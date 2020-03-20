@@ -1,0 +1,465 @@
+/**
+ *『Wjghj Project Static』
+ * This _CascadingStyleSheets_ code is from https://common.wjghj.cn
+ * GNU Public License
+ * InPageEdit default skin
+ **/
+/* 编辑器 */
+.in-page-edit .mw-editsection,
+.in-page-edit .hide-for-guide {
+  display: none;
+}
+.in-page-edit {
+  color: #252525;
+}
+.in-page-edit .ssi-modalWindow {
+  padding: 0;
+  border-radius: 0;
+}
+.in-page-edit .ssi-overflow {
+    background-image: radial-gradient(farthest-side at 50% 0,
+rgba(26,26,26,0.12),transparent),radial-gradient(farthest-side at 50% 100%,rgba(26,26,26,0.12),
+    transparent);
+    background-position: 0 0,0 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 9px;
+    position: relative;
+    z-index: 1;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.in-page-edit .ssi-overflow:before,
+.in-page-edit .ssi-overflow:after {
+  content: '';
+  display: block;
+  background-color: #fff;
+  height: 30px;
+  position: relative;
+  z-index: -1;
+  margin: 0 0 -30px;
+}
+.in-page-edit .ssi-overflow:after {
+  margin: 0 0 -29px;
+}
+.in-page-edit .ssi-topIcons {
+  #background: #808080;
+  text-align: center;
+}
+.in-page-edit .ssi-topIcons .ssi-closeIcon {
+  background: none;
+  color: #d33;
+  height: 24px;
+  width: 36px;
+  font-size: 30px;
+  line-height:  24px;
+}
+.in-page-edit .ssi-topIcons .ssi-closeIcon:hover {
+  background: none;
+  color: #f22;
+  height: 24px;
+  width: 36px;
+  font-size: 30px;
+  line-height:  24px;
+}
+.in-page-edit .ssi-closeIcon:before {
+  content: '关闭';
+  font-size: 16px;
+  display: unset !important;
+}
+.in-page-edit:not(.notify) .ssi-modalTitle {
+  font-style: normal;
+  font-family: sans-serif;
+  font-weight: bold;
+  background: #ffffff;
+  color: #252525;
+  font-size: 1.1em;
+  line-height: 1.8em;
+  text-align: center;
+}
+.in-page-edit .editArea {
+  max-width:100%;
+  min-width:100%;
+  min-height:350px;
+  margin: 1em 0 0 0;
+}
+.notify .ssi-modalTitle {
+  font-style: normal;
+  font-family: inherit;
+}
+.in-page-edit .ssi-modalTitle #showEditNotice {
+  font-size: small;
+  display: block;
+  line-height: 0;
+}
+.in-page-edit .ssi-modalTitle #showEditNotice .material-icons {
+  font-size: small;
+  position: relative;
+  top: 2px; 
+}
+.in-page-edit.ipe-editor .ssi-buttons {
+  background-color: #eaecf0;
+  color: #222;
+  /* border: 1px solid #c8ccd1; */
+  border-top: 0;
+  padding: 1em 1em 0.5em 1em;
+  margin-bottom: 0;
+}
+.in-page-edit .editSummary {
+  width: 98%;
+  margin: 4px auto 8px 0.5em
+}
+.in-page-edit .editOptionsLabel {
+  margin: 0 auto 16px auto;
+}
+.in-page-edit .btn {
+  font-size: 16px;
+  font-weight: bold;
+  color: #222;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  padding: 0.25em 0.8em;
+  transition: all .1s;
+}
+.in-page-edit .btn:focus {
+  box-shadow: inset 0 0 0 1px #36c;
+}
+.in-page-edit .btn.btn-primary {
+  color: #fff;
+  background-color: #36c;
+  border-color: #36c;
+}
+.in-page-edit .btn.btn-primary:hover {
+  background-color: #447ff5;
+  border-color: #447ff5;
+}
+.in-page-edit .btn.btn-primary:active {
+  background-color: #2a4b8d;
+}
+.in-page-edit .btn.btn-secondary {
+  color: #252525;
+  border-color: #c8ccd1;
+  background-color: #f8f9fa;
+}
+.in-page-edit .btn.btn-secondary:hover {
+  background-color: #ffffff;
+  color: #454545;
+}
+.in-page-edit .btn.btn-secondary:active {
+  border: 1px solid #36c;
+}
+.in-page-edit .btn.btn-danger {
+  background: transparent;
+  color: #d33;
+  background-color: #f4f4f4;
+}
+.in-page-edit .btn.btn-danger:hover {
+  color: #ff4242;
+  background-color: #fafafa;
+}
+.in-page-edit .btn.btn-danger:active {
+  color: #d00;
+  border: 1px solid #36c;
+}
+.in-page-edit .btn:disabled {
+  background-color: #c8ccd1 !important;
+  color: #ffffff !important;
+  cursor: not-allowed;
+}
+.in-page-edit .btn:disabled:hover {
+  background-color: #c8ccd1 !important;
+  color: #ffffff !important;
+}
+.in-page-edit .btn:disabled .ssi-countDown {
+  color: #fff;
+}
+.in-page-edit input {
+  padding: 0.25em 0.35em;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  transition: all .2s;
+}
+.in-page-edit input:focus {
+  border-color: #36c;
+  box-shadow: inset 0 0 0 1px #36c;
+}
+.in-page-edit .dialog .ssi-modalContent  {
+  padding-top: 18px;
+  font-size: large;
+}
+.in-page-edit .dialog .ssi-buttons .btn {
+  margin: 0;
+  padding: 0.5em;
+  background: transparent;
+  color: #252525;
+  border: 1px solid #efefef;
+  border-radius: 0;
+  width: 50%;
+}
+.in-page-edit .dialog .ssi-buttons .btn:hover {
+  background: #f8f8f8 !important;
+}
+.in-page-edit .btn.btn-single {
+  width: 100% !important;
+}
+.in-page-edit .dialog .ssi-buttons .btn.btn-danger {
+  color: #c33;
+}
+.in-page-edit .dialog .ssi-buttons {
+  padding: 0;
+}
+.in-page-edit .dialog .ssi-buttons .ssi-rightButtons {
+  width: 100%;
+}
+.in-page-edit-article-link-group:before {
+  content: '['
+}
+.in-page-edit-article-link-group:after {
+  content: ']'
+}
+.mw-editsection .in-page-edit-article-link-group:before {
+  content: ' | '
+}
+.mw-editsection .in-page-edit-article-link-group:after {
+  content:''
+}
+.mw-diff-undo .in-page-edit-article-link-group {
+  display: none;
+}
+
+/** 进度条 **/
+.ipe-progress {
+  height: 1em;
+  border: 1px solid #c5c5c5;
+  border-radius: 2px;
+  background: white;
+  overflow: hidden;
+}
+.ipe-progress .ipe-progress-bar {
+  height: 100%;
+  width: auto;
+  background: #3360c3;
+  animation: progress 2s linear infinite;
+  opacity: 1;
+}
+.ipe-progress.done {
+  background: #3360c3;
+  transition: all 0.8s;
+}
+.ipe-progress.done .ipe-progress-bar {
+  animation: none;
+  width: 0%;
+  margin: auto 0;
+  opacity: 0;
+  transition: all 0.8s;
+}
+@keyframes progress {
+  from {
+    margin-left: -40%;
+    margin-right: 110%;
+  }
+  to {
+    margin-left: 110%;
+    margin-right: -40%;
+  }
+}
+
+/* 通知框 */
+.in-page-edit.notify {
+  border-radius: 0;
+  font-family: unset;
+}
+.in-page-edit.notify .ssi-modalTitle {
+  background: none;
+  color: unset;
+}
+
+/** 背景颜色 **/
+.ssi-backdrop {
+  background: rgba(255,255,255,0.5);
+}
+
+/** 修改checkbox样式 **/
+.in-page-edit input[type=checkbox] + label {
+  user-select: none;
+}
+.in-page-edit input[type=checkbox] + label::before {
+  content: "\a0";  /* 不换行空格 */
+  display: inline-block;
+  vertical-align: 2px;
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
+  border-radius: 2px;
+  background-color: #f8f8f8;
+  text-indent: 2px;
+  line-height: 1.1;
+  border: 1px solid #72777d;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.in-page-edit input[type="checkbox"]:checked + label::before {
+  content: "\2713"; /* 对号的 Unicode 编码 */
+  font-size: 1em;
+  font-weight: bold;
+  background-color: #36c;
+  color: white;
+}
+.in-page-edit input[type='checkbox']:checked + label:hover:before {
+  background-color: #447ff5;
+}
+.in-page-edit input[type="checkbox"]:active + label::before,
+.in-page-edit input[type="checkbox"]:focus + label::before {
+  box-shadow: inset 0 0px 0px 1px rgb(255, 255, 255);
+  border-color: #3366cc;
+}
+.in-page-edit input[type='checkbox'] {
+  position: absolute;
+  clip:rect(0,0,0,0);
+}
+.in-page-edit input[type='checkbox']:disabled + label::before {
+  border-color: #d6d6d6;
+}
+.in-page-edit input[type='checkbox']:disabled:checked + label::before {
+  background-color: #a0a0a0;
+}
+
+/* 右下角小工具箱 */
+#ipe-edit-toolbox {
+  position: fixed; 
+  right: 24px; 
+  bottom: 24px;
+  user-select: none;
+  z-index: 199;
+}
+#ipe-edit-toolbox #toolbox-toggle {
+  transition: all .3s cubic-bezier(.54,-0.55,.44,1.5);
+}
+#ipe-edit-toolbox #toolbox-toggle.opened {
+  transform: rotate(45deg);
+}
+#ipe-edit-toolbox .ipe-toolbox-btn {
+  color: white; 
+  background: #bebebe; 
+  text-align: center;
+  height: 45px;
+  width: 45px;
+  font-size: 30px;
+  line-height: 50px;
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 5px gray;
+  text-shadow: 0 0 2px #4c4c4c;
+  padding: 0;
+  margin-bottom: 4px;
+  cursor: pointer;
+}
+#ipe-edit-toolbox .btn-group.group1 .btn-tip-group {
+  transform: scale(0) translateY(40px) translateX(0px);
+}
+#ipe-edit-toolbox .btn-group.group2 .btn-tip-group {
+  transform: scale(0) translateY(0px) translateX(40px);
+}
+#ipe-edit-toolbox .btn-group .btn-tip-group:nth-of-type(1) {
+  transition: transform .2s cubic-bezier(.68,-0.55,.35,1);
+}
+#ipe-edit-toolbox .btn-group .btn-tip-group:nth-of-type(2) {
+  transition: transform .2s cubic-bezier(.68,-0.55,.27,1) .14s;
+}
+#ipe-edit-toolbox .btn-group .btn-tip-group:nth-of-type(3) {
+  transition: transform .2s cubic-bezier(.68,-0.55,.27,1) .28s;
+}
+#ipe-edit-toolbox .btn-group.opened .btn-tip-group {
+  transform: scale(1) translateY(0px) translateX(0px);
+}
+#ipe-edit-toolbox .btn-group.opened .btn-tip-group:nth-of-type(3) {
+  transition: transform .2s cubic-bezier(.68,-0.55,.27,1.8);
+}
+#ipe-edit-toolbox .btn-group.opened .btn-tip-group:nth-of-type(2) {
+  transition: transform .2s cubic-bezier(.68,-0.55,.27,1.8) .14s;
+}
+#ipe-edit-toolbox .btn-group.opened .btn-tip-group:nth-of-type(1) {
+  transition: transform .2s cubic-bezier(.68,-0.55,.27,1.8) .28s;
+}
+#ipe-edit-toolbox .ipe-toolbox-btn#toolbox-toggle {
+  width: 50px; 
+  height: 50px;
+  background: #bebebe;
+  font-size: 40px; 
+  line-height: 56px;
+}
+#ipe-edit-toolbox .ipe-toolbox-btn#edit-btn {
+  background: #45a8ff;
+}
+#ipe-edit-toolbox .ipe-toolbox-btn#redirectfrom-btn {
+  background: #ffa530;
+}
+#ipe-edit-toolbox .ipe-toolbox-btn#redirectto-btn {
+  background: #ff4985;
+}
+#ipe-edit-toolbox .ipe-toolbox-btn#preference-btn {
+  background: #4caf50;
+}
+#ipe-edit-toolbox .ipe-toolbox-btn#deletepage-btn {
+  background: #f00000;
+}
+#ipe-edit-toolbox .ipe-toolbox-btn#renamepage-btn {
+  background: #ca7efe;
+}
+#ipe-edit-toolbox .ipe-toolbox-btn.not-allowed {
+  #box-shadow: 0 0 0 4px #ff4141 !important;
+  background: #cdcdcd !important;
+}
+#ipe-edit-toolbox .ipe-toolbox-btn.not-allowed:before {
+  content: 'add';
+  color: red;
+  display: block;
+  font-size: 86px;
+  position: absolute;
+  transform: rotate(45deg);
+  margin-top: 2px;
+  margin-left: -22px;
+}
+#ipe-edit-toolbox .btn-group {
+  height: auto;
+  margin-left: 2px;
+  position: relative;
+  list-style: none;
+}
+#ipe-edit-toolbox .btn-group.group2 {
+  position: absolute;
+  right: 50px;
+  margin: 5px 0 0 0;
+}
+#ipe-edit-toolbox .btn-group.opened {
+  visibility: visible
+}
+#ipe-edit-toolbox .btn-group.group2 .btn-tip-group {
+  margin-right: 6px;
+}
+#ipe-edit-toolbox .btn-tip-group .btn-tip {
+  position: absolute;
+  text-align: center;
+  font-size: 12px;
+  width: 6em;
+  right: -12px;
+  top: -2em;
+  background: white;
+  padding: 0px 4px;
+  box-shadow: 0 0 4px gray;
+  display: none;
+}
+#ipe-edit-toolbox .btn-tip-group:hover .btn-tip {
+  display: block;
+}
+#ipe-edit-toolbox .btn-tip-group .btn-tip:after {
+  content: "";
+  background: ;
+  display: block;
+  border: 5px solid transparent;
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+  position: absolute;
+  bottom: -4px;
+  left: calc(50% - 2.5px);
+  transform: rotate(45deg);
+}
