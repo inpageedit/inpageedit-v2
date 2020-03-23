@@ -2,7 +2,7 @@
 A MediaWiki Plugin based JavaScript
 
 # Required
-mw.api, MediaWiki > 1.22
+mw.api(MediaWiki > 1.22)<br/>
 jQuery > 2.1.0
 
 # What is it
