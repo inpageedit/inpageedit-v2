@@ -43,16 +43,17 @@
   function init(i18n) {
     // i18n
     function msg(i) {
-      return i18n.msg(i).escape();
+      return i18n.msg(i).parse();
     };
     /** HTML 组件 **/
-    var $br = $('<br>'),
+    const $br = $('<br/>'),
       $clear = $('<div>', { style: 'clear:both' }),
-      $hr = $('<hr>'),
+      $hr = $('<hr/>'),
       $progress = $('<div>', { class: 'ipe-progress', style: 'width: 100%' }).append($('<div>', { class: 'ipe-progress-bar' }));
 
     /** 快速编辑模块 **/
-    InPageEdit.edit = function (option) {
+    InPageEdit.edit = InPageEdit.quickEdit = function (option) {
+      mw.hook('InPageEdit.quickEdit').fire();
       // 变量
       if (option === undefined)
         option = {};
@@ -131,7 +132,7 @@
             $('<div>', { class: 'editOptionsLabel editForm' }).append(
               $('<label>', { for: 'editSummary', text: msg('editSummary') }),
               $br,
-              $('<input>', { class: 'editSummary', id: 'editSummary', placeholder: 'Edit vis InPageEdit~', value: editSummary.replace(/\$section/ig, $($.parseHTML(titleSection)).text()).replace(/\$oldid/ig, summaryRevision) }),
+              $('<input>', { class: 'editSummary', id: 'editSummary', placeholder: 'Edit via InPageEdit~', value: editSummary.replace(/\$section/ig, $($.parseHTML(titleSection)).text()).replace(/\$oldid/ig, summaryRevision) }),
               $br,
               $('<input>', { type: 'checkbox', class: 'editMinor', id: 'editMinor', checked: editMinor }),
               $('<label>', { for: 'editMinor', text: msg('markAsMinor') })
@@ -222,17 +223,19 @@
         ],
 
         /* 开始执行后续程序 */
-        onShow: function (modal) {
-          // 绑定事件，在尝试离开页面时提示
-          $(window).bind('beforeunload', function () {
-            return msg('window-leave-confirm');
-          });
+        beforeShow: function () {
           // 设置样式
           $('.ipe-editor.timestamp-' + timestamp + ' .editForm').hide();
           $('.ipe-editor.timestamp-' + timestamp + ' .ipe-progress').css('margin', Number($(window).height() / 3 - 50) + 'px 0');
           $('.ipe-editor.timestamp-' + timestamp + ' .editArea').css('height', $(window).height() / 3 * 2 - 100);
           $('.ipe-editor.timestamp-' + timestamp + ' .editOptionsLabel').prependTo('.ipe-editor.timestamp-' + timestamp + ' .ssi-buttons');
           $('.leftBtn').appendTo('.ssi-leftButtons');
+        },
+        onShow: function (modal) {
+          // 绑定事件，在尝试离开页面时提示
+          $(window).bind('beforeunload', function () {
+            return msg('window-leave-confirm');
+          });
           // 获取页面保护等级+最后编辑时间戳
           console.time('[InPageEdit] 获取页面基础信息');
           new mw.Api().get(jsonGetInfo).then(function (data) {
@@ -287,7 +290,6 @@
             if (data.error === undefined) {
               editText = data.parse.wikitext['*']
             } else {
-              console.timeEnd('[InPageEdit] 获取页面源代码');
               editText = '<!-- 警告：无法获取页面内容 -->';
               console.error('[InPageEdit]警告：无法获取页面内容');
             }
@@ -385,9 +387,7 @@
           jsonPost.section = pValue.section;
           delete jsonPost.basetimestamp;
         }
-        // Debug
-        console.info('%c[InPageEdit] Submitting with params: ', 'color:#fe20d1');
-        console.table(jsonPost);
+
         new mw.Api().postWithToken('csrf', jsonPost).then(function (data) {
           InPageEdit.progress(true);
           $(window).unbind('beforeunload');
@@ -418,99 +418,6 @@
           console.error('[InPageEdit] Submit failed: \nCode: ' + errorThrown.errors[0]['code'] + '\nDescription: ' + errorThrown.errors[0]['*']);
         });
       }
-
-    };
-
-    /** 快速重定向模块 **/
-    InPageEdit.redirect = function (type) {
-      var json = {
-        action: 'edit',
-        minor: JSON.parse(localStorage.getItem('InPageEditPreference')).editMinor,
-        token: mw.user.tokens.get('editToken'),
-        errorformat: 'plaintext'
-      },
-        summary = msg('redirect-summary') + ' → [[:$1]]',
-        text = '#REDIRECT [[:$1]]',
-        question,
-        target;
-      switch (type) {
-        case 'to':
-          json.title = mw.config.get('wgPageName');
-          question = msg('redirect-question-to').replace('$1', '<b>' + mw.config.get('wgPageName') + '</b>');
-          break;
-        case 'from':
-          question = msg('redirect-question-from').replace('$1', '<b>' + mw.config.get('wgPageName') + '</b>');
-          json.text = text.replace('$1', mw.config.get('wgPageName'));
-          json.summary = summary.replace('$1', mw.config.get('wgPageName'));
-          break;
-      }
-      ssi_modal.show({
-        outSideClose: false,
-        className: 'in-page-edit quick-redirect',
-        center: true,
-        sizeClass: 'dialog',
-        title: msg('redirect-title'),
-        content: $('<div>').append(
-          $('<section>').append(
-            $('<span>', { html: question }),
-            $br,
-            $('<input>', { id: 'redirect-page', style: 'width:80%;margin: 0 10%;', onclick: "$(this).css('box-shadow', '')" })
-          ),
-          $progress.css('display', 'none')
-        ).prop('outerHTML'),
-        buttons: [{
-          label: msg('confirm'),
-          className: 'btn btn-primary btn-single okBtn',
-          method: function (a, modal) {
-            InPageEdit.analysis({ type: 'functionCount', function: '快速重定向' });
-            InPageEdit.analysis({ type: 'dateCount' });
-            InPageEdit.analysis({ type: 'siteCount' });
-            var input = $('#redirect-page').val();
-            if (input === '' || input === mw.config.get('wgPageName')) {
-              $('#redirect-page').css('box-shadow', '0 0 4px red');
-            } else {
-              $('.in-page-edit.quick-redirect .ipe-progress').show();
-              $('.in-page-edit.quick-redirect section').hide();
-              $('.in-page-edit.quick-redirect .okBtn').attr('disabled', 'disabled');
-              switch (type) {
-                case 'to':
-                  json.summary = summary.replace('$1', input);
-                  json.text = text.replace('$1', input);
-                  break;
-                case 'from':
-                  json.title = input;
-                  break;
-              }
-
-              new mw.Api().post(json).done(function () {
-                $('.in-page-edit.quick-redirect .ipe-progress').addClass('done');
-                ssi_modal.notify('success', {
-                  className: 'in-page-edit',
-                  content: msg('notify-redirect-success'),
-                  title: msg('notify-success')
-                });
-                if (type === 'to') {
-                  window.location.reload();
-                } else {
-                  $('.in-page-edit.quick-redirect .ipe-progress').addClass('done');
-                  setTimeout(function () { modal.close() }, 2000);
-                }
-              }).fail(function () {
-                $('.in-page-edit.quick-redirect .ipe-progress').hide();
-                $('.in-page-edit.quick-redirect section').show();
-                $('.in-page-edit.quick-redirect .okBtn').attr('disabled', false);
-                $('.in-page-edit.quick-redirect .ipe-progress').addClass('done');
-                ssi_modal.notify('error', {
-                  className: 'in-page-edit',
-                  content: msg('notify-redirect-error'),
-                  title: msg('notify-error')
-                });
-              });
-            }
-          }
-        }
-        ]
-      });
     };
 
     /** 查找替换模块 **/
@@ -521,9 +428,9 @@
       ssi_modal.show({
         className: 'in-page-edit',
         sizeClass: 'dialog',
-        // backdrop: false,
+        center: true,
         outSideClose: false,
-        position: 'right bottom',
+        // position: 'right bottom',
         title: msg('fAndR-title'),
         content:
           $('<div>', { class: 'module far-module' }).append(
@@ -535,7 +442,7 @@
                 $('<textarea>', { id: 'replace_with', style: 'margin: 0', rows: 4 })
               ),
               $('<section>', { style: 'padding: 7px 0' }).append(
-                $('<input>', { type: 'checkbox', id: 'globl', checked: '', disabled: '' }),
+                $('<input>', { type: 'checkbox', id: 'globl', checked: '' }),
                 $('<label>', { for: 'globl', text: msg('fAndR-globl') }),
                 $br,
                 $('<input>', { type: 'checkbox', id: 'case_sen' }),
@@ -613,12 +520,114 @@
       });
     };
 
+    /** 快速重定向模块 **/
+    InPageEdit.redirect = InPageEdit.quickRedirect = function (type) {
+      mw.hook('InPageEdit.quickRedirect').fire();
+      var text = '#REDIRECT [[:$1]]',
+        question,
+        target,
+        json = {
+          action: 'edit',
+          minor: JSON.parse(localStorage.getItem('InPageEditPreference')).editMinor,
+          token: mw.user.tokens.get('editToken'),
+          errorformat: 'plaintext'
+        },
+        summary;
+
+      switch (type) {
+        case 'to':
+          json.title = mw.config.get('wgPageName');
+          question = msg('redirect-question-to').replace('$1', '<b>' + mw.config.get('wgPageName') + '</b>');
+          break;
+        case 'from':
+          question = msg('redirect-question-from').replace('$1', '<b>' + mw.config.get('wgPageName') + '</b>');
+          json.text = text.replace('$1', mw.config.get('wgPageName'));
+          break;
+      }
+      ssi_modal.show({
+        outSideClose: false,
+        className: 'in-page-edit quick-redirect',
+        center: true,
+        sizeClass: 'dialog',
+        title: msg('redirect-title'),
+        content: $('<div>').append(
+          $('<section>').append(
+            $('<span>', { html: question }),
+            $br,
+            $('<input>', { id: 'redirect-page', style: 'width:96%', onclick: "$(this).css('box-shadow', '')" }),
+            $br,
+            $('<label>', { for: 'redirect-reason', text: msg('editSummary') }),
+            $('<input>', { id: 'redirect-reason', style: 'width:96%' })
+          ),
+          $progress.css('display', 'none')
+        ).prop('outerHTML'),
+        buttons: [{
+          label: msg('confirm'),
+          className: 'btn btn-primary btn-single okBtn',
+          method: function (a, modal) {
+            target = $('.in-page-edit.quick-redirect #redirect-page').val();
+            if (target === '' || target === mw.config.get('wgPageName')) {
+              $('.in-page-edit.quick-redirect #redirect-page').css('box-shadow', '0 0 4px #f00');
+              return;
+            }
+
+            InPageEdit.analysis({ type: 'functionCount', function: '快速重定向' });
+            InPageEdit.analysis({ type: 'dateCount' });
+            InPageEdit.analysis({ type: 'siteCount' });
+
+            summary = msg('redirect-summary') + ' → [[:' + target + ']]';
+            if ($('.in-page-edit.quick-redirect #redirect-reason').val() !== '') {
+              summary = summary + ' (' + $('.in-page-edit.quick-redirect #redirect-reason').val() + ')';
+            }
+            json.summary = summary;
+
+            $('.in-page-edit.quick-redirect .ipe-progress').show();
+            $('.in-page-edit.quick-redirect section').hide();
+            $('.in-page-edit.quick-redirect .okBtn').attr('disabled', 'disabled');
+            switch (type) {
+              case 'to':
+                json.text = text.replace('$1', target);
+                break;
+              case 'from':
+                json.title = target;
+                break;
+            }
+
+            new mw.Api().post(json).done(function () {
+              $('.in-page-edit.quick-redirect .ipe-progress').addClass('done');
+              ssi_modal.notify('success', {
+                className: 'in-page-edit',
+                content: msg('notify-redirect-success'),
+                title: msg('notify-success')
+              });
+              if (type === 'to') {
+                window.location.reload();
+              } else {
+                $('.in-page-edit.quick-redirect .ipe-progress').addClass('done');
+                setTimeout(function () { modal.close() }, 2000);
+              }
+            }).fail(function () {
+              $('.in-page-edit.quick-redirect .ipe-progress').hide();
+              $('.in-page-edit.quick-redirect section').show();
+              $('.in-page-edit.quick-redirect .okBtn').attr('disabled', false);
+              $('.in-page-edit.quick-redirect .ipe-progress').addClass('done');
+              ssi_modal.notify('error', {
+                className: 'in-page-edit',
+                content: msg('notify-redirect-error'),
+                title: msg('notify-error')
+              });
+            });
+          }
+        }
+        ]
+      });
+    };
+
     /** 删除页面模块 **/
-    InPageEdit.deletepage = function (page) {
-      InPageEdit.analysis({ type: 'functionCount', function: '快速删除' });
-      var reasonType,
-        reason = msg('delete-reason-default');
-      if (page === this.undefined) page = mw.config.get('wgPageName');
+    InPageEdit.deletepage = InPageEdit.quickDelete = function (page) {
+      mw.hook('InPageEdit.quickDelete').fire();
+      var reason,
+        page = page || mw.config.get('wgPageName');
 
       ssi_modal.show({
         outSideClose: false,
@@ -631,15 +640,8 @@
           $('<section>', { id: 'InPageEditDeletepage' }).append(
             $('<span>', { html: msg('delete-reason').replace('$1', '<b>' + page + '</b>') }),
             $br,
-            $('<input>', { type: 'checkbox', id: 'autoReason', checked: '', disabled: '' }),
-            $('<label>', { for: 'autoReason', text: msg('delete-reason-auto') }),
-            /*
-            $('<select>').append(
-              $('<option>')
-            ),
-            $('<input>'),
-            $br
-            */
+            $('<label>', { for: 'delete-reason', text: msg('editSummary') }),
+            $('<input>', { id: 'delete-reason', style: 'width:96%', onclick: "$(this).css('box-shadow', '')" })
           )
         ).prop('outerHTML'),
         beforeShow: function () {
@@ -667,6 +669,13 @@
             label: msg('confirm'),
             className: 'btn btn-danger',
             method: function (e, modal) {
+              reason = $('#InPageEditDeletepage #delete-reason').val();
+              if (reason === '') {
+                $('#InPageEditDeletepage #delete-reason').css('box-shadow', '0 0 4px #f00');
+                return;
+              }
+              InPageEdit.analysis({ type: 'functionCount', function: '快速删除' });
+
               ssi_modal.confirm({
                 center: true,
                 className: 'in-page-edit',
@@ -682,10 +691,12 @@
                 }
               }, function (result) {
                 if (result) {
-                  var fiNalReason = '[' + $('#InPageEditDeletepage #reasonType').val() + '] ' + $('#InPageEditDeletepage #reason').val();
+                  reason = msg('delete-title') + ' (' + reason + ')';
                   new mw.Api().postWithToken('csrf', {
                     action: 'delete',
-                    title: page
+                    title: page,
+                    reason: reason,
+                    format: 'json'
                   }).then(function (data) {
                     ssi_modal.notify('success', {
                       className: 'in-page-edit',
@@ -711,9 +722,10 @@
     };
 
     /** 重命名模块 **/
-    InPageEdit.renamepage = function () {
-      var from = mw.config.get('wgPageName'),
-        to,
+    InPageEdit.renamepage = InPageEdit.quickRename = function (from, to) {
+      mw.hook('InPageEdit.quickRename').fire();
+      var from = from || mw.config.get('wgPageName'),
+        to = to || '',
         reason,
         movetalk,
         movesubpages,
@@ -726,7 +738,25 @@
         center: true,
         sizeClass: 'dialog',
         title: msg('rename-title'),
-        content: '<section id="InPageEditRename"><label for="move-to">' + msg('rename-moveTo').replace('$1', '<b>' + from + '</b>') + '</label><br/><input style="width:90%" id="move-to"><br/><input type="checkbox" id="movetalk" checked="checked"/><label for="movetalk">' + msg('rename-movetalk') + '</label><br/><input id="movesubpages" type="checkbox" checked="checked"/><label for="movesubpages">' + msg('rename-movesubpages') + '</label><br/><input id="noredirect" type="checkbox"/><label for="noredirect">' + msg('rename-noredirect') + '</label><br/><label for="move-reason">' + msg('editSummary') + '<br/><input style="width:90%" id="move-reason"/></label></section>',
+        content:
+          $('<section>').append(
+            $('<label>', { for: 'move-to', html: msg('rename-moveTo').replace('$1', '<b>' + from + '</b>') }),
+            $br,
+            $('<input>', { id: 'move-to', style: 'width:96%', onclick: "$(this).css('box-shadow','')" }),
+            $br,
+            $('<label>', { for: 'move-reason', text: msg('editSummary') }),
+            $br,
+            $('<input>', { id: 'move-reason', style: 'width:96%' }),
+            $br,
+            $('<input>', { type: 'checkbox', id: 'movetalk', checked: 'checked' }),
+            $('<label>', { for: 'movetalk', text: msg('rename-movetalk') }),
+            $br,
+            $('<input>', { type: 'checkbox', id: 'movesubpages', checked: 'checked' }),
+            $('<label>', { for: 'movesubpages', text: msg('rename-movesubpages') }),
+            $br,
+            $('<input>', { type: 'checkbox', id: 'noredirect' }),
+            $('<label>', { for: 'noredirect', text: msg('rename-noredirect') })
+          ).prop('outerHTML'),
         buttons: [{
           label: msg('cancel'),
           className: 'btn btn-secondary',
@@ -737,18 +767,26 @@
           label: msg('confirm'),
           className: 'btn btn-primary',
           method: function () {
+            to = $('.in-page-edit.quick-rename #move-to').val();
+            if (to === '' || to === mw.config.get('wgPageName')) {
+              $('.in-page-edit.quick-rename #move-to').css('box-shadow', '0 0 4px #f00');
+              return;
+            }
+
             InPageEdit.analysis({ type: 'functionCount', function: '快速重命名' });
             InPageEdit.analysis({ type: 'dateCount' });
             InPageEdit.analysis({ type: 'siteCount' });
-            InPageEdit.progress('正在和土豆交涉……');
-            movetalk = $('#movetalk').prop('checked');
-            movesubpages = $('#movesubpages').prop('checked');
-            noredirect = $('#noredirect').prop('checked');
-            to = $('#move-to').val();
-            if ($('#move-reason').val() === '') {
+
+            InPageEdit.progress(msg('editor-title-saving'));
+            movetalk = $('.in-page-edit.quick-rename #movetalk').prop('checked');
+            movesubpages = $('.in-page-edit.quick-rename #movesubpages').prop('checked');
+            noredirect = $('.in-page-edit.quick-rename #noredirect').prop('checked');
+            reason = $('.in-page-edit.quick-rename #move-reason').val();
+
+            if (reason === '') {
               reason = msg('rename-summary') + ' → [[:' + to + ']]';
             } else {
-              reason = msg('rename-summary') + ' → [[:' + to + ']] (Reason: ' + $('#move-reason').val() + ')';
+              reason = msg('rename-summary') + ' → [[:' + to + ']] (' + reason + ')';
             }
             new mw.Api().postWithToken('csrf', {
               action: 'move',
@@ -807,6 +845,7 @@
 
     /** 个人设置模块 **/
     InPageEdit.preference = function () {
+      mw.hook('InPageEdit.preference').fire();
       InPageEdit.analysis({ type: 'functionCount', function: '插件设置' });
       var settings = JSON.parse(localStorage.getItem('InPageEditPreference')),
         minor = settings.editMinor,
@@ -816,7 +855,7 @@
       ssi_modal.show({
         outSideClose: false,
         title: msg('preference-title') + ' - ' + InPageEdit.version,
-        content: '<section id="InPageEditSettingBox"><h4>' + msg('preference-editor-label') + '</h4><input id="ipeSetoutSideClose" type="checkbox"/> <label for="ipeSetoutSideClose">' + msg('preference-outSideClose') + '</label><br/><input id="ipeSetMinor" type="checkbox"/> <label for="ipeSetMinor">' + msg('preference-setMinor') + '</label><br/><label><h4>' + msg('preference-summary-label') + '</h4>' + msg('preference-editSummary').replace('%br%', '<br/>').replace('$1', '<code>$oldid</code>').replace('$2', '<code>' + msg('editor-summary-rivision') + ' [[Special:Diff/oldid]]</code>').replace('$3', '<code>$section</code>').replace('$4', '<code>/* ' + msg('editor-title-editSection') + ' */</code>') + '<br/><span style="font-size:10px"></span><input id="ipeSetSummary" value="' + summary + '" style="width:100%"/></label><br/><h4>' + msg('preference-analysis-label') + '</h4><span style="font-size: small; line-height: 0.9em;">' + msg('preference-analysis-view').replace('$1', '<a href="https://doc.wjghj.cn/InPageEditAnalysis/" target="_blank">https://doc.wjghj.cn/InPageEditAnalysis/</a>') + '</span><h4>' + msg('preference-about-label') + '</h4><button class="btn btn-secondary" onclick="mw.loader.load(\'https://common.wjghj.cn/js/InPageEdit-v2.js/about\')">' + msg('preference-aboutAndHelp') + '</button>&nbsp;<button class="btn btn-secondary" onclick="InPageEdit.versionInfo()">' + msg('preference-updatelog') + '</button><hr><span style="font-size: small;line-height: 0.9em">' + msg('preference-savelocal-label') + '<br/>' + msg('preference-savelocal') + '<a href="javascript:;" id="ipeSaveLocalShow">' + msg('preference-savelocal-btn') + '</a></span></section>',
+        content: '<section id="InPageEditSettingBox"><h4>' + msg('preference-editor-label') + '</h4><input id="ipeSetoutSideClose" type="checkbox"/> <label for="ipeSetoutSideClose">' + msg('preference-outSideClose') + '</label><br/><input id="ipeSetMinor" type="checkbox"/> <label for="ipeSetMinor">' + msg('preference-setMinor') + '</label><br/><label><h4>' + msg('preference-summary-label') + '</h4>' + msg('preference-editSummary').replace('%br%', '<br/>').replace('$1', '<code>$oldid</code>').replace('$2', '<code>' + msg('editor-summary-rivision') + ' [[Special:Diff/oldid]]</code>').replace('$3', '<code>$section</code>').replace('$4', '<code>/* ' + msg('editor-title-editSection') + ' */</code>') + '<br/><span style="font-size:10px"></span><input id="ipeSetSummary" value="' + summary + '" style="width:100%"/></label><br/><h4>' + msg('preference-analysis-label') + '</h4><span style="font-size: small; line-height: 0.9em;">' + msg('preference-analysis-view').replace('$1', '<a href="https://doc.wjghj.cn/InPageEditAnalysis/" to="_blank">https://doc.wjghj.cn/InPageEditAnalysis/</a>') + '</span><h4>' + msg('preference-about-label') + '</h4><button class="btn btn-secondary" onclick="mw.loader.load(\'https://common.wjghj.cn/js/InPageEdit-v2.js/about\')">' + msg('preference-aboutAndHelp') + '</button>&nbsp;<button class="btn btn-secondary" onclick="InPageEdit.versionInfo()">' + msg('preference-updatelog') + '</button><hr><span style="font-size: small;line-height: 0.9em">' + msg('preference-savelocal-label') + '<br/>' + msg('preference-savelocal') + '<a href="javascript:;" id="ipeSaveLocalShow">' + msg('preference-savelocal-btn') + '</a></span></section>',
         sizeClass: 'dialog',
         className: 'in-page-edit ipe-preference',
         center: true,
@@ -890,6 +929,7 @@
 
     /** 快速页面差异模块 **/
     InPageEdit.quickDiff = function (param) {
+      mw.hook('InPageEdit.quickDiff').fire();
       InPageEdit.analysis({ type: 'dateCount' });
       InPageEdit.analysis({ type: 'siteCount' });
       // InPageEdit.analysis({ type: 'functionCount', function: '快速差异' });
@@ -1023,7 +1063,7 @@
           var $this = $(this),
             oldid = $this.attr('data-mw-revid');
           $this.find('.mw-history-undo').after(
-            $('<span>').html(' | <a class="in-page-edit-article-link" href="javascript:void(0);" onclick="InPageEdit.edit({page:mw.config.get(\'wgPageName\'),revision:' + oldid + '});">' + msg('quick-edit') + '</a>')
+            $('<span>').html(' | <a class="in-page-edit-article-link" href="javascript:void(0);" onclick="InPageEdit.quickEdit({page:mw.config.get(\'wgPageName\'),revision:' + oldid + '});">' + msg('quick-edit') + '</a>')
           );
         });
       }
@@ -1066,12 +1106,12 @@
                 .text(msg('quick-edit'))
                 .click(function () {
                   if (revision !== null) {
-                    InPageEdit.edit({
+                    InPageEdit.quickEdit({
                       page: title,
                       revision: revision
                     });
                   } else {
-                    InPageEdit.edit({
+                    InPageEdit.quickEdit({
                       page: title,
                       section: section
                     });
@@ -1083,13 +1123,17 @@
 
     /** 快速预览文章页 **/
     InPageEdit.quickPreview = function (params) {
+      mw.hook('InPageEdit.quickPreview').fire();
       var timestamp = new Date().getTime();
       console.time('[InPageEdit] Request preview');
       ssi_modal.show({
         sizeClass: 'large',
         className: 'in-page-edit previewbox',
-        content: '<div class="ipe-progress" style="width:100%"><div class="ipe-progress-bar"></div></div><section id="InPageEditPreview" data-timestamp="' + timestamp + '" style="display:none">' + msg('preview-placeholder') + '</section>',
         title: msg('preview-title'),
+        content: $('<section>').append(
+          $progress,
+          $('<div>', { id: 'InPageEditPreview', 'data-timestamp': timestamp, style: 'display:none', text: msg('preview-placeholder') })
+        ).prop('outerHTML'),
         fixedHeight: true,
         fitScreen: true,
         buttons: [{ label: '', className: 'hideThisBtn' }],
@@ -1128,7 +1172,10 @@
         }
         ssi_modal.show({
           title: title,
-          content: '<div class="ipe-progress" style="width:100%"><div class="ipe-progress-bar"></div></div>',
+          content:
+            $('<div>', { class: 'ipe-progress', style: 'width: 100%' }).append(
+              $('<div>', { class: 'ipe-progress-bar' })
+            ).prop('outerHTML'),
           className: 'in-page-edit loadingbox',
           center: true,
           sizeClass: 'dialog',
@@ -1178,24 +1225,26 @@
     };
 
     /** 获取用户权限信息 **/
-    var user = mw.config.get('wgUserName');
-    if (user === null) {
-      console.warn('[InPageEdit] 警告：用户未登录');
-      mw.config.set('wgUserRights', '');
-      return;
-    }
-    new mw.Api().get({
-      action: 'query',
-      list: 'users',
-      usprop: 'rights',
-      ususers: user
-    }).done(function (data) {
-      console.info('[InPageEdit] 成功获取用户权限信息');
-      mw.config.set('wgUserRights', data.query.users[0]['rights']);
-    }).fail(function () {
-      console.warn('[InPageEdit] 警告：无法获取用户权限信息');
-      mw.config.set('wgUserRights', '');
-    });
+    (function () {
+      var user = mw.config.get('wgUserName');
+      if (user === null) {
+        console.warn('[InPageEdit] 警告：用户未登录');
+        mw.config.set('wgUserRights', '');
+        return;
+      }
+      new mw.Api().get({
+        action: 'query',
+        list: 'users',
+        usprop: 'rights',
+        ususers: user
+      }).done(function (data) {
+        console.info('[InPageEdit] 成功获取用户权限信息');
+        mw.config.set('wgUserRights', data.query.users[0]['rights']);
+      }).fail(function () {
+        console.warn('[InPageEdit] 警告：无法获取用户权限信息');
+        mw.config.set('wgUserRights', '');
+      });
+    }());
 
     InPageEdit.hasRight = function (right) {
       if (mw.config.get('wgUserRights').indexOf(right) > -1) {
@@ -1299,7 +1348,7 @@
           onClose: function () {
             ssi_modal.notify('', {
               className: 'in-page-edit',
-              content: msg('updatelog-after-close').replace('$1', '<a href="' + msg('updatelog-url') + '" target="_blank">' + msg('updatelog-url') + '</a>').replace('$2', '<a href="https://github.com/Dragon-Fish/InPageEdit-v2">' + msg('updatelog-file-issue') + '</a>'),
+              content: msg('updatelog-after-close').replace('$1', '<a href="' + msg('updatelog-url') + '" to="_blank">' + msg('updatelog-url') + '</a>').replace('$2', '<a href="https://github.com/Dragon-Fish/InPageEdit-v2">' + msg('updatelog-file-issue') + '</a>'),
               closeAfter: {
                 time: 10
               }
@@ -1330,15 +1379,7 @@
       /** 额外的模块 **/
       // 快速页面差异模块
       InPageEdit.loadQuickDiff();
-
-      /** Toolbox模块 **/
-      // 检测是否为文章页
-      if (mw.config.get('wgIsArticle') === false) {
-        console.warn('%c[InPageEdit] 不是文章页面，未载入工具盒。', 'color:orange;font-size:1.2em;font-weight:bold');
-        return;
-      }
-
-      // 读取设定
+      /** 读取设定 **/
       if (localStorage.getItem('InPageEditPreference') === null) {
         // 没有保存任何设置
         var ipePreference = {};
@@ -1346,6 +1387,17 @@
         ipePreference.editMinor = false;
         ipePreference.editSummary = msg('preference-summary-default');
         localStorage.setItem('InPageEditPreference', JSON.stringify(ipePreference));
+      }
+      // 加载段落编辑模块
+      InPageEdit.articleLink();
+    }());
+
+    /** Toolbox模块 **/
+    mw.hook('InPageEdit').add(function () {
+      // 检测是否为文章页
+      if (mw.config.get('wgIsArticle') === false) {
+        console.warn('%c[InPageEdit] 不是文章页面，未载入工具盒。', 'color:orange;font-size:1.2em;font-weight:bold');
+        return;
       }
 
       /** IPE工具盒 **/
@@ -1392,41 +1444,33 @@
         InPageEdit.analysis({ type: 'functionCount', function: '工具盒' });
         switch ($(this).attr('id')) {
           case 'edit-btn':
-            InPageEdit.edit({
+            InPageEdit.quickEdit({
               page: mw.config.get('wgPageName'),
               revision: mw.config.get('wgRevisionId')
             });
             break;
           case 'redirectfrom-btn':
-            InPageEdit.redirect('from');
+            InPageEdit.quickRedirect('from');
             break;
           case 'redirectto-btn':
-            InPageEdit.redirect('to');
+            InPageEdit.quickRedirect('to');
             break;
           case 'preference-btn':
             InPageEdit.preference();
             break;
           case 'deletepage-btn':
-            InPageEdit.deletepage();
+            InPageEdit.quickDelete();
             break;
           case 'renamepage-btn':
-            InPageEdit.renamepage();
+            InPageEdit.quickRename();
             break;
         }
       });
-      // 加载段落编辑模块
-      InPageEdit.articleLink();
-      // 判断URL参数
-      var urlEdit = mw.util.getParamValue('ipe', location.href);
-      if (urlEdit === 'true' || urlEdit === '1') {
-        InPageEdit.edit({
-          page: mw.config.get('wgPageName'),
-          revision: mw.config.get('wgRevisionId')
-        });
-      }
-    }());
+      mw.hook('InPageEdit.toolbox').fire();
+    });
   }
 
   // 花里胡哨的加载提示
+  mw.hook('InPageEdit').fire();
   console.info('    ____      ____                   ______    ___ __              _    _____ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_            | |  / /__ \\\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/  ______    | | / /__/ /\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_   /_____/    | |/ // __/ \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/              |___//____/ \n                      /____/');
 }());
