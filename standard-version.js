@@ -23,7 +23,7 @@
   // 创建全局函数
   window.InPageEdit = {};
   InPageEdit.isCanary = false;
-  /*=version*/InPageEdit.version = '2.10.0(build_2417)';/*version=*/
+  /*=version*/InPageEdit.version = '2.10.0.1(build_2519)';/*version=*/
 
   /** 导入模态框插件 **/
   mw.loader.load('https://cdn.bootcss.com/ssi-modal/1.0.27/js/ssi-modal.min.js');
@@ -46,7 +46,7 @@
   function init(i18n) {
     // i18n
     function msg(i) {
-      return i18n.msg(i).escape();
+      return i18n.msg(i).parse();
     };
     /** HTML 组件 **/
     var $br = $('<br>'),
@@ -290,7 +290,6 @@
             if (data.error === undefined) {
               editText = data.parse.wikitext['*']
             } else {
-              console.timeEnd('[InPageEdit] 获取页面源代码');
               editText = '<!-- 警告：无法获取页面内容 -->';
               console.error('[InPageEdit]警告：无法获取页面内容');
             }
@@ -388,9 +387,7 @@
           jsonPost.section = pValue.section;
           delete jsonPost.basetimestamp;
         }
-        // Debug
-        console.info('%c[InPageEdit] Submitting with params: ', 'color:#fe20d1');
-        console.table(jsonPost);
+
         new mw.Api().postWithToken('csrf', jsonPost).then(function (data) {
           InPageEdit.progress(true);
           $(window).unbind('beforeunload');
@@ -1181,24 +1178,26 @@
     };
 
     /** 获取用户权限信息 **/
-    var user = mw.config.get('wgUserName');
-    if (user === null) {
-      console.warn('[InPageEdit] 警告：用户未登录');
-      mw.config.set('wgUserRights', '');
-      return;
-    }
-    new mw.Api().get({
-      action: 'query',
-      list: 'users',
-      usprop: 'rights',
-      ususers: user
-    }).done(function (data) {
-      console.info('[InPageEdit] 成功获取用户权限信息');
-      mw.config.set('wgUserRights', data.query.users[0]['rights']);
-    }).fail(function () {
-      console.warn('[InPageEdit] 警告：无法获取用户权限信息');
-      mw.config.set('wgUserRights', '');
-    });
+    (function () {
+      var user = mw.config.get('wgUserName');
+      if (user === null) {
+        console.warn('[InPageEdit] 警告：用户未登录');
+        mw.config.set('wgUserRights', '');
+        return;
+      }
+      new mw.Api().get({
+        action: 'query',
+        list: 'users',
+        usprop: 'rights',
+        ususers: user
+      }).done(function (data) {
+        console.info('[InPageEdit] 成功获取用户权限信息');
+        mw.config.set('wgUserRights', data.query.users[0]['rights']);
+      }).fail(function () {
+        console.warn('[InPageEdit] 警告：无法获取用户权限信息');
+        mw.config.set('wgUserRights', '');
+      });
+    }());
 
     InPageEdit.hasRight = function (right) {
       if (mw.config.get('wgUserRights').indexOf(right) > -1) {
