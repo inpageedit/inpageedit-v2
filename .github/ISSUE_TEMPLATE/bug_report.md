@@ -1,6 +1,6 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: 故障反馈/Bug report
+about: 如果你遇到了程序错误，请选此项/Create a report to help us improve
 title: ''
 labels: bug
 assignees: Dragon-Fish
