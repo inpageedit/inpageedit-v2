@@ -10,7 +10,8 @@ InPageEdit is a MediaWiki plugin made by 机智的小鱼君 (Dragon Fish) in Jav
 
 # How to use
 [![](https://data.jsdelivr.com/v1/package/gh/dragon-fish/inpageedit-v2/badge)](https://www.jsdelivr.com/package/gh/dragon-fish/inpageedit-v2)
+
 Add the code to your personal js page.
 ```javascript
-mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/standard-version.js');
+mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/script.js');
 ```
