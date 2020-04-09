@@ -1,25 +1,24 @@
 /**
- *『Wjghj Project Static』
- * This _JavaScript_ code is from https://common.wjghj.cn
  * GNU GENERAL PUBLIC LICENSE 3.0
  *
- * MediaWiki JS Plugin: In Page Edit Canary Edition
- * Version: InPageEdit-canary
+ * MediaWiki JS Plugin: In Page Edit v2
  * Author: 机智的小鱼君
  * Url:
  ** https://github.com/Dragon-Fish/InPageEdit-v2
- ** https://common.wjghj.cn/wiki/InPageEdit-v2
  * Logs:
  ** https://common.wjghj.cn/wiki/InPageEdit-v2/version-info
  **/
 
 (function () {
   'use strict';
-  if (typeof InPageEdit !== 'undefined') throw '[InPageEdit] 已经有一个IPE插件在执行了';
+  // 防止多次载入
+  if (typeof InPageEdit !== 'undefined') throw '[InPageEdit] 已经有一个IPE插件在执行了。';
+  // 由于兼容性问题，阻止低版本平台
+  if (mw.config.get('wgVersion').split('.')[1] < 21) throw '[InPageEdit] 警告：InPageEdit暂不支持您所在的平台';
 
   // 创建全局函数
   window.InPageEdit = {};
-  // InPageEdit.isCanary = true;
+  InPageEdit.isCanary = false;
   /*=version*/InPageEdit.version = '2.12.0.3(build_2629)';/*version=*/
 
   /** 导入模态框插件 **/
