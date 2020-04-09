@@ -15,7 +15,7 @@
 ; (function () {
   'use strict';
   // 创建全局函数
-  if (typeof (InPageEdit.version) !== 'undefined') throw '[InPageEdit] 已经有一个IPE插件在执行了';
+  if (typeof(InPageEdit) !== 'undefined' && typeof(InPageEdit.version) !== 'undefined') throw '[InPageEdit] 已经有一个IPE插件在执行了';
   window.InPageEdit = window.InPageEdit || {};
   InPageEdit.isCanary = false;
   /*=version*/InPageEdit.version = '2.13.0(build_2795)';/*version=*/
