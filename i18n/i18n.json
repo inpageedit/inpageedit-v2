@@ -147,7 +147,10 @@
         "editor-edittool-internal-link": "Internal link",
         "editor-edittool-list-bulleted": "Unordered list",
         "editor-edittool-list-numbered": "Ordered list",
-        "editor-edittool-nowiki": "Nowiki text"
+        "editor-edittool-nowiki": "Nowiki text",
+        "editor-edittool-format-label": "Format",
+        "editor-edittool-insert-label": "Insert",
+        "editor-edittool-custom-label": "Custom"
     },
     "ar": {
         "version-notice-title": "نجاح التثبيت",
@@ -781,7 +784,10 @@
         "editor-edittool-internal-link": "内部链接",
         "editor-edittool-list-bulleted": "无序列表",
         "editor-edittool-list-numbered": "有序列表",
-        "editor-edittool-nowiki": "去格式化"
+        "editor-edittool-nowiki": "去格式化",
+        "editor-edittool-format-label": "格式",
+        "editor-edittool-insert-label": "插入",
+        "editor-edittool-custom-label": "自定"
     },
     "zh-hant": {
         "quick-edit": "快速編輯",
