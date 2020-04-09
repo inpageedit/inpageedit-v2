@@ -1,14 +1,10 @@
 /**
- *『Wjghj Project Static』
- * This _JavaScript_ code is from https://common.wjghj.cn
  * GNU GENERAL PUBLIC LICENSE 3.0
  *
- * MediaWiki JS Plugin: In Page Edit
- * Version: See version-info file
+ * MediaWiki JS Plugin: In Page Edit v2
  * Author: 机智的小鱼君
  * Url:
  ** https://github.com/Dragon-Fish/InPageEdit-v2
- ** https://common.wjghj.cn/wiki/InPageEdit-v2
  * Logs:
  ** https://common.wjghj.cn/wiki/InPageEdit-v2/version-info
  **/
