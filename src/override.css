@@ -12,6 +12,10 @@
 .in-page-edit {
   color: #252525;
 }
+.in-page-edit .material-icons {
+  position: relative;
+  top: 2px;
+}
 .in-page-edit .ssi-modalWindow {
   padding: 0;
   border-radius: 0;
@@ -29,7 +33,7 @@ rgba(26,26,26,0.12),transparent),radial-gradient(farthest-side at 50% 100%,rgba(
 }
 .in-page-edit .ssi-overflow:before,
 .in-page-edit .ssi-overflow:after {
-  content: '';
+  content: "";
   display: block;
   background-color: #fff;
   height: 30px;
@@ -45,7 +49,6 @@ rgba(26,26,26,0.12),transparent),radial-gradient(farthest-side at 50% 100%,rgba(
   overflow-y: auto;
 }
 .in-page-edit .ssi-topIcons {
-  #background: #808080;
   text-align: center;
 }
 .in-page-edit .ssi-topIcons .ssi-closeIcon {
@@ -65,7 +68,7 @@ rgba(26,26,26,0.12),transparent),radial-gradient(farthest-side at 50% 100%,rgba(
   line-height:  24px;
 }
 .in-page-edit .ssi-closeIcon:before {
-  content: '✕';
+  content: "✕";
   font-size: 16px;
   display: unset !important;
 }
@@ -79,11 +82,54 @@ rgba(26,26,26,0.12),transparent),radial-gradient(farthest-side at 50% 100%,rgba(
   line-height: 1.8em;
   text-align: center;
 }
-.in-page-edit .editArea {
-  max-width:100%;
-  min-width:100%;
-  min-height:350px;
-  margin: 1em 0 0 0;
+.ipe-editor .editTools {
+  background: #eaf3ff;
+  border: 1px solid #c8ccd1;
+  border-bottom: none;
+  float: left;
+  width: calc(100% - 1px);
+}
+.ipe-editor .editTools .btnGroup {
+  float: left;
+  padding-right: 6px;
+  border-right: 1px solid #c8ccd1;
+  margin: 3px;
+}
+.ipe-editor .editTools .btnGroup.special-tools {
+  border-right: none;
+  border-left: 1px solid #c8ccd1;
+  padding-right: 3px;
+  padding-left: 6px;
+}
+.ipe-editor .editTools .label {
+  color: #888;
+  padding-right: 6px;
+  cursor: default;
+}
+.ipe-editor .editTools .formatSelect {
+  margin: 0;
+}
+.ipe-editor .editTools .btn {
+  color: #47494d;
+  font-size: 18px;
+  background: none;
+  box-shadow: none;
+  margin: 0 2px;
+  padding: 2px 6px;
+}
+.ipe-editor .editTools .btn * {
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+}
+.ipe-editor .editArea {
+  border: 1px solid #c8ccd1;
+  border-top: none;
+  border-radius: 0;
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 350px;
+  margin: 0;
 }
 .notify .ssi-modalTitle {
   font-style: normal;
@@ -217,16 +263,16 @@ rgba(26,26,26,0.12),transparent),radial-gradient(farthest-side at 50% 100%,rgba(
   width: 100%;
 }
 .in-page-edit-article-link-group:before {
-  content: '['
+  content: "["
 }
 .in-page-edit-article-link-group:after {
-  content: ']'
+  content: "]"
 }
 .mw-editsection .in-page-edit-article-link-group:before {
-  content: ' | '
+  content: " | "
 }
 .mw-editsection .in-page-edit-article-link-group:after {
-  content:''
+  content:""
 }
 .mw-diff-undo .in-page-edit-article-link-group {
   display: none;
@@ -294,44 +340,45 @@ rgba(26,26,26,0.12),transparent),radial-gradient(farthest-side at 50% 100%,rgba(
   background: rgba(255,255,255,0.5);
 }
 /** 修改checkbox样式 **/
-.in-page-edit input[type=checkbox] + label {
+.in-page-edit label input[type="checkbox"] +span {
   user-select: none;
   line-height: 1.2em;
 }
-.in-page-edit input[type=checkbox] + label::before {
+.in-page-edit label input[type="checkbox"] + span::before {
   content: "\a0"; /* 不换行空格可以保持选择框的高度 */
   display: inline-block;
   width: 1.2em;
   height: 1.2em;
-  margin-right: 5px;
+  margin-top: .15em;
+  margin-right: .375em;
   border-radius: 2px;
   background-color: #f8f8f8;
   border: 1px solid #72777d;
   cursor: pointer;
   transition: all 0.12s;
 }
-.in-page-edit input[type="checkbox"]:checked + label::before {
+.in-page-edit label input[type="checkbox"]:checked + span::before {
   content: "\a0";
   background-color: #36c;
   background-image: url(https://common.wjghj.cn/images/8/8f/Checkmark.svg);
   background-repeat: no-repeat;
 }
-.in-page-edit input[type='checkbox']:checked + label:hover:before {
+.in-page-edit label input[type="checkbox"]:checked + span:hover:before {
   background-color: #447ff5;
 }
-.in-page-edit input[type="checkbox"]:active + label::before,
-.in-page-edit input[type="checkbox"]:focus + label::before {
+.in-page-edit label input[type="checkbox"]:active + span::before,
+.in-page-edit label input[type="checkbox"]:focus + span::before {
   box-shadow: inset 0 0px 0px 1px rgb(255, 255, 255);
   border-color: #3366cc;
 }
-.in-page-edit input[type='checkbox'] {
+.in-page-edit label input[type="checkbox"] {
   position: absolute;
   clip:rect(0,0,0,0);
 }
-.in-page-edit input[type='checkbox']:disabled + label::before {
+.in-page-edit label input[type="checkbox"]:disabled + span::before {
   border-color: #d6d6d6;
 }
-.in-page-edit input[type='checkbox']:disabled:checked + label::before {
+.in-page-edit label input[type="checkbox"]:disabled:checked + span::before {
   background-color: #a0a0a0;
 }
 /* 右下角小工具箱 */
@@ -417,11 +464,10 @@ rgba(26,26,26,0.12),transparent),radial-gradient(farthest-side at 50% 100%,rgba(
   background: #ca7efe;
 }
 #ipe-edit-toolbox .ipe-toolbox-btn.not-allowed {
-  #box-shadow: 0 0 0 4px #ff4141 !important;
   background: #cdcdcd !important;
 }
 #ipe-edit-toolbox .ipe-toolbox-btn.not-allowed:before {
-  content: 'add';
+  content: "add";
   color: red;
   display: block;
   font-size: 86px;
@@ -464,7 +510,6 @@ rgba(26,26,26,0.12),transparent),radial-gradient(farthest-side at 50% 100%,rgba(
 }
 #ipe-edit-toolbox .btn-tip-group .btn-tip:after {
   content: "";
-  background: ;
   display: block;
   border: 5px solid transparent;
   border-right-color: #fff;
