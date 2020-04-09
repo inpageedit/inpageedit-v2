@@ -19,8 +19,8 @@
 
   // 创建全局函数
   window.InPageEdit = {};
-  InPageEdit.isCanary = true;
-  /*=version*/InPageEdit.version = '2.10.0(canary_2416)';/*version=*/
+  // InPageEdit.isCanary = true;
+  /*=version*/InPageEdit.version = '2.12.0.3(build_2629)';/*version=*/
 
   /** 导入模态框插件 **/
   mw.loader.load('https://cdn.bootcss.com/ssi-modal/1.0.27/js/ssi-modal.min.js');
