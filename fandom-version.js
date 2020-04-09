@@ -6,7 +6,7 @@
 ; (function () {
   'use strict';
   // 创建全局函数
-  if (typeof (InPageEdit.version) !== 'undefined') throw '[InPageEdit] 已经有一个IPE插件在执行了';
+  if (typeof(InPageEdit) !== 'undefined' && typeof(InPageEdit.version) !== 'undefined') throw '[InPageEdit] 已经有一个IPE插件在执行了';
   window.InPageEdit = window.InPageEdit || {};
   InPageEdit.isCanary = false;
   /*=version*/InPageEdit.version = '2.13.0(build_2795)';/*version=*/
@@ -132,7 +132,7 @@
                   )
                 ),
                 $('<div>', { class: 'btnGroup' }).append(
-                  $('<span>', { class: 'label', text: '格式' }),
+                  $('<span>', { class: 'label', text: msg('editor-edittool-format-label') }),
                   $('<button>', { class: 'editToolBtn material-icons btn', 'data-open': "'''", 'data-middle': msg('editor-edittool-bold'), 'data-close': "'''", text: 'format_bold' }),
                   $('<button>', { class: 'editToolBtn material-icons btn', 'data-open': "''", 'data-middle': msg('editor-edittool-italic'), 'data-close': "''", text: 'format_italic' }),
                   $('<button>', { class: 'editToolBtn material-icons btn', 'data-open': '\n* ', 'data-middle': msg('editor-edittool-list-bulleted'), 'data-close': '\n', text: 'format_list_bulleted' }),
@@ -141,13 +141,13 @@
                   $('<button>', { class: 'editToolBtn material-icons btn', 'data-open': '<br>\n', 'data-middle': '', 'data-close': '', text: 'keyboard_return' })
                 ),
                 $('<div>', { class: 'btnGroup' }).append(
-                  $('<span>', { class: 'label', text: '插入' }),
+                  $('<span>', { class: 'label', text: msg('editor-edittool-insert-label') }),
                   $('<button>', { class: 'editToolBtn material-icons btn', 'data-open': '[' + '[', 'data-middle': msg('editor-edittool-internal-link'), 'data-close': ']]', text: 'insert_link' }),
                   $('<button>', { class: 'editToolBtn material-icons btn', 'data-open': '[' + '[File:', 'data-middle': 'Example.png', 'data-close': '|thumb]]', text: 'image' }),
                   $('<button>', { class: 'editToolBtn material-icons btn', 'data-open': '\n<' + 'gallery>\n', 'data-middle': 'Example1.jpg|Description\nExample2.png|Description', 'data-close': '\n</gallery>\n', text: 'collections' })
                 ),
                 $('<div>', { class: 'btnGroup extra', style: 'display: none' }).append(
-                  $('<span>', { class: 'label', text: '自定义' })
+                  $('<span>', { class: 'label', text: msg('editor-edittool-custom-label') })
                 ),
                 $('<div>', { class: 'btnGroup special-tools', style: 'float: right' }).append(
                   $('<button>', { class: 'material-icons btn', onclick: "InPageEdit.findAndReplace($('.ipe-editor.timestamp-" + timestamp + " .editArea'))", text: 'find_in_page' })
