@@ -4,6 +4,29 @@
  * GNU Public License
  * InPageEdit default skin
  **/
+/* 字体 */
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/fonts/material-icons.woff2) format('woff2');
+}
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
 /* 编辑器 */
 .in-page-edit .mw-editsection,
 .in-page-edit .hide-for-guide {
@@ -384,16 +407,10 @@ rgba(26,26,26,0.12),transparent),radial-gradient(farthest-side at 50% 100%,rgba(
 /* 右下角小工具箱 */
 #ipe-edit-toolbox {
   position: fixed; 
-  right: 24px; 
-  bottom: 24px;
+  right: 32px;
+  bottom: 32px;
   user-select: none;
   z-index: 199;
-}
-#ipe-edit-toolbox #toolbox-toggle {
-  transition: all .3s cubic-bezier(.54,-0.55,.44,1.5);
-}
-#ipe-edit-toolbox #toolbox-toggle.opened {
-  transform: rotate(45deg);
 }
 #ipe-edit-toolbox .ipe-toolbox-btn {
   color: white; 
@@ -408,42 +425,72 @@ rgba(26,26,26,0.12),transparent),radial-gradient(farthest-side at 50% 100%,rgba(
   box-shadow: 0 0 5px gray;
   text-shadow: 0 0 2px #4c4c4c;
   padding: 0;
-  margin-bottom: 4px;
+  margin: 0;
   cursor: pointer;
 }
+#ipe-edit-toolbox #toolbox-toggle {
+  transition: all .26s ease-in-out;
+  transform: rotate(0deg);
+}
+#ipe-edit-toolbox #toolbox-toggle.opened {
+  transform: rotate(45deg);
+}
 #ipe-edit-toolbox .btn-group.group1 .btn-tip-group {
-  transform: scale(0) translateY(40px) translateX(0px);
+  transform: translate3d(0, 100%, 0);
 }
 #ipe-edit-toolbox .btn-group.group2 .btn-tip-group {
-  transform: scale(0) translateY(0px) translateX(40px);
+  transform: translate3d(100%, 0, 0);
 }
-#ipe-edit-toolbox .btn-group .btn-tip-group:nth-of-type(1) {
-  transition: transform .2s cubic-bezier(.68,-0.55,.35,1);
-}
-#ipe-edit-toolbox .btn-group .btn-tip-group:nth-of-type(2) {
-  transition: transform .2s cubic-bezier(.68,-0.55,.27,1) .14s;
-}
-#ipe-edit-toolbox .btn-group .btn-tip-group:nth-of-type(3) {
-  transition: transform .2s cubic-bezier(.68,-0.55,.27,1) .28s;
+#ipe-edit-toolbox .btn-group .btn-tip-group {
+  transition-timing-function: ease-in-out;
+  transition-duration: .3s;
+  opacity: 0;
 }
 #ipe-edit-toolbox .btn-group.opened .btn-tip-group {
-  transform: scale(1) translateY(0px) translateX(0px);
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
 }
+#ipe-edit-toolbox .btn-group.opened .btn-tip-group:nth-of-type(1),
+#ipe-edit-toolbox .btn-group:not(.opened) .btn-tip-group:nth-of-type(3) {
+  transition-delay: 0s;
+}
+#ipe-edit-toolbox .btn-group .btn-tip-group:nth-of-type(2) {
+  transition-delay: .06s;
+}
+#ipe-edit-toolbox .btn-group:not(.opened) .btn-tip-group:nth-of-type(1),
 #ipe-edit-toolbox .btn-group.opened .btn-tip-group:nth-of-type(3) {
-  transition: transform .2s cubic-bezier(.68,-0.55,.27,1.8);
+  transition-delay: .108s
 }
-#ipe-edit-toolbox .btn-group.opened .btn-tip-group:nth-of-type(2) {
-  transition: transform .2s cubic-bezier(.68,-0.55,.27,1.8) .14s;
+/* 不显示时使其完全缩小到没有，以防被点到 */
+#ipe-edit-toolbox .btn-group:not(.opened) {
+  transform: scaleZ(0);
+  transition-delay: .408s;
 }
-#ipe-edit-toolbox .btn-group.opened .btn-tip-group:nth-of-type(1) {
-  transition: transform .2s cubic-bezier(.68,-0.55,.27,1.8) .28s;
+#ipe-edit-toolbox .btn-group.opened {
+  transform: scaleZ(1);
 }
 #ipe-edit-toolbox .ipe-toolbox-btn#toolbox-toggle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
   width: 50px; 
   height: 50px;
   background: #bebebe;
   font-size: 40px; 
   line-height: 56px;
+  margin: 0;
+}
+#ipe-edit-toolbox .ipe-toolbox-btn#toolbox-toggle.click {
+  box-shadow: 0 0 4px gray, 0 0 10px #444 inset;
+}
+#toolbox-toggle.click:before {
+  content: "lock";
+  display: block;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 12px;
+  transform: rotateZ(-45deg)
 }
 #ipe-edit-toolbox .ipe-toolbox-btn#edit-btn {
   background: #45a8ff;
@@ -477,21 +524,27 @@ rgba(26,26,26,0.12),transparent),radial-gradient(farthest-side at 50% 100%,rgba(
   margin-left: -22px;
 }
 #ipe-edit-toolbox .btn-group {
-  height: auto;
-  margin-left: 2px;
-  position: relative;
+  position: absolute;
+  float: right;
   list-style: none;
+  margin: 0;
+}
+#ipe-edit-toolbox .btn-group.group1 {
+  bottom: calc(50px + 6px);
+  right: 2px;
 }
 #ipe-edit-toolbox .btn-group.group2 {
-  position: absolute;
-  right: 50px;
-  margin: 5px 0 0 0;
+  bottom: 0;
+  right: calc(50px + 6px);
 }
-#ipe-edit-toolbox .btn-group.opened {
-  visibility: visible
+#ipe-edit-toolbox .btn-group.group1 .btn-tip-group {
+  margin-bottom: 6px;
 }
 #ipe-edit-toolbox .btn-group.group2 .btn-tip-group {
   margin-right: 6px;
+}
+#ipe-edit-toolbox .btn-group.opened {
+  visibility: visible
 }
 #ipe-edit-toolbox .btn-tip-group .btn-tip {
   position: absolute;
@@ -523,16 +576,6 @@ rgba(26,26,26,0.12),transparent),radial-gradient(farthest-side at 50% 100%,rgba(
  * Animate.css Lite
  * Only zoomIn & zoomOut
  **/
-@-webkit-keyframes zoomIn {
-  from {
-    opacity: 0;
-    -webkit-transform: scale3d(0.3, 0.3, 0.3);
-    transform: scale3d(0.3, 0.3, 0.3);
-  }
-  50% {
-    opacity: 1;
-  }
-}
 @keyframes zoomIn {
   from {
     opacity: 0;
@@ -546,19 +589,6 @@ rgba(26,26,26,0.12),transparent),radial-gradient(farthest-side at 50% 100%,rgba(
 .zoomIn {
   -webkit-animation-name: zoomIn;
   animation-name: zoomIn;
-}
-@-webkit-keyframes zoomOut {
-  from {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-    -webkit-transform: scale3d(0.3, 0.3, 0.3);
-    transform: scale3d(0.3, 0.3, 0.3);
-  }
-  to {
-    opacity: 0;
-  }
 }
 @keyframes zoomOut {
   from {
