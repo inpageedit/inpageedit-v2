@@ -34,6 +34,9 @@
   mw.hook('dev.i18n').add(function (i18no) {
     i18no.loadMessages('InPageEdit-v2').then(init);
   });
+  mw.hook('dfgh.i18n').add(function (i18no) {
+    i18no.loadMessages('InPageEdit-v2').then(init);
+  });
 
   /** InPageEdit主框架 **/
   function init(i18n) {
