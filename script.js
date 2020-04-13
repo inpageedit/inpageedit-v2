@@ -30,19 +30,16 @@
 
   /*** BOT FLAG ***/
   /** 导入 i18n 组件 **/
-  // mw.loader.load('https://common.wjghj.cn/js/i18n-js');
-  mw.hook('dev.i18n').fire();
+  mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/i18n-js@master/script.js');
   mw.hook('dev.i18n').add(function (i18no) {
-    // i18no.loadMessages('InPageEdit-v2').then(init);
-    init();
+    i18no.loadMessages('InPageEdit-v2').then(init);
   });
 
   /** InPageEdit主框架 **/
   function init(i18n) {
     // i18n
     function msg(i) {
-      // return i18n.msg(i).parse();
-      return '{' + i + '}';
+      return i18n.msg(i).parse();
     };
     /** HTML 组件 **/
     const $br = $('<br/>'),
@@ -1661,6 +1658,7 @@
       var version = InPageEdit.version;
       // 版本更新
       if (localStorage.InPageEditVersion === null || localStorage.InPageEditVersion !== version) {
+        if (typeof(ssi_modal) === undefined) return;
         ssi_modal.notify('', {
           title: msg('updatelog-update-success-title'),
           content: msg('updatelog-update-success').replace('$1', version),
