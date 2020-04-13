@@ -21,27 +21,28 @@
   /*=version*/InPageEdit.version = '2.13.0(build_2795)';/*version=*/
 
   /** 导入模态框插件 **/
-  mw.loader.load('https://cdn.bootcss.com/ssi-modal/1.0.27/js/ssi-modal.min.js');
-  $('title').after('<link id="ssi-modal-style" rel="stylesheet" href="https://cdn.bootcss.com/ssi-modal/1.0.27/styles/ssi-modal.min.css"/>');
+  mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/script.js');
+  $('title').after('<link id="ssi-modal-style" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/style.css"/>');
 
   /** 样式表 **/
   // 皮肤
-  $('link#ssi-modal-style').after('<link rel="stylesheet" href="https://common.wjghj.cn/css/InPageEdit-v2"/>');
-  // Material icons
-  mw.loader.load('https://cdn.bootcss.com/material-design-icons/3.0.1/iconfont/material-icons.min.css', 'text/css');
+  $('link#ssi-modal-style').after('<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/override.css"/>');
 
   /*** BOT FLAG ***/
   /** 导入 i18n 组件 **/
-  mw.loader.load('https://common.wjghj.cn/js/i18n-js');
+  // mw.loader.load('https://common.wjghj.cn/js/i18n-js');
+  mw.hook('dev.i18n').fire();
   mw.hook('dev.i18n').add(function (i18no) {
-    i18no.loadMessages('InPageEdit-v2').then(init);
+    // i18no.loadMessages('InPageEdit-v2').then(init);
+    init();
   });
 
   /** InPageEdit主框架 **/
   function init(i18n) {
     // i18n
     function msg(i) {
-      return i18n.msg(i).parse();
+      // return i18n.msg(i).parse();
+      return '{' + i + '}';
     };
     /** HTML 组件 **/
     const $br = $('<br/>'),
