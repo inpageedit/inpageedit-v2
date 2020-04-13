@@ -1,39 +1,31 @@
 /**
- *『Wjghj Project Static』
- * This _JavaScript_ code is from https://common.wjghj.cn
  * GNU GENERAL PUBLIC LICENSE 3.0
  *
  * MediaWiki JS Plugin: In Page Edit
- * Version: See version-info file
  * Author: 机智的小鱼君
- * Url:
- ** https://github.com/Dragon-Fish/InPageEdit-v2
- ** https://common.wjghj.cn/wiki/InPageEdit-v2
- * Logs:
- ** https://common.wjghj.cn/wiki/InPageEdit-v2/version-info
+ * Url: https://github.com/Dragon-Fish/InPageEdit-v2
  **/
 ; (function () {
   'use strict';
   // 创建全局函数
-  if (typeof(InPageEdit) !== 'undefined' && typeof(InPageEdit.version) !== 'undefined') throw '[InPageEdit] 已经有一个IPE插件在执行了';
+  if (typeof (InPageEdit) !== 'undefined' && typeof (InPageEdit.version) !== 'undefined') throw '[InPageEdit] 已经有一个IPE插件在执行了';
   window.InPageEdit = window.InPageEdit || {};
   InPageEdit.isCanary = false;
-  /*=version*/InPageEdit.version = '2.13.0(build_2795)';/*version=*/
+  /*=version*/InPageEdit.version = '2.13.0(canary_2755)';/*version=*/
 
   /** 导入模态框插件 **/
-  mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/script.js');
-  $('title').after('<link id="ssi-modal-style" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/style.css"/>');
-
+  mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/script.min.js');
   /** 样式表 **/
-  // 皮肤
-  $('link#ssi-modal-style').after('<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/override.css"/>');
+  $('title').after(
+    // 模态框
+    $('<link>', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/style.min.css' }),
+    // 覆写
+    $('<link>', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/override.min.css' })
+  );
 
   /*** BOT FLAG ***/
   /** 导入 i18n 组件 **/
-  mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/i18n-js@master/script.js');
-  mw.hook('dev.i18n').add(function (i18no) {
-    i18no.loadMessages('InPageEdit-v2').then(init);
-  });
+  mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/i18n-js@master/script.min.js');
   mw.hook('dfgh.i18n').add(function (i18no) {
     i18no.loadMessages('InPageEdit-v2').then(init);
   });
@@ -1661,7 +1653,7 @@
       var version = InPageEdit.version;
       // 版本更新
       if (localStorage.InPageEditVersion === null || localStorage.InPageEditVersion !== version) {
-        if (typeof(ssi_modal) === undefined) return;
+        if (typeof (ssi_modal) === undefined) return;
         ssi_modal.notify('', {
           title: msg('updatelog-update-success-title'),
           content: msg('updatelog-update-success').replace('$1', version),
@@ -1768,12 +1760,28 @@
         ),
         $('<button>', { class: 'ipe-toolbox-btn material-icons', id: 'toolbox-toggle', text: 'add' })
       ).appendTo('body');
+
+      // 设置开关等
+      var toolBoxInner = $('#ipe-edit-toolbox #toolbox-toggle, #ipe-edit-toolbox .btn-group');
       $('#ipe-edit-toolbox #toolbox-toggle').click(function () {
-        $('#ipe-edit-toolbox #toolbox-toggle, #ipe-edit-toolbox .btn-group').toggleClass('opened');
+        if ($(this).hasClass('opened') && !$(this).hasClass('click')) {
+          toolBoxInner.addClass('click');
+        } else if ($(this).hasClass('click')) {
+          toolBoxInner.removeClass('click opened');
+        } else {
+          toolBoxInner.addClass('click opened');
+        }
       });
-      $('body > *:not(#ipe-edit-toolbox)').click(function () {
-        $('#ipe-edit-toolbox #toolbox-toggle, #ipe-edit-toolbox .btn-group').removeClass('opened');
+      $('#ipe-edit-toolbox').hover(function () {
+        toolBoxInner.addClass('hover opened');
+      }, function () {
+        toolBoxInner.removeClass('hover');
+        if (!$('#ipe-edit-toolbox #toolbox-toggle').hasClass('click')) {
+          toolBoxInner.removeClass('opened');
+        }
       });
+
+      // 按钮功能
       $('#ipe-edit-toolbox .btn-group .ipe-toolbox-btn').click(function () {
         InPageEdit.analysis({ type: 'functionCount', function: '工具盒' });
         switch ($(this).attr('id')) {
