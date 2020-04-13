@@ -11,7 +11,7 @@
   if (typeof (InPageEdit) !== 'undefined' && typeof (InPageEdit.version) !== 'undefined') throw '[InPageEdit] 已经有一个IPE插件在执行了';
   window.InPageEdit = window.InPageEdit || {};
   InPageEdit.isCanary = false;
-  /*=version*/InPageEdit.version = '2.13.0(canary_2755)';/*version=*/
+  /*=version*/InPageEdit.version = '2.13.0.1(build_c052a80)';/*version=*/
 
   /** 导入模态框插件 **/
   mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/script.min.js');
