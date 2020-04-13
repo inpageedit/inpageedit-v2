@@ -31,6 +31,9 @@
   /*** BOT FLAG ***/
   /** 导入 i18n 组件 **/
   mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/i18n-js@master/script.js');
+  mw.hook('dev.i18n').add(function (i18no) {
+    i18no.loadMessages('InPageEdit-v2').then(init);
+  });
   mw.hook('dfgh.i18n').add(function (i18no) {
     i18no.loadMessages('InPageEdit-v2').then(init);
   });
