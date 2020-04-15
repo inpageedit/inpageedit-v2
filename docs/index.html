@@ -1,13 +1,15 @@
 <html>
 
 <head>
-  <title>InPageEdit-v2 | MediaWiki Gadget</title>
+  <title>InPageEdit-v2 | A MediaWiki Quick Edit Gadget by Dragon Fish</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=yes">
+  <meta name="keywords" content="InPageEdit,InPageEdit-v2,MediaWiki,MediaWiki Gadget">
+  <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.min.js"></script>
 </head>
 
 <body class="github-page">
-  <main>
+  <article>
     <h1>InPageEdit-v2</h1>
     <table class="infobox">
       <tbody>
@@ -88,7 +90,7 @@
       <li>编辑器提供预览功能</li>
       <li>也可以编辑页面的历史版本以便快速修复</li>
       <li>
-        '''注意，您不应将本插件作为MediaWiki原生编辑页面的完全替代品，本插件与原生编辑页面相比少了很多实用的工具（模版使用分析、高级编辑工具条等等），而且稳定性一定低于原生编辑页面'''，本插件更适合进行修复页面内简单问题的小编辑
+        <b>注意，您不应将本插件作为MediaWiki原生编辑页面的完全替代品，本插件与原生编辑页面相比少了很多实用的工具（模版使用分析、高级编辑工具条等等），而且稳定性一定低于原生编辑页面</b>，本插件更适合进行修复页面内简单问题的小编辑
       </li>
     </ul>
     <h4 id="快速编辑段落">快速编辑段落</h4>
@@ -210,115 +212,99 @@
 
     <div style="text-align: center; color: #888; font-size: small;">
       <p>InPageEdit-v2 is a MediaWiki plugin based on JavaScript. And write by <a
-          href="https://epbureau.fandom.com/wiki/%E6%9C%BA%E6%99%BA%E7%9A%84%E5%B0%8F%E9%B1%BC%E5%90%9B">机智的小鱼君</a></p>
-      <p>© Original by Wjghj Project, <a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html">GNU General Public
-          License 3.0</a> (2019 -
-        <script>document.write(new Date().getFullYear());</script>)<br>
+          href="https://epbureau.fandom.com/wiki/%E6%9C%BA%E6%99%BA%E7%9A%84%E5%B0%8F%E9%B1%BC%E5%90%9B">机智的小鱼君</a>
+      </p>
+      <p>© Original by Wjghj Project, <a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html">GNU General
+          Public
+          License 3.0</a> (2019 - <span id="thisYear"></span>)<br>
         See more: <a href="https://github.com/Dragon-Fish/InPageEdit-v2">GitHub</a> <a
           href="https://github.com/Dragon-Fish/InPageEdit-v2/docs/Update%20logs.md">Update logs</a> <a
           href="https://github.com/Dragon-Fish/InPageEdit-v2/issue">File issues</a></p>
     </div>
-    <style>
-      .github-page {
-        background: aliceblue url("https://vignette.wikia.nocookie.net/dragonfish/images/5/50/Wiki-background/revision/latest/scale-to-width-down/1280?cb=20180308051626&path-prefix=zh") 50% -100px / cover no-repeat fixed !important;
-        background-attachment: fixed !important;
-        padding: 16px;
-      }
+  </article>
+  <script>
+    $(function () {
+      $('#thisYear').text(new Date().getFullYear());
+    });
+  </script>
+  <style>
+    .github-page {
+      background: aliceblue url("https://vignette.wikia.nocookie.net/dragonfish/images/5/50/Wiki-background/revision/latest/scale-to-width-down/1280?cb=20180308051626&path-prefix=zh") 50% -100px / cover no-repeat fixed !important;
+      background-attachment: fixed !important;
+      padding: 16px;
+    }
 
-      .github-page main {
-        background: rgba(255, 255, 255, .7);
-        width: calc(100% - 32px);
-        padding: 16px;
-        border: 1px solid #aaa;
-        box-sizing: content-box;
-      }
+    .github-page article {
+      background: rgba(255, 255, 255, .7);
+      width: calc(100% - 32px);
+      padding: 16px;
+      border: 1px solid #aaa;
+      box-sizing: content-box;
+    }
 
-      h1 {
-        border: none;
-        background: linear-gradient(90deg, rgb(151, 151, 151), rgba(255, 255, 255, 0));
-        background-position: 0 42px;
-        background-repeat: repeat-x;
-        background-size: 100% 8px;
-        text-shadow: 2px 0px 0px white;
+    .github-page h1 {
+      border: none;
+      background: linear-gradient(90deg, rgb(151, 151, 151), rgba(255, 255, 255, 0));
+      background-position: 0 42px;
+      background-repeat: repeat-x;
+      background-size: 100% 8px;
+      text-shadow: 2px 0px 0px white;
+      width: 100%;
+      padding-left: 4px;
+      margin-bottom: 9px;
+      font-size: 42px
+    }
+
+    .github-page h2 {
+      padding-top: 2px;
+      border: none !important;
+      background: linear-gradient(90deg, rgb(127, 172, 255), rgba(210, 232, 255, 0.53));
+      background-position: 0 18px !important;
+      background-repeat: repeat-x;
+      background-size: 100% 4px;
+      font-size: 21px;
+      text-shadow: 2px 0px 0px white
+    }
+
+    .github-page a {
+      color: #006cb0;
+      text-decoration: none;
+      text-shadow: 0 -15px 2.5px transparent, 0 15px 2.5px transparent;
+      text-decoration: none;
+      transition: all .05s;
+    }
+
+    .github-page code {
+      border: 1px solid #aaa;
+      border-radius: 2px;
+      padding: 0 2px;
+      background: rgba(200, 200, 200, .3)
+    }
+
+    .github-page hr {
+      border: none;
+      border-bottom: 4px solid #bbb;
+      width: 280px;
+      margin: 0 auto;
+    }
+
+    .github-page .infobox {
+      font-size: .85em;
+      text-align: center;
+      width: 260px;
+      max-width: 100%;
+      float: right;
+      background-color: #e6f5f9;
+      margin: 1em 10px 2em 1em;
+    }
+
+    @media screen and (max-width: 800px) {
+      .github-page .infobox {
+        float: laft;
         width: 100%;
-        padding-left: 4px;
-        margin-bottom: 9px;
-        font-size: 42px
       }
-
-      h2 {
-        padding-top: 2px;
-        border: none !important;
-        background: linear-gradient(90deg, rgb(127, 172, 255), rgba(210, 232, 255, 0.53));
-        background-position: 0 18px !important;
-        background-repeat: repeat-x;
-        background-size: 100% 4px;
-        font-size: 21px;
-        text-shadow: 2px 0px 0px white
-      }
-
-      h3 {
-        border: none;
-        background: linear-gradient(90deg, rgb(159, 204, 255), rgba(159, 204, 255, 0));
-        background-position: 0 18px;
-        background-repeat: repeat-x;
-        background-size: 100% 2px;
-        font-size: 19px
-      }
-
-      h4 {
-        border: none;
-        background: linear-gradient(90deg, rgb(159, 204, 255), rgba(159, 204, 255, 0));
-        background-position: 0 16px;
-        background-repeat: repeat-x;
-        background-size: 1px 1px;
-        font-size: 17px
-      }
-
-      h5 {
-        font-size: 16px
-      }
-
-      a {
-        color: #006cb0;
-        text-decoration: none;
-        text-shadow: 0 -15px 2.5px transparent, 0 15px 2.5px transparent;
-        text-decoration: none;
-        transition: all .05s;
-      }
-
-      code {
-        border: 1px solid #aaa;
-        border-radius: 2px;
-        padding: 0 2px;
-        background: rgba(200, 200, 200, .3)
-      }
-
-      hr {
-        border: none;
-        border-bottom: 4px solid #bbb;
-        width: 280px;
-        margin: 0 auto;
-      }
-
-      .infobox {
-        font-size: .85em;
-        text-align: center;
-        width: 260px;
-        max-width: 100%;
-        float: right;
-        background-color: #e6f5f9;
-        margin: 1em 10px 2em 1em;
-      }
-
-      @media screen and (max-width: 800px) {
-        .infobox {
-          float: laft;
-          width: 100%;
-        }
-      }
-    </style>
-  </main>
+    }
+  </style>
 </body>
 
 </html>
