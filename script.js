@@ -428,27 +428,32 @@
             function queryDone(data) {
               var data = data;
               if (data.query.pages[pageId]['protection'].length > 0) {
-                var protection = data.query.pages[pageId].protection[0].level;
-                if (
-                  (protection === 'autoconfirmed' && !InPageEdit.hasRight('autoconfirmed')) ||
-                  (protection === 'sysop' && !InPageEdit.hasRight('editprotected')) ||
-                  (mw.config.get('wgNamespaceNumber') === 8 && !InPageEdit.hasRight('editinterface'))
-                ) {
-                  ssi_modal.notify('dialog', {
-                    className: 'in-page-edit',
-                    position: 'center bottom',
-                    title: msg('notify-no-right'),
-                    content: msg('editor-no-right'),
-                    okBtn: {
-                      label: msg('ok'),
-                      className: 'btn btn-primary',
-                      method: function (e, modal) {
-                        modal.close();
+                var protection = data.query.pages[pageId]['protection'];
+                for (var i = 0; i < protection.length; i++) {
+                  if (
+                    protection[i].type === 'edit' &&
+                    (
+                      (protection[i].level === 'autoconfirmed' && !InPageEdit.hasRight('autoconfirmed')) ||
+                      (protection[i].level === 'sysop' && !InPageEdit.hasRight('editprotected')) ||
+                      (mw.config.get('wgNamespaceNumber') === 8 && !InPageEdit.hasRight('editinterface'))
+                    )
+                  ) {
+                    ssi_modal.notify('dialog', {
+                      className: 'in-page-edit',
+                      position: 'center bottom',
+                      title: msg('notify-no-right'),
+                      content: msg('editor-no-right'),
+                      okBtn: {
+                        label: msg('ok'),
+                        className: 'btn btn-primary',
+                        method: function (e, modal) {
+                          modal.close();
+                        }
                       }
-                    }
-                  });
-                  $('.ipe-editor.timestamp-' + timestamp + ' .editArea').attr('readonly', 'readonly');
-                  $('.ipe-editor.timestamp-' + timestamp + ' button.editForm').attr('disabled', 'disabled');
+                    });
+                    $('.ipe-editor.timestamp-' + timestamp + ' .editArea').attr('readonly', 'readonly');
+                    $('.ipe-editor.timestamp-' + timestamp + ' button.editForm').attr('disabled', 'disabled');
+                  }
                 }
               }
               // 获取编辑提示
@@ -1588,7 +1593,7 @@
       ssi_modal.show({
         className: 'in-page-edit version-info',
         title: msg('updatelog-title') + ' - <span id="yourVersion">' + msg('updatelog-loading') + '</span>',
-        content: '<div id="IPEversionInfoPlaceholder" class="ipe-progress" style="margin: calc(30% - 1em) auto;"><div class="ipe-progress-bar"></div></div><section style="display:none" id="IPEversionInfo"></section>',
+        content: '<div><div id="IPEversionInfoPlaceholder" class="ipe-progress" style="margin: calc(30% - 1em) auto;"><div class="ipe-progress-bar"></div></div><section style="display:none" id="IPEversionInfo"></section></div>',
         fitScreen: true,
         fixedHeight: true,
         buttons: [{
@@ -1612,19 +1617,13 @@
         }]
       });
       $.ajax({
-        url: 'https://common.wjghj.cn/api.php',
-        dataType: 'jsonp',
-        type: 'get',
-        data: {
-          page: 'InPageEdit-v2/version-info',
-          action: 'parse',
-          prop: 'text',
-          format: 'json'
-        },
+        url: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/docs/version-info.json',
+        dataType: 'json',
         success: function (data) {
-          var info = data.parse.text['*'];
+          var data = data;
+
+          // 安置文档
           $('#IPEversionInfoPlaceholder').addClass('done').delay(800).fadeOut(200);
-          $('#IPEversionInfo').html(info);
           $('#yourVersion').html(localStorage.InPageEditVersion);
           $('#IPEversionInfo .mw-headline').each(function () {
             var $this = $(this),
@@ -1643,8 +1642,8 @@
       ssi_modal.show({
         title: '关于InPageEdit',
         className: 'in-page-edit in-page-edit-about',
-        sizeClass: 'dialog',
-        content: '<iframe style="margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;" src="https://dev.fandom.com/wiki/InPageEdit-v2?useskin=mercury&amp;mobile-app=true"></iframe>'
+        // sizeClass: 'dialog',
+        content: '<section><iframe style="margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;" src="https://dragon-fish.github.io/InPageEdit-v2/?iframe=1"></iframe></section>'
       });
     };
 
