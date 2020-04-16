@@ -179,7 +179,7 @@ https://github.com/Dragon-Fish/InPageEdit-v2
 
 <hr/>
 
-InPageEdit-v2 is a MediaWiki plugin based on JavaScript. And write by [机智的小鱼君](https://wjghj.cn/wiki/机智的小鱼君)
+InPageEdit-v2 is a MediaWiki plugin based on JavaScript and is written by [机智的小鱼君](https://wjghj.cn/wiki/机智的小鱼君)
 
 © Original by Wjghj Project, [GNU General Public License 3.0](https://www.gnu.org/licenses/gpl-3.0-standalone.html) (2019- )<br/>
 See more: [GitHub](https://github.com/Dragon-Fish/InPageEdit-v2) [Update logs](https://github.com/Dragon-Fish/InPageEdit-v2/docs/Update%20logs.md) [File issues](https://github.com/Dragon-Fish/InPageEdit-v2/issue)
