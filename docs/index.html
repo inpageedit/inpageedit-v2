@@ -240,6 +240,7 @@
       }
       if (getQueryVariable('iframe')) {
         $('body').addClass('iframe');
+        $('head').append('<base target="_blank">');
       }
     });
   </script>

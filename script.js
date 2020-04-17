@@ -1547,8 +1547,10 @@
       // 显示模态框
       ssi_modal.show({
         className: 'in-page-edit update-logs-modal',
-        title: msg('updatelog-title') + ' - <span id="yourVersion">' + msg('updatelog-loading') + '</span>',
-        content: $progress.attr('id', 'updatelogs-progress'),
+        title: msg('updatelog-title') + ' - <span id="yourVersion">' + InPageEdit.version + '</span>',
+        content: $('<section>').append(
+          $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: 'https://dragon-fish.github.io/update-logs.html?iframe=1' })
+        ).prop('outerHTML'),
         fitScreen: true,
         fixedHeight: true,
         buttons: [{
@@ -1570,90 +1572,6 @@
             window.open('https://dragon-fish.github.io/InPageEdit-v2/');
           }
         }]
-      });
-
-      // AJAX获取更新列表的json
-      $.ajax({
-        url: InPageEdit.api.updatelogsJson,
-        dataType: 'json',
-        success: function (data) {
-          var data = data || {};
-
-          // 更新列表偶尔会采取简单的markdown语法，格式化
-          function conversion(text) {
-            var text = text;
-            if (typeof text !== 'string') return 'Error.';
-            text = text
-              .replace(/\[\[(issues|pull)\#(.+?)\]\]/g, '[https://github.com/Dragon-Fish/InPageEdit-v2/$1/$2]($1#$2)') // issues 或 pull
-              .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$1" target="_blank">$2</a>') // 链接
-              .replace(/<(http:\/\/|https:\/\/)(.+?)>/g, '<a href="$1$2" target="_blank>$1$2</a>') // 直接链接
-              .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>') // 粗体
-              .replace(/\*(.+?)\*/g, '<i>$1</i>') // 斜体
-              .replace(/`(.+?)`/g, '<code>$1</code>');
-            return text;
-          }
-
-          // 将json数据格式化为html
-          var list = data.list || [];
-          var html = $('<section>', { class: 'ipe-update-logs', style: 'display:none' }); // 创建外部html
-
-          // 遍历整体数组
-          for (var k1 = 0; k1 < list.length; k1++) {
-            var version = list[k1]['version'], // 本次遍历的版本号
-              date = list[k1]['date'] || '-', // 本次遍历的更新时间
-              description = list[k1]['description'] || []; // 本次遍历的说明列表
-
-            // 建立本次遍历的外部html
-            var versionGroup = $('<div>', { class: 'version-group' });
-            var versionHTML = $('<h2>', { text: version, id: version.replace(/\./g, '-').replace(/\(/g, '_').replace(/\)/g, '') }), // 本次遍历的版本的html对象
-              dateHTML = $('<p>', { text: 'Release date: ' + date }); // 本次遍历的时间的html对象
-
-            // 遍历说明列表
-            for (var k2 = 0; k2 < description.length; k2++) {
-              var type = description[k2]['type'] || 'note', // 本次遍历的变更类型
-                type = type.toLowerCase(), // 统一转换为小写
-                main = description[k2]['main'] || '', // 本次遍历的主要文字
-                more = description[k2]['more'] || []; // 本次遍历的更多说明列表
-              if (typeof more === 'string') more = [more]; // 将更多说明转换为数组
-
-              var versionChanges = $('<ul>', { class: 'version-chages-list' }), // 建立外部乱序列表项
-                typeHTML = $('<span>', { text: type, class: 'status-tag ' + type }), // 将更改类型装换位html对象
-                mainHTML = $('<li>', { class: 'version-chage', html: typeHTML.prop('outerHTML') + conversion(main) }), // 将主要说明组合为html对象
-                moreHTML = $('<ul>', { class: 'change-more-info' }); // 建立更多说明的乱序列表
-
-              for (var k3 = 0; k3 < more.length; k3++) {
-                moreHTML.append(
-                  $('<li>', { html: conversion(more['k3']) })
-                )
-              }
-              versionChanges.append(
-                mainHTML,
-                moreHTML
-              );
-            }
-            versionGroup = versionGroup.append(
-              versionHTML,
-              dateHTML,
-              versionChanges
-            );
-            html = html.append(versionGroup);
-          }
-
-          // 安置文档
-          $('#updatelogs-progress')
-            .after(html) // 插入html
-            .addClass('done') // 将progress切换为完成
-            .delay(800).fadeOut(200); // 1s后隐藏progress
-          // 将版本号显示在标题
-          $('#yourVersion').html(localStorage.InPageEditVersion);
-          // 1s后显示html
-          setTimeout(function () {
-            $('.ipe-update-logs').fadeIn(800);
-          }, 1000);
-        },
-        fail: function () {
-          // placeholder
-        }
       });
     };
 
