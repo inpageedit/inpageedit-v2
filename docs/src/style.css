@@ -49,6 +49,10 @@
   transition: all .05s;
 }
 
+.github-page pre {
+  overflow: auto;
+}
+
 .github-page code {
   border: 1px solid #aaa;
   border-radius: 2px;
