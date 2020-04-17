@@ -1,7 +1,7 @@
 <table>
   <tbody>
     <tr>
-      <td colspan="2">**InPageEdit-v2**
+      <td colspan="2"><b>InPageEdit-v2</b>
       </td>
     </tr>
     <tr>
@@ -10,7 +10,7 @@
       </td>
     </tr>
     <tr>
-      <td colspan="2">**信息**
+      <td colspan="2"><b>信息</b>
       </td>
     </tr>
     <tr>
