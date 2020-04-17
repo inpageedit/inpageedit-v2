@@ -1549,7 +1549,7 @@
         className: 'in-page-edit update-logs-modal',
         title: msg('updatelog-title') + ' - <span id="yourVersion">' + InPageEdit.version + '</span>',
         content: $('<section>').append(
-          $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: 'https://dragon-fish.github.io/update-logs.html?iframe=1' })
+          $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: 'https://dragon-fish.github.io/InPageEdit-v2/update-logs.html?iframe=1' })
         ).prop('outerHTML'),
         fitScreen: true,
         fixedHeight: true,
