@@ -13,7 +13,8 @@
 
   <article>
     <h1>InPageEdit-v2 Update Logs</h1>
-    <div class="bread-crumb"><a href="index.html">InPageEdit-v2</a> <span class="gt">&gt;</span> <b class="this-page">Update Logs</b></div>
+    <div class="bread-crumb"><a href="index.html">InPageEdit-v2</a> <span class="gt">&gt;</span> <b
+        class="this-page">Update Logs</b></div>
 
     <main>
       <div id="updatelogs-progress" style="margin: 80px auto; text-align: center;"><img
@@ -35,6 +36,20 @@
 
   <script>
     $(function () {
+      // iframe Page
+      function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+          var pair = vars[i].split("=");
+          if (pair[0] == variable) { return pair[1]; }
+        }
+        return (false);
+      }
+      if (getQueryVariable('iframe')) {
+        $('body').addClass('iframe');
+        $('head').append('<base target="_blank">');
+      }
       // AJAX获取更新列表的json
       $.ajax({
         url: 'update-logs.json',

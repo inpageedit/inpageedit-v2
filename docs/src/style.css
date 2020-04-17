@@ -79,6 +79,10 @@
   font-size: small;
 }
 
+.github-page.iframe .bread-crumb {
+  display: none;
+}
+
 @media screen and (max-width: 800px) {
   .github-page .infobox {
     float: laft;
