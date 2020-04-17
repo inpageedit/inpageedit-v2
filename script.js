@@ -11,6 +11,10 @@
   if (typeof (InPageEdit) !== 'undefined' && typeof (InPageEdit.version) !== 'undefined') throw '[InPageEdit] 已经有一个IPE插件在执行了';
   window.InPageEdit = window.InPageEdit || {};
   InPageEdit.isCanary = false;
+  InPageEdit.api = {
+    aboutUrl: 'https://dragon-fish.github.io/InPageEdit-v2/',
+    updatelogsJson: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/docs/update-logs.json'
+  }
   /*=version*/InPageEdit.version = '2.13.0.1(build_c052a80)';/*version=*/
 
   /** 导入模态框插件 **/
@@ -20,12 +24,12 @@
     // 模态框
     $('<link>', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/style.min.css' }),
     // 覆写
-    $('<link>', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2/src/override.min.css' })
+    $('<link>', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/override.min.css' })
   );
 
   /*** BOT FLAG ***/
   /** 导入 i18n 组件 **/
-  mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/i18n-js/script.min.js');
+  mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/i18n-js@master/script.min.js');
   mw.hook('dfgh.i18n').add(function (i18no) {
     i18no.loadMessages('InPageEdit-v2').then(init);
   });
@@ -1538,62 +1542,13 @@
       }
     };
 
-    /** 获取用户权限信息 **/
-    (function () {
-      mw.user.getRights().then(function (rights) {
-        console.info('[InPageEdit] 成功获取用户权限信息');
-        mw.config.set('wgUserRights', rights);
-      }).fail(function () {
-        console.warn('[InPageEdit] 警告：无法获取用户权限信息');
-        mw.config.set('wgUserRights', '');
-      });
-      if (mw.user.getName() !== null) {
-        new mw.Api().get({
-          action: 'query',
-          list: 'users',
-          usprop: 'blockinfo',
-          ususers: mw.user.getName()
-        }).then(function (data) {
-          if (data.query.users[0].hasOwnProperty('blockid')) {
-            mw.config.set('wgUserIsBlocked', true);
-          } else {
-            mw.config.set('wgUserIsBlocked', false);
-          }
-        });
-      }
-    }());
-
-    InPageEdit.hasRight = function (right) {
-      if (mw.config.get('wgUserIsBlocked') === true) {
-        return false;
-      }
-      if (mw.config.get('wgUserRights').indexOf(right) > -1) {
-        return true;
-      } else {
-        return false;
-      }
-    };
-
     /** 版本信息模块 **/
-    if (InPageEdit.isCanary) {
-      InPageEdit.specialNotice = {
-        id: msg('noticeid-canary'),
-        title: msg('version-notice-canary-title'),
-        content: msg('version-notice-canary')
-      };
-    } else {
-      InPageEdit.specialNotice = {
-        id: msg('noticeid'),
-        title: msg('version-notice-title'),
-        content: msg('version-notice')
-      };
-    }
     InPageEdit.versionInfo = function () {
-      var curVersion = InPageEdit.version;
+      // 显示模态框
       ssi_modal.show({
-        className: 'in-page-edit version-info',
+        className: 'in-page-edit update-logs-modal',
         title: msg('updatelog-title') + ' - <span id="yourVersion">' + msg('updatelog-loading') + '</span>',
-        content: '<div><div id="IPEversionInfoPlaceholder" class="ipe-progress" style="margin: calc(30% - 1em) auto;"><div class="ipe-progress-bar"></div></div><section style="display:none" id="IPEversionInfo"></section></div>',
+        content: $progress.attr('id', 'updatelogs-progress'),
         fitScreen: true,
         fixedHeight: true,
         buttons: [{
@@ -1606,48 +1561,115 @@
           label: 'GitHub',
           className: 'btn btn-secondary',
           method: function () {
-            location.href = 'https://github.com/Dragon-Fish/InPageEdit-v2';
+            window.open('https://github.com/Dragon-Fish/InPageEdit-v2');
           }
         }, {
           label: msg('updatelog-about'),
           className: 'btn btn-secondary',
           method: function () {
-            location.href = 'https://common.wjghj.cn/wiki/InPageEdit-v2';
+            window.open('https://dragon-fish.github.io/InPageEdit-v2/');
           }
         }]
       });
+
+      // AJAX获取更新列表的json
       $.ajax({
-        url: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/docs/version-info.json',
+        url: InPageEdit.api.updatelogsJson,
         dataType: 'json',
         success: function (data) {
-          var data = data;
+          var data = data || {};
+
+          // 更新列表偶尔会采取简单的markdown语法，格式化
+          function conversion(text) {
+            var text = text;
+            if (typeof text !== 'string') return 'Error.';
+            text = text
+              .replace(/\[\[(issues|pull)\#(.+?)\]\]/g, '[https://github.com/Dragon-Fish/InPageEdit-v2/$1/$2]($1#$2)') // issues 或 pull
+              .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$1" target="_blank">$2</a>') // 链接
+              .replace(/<(http:\/\/|https:\/\/)(.+?)>/g, '<a href="$1$2" target="_blank>$1$2</a>') // 直接链接
+              .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>') // 粗体
+              .replace(/\*(.+?)\*/g, '<i>$1</i>') // 斜体
+              .replace(/`(.+?)`/g, '<code>$1</code>');
+            return text;
+          }
+
+          // 将json数据格式化为html
+          var list = data.list || [];
+          var html = $('<section>', { class: 'ipe-update-logs', style: 'display:none' }); // 创建外部html
+
+          // 遍历整体数组
+          for (var k1 = 0; k1 < list.length; k1++) {
+            var version = list[k1]['version'], // 本次遍历的版本号
+              date = list[k1]['date'] || '-', // 本次遍历的更新时间
+              description = list[k1]['description'] || []; // 本次遍历的说明列表
+
+            // 建立本次遍历的外部html
+            var versionGroup = $('<div>', { class: 'version-group' });
+            var versionHTML = $('<h2>', { text: version, id: version.replace(/\./g, '-').replace(/\(/g, '_').replace(/\)/g, '') }), // 本次遍历的版本的html对象
+              dateHTML = $('<p>', { text: 'Release date: ' + date }); // 本次遍历的时间的html对象
+
+            // 遍历说明列表
+            for (var k2 = 0; k2 < description.length; k2++) {
+              var type = description[k2]['type'] || 'note', // 本次遍历的变更类型
+                type = type.toLowerCase(), // 统一转换为小写
+                main = description[k2]['main'] || '', // 本次遍历的主要文字
+                more = description[k2]['more'] || []; // 本次遍历的更多说明列表
+              if (typeof more === 'string') more = [more]; // 将更多说明转换为数组
+
+              var versionChanges = $('<ul>', { class: 'version-chages-list' }), // 建立外部乱序列表项
+                typeHTML = $('<span>', { text: type, class: 'status-tag ' + type }), // 将更改类型装换位html对象
+                mainHTML = $('<li>', { class: 'version-chage', html: typeHTML.prop('outerHTML') + conversion(main) }), // 将主要说明组合为html对象
+                moreHTML = $('<ul>', { class: 'change-more-info' }); // 建立更多说明的乱序列表
+
+              for (var k3 = 0; k3 < more.length; k3++) {
+                moreHTML.append(
+                  $('<li>', { html: conversion(more['k3']) })
+                )
+              }
+              versionChanges.append(
+                mainHTML,
+                moreHTML
+              );
+            }
+            versionGroup = versionGroup.append(
+              versionHTML,
+              dateHTML,
+              versionChanges
+            );
+            html = html.append(versionGroup);
+          }
 
           // 安置文档
-          $('#IPEversionInfoPlaceholder').addClass('done').delay(800).fadeOut(200);
+          $('#updatelogs-progress')
+            .after(html) // 插入html
+            .addClass('done') // 将progress切换为完成
+            .delay(800).fadeOut(200); // 1s后隐藏progress
+          // 将版本号显示在标题
           $('#yourVersion').html(localStorage.InPageEditVersion);
-          $('#IPEversionInfo .mw-headline').each(function () {
-            var $this = $(this),
-              text = $this.text();
-            if (text === curVersion) {
-              $this.html('<em class="curVersion" style="background: lightyellow; font-weight: bold">★ ' + $this.text() + '</em>');
-            }
-          });
-          setTimeout('$("#IPEversionInfo").fadeIn(800)', 1000);
+          // 1s后显示html
+          setTimeout(function () {
+            $('.ipe-update-logs').fadeIn(800);
+          }, 1000);
+        },
+        fail: function () {
+          // placeholder
         }
       });
     };
 
-    /** 关于插件 **/
+    /** 关于插件模块 **/
     InPageEdit.about = function () {
       ssi_modal.show({
         title: '关于InPageEdit',
         className: 'in-page-edit in-page-edit-about',
         // sizeClass: 'dialog',
-        content: '<section><iframe style="margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;" src="https://dragon-fish.github.io/InPageEdit-v2/?iframe=1"></iframe></section>'
+        content: $('<section>').append(
+          $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: 'https://dragon-fish.github.io/InPageEdit-v2/?iframe=1' })
+        ).prop('outerHTML')
       });
     };
 
-    /** 获取版本提示 **/
+    /** 获取版本更新提示 **/
     $(function () {
       var version = InPageEdit.version;
       // 版本更新
@@ -1698,6 +1720,56 @@
         });
       }
     });
+    // 特别通知
+    if (InPageEdit.isCanary) {
+      InPageEdit.specialNotice = {
+        id: msg('noticeid-canary'),
+        title: msg('version-notice-canary-title'),
+        content: msg('version-notice-canary')
+      };
+    } else {
+      InPageEdit.specialNotice = {
+        id: msg('noticeid'),
+        title: msg('version-notice-title'),
+        content: msg('version-notice')
+      };
+    }
+
+    /** 获取用户权限信息 **/
+    (function () {
+      mw.user.getRights().then(function (rights) {
+        console.info('[InPageEdit] 成功获取用户权限信息');
+        mw.config.set('wgUserRights', rights);
+      }).fail(function () {
+        console.warn('[InPageEdit] 警告：无法获取用户权限信息');
+        mw.config.set('wgUserRights', '');
+      });
+      if (mw.user.getName() !== null) {
+        new mw.Api().get({
+          action: 'query',
+          list: 'users',
+          usprop: 'blockinfo',
+          ususers: mw.user.getName()
+        }).then(function (data) {
+          if (data.query.users[0].hasOwnProperty('blockid')) {
+            mw.config.set('wgUserIsBlocked', true);
+          } else {
+            mw.config.set('wgUserIsBlocked', false);
+          }
+        });
+      }
+    }());
+
+    InPageEdit.hasRight = function (right) {
+      if (mw.config.get('wgUserIsBlocked') === true) {
+        return false;
+      }
+      if (mw.config.get('wgUserRights').indexOf(right) > -1) {
+        return true;
+      } else {
+        return false;
+      }
+    };
 
     /** 页面载入完成，自动加载某些模块 **/
     (function () {
