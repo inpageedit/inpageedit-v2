@@ -5,15 +5,32 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=yes">
   <meta name="keywords" content="InPageEdit,InPageEdit-v2,MediaWiki,MediaWiki Gadget">
-  <link href="style.css" rel="stylesheet">
-  <script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.min.js"></script>
+  <link href="src/style.css" rel="stylesheet">
+  <script src="src/jquery.min.js"></script>
 </head>
 
 <body class="github-page">
 
   <article>
     <h1>InPageEdit-v2 Update Logs</h1>
-    <div id="updatelogs-progress">Loading data...</div>
+    <div class="bread-crumb"><a href="index.html">InPageEdit-v2</a> <span class="gt">&gt;</span> <b class="this-page">Update Logs</b></div>
+
+    <main>
+      <div id="updatelogs-progress" style="margin: 80px auto; text-align: center;"><img
+          src="src/ms-loading-spinner.svg"><br>Loading data...</div>
+    </main>
+
+    <footer>
+      <hr>
+      <p>InPageEdit-v2 is a MediaWiki plugin based on JavaScript. And write by <a
+          href="https://epbureau.fandom.com/wiki/%E6%9C%BA%E6%99%BA%E7%9A%84%E5%B0%8F%E9%B1%BC%E5%90%9B">机智的小鱼君</a>
+      </p>
+      <p>© Original by Wjghj Project, <a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html">GNU General
+          Public
+          License 3.0</a> (2019 - <span id="thisYear"></span>)<br>
+        See more: <a href="https://github.com/Dragon-Fish/InPageEdit-v2">GitHub</a> | <a href="update-logs.html">Update
+          logs</a> | <a href="https://github.com/Dragon-Fish/InPageEdit-v2/issues">File issues</a></p>
+    </footer>
   </article>
 
   <script>
@@ -89,12 +106,12 @@
           $('#updatelogs-progress')
             .after(html) // 插入html
             .addClass('done') // 将progress切换为完成
-            .delay(800).fadeOut(200); // 1s后隐藏progress
+            .delay(300).fadeOut(700); // 1s后隐藏progress
           // 将版本号显示在标题
           $('#yourVersion').html(localStorage.InPageEditVersion);
           // 1s后显示html
           setTimeout(function () {
-            $('.ipe-update-logs').fadeIn(800);
+            $('.ipe-update-logs').show(800);
           }, 1000);
         },
         fail: function () {
