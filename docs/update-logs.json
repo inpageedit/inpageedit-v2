@@ -1,0 +1,22 @@
+{
+  "name": "InPageEdit-v2 Update Logs",
+  "url": "https://github.com/Dragon-Fish/InPageEdit-v2",
+  "list": [
+    {
+      "version": "2.13.0.2",
+      "date": "April 17, 2020 02:19 (CST)",
+      "description": [
+        {
+          "type": "fixed",
+          "main": "Update *About InPageEdit* and *Update Logs*(AKA Version Info) modules.",
+          "more": []
+        },
+        {
+          "type": "fixed",
+          "main": "Fixed [[issues#26]]",
+          "more": []
+        }
+      ]
+    }
+  ]
+}
