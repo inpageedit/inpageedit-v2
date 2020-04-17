@@ -15,7 +15,7 @@
     aboutUrl: 'https://dragon-fish.github.io/InPageEdit-v2/',
     updatelogsJson: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/docs/update-logs.json'
   }
-  /*=version*/InPageEdit.version = '2.13.0.1(build_c052a80)';/*version=*/
+  /*=version*/InPageEdit.version = '2.13.0.2';/*version=*/
 
   /** 导入模态框插件 **/
   mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/script.min.js');
