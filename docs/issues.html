@@ -6,14 +6,14 @@
     Proudly using MDUI(https://mdui.org/) (MIT)
   -->
   <head>
-    <title>InPageEdit-v2 | A MediaWiki Quick Edit Gadget by Dragon Fish</title>
+    <title>Issue | InPageEdit-v2 | A MediaWiki Quick Edit Gadget by Dragon Fish</title>
     <meta name="viewport" content="width=device-width">
     <meta name="keywords" content="InPageEdit,InPageEdit-v2,MediaWiki,MediaWiki Gadget">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui/dist/css/mdui.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/google/material-design-icons@master/iconfont/material-icons.css">
     <link rel="stylesheet" href="./src/css/template.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="./src/css/mainpage.css">
     <!-- 花 里 胡 哨 -->
     <script>console.info('    ____      ____                   ______    ___ __              _    _____ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_            | |  / /__ \\\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/  ______    | | / /__/ /\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_   /_____/    | |/ // __/ \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/              |___//____/ \n                      /____/\nInPageEdit-v2 Github pages template by Dianliang233\nLicence: GPLv3-only\nProudly using MDUI(https://mdui.org/) (MIT)');</script>
   </head>
@@ -41,10 +41,23 @@
     <br>
     <main class="mdui-container">
       <!-- 请开始你的表演 -->
-      <h1>InPageEdit-v2 Update Logs</h1>
-      <article>
-        <div id="updatelogs-progress" style="margin: 80px auto; text-align: center;"><img
-          src="./src/ms-loading-spinner.svg"><br>Loading data...</div>
+      <div id="mp-sec-1" class="mp-sec">
+        <div class="mdui-container text-center">
+          <h2 class="font-ps"><span class="IPE-logo-1">In</span><span class="IPE-logo-2">Pag<span>e</span></span><span class="IPE-logo-3">Edit</span><span class="IPE-logo-4"> v2</span></h2>
+          <h3>You can help.</h4>
+        </div>
+      </div>
+      <article class="mdui-typo mdui-container">
+        <h2>帮助 InPageEdit 完善</h2>
+        <p>作为一个为编辑者造福的用户脚本，我们深知只有听取用户的意见、指导才能更加完善。</p>
+        <p>同时，作为一个正在发展、持续更新的项目，我们也深知使用过程中出现漏洞、问题是不可避的。</p>
+        <p>因此，我们采用了 Github issue 作为用户汇报意见的平台。</p>
+        <h2>如何汇报？</h2>
+        <p>您只需要进入 InPageEdit 的 Github repo 后，点击“Issue”，之后点击“Start a new issue”。</p>
+        <p>请务必按照模板填写好资料，之后提交即可。issue 不规范，🐟君两行泪。</p>
+        <p>在您提交之后，机智的小鱼君<s>或其他的志愿者</s><span class="heimu">其实根本没有</span>会开始研究并跟踪此 issue。尽情耐心等待结果。</p>
+        <p>或点击按钮：</p>
+        <p><a class="mdui-btn mdui-color-red" href="https://github.com/Dragon-Fish/InPageEdit-v2/issue">直达 issue</a></p>
       </article>
     </main>
     <br>
@@ -59,6 +72,7 @@
       </div>
     </div>
     </footer>
+    <!-- 抽屉导航 -->
     <div class="mdui-drawer mdui-drawer-full-height mdui-drawer-close mdui-color-white" id="left-drawer">
       <div class="mdui-list">
         <div class="mdui-grid-tile">
@@ -77,11 +91,11 @@
           <i class="mdui-list-item-icon mdui-icon material-icons">info</i>
           <div class="mdui-list-item-content">About</div>
         </a>
-        <a href="./issues.html" class="mdui-list-item mdui-ripple">
+        <a href="./issues.html" class="mdui-list-item mdui-ripple mdui-list-item-active">
           <i class="mdui-list-item-icon mdui-icon material-icons">report_problem</i>
           <div class="mdui-list-item-content">Issues</div>
         </a>
-        <a class="mdui-list-item mdui-ripple mdui-list-item-active" href="./update-logs.html">
+        <a class="mdui-list-item mdui-ripple" href="./update-logs.html">
           <i class="mdui-list-item-icon mdui-icon material-icons">update</i>
           <div class="mdui-list-item-content">Update Logs</div>
         </a>
@@ -99,107 +113,6 @@
         </div>
       </div>
     </div>
-    <script>
-      $(function () {
-        // iframe Page
-        function getQueryVariable(variable) {
-          var query = window.location.search.substring(1);
-          var vars = query.split("&");
-          for (var i = 0; i < vars.length; i++) {
-            var pair = vars[i].split("=");
-            if (pair[0] == variable) { return pair[1]; }
-          }
-          return (false);
-        }
-        if (getQueryVariable('iframe')) {
-          $('body').addClass('iframe');
-          $('head').append('<base target="_blank">');
-        }
-        // AJAX获取更新列表的json
-        $.ajax({
-          url: 'update-logs.json',
-          dataType: 'json',
-          success: function (data) {
-            var data = data || {};
-  
-            // 更新列表偶尔会采取简单的markdown语法，格式化
-            function conversion(text) {
-              var text = text;
-              if (typeof text !== 'string') return 'Error.';
-              text = text
-                .replace(/\[\[(issues|pull)\#(.+?)\]\]/g, '[https://github.com/Dragon-Fish/InPageEdit-v2/$1/$2]($1#$2)') // issues 或 pull
-                .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$1" target="_blank">$2</a>') // 链接
-                .replace(/<(http:\/\/|https:\/\/)(.+?)>/g, '<a href="$1$2" target="_blank>$1$2</a>') // 直接链接
-                .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>') // 粗体
-                .replace(/\*(.+?)\*/g, '<i>$1</i>') // 斜体
-                .replace(/`(.+?)`/g, '<code>$1</code>');
-              return text;
-            }
-  
-            // 将json数据格式化为html
-            var list = data.list || [];
-            var html = $('<section>', { class: 'ipe-update-logs', style: 'display:none' }); // 创建外部html
-  
-            // 遍历整体数组
-            for (var k1 = 0; k1 < list.length; k1++) {
-              var version = list[k1]['version'], // 本次遍历的版本号
-                date = list[k1]['date'] || '-', // 本次遍历的更新时间
-                description = list[k1]['description'] || []; // 本次遍历的说明列表
-  
-              // 建立本次遍历的外部html
-              var versionGroup = $('<div>', { class: 'version-group' });
-              var versionHTML = $('<h2>', { text: version, id: version.replace(/\./g, '-').replace(/\(/g, '_').replace(/\)/g, '') }), // 本次遍历的版本的html对象
-                dateHTML = $('<p>', { text: 'Release date: ' + date }); // 本次遍历的时间的html对象
-  
-              // 遍历说明列表
-              for (var k2 = 0; k2 < description.length; k2++) {
-                var type = description[k2]['type'] || 'note', // 本次遍历的变更类型
-                  type = type.toLowerCase(), // 统一转换为小写
-                  main = description[k2]['main'] || '', // 本次遍历的主要文字
-                  more = description[k2]['more'] || []; // 本次遍历的更多说明列表
-                if (typeof more === 'string') more = [more]; // 将更多说明转换为数组
-  
-                var versionChanges = $('<ul>', { class: 'version-chages-list' }), // 建立外部乱序列表项
-                  typeHTML = $('<span>', { text: type, class: 'status-tag ' + type }), // 将更改类型装换位html对象
-                  mainHTML = $('<li>', { class: 'version-chage', html: typeHTML.prop('outerHTML') + conversion(main) }), // 将主要说明组合为html对象
-                  moreHTML = $('<ul>', { class: 'change-more-info' }); // 建立更多说明的乱序列表
-  
-                for (var k3 = 0; k3 < more.length; k3++) {
-                  moreHTML.append(
-                    $('<li>', { html: conversion(more['k3']) })
-                  )
-                }
-                versionChanges.append(
-                  mainHTML,
-                  moreHTML
-                );
-              }
-              versionGroup = versionGroup.append(
-                versionHTML,
-                dateHTML,
-                versionChanges
-              );
-              html = html.append(versionGroup);
-            }
-  
-            // 安置文档
-            $('#updatelogs-progress')
-              .after(html) // 插入html
-              .addClass('done') // 将progress切换为完成
-              .delay(300).fadeOut(700); // 1s后隐藏progress
-            // 将版本号显示在标题
-            $('#yourVersion').html(localStorage.InPageEditVersion);
-            // 1s后显示html
-            setTimeout(function () {
-              $('.ipe-update-logs').show(800);
-            }, 1000);
-          },
-          fail: function () {
-            // placeholder
-          }
-        });
-      });
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/mdui/dist/js/mdui.min.js"></script>
     <script src="./src/js/template.js"></script>
   </body>
