@@ -1,31 +1,38 @@
 .mp-sec {
-    margin: 30px inherit 30px;
-    padding: 36px;
+  margin: 30px inherit 30px;
+  padding: 36px;
 }
+
 .mp-cell-text p {
-    color: #757575;
+  color: #757575;
 }
+
 .mp-cell-left {
-    display: table;
+  display: table;
 }
+
 .mp-cell-right {
-    float: right;
-    display: table;
+  float: right;
+  display: table;
 }
+
 #mp-sec-1 {
-    font-size: 32px;
+  font-size: 32px;
 }
+
 #mp-sec-1 h2 {
-    text-align: center;
+  text-align: center;
 }
+
 #mp-sec-1 h4,
 #mp-sec-1 h3 {
-    text-align: center;
-    font-weight: 400;
-    opacity: .78;
-    font-size: 16px;
-    color: #757575;
+  text-align: center;
+  font-weight: 400;
+  opacity: .78;
+  font-size: 16px;
+  color: #757575;
 }
-#mp-sec-1 > a {
-    margin:0 auto;
+
+#mp-sec-1>a {
+  margin: 0 auto;
 }
