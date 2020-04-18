@@ -73,7 +73,7 @@
       <h1 class="font-ps"><span class="IPE-logo-1">In</span><span class="IPE-logo-2">Pag<span>e</span></span><span
           class="IPE-logo-3">Edit</span><span class="IPE-logo-4"> v2</span> Update Logs</h1>
       <div id="updatelogs-progress" style="margin: 80px auto; text-align: center;"><img
-          src="./src/ms-loading-spinner.svg"><br>Loading data...</div>
+          src="./src/ms-loading-spinner.svg"><br>Fetching data...</div>
     </article>
   </main>
   <br>
@@ -215,13 +215,13 @@
           $('#updatelogs-progress')
             .after(html) // 插入html
             .addClass('done') // 将progress切换为完成
-            .delay(300).fadeOut(700); // 1s后隐藏progress
+            .delay(1500).fadeOut(500); // 1s后隐藏progress
           // 将版本号显示在标题
           $('#yourVersion').html(localStorage.InPageEditVersion);
           // 1s后显示html
           setTimeout(function () {
-            $('.ipe-update-logs').show(800);
-          }, 1000);
+            $('.ipe-update-logs').fadeIn(500);
+          }, 2000);
         },
         fail: function () {
           // placeholder
