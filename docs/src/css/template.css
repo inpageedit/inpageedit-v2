@@ -64,6 +64,13 @@ body.iframe #mdui-drawer {
   color: #0065FF;
 }
 
+.IPE-logo-2 span {
+  transform: rotate(-30deg);
+  display: inline-block;
+  position: relative;
+  left: -.05em;
+}
+
 .IPE-logo-3 {
   color: #2684FF;
 }
