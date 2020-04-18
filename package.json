@@ -1,22 +1,27 @@
 {
   "name": "inpageedit-v2",
-  "version": "2.13.0.1",
-  "description": "A JavaScript plug-in that allows you to complete general maintenance without opening a new tab.",
+  "version": "2.13.2",
+  "description": "InPageEdit-v2 is a JavaScript-based MediaWiki plug-in, written by Dragon Fish",
+  "main": "script.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dragon-Fish/InPageEdit-v2.git"
+  },
   "keywords": [
     "mediawiki",
     "mediawiki-gadget",
     "inpageedit"
   ],
-  "homepage": "https://common.wjghj.cn/InPageEdit-v2",
-  "licenses": [
-    {
-      "type": "GNU Public License",
-      "url": "https://github.com/dragon-fish/inpageedit-v2/LICENSE"
-    }
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Dragon-Fish/InPageEdit-v2.git"
+  "author": "Dragon Fish",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Dragon-Fish/InPageEdit-v2/issues"
   },
-  "bugs": "https://github.com/dragon-fish/inpageedit-v2/issues"
+  "homepage": "https://github.com/Dragon-Fish/InPageEdit-v2#readme"
 }
