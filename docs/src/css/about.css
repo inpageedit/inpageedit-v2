@@ -1,0 +1,15 @@
+.infobox {
+    font-size: .85em;
+    text-align: center;
+    width: 260px;
+    max-width: 100%;
+    float: right;
+    background-color: #e6f5f9;
+    margin: 1em 10px 2em 1em;
+}
+@media screen and (max-width: 800px) {
+    .infobox {
+      float: left;
+      width: 100%;
+    }
+}

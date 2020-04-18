@@ -1,0 +1,31 @@
+.mp-sec {
+    margin: 30px inherit 30px;
+    padding: 36px;
+}
+.mp-cell-text p {
+    color: #757575;
+}
+.mp-cell-left {
+    display: table;
+}
+.mp-cell-right {
+    float: right;
+    display: table;
+}
+#mp-sec-1 {
+    font-size: 32px;
+}
+#mp-sec-1 h2 {
+    text-align: center;
+}
+#mp-sec-1 h4,
+#mp-sec-1 h3 {
+    text-align: center;
+    font-weight: 400;
+    opacity: .78;
+    font-size: 16px;
+    color: #757575;
+}
+#mp-sec-1 > a {
+    margin:0 auto;
+}
