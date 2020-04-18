@@ -1505,6 +1505,10 @@
 
     /** 提交统计信息模块 **/
     InPageEdit.analysis = function (params) {
+      if (InPageEdit.doNotCollectMyInfo === true) {
+        // console.info('[InPageEdit] 我们已不再收集您使用插件的信息。');
+        // return;
+      }
       var type = params.type;
       switch (type) {
         case 'siteCount':
@@ -1582,7 +1586,7 @@
         className: 'in-page-edit in-page-edit-about',
         // sizeClass: 'dialog',
         content: $('<section>').append(
-          $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: 'https://dragon-fish.github.io/InPageEdit-v2/?iframe=1' })
+          $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: 'https://dragon-fish.github.io/InPageEdit-v2/about.html?iframe=1' })
         ).prop('outerHTML')
       });
     };

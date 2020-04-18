@@ -1,0 +1,124 @@
+@font-face {
+  font-family: "Product Sans";
+  src: local("Product Sans"), local("ProductSans-Regular"), url("https://fonts.gstatic.com/s/productsans/v9/pxiDypQkot1TnFhsFMOfGShVF9eOYktMqg.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-size: cover !important;
+  background: linear-gradient(65deg, #dbdbdb 5%, #f2f5f5 5%, #f2f5f5 80%, #90e7ff 80%, #a8d9f2 95%, #28caff 95%) center 0 no-repeat;
+  background-size: auto;
+}
+
+header {
+  position: fixed;
+  width: 100%;
+}
+
+main {
+  min-height: calc(100vh - 240px);
+}
+
+footer {
+  position: relative;
+  bottom: 0;
+  padding-top: .5em;
+}
+
+h1 {
+  margin-top: 1.8em !important;
+  font-size: 36px !important;
+}
+
+body.iframe::before {
+  background: none;
+}
+
+body.iframe #drawer-toggle,
+body.iframe #mdui-drawer {
+  display: none;
+}
+
+.font-ps {
+  font-family: "Product Sans" !important;
+}
+
+.IPE-logo {
+  font-family: "Product Sans" !important;
+}
+
+.IPE-logo-1 {
+  color: #0052CC;
+}
+
+.IPE-logo-2 {
+  color: #0065FF;
+}
+
+.IPE-logo-3 {
+  color: #2684FF;
+}
+
+.IPE-logo-4 {
+  font-size: small;
+  color: #FFAB00;
+}
+
+.text-center {
+  text-align: center;
+}
+
+span.heimu a.external,
+span.heimu a.external:visited,
+span.heimu a.extiw,
+span.heimu a.extiw:visited {
+  color: #252525
+}
+
+.heimu,
+.heimu a,
+a .heimu,
+.heimu a.new {
+  background-color: #252525;
+  color: #252525;
+  text-shadow: none;
+  transition: background-color .13s linear;
+}
+
+body:not(.heimu_toggle_on) .heimu:hover,
+body:not(.heimu_toggle_on) .heimu:active,
+body:not(.heimu_toggle_on) .heimu.off {
+  transition: background-color .13s linear;
+  background-color: rgba(0, 0, 0, .18);
+}
+
+body:not(.heimu_toggle_on) .heimu:hover a,
+body:not(.heimu_toggle_on) a:hover .heimu,
+body:not(.heimu_toggle_on) .heimu.off a,
+body:not(.heimu_toggle_on) a:hover .heimu.off {
+  transition: color .13s linear;
+  color: #add8e6
+}
+
+body:not(.heimu_toggle_on) .heimu.off .new,
+body:not(.heimu_toggle_on) .heimu.off .new:hover,
+body:not(.heimu_toggle_on) .new:hover .heimu.off,
+body:not(.heimu_toggle_on) .heimu.off .new,
+body:not(.heimu_toggle_on) .heimu.off .new:hover,
+body:not(.heimu_toggle_on) .new:hover .heimu.off {
+  transition: color .13s linear;
+  color: #ba0000
+}
+
+.mdui-list {
+  padding: 0px;
+}
