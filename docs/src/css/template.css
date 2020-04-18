@@ -19,13 +19,26 @@ body::before {
   background-size: auto;
 }
 
-header {
+body.iframe::before {
+  background: none;
+}
+
+body.iframe header,
+body.iframe #mdui-drawer {
+  display: none;
+}
+
+:not(.iframe) header {
   position: fixed;
   width: 100%;
 }
 
-main {
-  min-height: calc(100vh - 240px);
+:not(.iframe) main {
+  min-height: calc(100vh - 258px);
+}
+
+.iframe main {
+  min-height: calc(100vh - 192px);
 }
 
 footer {
@@ -34,18 +47,13 @@ footer {
   padding-top: .5em;
 }
 
-h1 {
+:not(.iframe) h1 {
   margin-top: 1.8em !important;
   font-size: 36px !important;
 }
 
-body.iframe::before {
-  background: none;
-}
-
-body.iframe #drawer-toggle,
-body.iframe #mdui-drawer {
-  display: none;
+.iframe h1 {
+  margin-top: 0 !important;
 }
 
 .font-ps {
@@ -84,6 +92,16 @@ body.iframe #mdui-drawer {
   text-align: center;
 }
 
+.mdui-list {
+  padding: 0px;
+}
+
+
+/**
+ * 黑幕
+ * From Moegirlpedia https://zh.moegirl.org/MediaWiki:Common.css
+ * CC BY-NC-SA
+ **/
 span.heimu a.external,
 span.heimu a.external:visited,
 span.heimu a.extiw,
@@ -123,9 +141,5 @@ body:not(.heimu_toggle_on) .heimu.off .new,
 body:not(.heimu_toggle_on) .heimu.off .new:hover,
 body:not(.heimu_toggle_on) .new:hover .heimu.off {
   transition: color .13s linear;
-  color: #ba0000
-}
-
-.mdui-list {
-  padding: 0px;
+  color: #ba0000;
 }
