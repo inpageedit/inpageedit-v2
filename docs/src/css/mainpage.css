@@ -36,3 +36,22 @@
 #mp-sec-1>a {
   margin: 0 auto;
 }
+/* From Fandom Design System */
+ .avatar-stack img  {
+  background-color:#fff;
+  fill:#1a1a1a;
+  width: 64px;
+  position:relative;
+  margin-right: -20px;
+}
+.avatar-stack {
+  align-items: center;
+  display: flex;
+  margin: 8px 18px 6px 40px;
+}
+.avatar-stack-overflow {
+  border:0;
+  font-size:12px;
+  padding-left:6px;
+  width:auto
+ }

@@ -88,9 +88,7 @@
     <div id="mp-sec-4" class="mp-sec mdui-center mdui-container">
       <h3 class="mdui-center mdui-col-sm-12 text-center">支持我们的开发</h3>
       <div class="mp-cell-left text-center mp-cell-text mdui-col-sm-12 mdui-col-md-6">
-        <a href="https://github.com/Dragon-Fish/InPageEdit-v2/graphs/contributors"><img alt="Contributors"
-            src="https://badges.implements.io/api/contributors?org=Dragon-Fish&repo=InPageEdit&size64&padding=6"
-            class="mdui-center"></a>
+        <div class="avatar-stack"></div>
       </div>
       <div class="mdui-col-sm-12 mdui-col-md-6 text-center">
         <p>欢迎为 InPageEdit-v2 的开发做一份贡献。</p>
@@ -170,6 +168,18 @@
   <script src="https://cdn.jsdelivr.net/npm/mdui/dist/js/mdui.min.js"></script>
   <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
   <script src="./src/js/template.js"></script>
+  <script>
+    $.get("https://api.github.com/repos/dragon-fish/inpageedit-v2/contributors").then(function(contribdata){
+      var contribdata = contribdata || [];
+      for (var i = 0; i < contribdata.length & i < 6; i++){
+        $(".avatar-stack").append(`<img src=\"${contribdata[i]["avatar_url"]}\" width="64px" class=\"mdui-img-circle\" mdui-tooltip=\"\{\'content\':\'${contribdata[i]["login"]}\'\}\">`)
+      };
+      if (contribdata.length > 6){
+        var mousrno = contribdata.length - 6
+        $(".avatar-stack").prepend(`<a href=\"https://github.com/Dragon-Fish/InPageEdit-v2/graphs/contributors\"><div class=\"avatar-stack-overflow\">另有 ${mousrno} 位用户...</div></a>`)
+      }
+      mdui.mutation()
+    })</script>
 </body>
 
 </html>
