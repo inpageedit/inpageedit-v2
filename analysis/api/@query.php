@@ -1,14 +1,14 @@
 <?php
 /**
  * 查询函数
- * @param $name string Site Name
+ * @param $sitename string Site Name
  * @param $url string SIte URL
  * @return $finalResult array
  */
 function _query($sitename, $url)
 {
     ## 调用工具类
-    require_once('/data/wwwroot/util/mongomanager.php');
+    require_once('/path/to/util.mongodb.class.php.php');
     $mongoLib = m_mgdb::i("inpageedit");
     $collection = 'test';
 
