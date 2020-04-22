@@ -10,6 +10,7 @@ function _submit($url, $sitename, $username, $function)
     $mongoLib = m_mgdb::i("inpageedit");
     $collection = 'analysis';
 
+
     ## 变量
     $command = [];
     $insert = [];

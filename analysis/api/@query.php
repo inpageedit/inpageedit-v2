@@ -16,6 +16,7 @@ function _query($url, $sitename, $username, $date, $limit, $from)
     $mongoLib = m_mgdb::i("inpageedit");
     $collection = 'analysis';
 
+
     ## 变量
     $command = [];
     $command['find'] = $collection;
