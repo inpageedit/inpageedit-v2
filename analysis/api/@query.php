@@ -5,10 +5,10 @@
  * @param $url string SIte URL
  * @return $finalResult array
  */
-function _query($sitename, $url)
+function _query($url, $sitename, $username, $date)
 {
     ## 调用工具类
-    require_once('util.mongodb.class.php.php');
+    require_once('util.mongodb.class.php');
     $mongoLib = m_mgdb::i("inpageedit");
     $collection = 'test';
 
