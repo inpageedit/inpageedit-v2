@@ -5,7 +5,7 @@
  */
 function _submit($url, $sitename, $username, $function)
 {
-    ## 调用工具类
+    ## 调用封装库
     require_once('util.mongodb.class.php');
     $mongoLib = m_mgdb::i("inpageedit");
     $collection = 'test';
@@ -52,6 +52,7 @@ function _submit($url, $sitename, $username, $function)
 
         $dbres = $mongoLib->insert($collection, [$insert]);
         $finalResult['msg'] = 'New Wiki inserted.';
+        $finalResult['submit'] = $insert;
         $finalResult['status'] = true;
 
     } else {
@@ -95,6 +96,7 @@ function _submit($url, $sitename, $username, $function)
         $mongoLib->update($collection,$updates);
 
         $finalResult['status'] = true;
+        $finalResult['submit'] = $settingdata;
         # $finalResult = $query;
     }
 
