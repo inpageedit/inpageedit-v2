@@ -18,10 +18,13 @@ Query data
 - `sitename`
   - Filter via Wiki Name
 
-#### Feed back
-```json
+#### Response
+
+`JSON`
+
+```javascript
 {
-    "status": <true/false>,
+    "status": true, // true/false
     "msg": "<msg>",
     "query": [
         {
