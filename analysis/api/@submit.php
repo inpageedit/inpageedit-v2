@@ -6,7 +6,7 @@
 function _submit($url, $sitename, $username, $function)
 {
     ## 调用工具类
-    require_once('/data/wwwroot/util/util.mongodb.class.php');
+    require_once('util.mongodb.class.php');
     $mongoLib = m_mgdb::i("inpageedit");
     $collection = 'test';
 
