@@ -5,17 +5,21 @@
  * Author: 机智的小鱼君
  * Url: https://github.com/Dragon-Fish/InPageEdit-v2
  **/
-; (function () {
+!(function () {
   'use strict';
   // 创建全局函数
   if (typeof (InPageEdit) !== 'undefined' && typeof (InPageEdit.version) !== 'undefined') throw '[InPageEdit] 已经有一个IPE插件在执行了';
   window.InPageEdit = window.InPageEdit || {};
   InPageEdit.isCanary = false;
   InPageEdit.api = {
-    aboutUrl: 'https://dragon-fish.github.io/InPageEdit-v2/',
+    analysis: 'https://doc.wjghj.cn/inpageedit-v2/analysis/api/index.php',
+    aboutUrl: 'https://dragon-fish.github.io/inpageedit-v2/',
     updatelogsJson: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/docs/update-logs.json'
   }
-  /*=version*/InPageEdit.version = '2.13.0.2';/*version=*/
+  /*=version*/InPageEdit.version = '2.13.3';/*version=*/
+
+  // 常用函数
+  var config = mw.config.get();
 
   /** 导入模态框插件 **/
   mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/script.min.js');
@@ -53,7 +57,7 @@
       var option = option || {};
       var preference = localStorage.InPageEditPreference || '{}';
       preference = JSON.parse(preference);
-      var editPage = option.page || mw.config.get('wgPageName');
+      var editPage = option.page || config.wgPageName;
       editPage = decodeURIComponent(editPage);
       var
         editSection = option.section || false,
@@ -84,11 +88,9 @@
       var reloadPage = option.reload;
       if (reloadPage === undefined) reloadPage = true;
 
-      InPageEdit.analysis({ type: 'functionCount', function: '快速编辑' });
-      InPageEdit.analysis({ type: 'siteCount' });
-      InPageEdit.analysis({ type: 'dateCount' });
+      _analysis('quick_edit');
 
-      if (editRevision !== false && editRevision !== '' && editRevision !== mw.config.get('wgCurRevisionId')) {
+      if (editRevision !== false && editRevision !== '' && editRevision !== config.wgCurRevisionId) {
         ssi_modal.notify('warning', {
           className: 'in-page-edit',
           content: msg('notify-editing-history'),
@@ -151,7 +153,9 @@
                   $('<span>', { class: 'label', text: '自定义' })
                 ),
                 $('<div>', { class: 'btnGroup special-tools', style: 'float: right' }).append(
-                  $('<button>', { class: 'material-icons btn', onclick: "InPageEdit.findAndReplace($('.ipe-editor.timestamp-" + timestamp + " .editArea'))", text: 'find_in_page' })
+                  $('<button>', { class: 'material-icons btn', text: 'find_in_page' }).click(function () {
+                    InPageEdit.findAndReplace($('.ipe-editor.timestamp-' + timestamp + ' .editArea'))
+                  })
                 )
               ),
               // 编辑框
@@ -177,7 +181,7 @@
                 )
               )
             )
-          ).prop("outerHTML"),
+          ),
         outSideClose: outSideClose,
         className: 'in-page-edit ipe-editor timestamp-' + timestamp,
         sizeClass: 'large',
@@ -185,7 +189,7 @@
         /* 按钮 */
         buttons: [{
           label: msg('editor-button-save'),
-          className: 'btn btn-primary leftBtn editForm',
+          className: 'btn btn-primary leftBtn editForm save-btn',
           method: function (e, modal) {
             var modal = modal;
             ssi_modal.confirm({
@@ -221,7 +225,7 @@
           label: msg('editor-button-preview'),
           className: 'btn btn-secondary leftBtn editForm',
           method: function () {
-            InPageEdit.analysis({ type: 'functionCount', function: 'previewEdit' });
+            _analysis('preview_edit');
             var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
             InPageEdit.quickPreview({
               action: 'parse',
@@ -236,7 +240,7 @@
           label: msg('editor-button-diff'),
           className: 'btn btn-secondary leftBtn editForm',
           method: function () {
-            InPageEdit.analysis({ type: 'functionCount', function: '快速差异Edit' });
+            _analysis('quick_diff_edit');
             var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
             var diffJson = {};
             diffJson.fromtext = editText;
@@ -350,8 +354,7 @@
                 }
               }
             });
-            $('.ipe-editor.timestamp-' + timestamp + ' .editArea').attr('readonly', 'readonly');
-            $('.ipe-editor.timestamp-' + timestamp + ' button.editForm').attr('disabled', 'disabled');
+            $('.ipe-editor.timestamp-' + timestamp + ' .save-btn').addClass('btn-danger');
           }
 
           // 解析页面内容
@@ -384,7 +387,7 @@
             $('.ipe-editor.timestamp-' + timestamp + ' .ipe-progress').hide();
             $('.ipe-editor.timestamp-' + timestamp + ' .editForm').fadeIn(500);
             $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val(editText + '\n');
-            console.info('editSection: ' + editSection);
+
             if (editSection !== false) {
               var val = $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val();
               val = val.replace(/\$section/ig, '/* ' + data.parse.sections[0].line + ' */');
@@ -397,7 +400,7 @@
               $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val(val);
               jumpTo = '#';
             }
-            if (editRevision !== false && editRevision !== '' && editRevision !== mw.config.get('wgCurRevisionId')) {
+            if (editRevision !== false && editRevision !== '' && editRevision !== config.wgCurRevisionId) {
               $('.ipe-editor.timestamp-' + timestamp + ' .editPage').after('<span class="editRevision">(' + msg('editor-title-editRevision') + '：' + editRevision + ')</span>');
             }
 
@@ -434,34 +437,32 @@
               if (data.query.pages[pageId]['protection'].length > 0) {
                 var protection = data.query.pages[pageId]['protection'];
                 for (var i = 0; i < protection.length; i++) {
-                  if (
-                    protection[i].type === 'edit' &&
-                    (
+                  if (protection[i].type === 'edit') {
+                    if (
                       (protection[i].level === 'autoconfirmed' && !InPageEdit.hasRight('autoconfirmed')) ||
                       (protection[i].level === 'sysop' && !InPageEdit.hasRight('editprotected')) ||
-                      (mw.config.get('wgNamespaceNumber') === 8 && !InPageEdit.hasRight('editinterface'))
-                    )
-                  ) {
-                    ssi_modal.notify('dialog', {
-                      className: 'in-page-edit',
-                      position: 'center bottom',
-                      title: msg('notify-no-right'),
-                      content: msg('editor-no-right'),
-                      okBtn: {
-                        label: msg('ok'),
-                        className: 'btn btn-primary',
-                        method: function (e, modal) {
-                          modal.close();
+                      (config.wgNamespaceNumber === 8 && !InPageEdit.hasRight('editinterface'))
+                    ) {
+                      ssi_modal.notify('dialog', {
+                        className: 'in-page-edit',
+                        position: 'center bottom',
+                        title: msg('notify-no-right'),
+                        content: msg('editor-no-right'),
+                        okBtn: {
+                          label: msg('ok'),
+                          className: 'btn btn-primary',
+                          method: function (e, modal) {
+                            modal.close();
+                          }
                         }
-                      }
-                    });
-                    $('.ipe-editor.timestamp-' + timestamp + ' .editArea').attr('readonly', 'readonly');
-                    $('.ipe-editor.timestamp-' + timestamp + ' button.editForm').attr('disabled', 'disabled');
+                      });
+                      $('.ipe-editor.timestamp-' + timestamp + ' .save-btn').addClass('btn-danger');
+                    }
                   }
                 }
               }
               // 获取编辑提示
-              $.get(mw.config.get('wgScript'), {
+              $.get(config.wgScript, {
                 action: 'raw',
                 title: 'MediaWiki:Editnotice-' + data.query.pages[pageId].ns
               }, function (data) {
@@ -474,22 +475,20 @@
                   text: data
                 }).done(function (data) {
                   var data = data;
-                  editNotice = '<section class="editNotice">' + data.parse.text['*'] + '</section>';
+                  editNotice = data.parse.text['*'];
                   $('.ipe-editor.timestamp-' + timestamp + ' .ssi-modalTitle').append(
-                    $('<a>')
-                      .attr({
-                        id: 'showEditNotice',
-                        href: 'javascript:;'
-                      })
-                      .click(function () {
-                        ssi_modal.show({
-                          className: 'in-page-edit',
-                          center: true,
-                          title: msg('editor-title-editNotice'),
-                          content: editNotice
-                        });
-                      })
-                      .html('<i class="material-icons">info</i> ' + msg('editor-has-editNotice'))
+                    $('<a>', {
+                      id: 'showEditNotice',
+                      href: 'javascript:;',
+                      html: '<i class="material-icons">info</i> ' + msg('editor-has-editNotice')
+                    }).click(function () {
+                      ssi_modal.show({
+                        className: 'in-page-edit',
+                        center: true,
+                        title: msg('editor-title-editNotice'),
+                        content: '<section class="editNotice">' + editNotice + '</section>'
+                      });
+                    })
                   );
                 });
               });
@@ -549,20 +548,27 @@
       $('.ipe-editor.timestamp-' + timestamp + ' .detailBtnGroup .detailBtn').click(function () {
         var $this = $(this),
           id = $this.attr('id'),
-          content = '';
+          content = $('<ul>');
         switch (id) {
           case 'showTemplates':
             var templates = pageDetail.parse.templates,
               templateName;
             for (var i = 0; i < templates.length; i++) {
               templateName = templates[i]['*'];
-              content = content + '<li><a href="' + mw.util.getUrl(templateName) + '" target="_blank">' + templateName + '</a> (<a href="javascript:void(0);" onclick="InPageEdit.quickEdit({page:\'' + templateName + '\', reload: false});">' + msg('quick-edit') + '</a>)</li>';
+              $('<li>').append(
+                $('<a>', { href: mw.util.getUrl(templateName), target: '_blank', text: templateName }),
+                $('<span> (</span>'),
+                $('<a>', { href: 'javascript:;', text: msg('quick-edit') }).click(function () {
+                  InPageEdit.quickEdit({ page: templateName, reload: false });
+                }),
+                $('<span>)</span>')
+              ).appendTo(content);
             }
             ssi_modal.show({
               className: 'in-page-edit quick-edit-detail',
               sizeClass: 'dialog',
               title: msg('editor-detail-title-templates'),
-              content: '<ul>' + content + '</ul>'
+              content: content
             });
             break;
           case 'showImages':
@@ -570,34 +576,38 @@
               imageName;
             for (var i = 0; i < images.length; i++) {
               imageName = images[i];
-              content = content + '<li><a href="' + mw.util.getUrl('File:' + imageName) + '" target="_blank">' + imageName + '</a> (<a href="javascript:void(0);" class="quickViewImages" id="' + imageName + '">' + msg('editor-detail-images-quickview') + '</a> | <a href="' + mw.config.get('wgScript') + '?title=Special:Upload&wpDestFile=' + imageName + '&wpForReUpload=1" target="_blank">' + msg('editor-detail-images-upload') + '</a>)</li>';
+              $('li').append(
+                $('<a>', { href: mw.util.getUrl('File:' + imageName), target: '_balnk' }),
+                $('<span> (</span>'),
+                $('<a>', { href: 'javascript:;', class: 'quickViewImage', text: msg('editor-detail-images-quickview') }).click(function () {
+                  ssi_modal.show({
+                    className: 'in-page-edit quick-view-image',
+                    center: true,
+                    title: imageName,
+                    content: $('<center>').append(
+                      $('<image>', { src: config.wgScript + '?title=Special:Filepath/' + imageName, style: 'max-width: 80%; max-height: 60vh' })
+                    ),
+                    buttons: [{
+                      label: msg('editor-detail-images-upload'),
+                      className: 'btn btn-primary',
+                      method: function (a, modal) { window.open(config.wgScript + '?title=Special:Upload&wpDestFile=' + imageName + '&wpForReUpload=1') }
+                    }, {
+                      label: msg('close'),
+                      className: 'btn btn-secondary',
+                      method: function (a, modal) { modal.close() }
+                    }]
+                  });
+                }),
+                $('<span> | </span>'),
+                $('<a>', { href: config.wgScript + '?title=Special:Upload&wpDestFile=' + imageName + '&wpForReUpload=1', target: '_balnk', text: msg('editor-detail-images-upload') }),
+                $('<span>)</span>')
+              ).appendTo(content);
             }
             ssi_modal.show({
               className: 'in-page-edit quick-edit-detail',
               sizeClass: 'dialog',
               title: msg('editor-detail-title-images'),
-              content: '<ul>' + content + '</ul>'
-            });
-            $('.quickViewImages').click(function () {
-              var $this = $(this),
-                image = $this.attr('id');
-              ssi_modal.show({
-                className: 'in-page-edit quick-view-image',
-                center: true,
-                title: image,
-                content: $('<center>').append(
-                  $('<image>', { src: mw.config.get('wgScript') + '?title=Special:Filepath/' + image, style: 'max-width: 80%; max-height: 60vh' })
-                ).prop('outerHTML'),
-                buttons: [{
-                  label: msg('editor-detail-images-upload'),
-                  className: 'btn btn-primary',
-                  method: function (a, modal) { window.open(mw.config.get('wgScript') + '?title=Special:Upload&wpDestFile=' + imageName + '&wpForReUpload=1') }
-                }, {
-                  label: msg('close'),
-                  className: 'btn btn-secondary',
-                  method: function (a, modal) { modal.close() }
-                }]
-              });
+              content: content
             });
             break;
         }
@@ -607,7 +617,7 @@
       function postArticle(pValue, modal) {
         var pValue = pValue;
         var modal = modal;
-        InPageEdit.analysis({ type: 'functionCount', function: '保存编辑' });
+        _analysis('quick_edit_save');
         InPageEdit.progress(msg('editor-title-saving'));
         jsonPost = {
           action: 'edit',
@@ -624,53 +634,64 @@
           delete jsonPost.basetimestamp;
         }
 
-        new mw.Api().postWithToken('csrf', jsonPost).then(function (data) {
+        new mw.Api().postWithToken('csrf', jsonPost).always(function (data) {
           InPageEdit.progress(true);
+          // GitHub@issue#40
+          if (data.edit.result !== 'Success') {
+            // 出事了
+            InPageEdit.progress(false);
+            ssi_modal.show({
+              className: 'in-page-edit',
+              sizeClass: 'dialog',
+              title: msg('editor-save-error'),
+              content: data.edit.info + '<hr style="clear: both" />' + data.edit.warning
+            });
+            ssi_modal.notify('error', {
+              className: 'in-page-edit',
+              position: 'right top',
+              closeAfter: {
+                time: 15
+              },
+              title: msg('notify-error'),
+              content: msg('editor-save-error') + '：<code>' + data.edit.code + '</code>'
+            });
 
-          if (reloadPage) {
-            var content;
-            $(window).unbind('beforeunload');
-            content = msg('notify-save-success');
-            setTimeout(function () {
-              if (pValue.page === mw.config.get('wgPageName')) {
-                window.location = mw.util.getUrl(pValue.page) + jumpTo;
-                window.location.reload();
-              } else {
-                window.location.reload();
-              }
-            }, 500);
+            console.error('[InPageEdit] Submit failed: \nCode: ' + data.edit.code);
+            return;
           } else {
-            console.info('[InPageEdit] 将不会重载页面！');
-            content = msg('notify-save-success-noreload');
-            setTimeout(function () {
-              InPageEdit.progress(false);
-              $('.ipe-editor.timestamp-' + timestamp + ' .editArea').attr('data-confirmclose', 'true');
-              modal.close();
-            }, 1500);
+            // 保存正常
+            if (reloadPage) {
+              var content;
+              $(window).unbind('beforeunload');
+              content = msg('notify-save-success');
+              setTimeout(function () {
+                if (pValue.page === config.wgPageName) {
+                  window.location = mw.util.getUrl(pValue.page) + jumpTo;
+                  window.location.reload();
+                } else {
+                  window.location.reload();
+                }
+              }, 500);
+            } else {
+              console.info('[InPageEdit] 将不会重载页面！');
+              content = msg('notify-save-success-noreload');
+              setTimeout(function () {
+                InPageEdit.progress(false);
+                $('.ipe-editor.timestamp-' + timestamp + ' .editArea').attr('data-confirmclose', 'true');
+                modal.close();
+              }, 1500);
+            }
+
+            ssi_modal.notify('success', {
+              className: 'in-page-edit',
+              position: 'right top',
+              title: msg('notify-success'),
+              content: content
+            });
           }
-
-          ssi_modal.notify('success', {
-            className: 'in-page-edit',
-            position: 'right top',
-            title: msg('notify-success'),
-            content: content
-          });
-
-        }).fail(function (errorCode, feedback, errorThrown) {
-          InPageEdit.progress(false);
-          ssi_modal.notify('error', {
-            className: 'in-page-edit',
-            position: 'right top',
-            closeAfter: {
-              time: 15
-            },
-            title: msg('notify-error'),
-            content: msg('editor-save-error') + '：<br/><span style="font-size:amall">' + errorThrown.errors[0]['*'] + '(<code>' + errorThrown.errors[0]['code'] + '</code>)</span>'
-          });
-          console.error('[InPageEdit] Submit failed: \nCode: ' + errorThrown.errors[0]['code'] + '\nDescription: ' + errorThrown.errors[0]['*']);
         });
       }
-    };
+    }
 
     /** 查找替换模块 **/
     InPageEdit.findAndReplace = function (contengut) {
@@ -710,7 +731,7 @@
                 ),
               )
             )
-          ).prop('outerHTML'),
+          ),
         buttons: [
           {
             label: msg('fAndR-button-undo'),
@@ -776,12 +797,12 @@
           }
         ]
       });
-    };
+    }
 
     /** 快速重定向模块 **/
     InPageEdit.redirect = InPageEdit.quickRedirect = function (type) {
       mw.hook('InPageEdit.quickRedirect').fire();
-      InPageEdit.analysis({ type: 'functionCount', function: '查找替换' });
+      _analysis('find_replace');
       var text = '#REDIRECT [[:$1]]',
         question,
         target,
@@ -795,12 +816,12 @@
 
       switch (type) {
         case 'to':
-          json.title = mw.config.get('wgPageName');
-          question = msg('redirect-question-to').replace('$1', '<b>' + mw.config.get('wgPageName').replace(/\_/g, ' ') + '</b>');
+          json.title = config.wgPageName;
+          question = msg('redirect-question-to').replace('$1', '<b>' + config.wgPageName.replace(/\_/g, ' ') + '</b>');
           break;
         case 'from':
-          question = msg('redirect-question-from').replace('$1', '<b>' + mw.config.get('wgPageName').replace(/\_/g, ' ') + '</b>');
-          json.text = text.replace('$1', mw.config.get('wgPageName'));
+          question = msg('redirect-question-from').replace('$1', '<b>' + config.wgPageName.replace(/\_/g, ' ') + '</b>');
+          json.text = text.replace('$1', config.wgPageName);
           break;
       }
       ssi_modal.show({
@@ -813,26 +834,24 @@
           $('<section>').append(
             $('<span>', { html: question }),
             $('<br>'),
-            $('<input>', { id: 'redirect-page', style: 'width:96%', onclick: "$(this).css('box-shadow', '')" }),
+            $('<input>', { id: 'redirect-page', style: 'width:96%' }).click(function () { $(this).css('box-shadow', '') }),
             $('<br>'),
             $('<label>', { for: 'redirect-reason', text: msg('editSummary') }),
             $('<input>', { id: 'redirect-reason', style: 'width:96%' })
           ),
           $progress.css('display', 'none')
-        ).prop('outerHTML'),
+        ),
         buttons: [{
           label: msg('confirm'),
           className: 'btn btn-primary btn-single okBtn',
           method: function (a, modal) {
             target = $('.in-page-edit.quick-redirect #redirect-page').val();
-            if (target === '' || target === mw.config.get('wgPageName') || target === mw.config.get('wgPageName').replace(/\_/g, ' ')) {
+            if (target === '' || target === config.wgPageName || target === config.wgPageName.replace(/\_/g, ' ')) {
               $('.in-page-edit.quick-redirect #redirect-page').css('box-shadow', '0 0 4px #f00');
               return;
             }
 
-            InPageEdit.analysis({ type: 'functionCount', function: '快速重定向' });
-            InPageEdit.analysis({ type: 'dateCount' });
-            InPageEdit.analysis({ type: 'siteCount' });
+            _analysis('quick_redirect');
 
             summary = msg('redirect-summary') + ' → [[:' + target + ']]';
             if ($('.in-page-edit.quick-redirect #redirect-reason').val() !== '') {
@@ -880,13 +899,13 @@
         }
         ]
       });
-    };
+    }
 
     /** 删除页面模块 **/
     InPageEdit.deletepage = InPageEdit.quickDelete = function (page) {
       mw.hook('InPageEdit.quickDelete').fire();
       var reason,
-        page = page || mw.config.get('wgPageName');
+        page = page || config.wgPageName;
 
       ssi_modal.show({
         outSideClose: false,
@@ -901,7 +920,7 @@
             $('<label>', { for: 'delete-reason', text: msg('editSummary') }),
             $('<input>', { id: 'delete-reason', style: 'width:96%', onclick: "$(this).css('box-shadow', '')" })
           )
-        ).prop('outerHTML'),
+        ),
         beforeShow: function () {
           if (!InPageEdit.hasRight('delete')) {
             ssi_modal.dialog({
@@ -932,7 +951,7 @@
                 $('#InPageEditDeletepage #delete-reason').css('box-shadow', '0 0 4px #f00');
                 return;
               }
-              InPageEdit.analysis({ type: 'functionCount', function: '快速删除' });
+              _analysis('quick_delete');
 
               ssi_modal.confirm({
                 center: true,
@@ -977,12 +996,12 @@
           }
         ]
       });
-    };
+    }
 
     /** 重命名模块 **/
     InPageEdit.renamepage = InPageEdit.quickRename = function (from, to) {
       mw.hook('InPageEdit.quickRename').fire();
-      var from = from || mw.config.get('wgPageName'),
+      var from = from || config.wgPageName,
         to = to || '',
         reason,
         movetalk,
@@ -1021,7 +1040,7 @@
               $('<input>', { type: 'checkbox', id: 'noredirect' }),
               $('<span>', { text: msg('rename-noredirect') })
             ),
-          ).prop('outerHTML'),
+          ),
         buttons: [{
           label: msg('cancel'),
           className: 'btn btn-secondary',
@@ -1033,14 +1052,12 @@
           className: 'btn btn-primary',
           method: function () {
             to = $('.in-page-edit.quick-rename #move-to').val();
-            if (to === '' || to === mw.config.get('wgPageName') || to === mw.config.get('wgPageName').replace(/\_/g, ' ')) {
+            if (to === '' || to === config.wgPageName || to === config.wgPageName.replace(/\_/g, ' ')) {
               $('.in-page-edit.quick-rename #move-to').css('box-shadow', '0 0 4px #f00');
               return;
             }
 
-            InPageEdit.analysis({ type: 'functionCount', function: '快速重命名' });
-            InPageEdit.analysis({ type: 'dateCount' });
-            InPageEdit.analysis({ type: 'siteCount' });
+            _analysis('quick_move');
 
             InPageEdit.progress(msg('editor-title-saving'));
             movetalk = $('.in-page-edit.quick-rename #movetalk').prop('checked');
@@ -1068,7 +1085,7 @@
                 content: msg('notify-rename-success'),
                 title: msg('notify-success')
               });
-              location.href = mw.config.get('wgArticlePath').replace('$1', to);
+              location.href = config.wgArticlePath.replace('$1', to);
             }).fail(function (errorCode, feedback, errorThrown) {
               InPageEdit.progress(false);
               ssi_modal.notify('error', {
@@ -1106,12 +1123,12 @@
           }
         }
       });
-    };
+    }
 
     /** 个人设置模块 **/
     InPageEdit.preference = function () {
       mw.hook('InPageEdit.preference').fire();
-      InPageEdit.analysis({ type: 'functionCount', function: '插件设置' });
+      _analysis('plugin_setting');
       var settings = JSON.parse(localStorage.getItem('InPageEditPreference')),
         minor = settings.editMinor,
         summary = settings.editSummary,
@@ -1148,7 +1165,7 @@
             $('<span>', { style: 'font-size: small; line-height: 0.9em', text: msg('preference-savelocal') }).append(
               $('<a>', { href: 'javascript:;', id: 'ipeSaveLocalShow', text: msg('preference-savelocal-btn') })
             )
-          ).prop('outerHTML'),
+          ),
         sizeClass: 'dialog',
         className: 'in-page-edit ipe-preference',
         center: true,
@@ -1219,14 +1236,12 @@
           }
         });
       }
-    };
+    }
 
     /** 快速页面差异模块 **/
     InPageEdit.quickDiff = function (param) {
       mw.hook('InPageEdit.quickDiff').fire();
-      InPageEdit.analysis({ type: 'dateCount' });
-      InPageEdit.analysis({ type: 'siteCount' });
-      // InPageEdit.analysis({ type: 'functionCount', function: '快速差异' });
+      _analysis('quick_diff');
       if ($('[href*="mediawiki.diff.styles"]').length < 1) {
         mw.loader.load(mw.util.wikiScript('load') + '?modules=mediawiki.legacy.shared|mediawiki.diff.styles&only=styles', 'text/css');
       }
@@ -1281,10 +1296,10 @@
           '<tbody>' +
           '<tr class="diff-title">' +
           '<td colspan="2" class="diff-otitle">' +
-          '<a class="" href="' + mw.config.get('wgScript') + '?oldid=' + data.compare.fromrevid + '">' + data.compare.fromtitle + '</a> (<span class="diff-version">' + msg('diff-version') + data.compare.fromrevid + '</span>) (<a class="editLink" href="' + mw.config.get('wgScript') + '?action=edit&title=' + data.compare.fromtitle + '&oldid=' + data.compare.fromrevid + '">' + msg('diff-edit') + '</a>)<br/>' + userlink(data.compare.fromuser) + '<br/>(<span class="diff-comment">' + data.compare.fromparsedcomment + '</span>)<br/><a class="prevVersion" href="javascript:void(0);" onclick="InPageEdit.quickDiff({fromrev:' + data.compare.fromrevid + ',torelative:\'prev\'});InPageEdit.analysis({type:\'functionCount\',function:\'快速差异History\'});">←' + msg('diff-prev') + '</a>' +
+          '<a class="" href="' + config.wgScript + '?oldid=' + data.compare.fromrevid + '">' + data.compare.fromtitle + '</a> (<span class="diff-version">' + msg('diff-version') + data.compare.fromrevid + '</span>) (<a class="editLink" href="' + config.wgScript + '?action=edit&title=' + data.compare.fromtitle + '&oldid=' + data.compare.fromrevid + '">' + msg('diff-edit') + '</a>)<br/>' + userlink(data.compare.fromuser) + '<br/>(<span class="diff-comment">' + data.compare.fromparsedcomment + '</span>)<br/><a class="prevVersion ipe-analysis-quick_diff_modalclick" href="javascript:void(0);" onclick="InPageEdit.quickDiff({fromrev:' + data.compare.fromrevid + ',torelative:\'prev\'});">←' + msg('diff-prev') + '</a>' +
           '</td>' +
           '<td colspan="2" class="diff-ntitle">' +
-          '<a class="" href="' + mw.config.get('wgScript') + '?oldid=' + data.compare.torevid + '">' + data.compare.totitle + '</a> (<span class="diff-version">' + msg('diff-version') + data.compare.torevid + '</span>) (<a class="editLink" href="' + mw.config.get('wgScript') + '?action=edit&title=' + data.compare.totitle + '&oldid=' + data.compare.torevid + '">' + msg('diff-edit') + '</a>)<br/>' + userlink(data.compare.touser) + '<br/>(<span class="diff-comment">' + data.compare.toparsedcomment + '</span>)<br/><a class="nextVersion" href="javascript:void(0);" onclick="InPageEdit.quickDiff({fromrev:' + data.compare.torevid + ',torelative:\'next\'});InPageEdit.analysis({type:\'functionCount\',function:\'快速差异History\'});">' + msg('diff-nextv') + '→</a>' +
+          '<a class="" href="' + config.wgScript + '?oldid=' + data.compare.torevid + '">' + data.compare.totitle + '</a> (<span class="diff-version">' + msg('diff-version') + data.compare.torevid + '</span>) (<a class="editLink" href="' + config.wgScript + '?action=edit&title=' + data.compare.totitle + '&oldid=' + data.compare.torevid + '">' + msg('diff-edit') + '</a>)<br/>' + userlink(data.compare.touser) + '<br/>(<span class="diff-comment">' + data.compare.toparsedcomment + '</span>)<br/><a class="nextVersion ipe-analysis-quick_diff_modalclick" href="javascript:void(0);" onclick="InPageEdit.quickDiff({fromrev:' + data.compare.torevid + ',torelative:\'next\'});">' + msg('diff-nextv') + '→</a>' +
           '</td>' +
           '</tr>' +
           diffTable +
@@ -1292,8 +1307,11 @@
           '</tbody>' +
           '</table>'
         );
+        $('.ipe-analysis-quick_diff_modalclick').click(function () {
+          _analysis('quick_diff_modalclick');
+        });
         $('.quick-diff button.toDiffPage').click(function () {
-          location.href = mw.config.get('wgScript') + '?oldid=' + data.compare.fromrevid + '&diff=' + data.compare.torevid;
+          location.href = config.wgScript + '?oldid=' + data.compare.fromrevid + '&diff=' + data.compare.torevid;
         });
         InPageEdit.articleLink($('.quick-diff .editLink'));
         if (param.isPreview === true) {
@@ -1337,7 +1355,7 @@
         $('.in-page-edit.quick-diff .ipe-progress').hide();
         $('.diffArea').show().html(msg('diff-error') + ': ' + errorThrown.error['info'] + '(<code>' + errorThrown.error['code'] + '</code>)');
       });
-    };
+    }
     // 加载预设的快速最近更改模块
     InPageEdit.loadQuickDiff = function () {
       // 最近更改
@@ -1345,7 +1363,7 @@
         $('.mw-changeslist-groupdiff, .mw-changeslist-diff, .mw-changeslist-diff-cur, .mw-history-histlinks a').unbind('click', ipeDiffLink);
         var ipeDiffLink = $('.mw-changeslist-groupdiff, .mw-changeslist-diff, .mw-changeslist-diff-cur, .mw-history-histlinks a').click(function (e) {
           e.preventDefault();
-          InPageEdit.analysis({ type: 'functionCount', function: '快速差异RC' });
+          _analysis('quick_diff_recentchanges');
           var $this = $(this),
             href = $this.attr('href'),
             diff = mw.util.getParamValue('diff', href),
@@ -1367,11 +1385,11 @@
         addLink();
       }
       // 查看历史页面的比较按钮与快速编辑
-      if (mw.config.get('wgAction') === 'history') {
+      if (config.wgAction === 'history') {
         $('.historysubmit.mw-history-compareselectedversions-button').after(
           $('<button>').text(msg('quick-diff')).click(function (e) {
             e.preventDefault();
-            InPageEdit.analysis({ type: 'functionCount', function: '快速差异History' });
+            _analysis('quick_diff_history_page');
             var before = $('.selected.before').attr('data-mw-revid'),
               after = $('.selected.after').attr('data-mw-revid');
             InPageEdit.quickDiff({ fromrev: after, torev: before });
@@ -1385,7 +1403,7 @@
           );
         });
       }
-    };
+    }
 
     /** 获取段落编辑以及编辑链接 **/
     InPageEdit.articleLink = function (element) {
@@ -1405,9 +1423,9 @@
 
         // 不是 index.php?title=FOO 形式的url
         if (title === null) {
-          var splitStr = mw.config.get('wgArticlePath').replace('$1', '');
+          var splitStr = config.wgArticlePath.replace('$1', '');
           if (splitStr === '/') {
-            splitStr = mw.config.get('wgServer').substring(mw.config.get('wgServer').length - 4) + '/';
+            splitStr = config.wgServer.substring(config.wgServer.length - 4) + '/';
           }
           title = url.split(splitStr).pop().split('?')['0'];
         }
@@ -1437,7 +1455,7 @@
                 })));
         }
       });
-    };
+    }
 
     /** 快速预览文章页 **/
     InPageEdit.quickPreview = function (params) {
@@ -1451,7 +1469,7 @@
         content: $('<section>').append(
           $progress,
           $('<div>', { id: 'InPageEditPreview', 'data-timestamp': timestamp, style: 'display:none', text: msg('preview-placeholder') })
-        ).prop('outerHTML'),
+        ),
         fixedHeight: true,
         fitScreen: true,
         buttons: [{ label: '', className: 'hideThisBtn' }],
@@ -1471,7 +1489,7 @@
           });
         }
       });
-    };
+    }
 
     /** 载入中模块 **/
     InPageEdit.progress = function (title) {
@@ -1493,7 +1511,7 @@
           content:
             $('<div>', { class: 'ipe-progress', style: 'width: 100%' }).append(
               $('<div>', { class: 'ipe-progress-bar' })
-            ).prop('outerHTML'),
+            ),
           className: 'in-page-edit loadingbox',
           center: true,
           sizeClass: 'dialog',
@@ -1501,50 +1519,31 @@
           outSideClose: false
         });
       }
-    };
+    }
 
     /** 提交统计信息模块 **/
-    InPageEdit.analysis = function (params) {
+    const _analysis = function (functionID) {
       if (InPageEdit.doNotCollectMyInfo === true) {
         // console.info('[InPageEdit] 我们已不再收集您使用插件的信息。');
         // return;
       }
-      var type = params.type;
-      switch (type) {
-        case 'siteCount':
-          $.ajax({
-            url: 'https://doc.wjghj.cn/InPageEditAnalysis/site/log.php',
-            data: {
-              'sitename': mw.config.get('wgSiteName')
-            },
-            dataType: 'json'
-          });
-          break;
-        case 'dateCount':
-          var now = new Date(),
-            y = now.getFullYear(), m = Number(now.getMonth() + 1), d = Number(now.getDate());
-          if (m < 10) m = '0' + m;
-          if (d < 10) d = '0' + d;
-          var time = y + '-' + m + '-' + d;
-          $.ajax({
-            url: 'https://doc.wjghj.cn/InPageEditAnalysis/date/log.php',
-            data: {
-              'date': time
-            },
-            dataType: 'json'
-          });
-          break;
-        case 'functionCount':
-          $.ajax({
-            url: 'https://doc.wjghj.cn/InPageEditAnalysis/function/log.php',
-            data: {
-              'function': params.function
-            },
-            dataType: 'json'
-          });
-          break;
+      var functionID = functionID;
+      var submitdata = {
+        'action': 'submit',
+        'url': config.wgServer + config.wgArticlePath.replace('$1', ''),
+        'sitename': config.wgSiteName,
+        'username': config.wgUserName,
+        'function': functionID
       }
-    };
+      $.ajax({
+        url: InPageEdit.api.analysis,
+        data: submitdata,
+        type: 'get',
+        dataType: 'json'
+      }).done(function (data) {
+        console.log('[InPageEdit] Analysis response\nStatus: ' + data.status + '\nMessage: ' + data.msg);
+      });
+    }
 
     /** 版本信息模块 **/
     InPageEdit.versionInfo = function () {
@@ -1553,17 +1552,9 @@
         className: 'in-page-edit update-logs-modal',
         title: msg('updatelog-title') + ' - <span id="yourVersion">' + InPageEdit.version + '</span>',
         content: $('<section>').append(
-          $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: 'https://dragon-fish.github.io/InPageEdit-v2/update-logs.html?iframe=1' })
-        ).prop('outerHTML'),
-        fitScreen: true,
-        fixedHeight: true,
+          $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: 'https://dragon-fish.github.io/inpageedit-v2/update-logs/?iframe=1' })
+        ),
         buttons: [{
-          label: msg('close'),
-          className: 'btn btn-danger',
-          method: function (a, modal) {
-            modal.close();
-          }
-        }, {
           label: 'GitHub',
           className: 'btn btn-secondary',
           method: function () {
@@ -1573,7 +1564,13 @@
           label: msg('updatelog-about'),
           className: 'btn btn-secondary',
           method: function () {
-            window.open('https://dragon-fish.github.io/InPageEdit-v2/');
+            window.open('https://dragon-fish.github.io/inpageedit-v2/');
+          }
+        }, {
+          label: msg('close'),
+          className: 'btn btn-primary',
+          method: function (a, modal) {
+            modal.close();
           }
         }]
       });
@@ -1586,13 +1583,13 @@
         className: 'in-page-edit in-page-edit-about',
         // sizeClass: 'dialog',
         content: $('<section>').append(
-          $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: 'https://dragon-fish.github.io/InPageEdit-v2/about.html?iframe=1' })
-        ).prop('outerHTML')
+          $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: 'https://dragon-fish.github.io/inpageedit-v2/about/?iframe=1' })
+        )
       });
-    };
+    }
 
     /** 获取版本更新提示 **/
-    $(function () {
+    $(window).load(function () {
       var version = InPageEdit.version;
       // 版本更新
       if (localStorage.InPageEditVersion === null || localStorage.InPageEditVersion !== version) {
@@ -1642,6 +1639,7 @@
         });
       }
     });
+
     // 特别通知
     if (InPageEdit.isCanary) {
       InPageEdit.specialNotice = {
@@ -1658,7 +1656,7 @@
     }
 
     /** 获取用户权限信息 **/
-    (function () {
+    !(function () {
       mw.user.getRights().then(function (rights) {
         console.info('[InPageEdit] 成功获取用户权限信息');
         mw.config.set('wgUserRights', rights);
@@ -1683,7 +1681,7 @@
     }());
 
     InPageEdit.hasRight = function (right) {
-      if (mw.config.get('wgUserIsBlocked') === true) {
+      if (config.wgUserIsBlocked === true) {
         return false;
       }
       if (mw.config.get('wgUserRights').indexOf(right) > -1) {
@@ -1694,7 +1692,7 @@
     };
 
     /** 页面载入完成，自动加载某些模块 **/
-    (function () {
+    !(function () {
       /** 额外的模块 **/
       // 快速页面差异模块
       InPageEdit.loadQuickDiff();
@@ -1714,7 +1712,7 @@
     /** Toolbox模块 **/
     mw.hook('InPageEdit').add(function () {
       // 检测是否为文章页
-      if (mw.config.get('wgIsArticle') === false) {
+      if (config.wgIsArticle === false) {
         console.warn('%c[InPageEdit] 不是文章页面，未载入工具盒。', 'color:orange;font-size:1.2em;font-weight:bold');
         return;
       }
@@ -1776,12 +1774,12 @@
 
       // 按钮功能
       $('#ipe-edit-toolbox .btn-group .ipe-toolbox-btn').click(function () {
-        InPageEdit.analysis({ type: 'functionCount', function: '工具盒' });
+        _analysis('tool_box');
         switch ($(this).attr('id')) {
           case 'edit-btn':
             InPageEdit.quickEdit({
-              page: mw.config.get('wgPageName'),
-              revision: mw.config.get('wgRevisionId')
+              page: config.wgPageName,
+              revision: config.wgRevisionId
             });
             break;
           case 'redirectfrom-btn':

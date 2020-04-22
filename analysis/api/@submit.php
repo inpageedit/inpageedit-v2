@@ -1,14 +1,14 @@
 <?php
 /**
  * 录入数据函数
- * @param 懒得写，参数都是字面意思
+ * @param blahblah 懒得写，参数都是字面意思
  */
-function _log($url, $sitename, $username, $function)
+function _submit($url, $sitename, $username, $function)
 {
-    ## 调用工具类
-    require_once('/data/wwwroot/util/util.mongodb.class.php');
+    ## 调用封装库
+    require_once('util.mongodb.class.php');
     $mongoLib = m_mgdb::i("inpageedit");
-    $collection = 'test';
+    $collection = 'analysis';
 
     ## 变量
     $command = [];
@@ -41,54 +41,62 @@ function _log($url, $sitename, $username, $function)
         $insert = array(
             'url' => $url,
             'sitename' => $sitename,
-            'users' => array(
-                $username => array(
-                    $function => 1
+            'date' => array(
+                date('Y-m-d') => array(
+                    $username => array(
+                        $function => 1
+                    )
                 )
             )
         );
 
         $dbres = $mongoLib->insert($collection, [$insert]);
         $finalResult['msg'] = 'New Wiki inserted.';
+        $finalResult['submit'] = $insert;
         $finalResult['status'] = true;
 
     } else {
         ## Wiki存在，下一步
         $query = $query[0];
-        $times = 1;
+        $times = 0;
+        $settingdata = [];
         ## 蛇皮操作转换数组，防止抑郁
         $query = json_encode($query);
         $query = json_decode($query, true);
 
-       ## 是否含有该用户的数据
-       if ( isset($query['users'][$username]) ) {
-           ## 有该用户数据
-           ## 是否有该功能记录
-           if ( isset($query['users'][$username][$function]) ) {
-               ## 不容易不容易，喜加一
-               $times = $query['users'][$username][$function];
-               $times = $times + 1;
+       ## 是否含有该用户使用该功能的数据
+       if ( isset($query['date'][date('Y-m-d')][$username][$function]) ) {
+           ## 有数据，喜加一
+           $finalResult['msg'] = 'Ok.';
 
-               $finalResult['msg'] = 'Ok.';
-           } else {
-               $times = 1;
-               $finalResult['msg'] = 'User using new function.';
-           }
+           $times = $query['date'][date('Y-m-d')][$username][$function];
+           $times = $times + 1;
+           $query['date'][date('Y-m-d')][$username][$function] = $times;
+
        } else {
-           ## 没有该用户数据，插就完了
-           $finalResult['msg'] = 'New user added.';
+           ## 没有该用户该功能的数据，次数初始化为1
            $times = 1;
+           $msg = '';
+           if ( !isset($query['date'][date('Y-m-d')]) ) {$msg = 'New date logged.';}
+           if ( !isset($query['date'][date('Y-m-d')][$username]) ) {$msg = $msg . ' New user added. ';}
+           if ( !isset($query['date'][date('Y-m-d')][$username][$function]) ) {$msg = $msg . ' New function logged.';}
+           $finalResult['msg'] = $msg;
        }
+        $query['date'][date('Y-m-d')][$username][$function] = $times;
+        $settingdata = ['date'=>$query['date']];
 
         $updates = [
             [
                 'q' => ['url' => $url],
-                'u' => ['$set'=>['users.'.$username.'.'.$function=>$times]]
+                'u' => ['$set'=>
+                    $settingdata
+                ]
             ]
         ];
         $mongoLib->update($collection,$updates);
 
         $finalResult['status'] = true;
+        $finalResult['submit'] = $settingdata;
         # $finalResult = $query;
     }
 

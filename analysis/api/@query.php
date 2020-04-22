@@ -1,16 +1,20 @@
 <?php
 /**
- * 查询函数
- * @param $sitename string Site Name
- * @param $url string SIte URL
- * @return $finalResult array
+ * 查询数据函数
+ * @param url [string] Site URL
+ * @param sitename [string] Site name
+ * @param username [string] User name (not use)
+ * @param date [string] Date (not use)
+ * @param limit [num] Query limit (not use)
+ * @param from [num] Query skip (not use)
+ * @return finalResult [array]
  */
-function _query($sitename, $url)
+function _query($url, $sitename, $username, $date, $limit, $from)
 {
-    ## 调用工具类
-    require_once('/path/to/util.mongodb.class.php.php');
+    ## 调用封装库
+    require_once('util.mongodb.class.php');
     $mongoLib = m_mgdb::i("inpageedit");
-    $collection = 'test';
+    $collection = 'analysis';
 
     ## 变量
     $command = [];
