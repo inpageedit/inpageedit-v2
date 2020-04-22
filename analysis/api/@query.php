@@ -1,13 +1,15 @@
 <?php
 /**
  * 查询函数
- * @param $sitename string Site Name
+ * @param $sitename string Site name
  * @param $url string SIte URL
+ * @param $username string User name (not used)
+ * @param $date string Date (not used)
  * @return $finalResult array
  */
 function _query($url, $sitename, $username, $date)
 {
-    ## 调用工具类
+    ## 调用封装库
     require_once('util.mongodb.class.php');
     $mongoLib = m_mgdb::i("inpageedit");
     $collection = 'test';
