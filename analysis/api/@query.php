@@ -8,7 +8,7 @@
 function _query($sitename, $url)
 {
     ## 调用工具类
-    require_once('/path/to/util.mongodb.class.php.php');
+    require_once('util.mongodb.class.php.php');
     $mongoLib = m_mgdb::i("inpageedit");
     $collection = 'test';
 
