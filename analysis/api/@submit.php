@@ -1,14 +1,15 @@
 <?php
 /**
  * 录入数据函数
- * @param 懒得写，参数都是字面意思
+ * @param blahblah 懒得写，参数都是字面意思
  */
 function _submit($url, $sitename, $username, $function)
 {
     ## 调用封装库
     require_once('util.mongodb.class.php');
     $mongoLib = m_mgdb::i("inpageedit");
-    $collection = 'test';
+    $collection = 'analysis';
+
 
     ## 变量
     $command = [];

@@ -1,1 +1,14 @@
+# Common
 .DS_Store
+Thumbs.db
+db.json
+*.log
+node_modules/
+public/
+.deploy*/
+
+# This part is for development, ignore
+/dev
+
+# Hidden routing rules for Wjghj Server
+# \@*

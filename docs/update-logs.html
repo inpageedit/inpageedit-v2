@@ -195,14 +195,10 @@
                 moreHTML = $('<ul>', { class: 'change-more-info' }); // 建立更多说明的乱序列表
 
               for (var k3 = 0; k3 < more.length; k3++) {
-                moreHTML.append(
-                  $('<li>', { html: conversion(more['k3']) })
-                )
+                moreHTML = $('<li>', { html: conversion(more['k3']) }).appendTo(moreHTML);
               }
-              versionChanges.append(
-                mainHTML,
-                moreHTML
-              );
+              versionChanges = mainHTML.appendTo(versionChanges);
+              versionChanges = moreHTML.appendTo(versionChanges);
             }
             versionGroup = versionGroup.append(
               versionHTML,
