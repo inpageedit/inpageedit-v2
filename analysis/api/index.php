@@ -26,7 +26,7 @@ switch ($action) {
     break;
 
     case 'log':
-      require_once('@log.php');
+      require_once('@submit.php');
       $url = isset($_GET['url']) ? $_GET['url'] : false;
       $sitename = isset($_GET['sitename']) ? $_GET['sitename'] : false;
       $username = isset($_GET['username']) ? $_GET['username'] : false;
