@@ -2,6 +2,11 @@
 /**
  * 录入数据函数
  * @param blahblah 懒得写，参数都是字面意思
+ * Logs:
+ * - 2020年4月22日
+ *   - 初次发布
+ * - 2020年4月23日
+ *   - [破坏性更新]改变数据结构
  */
 function _submit($url, $sitename, $username, $function)
 {
@@ -10,21 +15,33 @@ function _submit($url, $sitename, $username, $function)
     $mongoLib = m_mgdb::i("inpageedit");
     $collection = 'analysis';
 
-
     ## 变量
     $command = [];
     $insert = [];
+    $msg = [];
     $finalResult = [];
+    $today = date('Y-m-d');
 
     ## 参数有误
     if (!$url||!$sitename||!$username||!$function) {
         $finalResult['status'] = false;
         $msg = 'Missing param(s):';
-        if (!$url) { $msg = $msg . ' url '; }
-        if (!$sitename) { $msg = $msg . ' sitename '; }
-        if (!$username) { $msg = $msg . ' user '; }
-        if (!$function) { $msg = $msg . ' function'; }
-        $finalResult['msg'] = $msg . '.';
+        if (!$url) {
+            $msg = $msg . ' url ';
+        }
+        if (!$sitename) {
+            $msg = $msg . ' sitename ';
+        }
+        if (!$username) {
+            $msg = $msg . ' user ';
+        }
+        if (!$function) {
+            $msg = $msg . ' function';
+        }
+        $msg = trim($msg) . '.';
+        $finalResult['msg'][0] = 'FAIL';
+        $finalResult['msg'][1] = $msg;
+        $finalResult['submit'] = [];
         return $finalResult;
     }
 
@@ -34,7 +51,7 @@ function _submit($url, $sitename, $username, $function)
       'filter'=> [
         'url'=>$url
       ]
-    ],[]);
+    ], []);
     $query = $query->toArray();
 
     if (empty($query)) {
@@ -42,9 +59,26 @@ function _submit($url, $sitename, $username, $function)
         $insert = array(
             'url' => $url,
             'sitename' => $sitename,
+            '_total' => 1,
             'date' => array(
-                date('Y-m-d') => array(
-                    $username => array(
+                $today => array(
+                    '_total' => 1,
+                    $function => 1
+                )
+            ),
+            'functions' => array(
+                $function => 1
+            ),
+            'users' => array(
+                $username => array(
+                    '_total' => 1,
+                    'date' => array(
+                        $today => array(
+                            '_total' => 1,
+                            $function => 1
+                        )
+                    ),
+                    'functions' => array(
                         $function => 1
                     )
                 )
@@ -52,40 +86,103 @@ function _submit($url, $sitename, $username, $function)
         );
 
         $dbres = $mongoLib->insert($collection, [$insert]);
-        $finalResult['msg'] = 'New Wiki inserted.';
+        $msg[0] = 'SUCCESS';
+        $msg[] = 'New Wiki inserted.';
         $finalResult['submit'] = $insert;
         $finalResult['status'] = true;
-
     } else {
         ## Wiki存在，下一步
         $query = $query[0];
         $times = 0;
         $settingdata = [];
+        $msg = [];
+        $msg[0] = 'SUCCESS';
         ## 蛇皮操作转换数组，防止抑郁
         $query = json_encode($query);
         $query = json_decode($query, true);
 
-       ## 是否含有该用户使用该功能的数据
-       if ( isset($query['date'][date('Y-m-d')][$username][$function]) ) {
-           ## 有数据，喜加一
-           $finalResult['msg'] = 'Ok.';
+        /** 先把总数加一 **/
+        $query['_total']++;
 
-           $times = $query['date'][date('Y-m-d')][$username][$function];
-           $times = $times + 1;
-           $query['date'][date('Y-m-d')][$username][$function] = $times;
+        /** date环节 **/
+        ## 当日是否[未]被记录
+        if (!isset($query['date'][$today])) {
+            ## 未记录，初始化
+            $msg[] = 'New date logged.';
+            $query['date'][$today]['_total'] = 0;
+            $query['date'][$today][$function] = 0;
+        }
+        if (!isset($query['date'][$today][$function])) {
+            $msg[] = 'New date → function logged.';
+            $query['date'][$today][$function] = 0;
+        }
+        ## 喜加一
+        $query['date'][$today]['_total']++;
+        $query['date'][$today][$function]++;
 
-       } else {
-           ## 没有该用户该功能的数据，次数初始化为1
-           $times = 1;
-           $msg = '';
-           if ( !isset($query['date'][date('Y-m-d')]) ) {$msg = 'New date logged.';}
-           if ( !isset($query['date'][date('Y-m-d')][$username]) ) {$msg = $msg . ' New user added. ';}
-           if ( !isset($query['date'][date('Y-m-d')][$username][$function]) ) {$msg = $msg . ' New function logged.';}
-           $finalResult['msg'] = $msg;
-       }
-        $query['date'][date('Y-m-d')][$username][$function] = $times;
-        $settingdata = ['date'=>$query['date']];
+        /** functions环节 */
+        ## 该功能是否[未]被记录
+        if (!isset($query['functions'][$function])) {
+            ## 未记录，初始化
+            $msg[] = 'New function logged.';
+            $query['functions'][$function] = 0;
+        }
+        ## 喜加一
+        $query['functions'][$function]++;
 
+        /** users环节 **/
+        ## 该用户是否[未]被记载
+        if (!isset($query['users'][$username])) {
+            ## 未记载该用户，初始化
+            $msg[] = 'New user added.';
+            $query['users'][$username] = array(
+                '_total' => 0,
+                'date' => array(
+                    $today => array(
+                        '_total' => 0,
+                        $function => 0
+                    )
+                ),
+                'functions' => array(
+                    $function => 0
+                )
+            );
+        }
+        ## 该用户当日是否[未]被记载
+        if (!isset($query['users'][$username]['date'][$today])) {
+            ## 当日未记载，初始化
+            $msg[] = 'New user → date logged.';
+            $query['users'][$username]['date'][$today] = array(
+                '_total' => 0,
+                $function => 0
+            );
+        }
+        if (!isset($query['users'][$username]['date'][$today][$function])) {
+            $msg[] = 'New user → date → function logged.';
+            $query['users'][$username]['date'][$today][$function] = 0;
+        }
+        ## 该用户是否[未]使用过该功能
+        if (!isset($query['users'][$username]['functions'][$function])) {
+            ## 没使用过，初始化
+            $msg[] = 'New user → function logged.';
+            $query['users'][$username]['functions'][$function] = 0;
+        }
+        ## users开始疯狂喜加一
+        $query['users'][$username]['_total']++;
+        $query['users'][$username]['date'][$today]['_total']++;
+        $query['users'][$username]['date'][$today][$function]++;
+        $query['users'][$username]['functions'][$function]++;
+
+        ## 设定查询参数
+        # 更新数据
+        // $settingdata = [$query]; // 不太好用
+        $settingdata = [
+            '_total' => $query['_total'],
+            'date' => $query['date'],
+            'functions' => $query['functions'],
+            'users' => $query['users']
+        ];
+        # 查询语句
         $updates = [
             [
                 'q' => ['url' => $url],
@@ -94,14 +191,16 @@ function _submit($url, $sitename, $username, $function)
                 ]
             ]
         ];
-        $mongoLib->update($collection,$updates);
+        # 走你
+        $mongoLib->update($collection, $updates);
 
+        $msg[] = 'All data submitted.';
         $finalResult['status'] = true;
         $finalResult['submit'] = $settingdata;
-        # $finalResult = $query;
     }
 
     ## 完事，我爱MongoDB
+    $finalResult['msg'] = $msg;
     return $finalResult;
 }
 
