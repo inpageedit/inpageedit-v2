@@ -45,7 +45,7 @@ function _submit($url, $sitename, $username, $function)
         return $finalResult;
     }
 
-    ## 查询
+    ## 查询 Wiki
     $query = $mongoLib->command([
       'find'=>$collection,
       'filter'=> [
@@ -194,10 +194,48 @@ function _submit($url, $sitename, $username, $function)
         # 走你
         $mongoLib->update($collection, $updates);
 
-        $msg[] = 'All data submitted.';
-        $finalResult['status'] = true;
         $finalResult['submit'] = $settingdata;
     }
+
+    /** 记录本日次数 **/
+    $queryDate = $mongoLib->command([
+        'find'=> 'date',
+        'filter'=> [
+          'date'=>$today
+        ]
+    ], []);
+    $queryDate = $queryDate->toArray();
+    $queryDate = $queryDate[0];
+
+    ## 当日是否为空
+    if (empty($queryDate)) {
+        ## 建立一个
+        $msg[] = 'Insert new date to date collection.';
+        $mongoLib->insert('date', [
+            [
+                'date' => $today,
+                'times' => 1
+            ]
+        ]);
+    } else {
+        ## 蛇皮操作转换数组，防止抑郁
+        $queryDate = json_encode($queryDate);
+        $queryDate = json_decode($queryDate, true);
+        $queryDate['times']++;
+        $mongoLib->update('date', [
+            [
+                'q' => ['date' => $today],
+                'u' => ['$set'=>
+                    [
+                        'times' => $queryDate['times']
+                    ]
+                ]
+            ]
+        ]);
+    }
+
+    $msg[] = 'All data submitted.';
+    $finalResult['status'] = true;
 
     ## 完事，我爱MongoDB
     $finalResult['msg'] = $msg;
