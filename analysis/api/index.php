@@ -4,6 +4,7 @@
  * @author: 机智的小鱼君
  * @tech used: PHP, MongoDB
  */
+
 # ini_set('display_errors', 1);
 # error_reporting(-1);
 header('content-type:application/json');

@@ -8,11 +8,13 @@
 - MongoDB 4.0.10
 
 ## API
+
 ### `action=query`
 
 Query data
 
 #### Params
+
 - `url`
   - Filter via Wiki url
 - `sitename`
@@ -25,29 +27,57 @@ Query data
 ```javascript
 {
     "status": true, // true/false
-    "msg": "<msg>",
+    "msg": [
+        // Massages
+    ],
     "query": [
-        {
-            "_id": {
-                "$oid": "<mgdb_id>"
-            },
-            "url": "<Wiki Url>",
-            "sitename": "<Wiki Name>",
-            "date": {
-                "<Y-m-d>": {
-                    "<username>": {
-                        "function1": 123,
-                        "function2": 123
-                    },
-                    // users...
-                },
-                // another date...
-            }
-        },
         // wikis...
     ]
-}  
+}
 ```
 
 ### `action=log`
+
 Unpublic on document. Prevent SPAM.
+
+## Data Structure
+
+```shell
+> using inpageedit
+switched to db inpageedit
+> db.auth('<username>','password')
+1
+> db.analysis.find().pretty()
+```
+
+```json
+{
+  "_id": ObjectId("<ID>"),
+  "url": "<wgServer><wgArticlePath>",
+  "sitename": "<wgSiteName>",
+  "_total": 0,
+  "date": {
+    "<Y-m-d>": {
+      "_total": 0,
+      "<inpageedit_function_name>": 0
+    }
+  },
+  "functions": {
+    "<inpageedit_function_name>": 0
+  },
+  "users": {
+    "<wgUserName>": {
+      "_total": 0,
+      "date": {
+        "<Y-m-d>": {
+          "_total": 0,
+          "<inpageedit_function_name>": 0
+        }
+      },
+      "functions": {
+        "<inpageedit_function_name>": 0
+      }
+    }
+  }
+}
+```
