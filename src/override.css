@@ -352,6 +352,10 @@
 }
 
 .in-page-edit-article-link-group:before {
+  position: absolute;
+}
+
+.in-page-edit-article-link-group:before {
   content: "["
 }
 
