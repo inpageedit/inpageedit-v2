@@ -1,13 +1,17 @@
 /**
- * GNU GENERAL PUBLIC LICENSE 3.0
+ * @license GPL-3.0 GNU GENERAL PUBLIC LICENSE 3.0
  *
- * MediaWiki JS Plugin: In Page Edit
- * Author: 机智的小鱼君
- * Url: https://github.com/Dragon-Fish/InPageEdit-v2
- **/
+ * @name InPageEdit-v2
+ * @description A JavaScript-based MediaWiki Plugin: 
+ * @author 机智的小鱼君
+ * @url https://github.com/Dragon-Fish/InPageEdit-v2
+ */
 !(function () {
   'use strict';
-  // 创建全局函数
+  /**
+   * @description 检查插件是否已经运行，创建全局函数
+   * @global InPageEdit {Object}
+   */
   if (typeof (InPageEdit) !== 'undefined' && typeof (InPageEdit.version) !== 'undefined') throw '[InPageEdit] 已经有一个IPE插件在执行了';
   window.InPageEdit = window.InPageEdit || {};
   InPageEdit.isCanary = false;
@@ -16,7 +20,8 @@
     aboutUrl: 'https://dragon-fish.github.io/inpageedit-v2/',
     updatelogsJson: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/docs/update-logs.json'
   }
-  /*=version*/InPageEdit.version = '2.13.3';/*version=*/
+  InPageEdit.version = '2.13.4';
+  Object.freeze(InPageEdit.api); // 冻结重要全局变量
 
   // 常用函数
   var config = mw.config.get();
@@ -31,74 +36,88 @@
     $('<link>', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/override.min.css' })
   );
 
-  /*** BOT FLAG ***/
   /** 导入 i18n 组件 **/
   mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/i18n-js@master/script.min.js');
   mw.hook('dfgh.i18n').add(function (i18no) {
     i18no.loadMessages('InPageEdit-v2').then(init);
   });
 
-  /** InPageEdit主框架 **/
+  /**
+   * @function InPageEdit
+   */
   function init(i18n) {
     // i18n
     function msg(i) {
       return i18n.msg(i).parse();
-    };
+    }
     /** HTML 组件 **/
     const $br = $('<br/>'),
       $clear = $('<div>', { style: 'clear:both' }),
       $hr = $('<hr/>'),
       $progress = $('<div>', { class: 'ipe-progress', style: 'width: 100%' }).append($('<div>', { class: 'ipe-progress-bar' }));
 
-    /** 快速编辑模块 **/
-    InPageEdit.edit = InPageEdit.quickEdit = function (option) {
+    /**
+     * @module 快速编辑模块
+     * 
+     * @property {Object} options
+     * @property {String} options.page edit page (default: wgPageName)
+     * @property {Number} options.revision page rev ID
+     * @property {Number} options.section edit section
+     * @property {Boolean} options.reload if reload page after save successful (default: true)
+     */
+    InPageEdit.edit = InPageEdit.quickEdit = function (options) {
       mw.hook('InPageEdit.quickEdit').fire();
-      // 变量
-      var option = option || {};
+      /** 获取设定信息，设置缺省值 **/
+      var options = options || {};
+      var defaultOptions = {
+        page: config.wgPageName,
+        revision: null,
+        summaryRevision: '',
+        section: null,
+        editText: '',
+        editMinor: false,
+        editSummary: msg('preference-summary-default'),
+        editNotice: '',
+        outSideClose: true,
+        jumpTo: '',
+        reload: true
+      }
+
+      /** 获取用户设置 **/
       var preference = localStorage.InPageEditPreference || '{}';
       preference = JSON.parse(preference);
-      var editPage = option.page || config.wgPageName;
-      editPage = decodeURIComponent(editPage);
-      var
-        editSection = option.section || false,
-        editRevision = option.revision || false,
-        summaryRevision = '',
-        editText,
-        editSummary = preference.editSummary || msg('preference-summary-default'),
-        editMinor = preference.editMinor || false,
-        editNotice = '',
-        outSideClose = preference.outSideClose;
-      if (outSideClose === undefined) outSideClose = true;
+
+      /** 缓存时间戳 **/
+      var date = new Date(),
+        timestamp = date.getTime(),
+        now = date.toUTCString();
+
+      /** 将选项合并并标准化 **/
+      options = $.extend(defaultOptions, options, preference);
+      options.page = decodeURIComponent(options.page); // 解码网址 Unicode
+
+      // 设置顶层变量
       var jsonGet = {
         action: 'parse',
-        page: editPage,
+        page: options.page,
         prop: 'wikitext|langlinks|categories|templates|images|sections',
         format: 'json'
-      },
-        pageId,
-        jsonPost = {},
-        protection = '',
-        pageDetail,
-        basetimestamp,
-        jumpTo = '#';
-      var
-        date = new Date(),
-        timestamp = date.getTime(),
-        now = date.toUTCString(); // 缓存时间戳
-      var reloadPage = option.reload;
-      if (reloadPage === undefined) reloadPage = true;
+      }
+      var pageId = 0;
+      var jsonPost = {};
+      var pageDetail;
 
       _analysis('quick_edit');
 
-      if (editRevision !== false && editRevision !== '' && editRevision !== config.wgCurRevisionId) {
+      if (options.revision !== false && options.revision !== '' && options.revision !== config.wgCurRevisionId) {
         ssi_modal.notify('warning', {
           className: 'in-page-edit',
           content: msg('notify-editing-history'),
           title: msg('notify-info')
         });
         delete jsonGet.page;
-        jsonGet.oldid = editRevision;
-        summaryRevision = '(' + msg('editor-summary-rivision') + '[[Special:Diff/' + editRevision + ']])';
+        jsonGet.oldid = options.revision;
+        summaryRevision = '(' + msg('editor-summary-rivision') + '[[Special:Diff/' + options.revision + ']])';
       } else {
         if (editSection !== false && editSection !== '') {
           jsonGet.section = editSection;
@@ -340,7 +359,7 @@
             });
           });
           // 获取权限
-          if (InPageEdit.hasRight('edit') === false) {
+          if (_hasRight('edit') === false) {
             ssi_modal.notify('dialog', {
               className: 'in-page-edit',
               position: 'center bottom',
@@ -398,10 +417,10 @@
               var val = $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val();
               val = val.replace(/\$section/ig, '');
               $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val(val);
-              jumpTo = '#';
+              jumpTo = '';
             }
-            if (editRevision !== false && editRevision !== '' && editRevision !== config.wgCurRevisionId) {
-              $('.ipe-editor.timestamp-' + timestamp + ' .editPage').after('<span class="editRevision">(' + msg('editor-title-editRevision') + '：' + editRevision + ')</span>');
+            if (options.revision !== false && options.revision !== '' && options.revision !== config.wgCurRevisionId) {
+              $('.ipe-editor.timestamp-' + timestamp + ' .editPage').after('<span class="editRevision">(' + msg('editor-title-editRevision') + '：' + options.revision + ')</span>');
             }
 
             // 获取页面基础信息
@@ -439,9 +458,9 @@
                 for (var i = 0; i < protection.length; i++) {
                   if (protection[i].type === 'edit') {
                     if (
-                      (protection[i].level === 'autoconfirmed' && !InPageEdit.hasRight('autoconfirmed')) ||
-                      (protection[i].level === 'sysop' && !InPageEdit.hasRight('editprotected')) ||
-                      (config.wgNamespaceNumber === 8 && !InPageEdit.hasRight('editinterface'))
+                      (protection[i].level === 'autoconfirmed' && !_hasRight('autoconfirmed')) ||
+                      (protection[i].level === 'sysop' && !_hasRight('editprotected')) ||
+                      (config.wgNamespaceNumber === 8 && !_hasRight('editinterface'))
                     ) {
                       ssi_modal.notify('dialog', {
                         className: 'in-page-edit',
@@ -693,7 +712,10 @@
       }
     }
 
-    /** 查找替换模块 **/
+    /**
+     * @module 查找替换模块
+     * @param contengut <Element> Textarea
+     */
     InPageEdit.findAndReplace = function (contengut) {
       if (contengut === this.undefined) contengut = $('.in-page-edit.ipe-editor .editArea');
       var origin = contengut.val();
@@ -922,7 +944,7 @@
           )
         ),
         beforeShow: function () {
-          if (!InPageEdit.hasRight('delete')) {
+          if (!_hasRight('delete')) {
             ssi_modal.dialog({
               title: msg('notify-no-right'),
               content: msg('delete-no-right'),
@@ -1109,7 +1131,7 @@
           }
         }],
         beforeShow: function () {
-          if (!InPageEdit.hasRight('move')) {
+          if (!_hasRight('move')) {
             ssi_modal.dialog({
               title: msg('notify-no-right'),
               content: msg('rename-no-right'),
@@ -1285,28 +1307,43 @@
           return '<a class="diff-user" href="' + mw.util.getUrl('User:' + user) + '">' + user + '</a> (<a href="' + mw.util.getUrl('User_talk:' + user) + '">' + msg('diff-usertalk') + '</a> | <a href="' + mw.util.getUrl('Special:Contributions/' + user) + '">' + msg('diff-usercontrib') + '</a> | <a href="' + mw.util.getUrl('Special:Block/' + user) + '">' + msg('diff-userblock') + '</a>)';
         }
         $('.quick-diff .pageName').html(msg('diff-title') + ': <u>' + toTitle + '</u>');
-        $('.quick-diff .diffArea').show().html(
-          '<table class="diff diffTable">' +
-          '<colgroup>' +
-          '<col class="diff-marker">' +
-          '<col class="diff-content">' +
-          '<col class="diff-marker">' +
-          '<col class="diff-content">' +
-          '</colgroup>' +
-          '<tbody>' +
-          '<tr class="diff-title">' +
-          '<td colspan="2" class="diff-otitle">' +
-          '<a class="" href="' + config.wgScript + '?oldid=' + data.compare.fromrevid + '">' + data.compare.fromtitle + '</a> (<span class="diff-version">' + msg('diff-version') + data.compare.fromrevid + '</span>) (<a class="editLink" href="' + config.wgScript + '?action=edit&title=' + data.compare.fromtitle + '&oldid=' + data.compare.fromrevid + '">' + msg('diff-edit') + '</a>)<br/>' + userlink(data.compare.fromuser) + '<br/>(<span class="diff-comment">' + data.compare.fromparsedcomment + '</span>)<br/><a class="prevVersion ipe-analysis-quick_diff_modalclick" href="javascript:void(0);" onclick="InPageEdit.quickDiff({fromrev:' + data.compare.fromrevid + ',torelative:\'prev\'});">←' + msg('diff-prev') + '</a>' +
-          '</td>' +
-          '<td colspan="2" class="diff-ntitle">' +
-          '<a class="" href="' + config.wgScript + '?oldid=' + data.compare.torevid + '">' + data.compare.totitle + '</a> (<span class="diff-version">' + msg('diff-version') + data.compare.torevid + '</span>) (<a class="editLink" href="' + config.wgScript + '?action=edit&title=' + data.compare.totitle + '&oldid=' + data.compare.torevid + '">' + msg('diff-edit') + '</a>)<br/>' + userlink(data.compare.touser) + '<br/>(<span class="diff-comment">' + data.compare.toparsedcomment + '</span>)<br/><a class="nextVersion ipe-analysis-quick_diff_modalclick" href="javascript:void(0);" onclick="InPageEdit.quickDiff({fromrev:' + data.compare.torevid + ',torelative:\'next\'});">' + msg('diff-nextv') + '→</a>' +
-          '</td>' +
-          '</tr>' +
-          diffTable +
-          '<tr class="diffSize" style="text-align: center;"><td colspan="2">' + data.compare.fromsize + msg('diff-bytes') + '</td><td colspan="2">' + data.compare.tosize + msg('diff-bytes') + '</td></tr>' +
-          '</tbody>' +
-          '</table>'
-        );
+        $('.quick-diff .diffArea').show().html(`
+          <table class="diff diffTable">
+            <colgroup>
+              <col class="diff-marker">
+              <col class="diff-content">
+              <col class="diff-marker">
+              <col class="diff-content">
+            </colgroup>
+            <tbody>
+              <tr class="diff-title">
+                <td colspan="2" class="diff-otitle">
+                  <a class="" href="${config.wgScript}?oldid=${data.compare.fromrevid}">${data.compare.fromtitle}</a> (<span class="diff-version">${msg('diff-version')}${data.compare.fromrevid}</span>) (<a class="editLink" href="${config.wgScript}?action=edit&title=${data.compare.fromtitle}&oldid=${data.compare.fromrevid}">${msg('diff-edit')}</a>)
+                  <br/>
+                  ${userlink(data.compare.fromuser)}
+                  <br/>
+                  (<span class="diff-comment">${data.compare.fromparsedcomment}</span>)
+                  <br/>
+                  <a class="prevVersion ipe-analysis-quick_diff_modalclick" href="javascript:void(0);" onclick="InPageEdit.quickDiff({fromrev:${data.compare.fromrevid},torelative:'prev'});">←${msg('diff-prev')}</a>
+                </td>
+                <td colspan="2" class="diff-otitle">
+                  <a class="" href="${config.wgScript}?oldid=${data.compare.torevid}">${data.compare.totitle}</a> (<span class="diff-version">${msg('diff-version')}${data.compare.torevid}</span>) (<a class="editLink" href="${config.wgScript}?action=edit&title=${data.compare.totitle}&oldid=${data.compare.torevid}">${msg('diff-edit')}</a>)
+                  <br/>
+                  ${userlink(data.compare.touser)}
+                  <br/>
+                  (<span class="diff-comment">${data.compare.toparsedcomment}</span>)
+                  <br/>
+                  <a class="prevVersion ipe-analysis-quick_diff_modalclick" href="javascript:void(0);" onclick="InPageEdit.quickDiff({fromrev:${data.compare.torevid},torelative:'prev'});">${msg('diff-nextv')}→</a>
+                </td>
+              </tr>
+              ${diffTable}
+              <tr class="diffSize" style="text-align: center;">
+                <td colspan="2">${data.compare.fromsize}${msg('diff-bytes')}</td>
+                <td colspan="2">${data.compare.tosize}${msg('diff-bytes')}</td>
+              </tr>
+            </tbody>
+          </table>
+        `);
         $('.ipe-analysis-quick_diff_modalclick').click(function () {
           _analysis('quick_diff_modalclick');
         });
@@ -1405,7 +1442,10 @@
       }
     }
 
-    /** 获取段落编辑以及编辑链接 **/
+    /**
+     * @module 获取段落编辑以及编辑链接
+     * @param element <Element> parent element to find edit links
+     */
     InPageEdit.articleLink = function (element) {
       if (element === undefined)
         element = $('#mw-content-text a:not(.new)');
@@ -1437,27 +1477,31 @@
             }).append(
               $('<a>', {
                 'href': 'javascript:void(0)',
-                'class': 'in-page-edit-article-link'
+                'class': 'in-page-edit-article-link',
+                text: msg('quick-edit')
+              }).click(function () {
+                if (revision !== null) {
+                  InPageEdit.quickEdit({
+                    page: title,
+                    revision: revision
+                  });
+                } else {
+                  InPageEdit.quickEdit({
+                    page: title,
+                    section: section
+                  });
+                }
               })
-                .text(msg('quick-edit'))
-                .click(function () {
-                  if (revision !== null) {
-                    InPageEdit.quickEdit({
-                      page: title,
-                      revision: revision
-                    });
-                  } else {
-                    InPageEdit.quickEdit({
-                      page: title,
-                      section: section
-                    });
-                  }
-                })));
+            )
+          );
         }
       });
     }
 
-    /** 快速预览文章页 **/
+    /**
+     * @module 快速预览文章页
+     * @param params {Object} 
+     */
     InPageEdit.quickPreview = function (params) {
       mw.hook('InPageEdit.quickPreview').fire();
       var timestamp = new Date().getTime();
@@ -1491,7 +1535,12 @@
       });
     }
 
-    /** 载入中模块 **/
+    /**
+     * @module 载入中模块
+     * @param title
+     *  - √Boolean× true: Mark top progress box as done; false: Close top progress box
+     *  - "String" Show new progress box with title @default 'Loading...'
+     */
     InPageEdit.progress = function (title) {
       if (title === true) {
         $('.in-page-edit.loadingbox .ssi-modalTitle').html(msg('done'));
@@ -1521,7 +1570,10 @@
       }
     }
 
-    /** 提交统计信息模块 **/
+    /**
+     * @module 提交统计信息模块
+     * @description Internal module
+     */
     const _analysis = function (functionID) {
       if (InPageEdit.doNotCollectMyInfo === true) {
         // console.info('[InPageEdit] 我们已不再收集您使用插件的信息。');
@@ -1545,7 +1597,10 @@
       });
     }
 
-    /** 版本信息模块 **/
+    /**
+     * @module 版本信息模块
+     * @description Show Update Logs Modal box
+     */
     InPageEdit.versionInfo = function () {
       // 显示模态框
       ssi_modal.show({
@@ -1576,7 +1631,10 @@
       });
     };
 
-    /** 关于插件模块 **/
+    /**
+     * @module 关于插件模块
+     * @description Show "What is" modal box of IPE2
+     */
     InPageEdit.about = function () {
       ssi_modal.show({
         title: '关于InPageEdit',
@@ -1588,7 +1646,9 @@
       });
     }
 
-    /** 获取版本更新提示 **/
+    /**
+     * @module 获取版本更新提示
+     */
     $(window).load(function () {
       var version = InPageEdit.version;
       // 版本更新
@@ -1655,7 +1715,9 @@
       };
     }
 
-    /** 获取用户权限信息 **/
+    /**
+     * @description 获取用户权限信息
+     */
     !(function () {
       mw.user.getRights().then(function (rights) {
         console.info('[InPageEdit] 成功获取用户权限信息');
@@ -1680,7 +1742,12 @@
       }
     }());
 
-    InPageEdit.hasRight = function (right) {
+    /** 
+     * @module 是否拥有权限
+     * @param {String} right
+     * @return {Boolean}
+     */
+    const _hasRight = function (right) {
       if (config.wgUserIsBlocked === true) {
         return false;
       }
@@ -1691,7 +1758,9 @@
       }
     };
 
-    /** 页面载入完成，自动加载某些模块 **/
+    /**
+     * @description 页面载入完成，自动加载某些模块
+     */
     !(function () {
       /** 额外的模块 **/
       // 快速页面差异模块
