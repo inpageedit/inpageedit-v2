@@ -1,4 +1,4 @@
-# About these Logos
+# InPageEdit Logos
 Made by [Dianliang233](https://github.com/dianliang233/) with [Sketch](https://www.sketch.com/).
 
 ## Design & Font

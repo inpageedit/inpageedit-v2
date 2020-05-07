@@ -73,7 +73,8 @@
         "editor-leave-confirm": "Are you sure you want to leave the editor? Your text will NOT be saved.",
         "notify-no-change": "Nothing changed.",
         "editor-title-saving": "Publishing...",
-        "notify-save-success": "Save successful, refreshing page...",
+        "notify-save-success": "Saved successfully. Refreshing page...",
+        "notify-save-success-noreload": "Saved successfully.",
         "editor-save-error": "Some error(s) occurred while saving",
         "redirect-summary": "Quick redirect",
         "redirect-question-to": "Which page do you want to redirect $1 to?",
@@ -150,7 +151,8 @@
         "editor-edittool-nowiki": "Nowiki text",
         "editor-edittool-format-label": "Format",
         "editor-edittool-insert-label": "Insert",
-        "editor-edittool-custom-label": "Custom"
+        "editor-edittool-custom-label": "Custom",
+        "editor-reload-page": "Reload the page after saving"
     },
     "ar": {
         "version-notice-title": "نجاح التثبيت",
@@ -677,6 +679,7 @@
         "notify-no-change": "没有进行任何改动",
         "editor-title-saving": "正在保存……",
         "notify-save-success": "保存成功，正在刷新页面……",
+        "notify-save-success-noreload": "保存成功！",
         "editor-save-error": "保存时出现错误",
         "redirect-summary": "快速重定向到",
         "redirect-question-to": "要将$1重定向到哪个页面？",
@@ -787,7 +790,8 @@
         "editor-edittool-nowiki": "去格式化",
         "editor-edittool-format-label": "格式",
         "editor-edittool-insert-label": "插入",
-        "editor-edittool-custom-label": "自定"
+        "editor-edittool-custom-label": "自定",
+        "editor-reload-page": "保存后刷新页面"
     },
     "zh-hant": {
         "quick-edit": "快速編輯",
