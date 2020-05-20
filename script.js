@@ -6,14 +6,15 @@
  * @author 机智的小鱼君
  * @url https://github.com/Dragon-Fish/InPageEdit-v2
  */
-!(function () {
+!(function (root, factory) {
+  root.InPageEdit = factory(root.jQuery);
+}(this, function ($) {
   'use strict';
   /**
    * @description 检查插件是否已经运行，创建全局函数
-   * @global InPageEdit {Object}
    */
-  if (typeof (InPageEdit) !== 'undefined' && typeof (InPageEdit.version) !== 'undefined') throw '[InPageEdit] 已经有一个IPE插件在执行了';
   window.InPageEdit = window.InPageEdit || {};
+  if (typeof (InPageEdit.version) !== 'undefined') throw '[InPageEdit] 已经有一个IPE插件在执行了';
   InPageEdit.isCanary = false;
   InPageEdit.api = {
     analysis: 'https://doc.wjghj.cn/inpageedit-v2/analysis/api/index.php',
@@ -38,7 +39,7 @@
     // FontAwesome
     $('<link>', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css' }),
     // 覆写
-    $('<link>', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/override.min.css' })
+    $('<link>', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/skin/ipe-default.min.css' })
   );
 
   /** 导入 i18n 组件 **/
@@ -106,7 +107,7 @@
         now = date.toUTCString();
 
       /** 将选项合并并标准化 **/
-      options = $.extend(defaultOptions, options, preference);
+      options = $.extend({}, defaultOptions, options, preference);
       options.page = decodeURIComponent(options.page); // 解码网址 Unicode
 
       _analysis('quick_edit');
@@ -136,17 +137,19 @@
         title: msg('editor-title-editing') + ': <u class="editPage">' + options.page.replace(/\_/g, ' ') + '</u>',
         content:
           $('<div>').append(
-            $progress,
+            $('<div>', { class: 'ipe-progress', style: 'width: 100%' }).append($('<div>', { class: 'ipe-progress-bar' })),
             $('<section>', { class: 'editForm' }).append(
               // 编辑工具条
               $('<div>', { class: 'editTools' }).append(
                 $('<div>', { class: 'btnGroup' }).append(
-                  $('<select>', { class: 'formatSelect' }).append(
-                    $('<option>', { value: 'default', 'data-open': '', 'data-middle': '', 'data-close': '', text: msg('editor-edittool-header') }),
-                    $('<option>', { value: 'h2', 'data-open': '\n== ', 'data-middle': msg('editor-edittool-header-text'), 'data-close': ' ==\n', text: 'H2' }),
-                    $('<option>', { value: 'h3', 'data-open': '\n=== ', 'data-middle': msg('editor-edittool-header-text'), 'data-close': ' ===\n', text: 'H3' }),
-                    $('<option>', { value: 'h4', 'data-open': '\n==== ', 'data-middle': msg('editor-edittool-header-text'), 'data-close': ' ====\n', text: 'H4' }),
-                    $('<option>', { value: 'h5', 'data-open': '\n===== ', 'data-middle': msg('editor-edittool-header-text'), 'data-close': ' =====\n', text: 'H5' })
+                  $('<div>', { class: 'toolSelect' }).append(
+                    $('<div>', { class: 'label', text: msg('editor-edittool-header') }),
+                    $('<ul>', { class: 'ul-list' }).append(
+                      $('<li>', { class: 'editToolBtn', 'data-open': '\n== ', 'data-middle': msg('editor-edittool-header-text'), 'data-close': ' ==\n', text: 'H2' }),
+                      $('<li>', { class: 'editToolBtn', 'data-open': '\n=== ', 'data-middle': msg('editor-edittool-header-text'), 'data-close': ' ===\n', text: 'H3' }),
+                      $('<li>', { class: 'editToolBtn', 'data-open': '\n==== ', 'data-middle': msg('editor-edittool-header-text'), 'data-close': ' ====\n', text: 'H4' }),
+                      $('<li>', { class: 'editToolBtn', 'data-open': '\n===== ', 'data-middle': msg('editor-edittool-header-text'), 'data-close': ' =====\n', text: 'H5' })
+                    )
                   )
                 ),
                 $('<div>', { class: 'btnGroup' }).append(
@@ -168,8 +171,8 @@
                   $('<span>', { class: 'label', text: '自定义' })
                 ),
                 $('<div>', { class: 'btnGroup special-tools', style: 'float: right' }).append(
-                  $('<button>', { class: 'btn', html: '<span class="fa-stack"><i class="fa fa-file fa-stack-1x"></i><i style="font-size: smaller;" class="fa fa-search fa-stack-1x fa-inverse"></i></span>' }).click(function () {
-                    InPageEdit.findAndReplace($('.ipe-editor.timestamp-' + timestamp + ' .editArea'))
+                  $('<button>', { class: 'btn fa fa-search' }).click(function () {
+                    InPageEdit.findAndReplace($('.ipe-editor.timestamp-' + timestamp + ' .editArea'));
                   })
                 )
               ),
@@ -334,19 +337,6 @@
               middle: $middle,
               close: $close
             }, $('.ipe-editor.timestamp-' + timestamp + ' .editArea')[0]);
-          });
-          $('.ipe-editor.timestamp-' + timestamp + ' .formatSelect').change(function () {
-            var $this = $(this),
-              val = $this.val(),
-              $open = $this.find('[value="' + val + '"]').attr('data-open') || '',
-              $middle = $this.find('[value="' + val + '"]').attr('data-middle') || '',
-              $close = $this.find('[value="' + val + '"]').attr('data-close') || '';
-            insertText({
-              open: $open,
-              middle: $middle,
-              close: $close
-            }, $('.ipe-editor.timestamp-' + timestamp + ' .editArea')[0]);
-            $this.val('default');
           });
         },
         /**
@@ -632,7 +622,7 @@
             center: true,
             title: imageName.replace(/_/g, ' '),
             content: $('<center>', { id: 'imageLayer' }).append(
-              $progress
+              $('<div>', { class: 'ipe-progress', style: 'width: 100%' }).append($('<div>', { class: 'ipe-progress-bar' }))
             ),
             buttons: [{
               label: msg('editor-detail-images-upload'),
@@ -916,7 +906,7 @@
             $('<label>', { for: 'redirect-reason', text: msg('editSummary') }),
             $('<input>', { id: 'redirect-reason', style: 'width:96%' })
           ),
-          $progress.css('display', 'none')
+          $('<div>', { class: 'ipe-progress', style: 'width: 100%' }).append($('<div>', { class: 'ipe-progress-bar' })).css('display', 'none')
         ),
         buttons: [{
           label: msg('confirm'),
@@ -1220,7 +1210,7 @@
         var local = localStorage.getItem('InPageEditPreference') || '{}',
           local = JSON.parse(local);
         if (typeof InPageEdit.myPreference === 'object') {
-          local = $.extend(local, InPageEdit.myPreference);
+          local = $.extend({}, local, InPageEdit.myPreference);
         }
         return $.extend({}, InPageEdit.preference.default, local);
       },
@@ -1231,7 +1221,7 @@
       set: function (options) {
         var options = options || {};
         if (typeof options !== 'object') return;
-        options = $.extend(InPageEdit.preference.get(), options);
+        options = $.extend({}, InPageEdit.preference.get(), options);
         options = JSON.stringify(options);
         localStorage.setItem('InPageEditPreference', options);
       },
@@ -1269,7 +1259,7 @@
               $('<h4>', { text: msg('preference-about-label') }),
               $('<button>', { class: 'btn btn-secondary', onclick: "InPageEdit.about()", text: msg('preference-aboutAndHelp') }),
               $('<button>', { class: 'btn btn-secondary', style: 'margin-left: 1em;', onclick: "InPageEdit.versionInfo()", text: msg('preference-updatelog') }),
-              $hr,
+              $('<hr>'),
               $('<strong>', { style: 'font-size: small; line-height: 0.9em', text: msg('preference-savelocal-label') }),
               $('<br>'),
               $('<span>', { style: 'font-size: small; line-height: 0.9em', text: msg('preference-savelocal') }).append(
@@ -1603,7 +1593,7 @@
         className: 'in-page-edit previewbox',
         title: msg('preview-title'),
         content: $('<section>').append(
-          $progress,
+          $('<div>', { class: 'ipe-progress', style: 'width: 100%' }).append($('<div>', { class: 'ipe-progress-bar' })),
           $('<div>', { id: 'InPageEditPreview', 'data-timestamp': timestamp, style: 'display:none', text: msg('preview-placeholder') })
         ),
         fixedHeight: true,
@@ -1660,33 +1650,6 @@
           outSideClose: false
         });
       }
-    }
-
-    /**
-     * @module 提交统计信息模块
-     * @description Internal module
-     */
-    const _analysis = function (functionID) {
-      if (InPageEdit.doNotCollectMyInfo === true) {
-        // console.info('[InPageEdit] 我们已不再收集您使用插件的信息。');
-        // return;
-      }
-      var functionID = functionID;
-      var submitdata = {
-        'action': 'submit',
-        'url': config.wgServer + config.wgArticlePath.replace('$1', ''),
-        'sitename': config.wgSiteName,
-        'username': config.wgUserName,
-        'function': functionID
-      }
-      $.ajax({
-        url: InPageEdit.api.analysis,
-        data: submitdata,
-        type: 'get',
-        dataType: 'json'
-      }).done(function (data) {
-        console.log('[InPageEdit] Analysis response\nStatus: ' + data.status + '\nMessage: ' + data.msg);
-      });
     }
 
     /**
@@ -1851,6 +1814,33 @@
     };
 
     /**
+     * @module 提交统计信息模块
+     * @description Internal module
+     */
+    const _analysis = function (functionID) {
+      if (InPageEdit.doNotCollectMyInfo === true) {
+        // console.info('[InPageEdit] 我们已不再收集您使用插件的信息。');
+        // return;
+      }
+      var functionID = functionID;
+      var submitdata = {
+        'action': 'submit',
+        'url': config.wgServer + config.wgArticlePath.replace('$1', ''),
+        'sitename': config.wgSiteName,
+        'username': config.wgUserName,
+        'function': functionID
+      }
+      $.ajax({
+        url: InPageEdit.api.analysis,
+        data: submitdata,
+        type: 'get',
+        dataType: 'json'
+      }).done(function (data) {
+        console.log('[InPageEdit] Analysis response\nStatus: ' + data.status + '\nMessage: ' + data.msg);
+      });
+    }
+
+    /**
      * @description 页面载入完成，自动加载某些模块
      */
     !(function () {
@@ -1954,4 +1944,7 @@
   // 花里胡哨的加载提示
   mw.hook('InPageEdit').fire();
   console.info('    ____      ____                   ______    ___ __              _    _____ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_            | |  / /__ \\\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/  ______    | | / /__/ /\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_   /_____/    | |/ // __/ \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/              |___//____/ \n                      /____/');
-}());
+
+  return InPageEdit;
+
+}));
