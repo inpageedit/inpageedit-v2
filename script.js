@@ -18,8 +18,8 @@
   InPageEdit.isCanary = false;
   InPageEdit.api = {
     analysis: 'https://doc.wjghj.cn/inpageedit-v2/analysis/api/index.php',
-    aboutUrl: 'https://dragon-fish.github.io/inpageedit-v2/',
-    updatelogsJson: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/docs/update-logs.json'
+    aboutUrl: 'https://dragon-fish.github.io/inpageedit-v2/about/',
+    updatelogsUrl: 'https://dragon-fish.github.io/inpageedit-v2/update-logs/'
   }
   InPageEdit.version = '2.13.4';
   // 冻结重要全局变量
@@ -184,7 +184,7 @@
                   $('<label>', { class: 'detailToggle', text: msg('editor-detail-button-toggle') }),
                   $('<div>', { class: 'detailBtnGroup' }).append(
                     $('<a>', { href: 'javascript:;', class: 'detailBtn', id: 'showTemplates', text: msg('editor-detail-button-templates') }),
-                    $('<span>', { text: ' | ' }),
+                    ' | ',
                     $('<a>', { href: 'javascript:;', class: 'detailBtn', id: 'showImages', text: msg('editor-detail-button-images') })
                   )
                 ),
@@ -571,9 +571,9 @@
               templateName = templates[i]['*'];
               $('<li>').append(
                 $('<a>', { href: mw.util.getUrl(templateName), target: '_blank', text: templateName }),
-                $('<span> (</span>'),
+                ' (',
                 $('<a>', { href: 'javascript:;', text: msg('quick-edit'), class: 'quickEditTemplate', 'data-template-name': templateName }),
-                $('<span>)</span>')
+                ')'
               ).appendTo(content);
             }
             ssi_modal.show({
@@ -590,11 +590,11 @@
               imageName = images[i];
               $('<li>').append(
                 $('<a>', { href: mw.util.getUrl('File:' + imageName), target: '_balnk', text: imageName }),
-                $('<span> (</span>'),
+                ' (',
                 $('<a>', { href: 'javascript:;', class: 'quickViewImage', text: msg('editor-detail-images-quickview'), 'data-image-name': imageName }),
-                $('<span> | </span>'),
+                ' | ',
                 $('<a>', { href: config.wgScript + '?title=Special:Upload&wpDestFile=' + imageName + '&wpForReUpload=1', target: '_balnk', text: msg('editor-detail-images-upload') }),
-                $('<span>)</span>')
+                ')'
               ).appendTo(content);
             }
             ssi_modal.show({
@@ -759,7 +759,7 @@
 
     /**
      * @module 查找替换模块
-     * @param contengut <Element> Textarea
+     * @param {element} contengut Textarea
      */
     InPageEdit.findAndReplace = function (contengut) {
       if (contengut === this.undefined) contengut = $('.in-page-edit.ipe-editor .editArea');
