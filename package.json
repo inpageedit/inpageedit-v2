@@ -1,8 +1,12 @@
 {
   "name": "inpageedit-v2",
-  "version": "2.13.4",
+  "version": "2.13.4-2",
   "description": "InPageEdit-v2 is a JavaScript-based MediaWiki plug-in, written by Dragon Fish",
   "main": "script.js",
+  "dependencies": {
+    "jquery": ">1.9.x",
+    "ssi-modal": "1.0.28"
+  },
   "directories": {
     "doc": "docs"
   },
