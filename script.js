@@ -21,7 +21,7 @@
     aboutUrl: 'https://dragon-fish.github.io/inpageedit-v2/about/',
     updatelogsUrl: 'https://dragon-fish.github.io/inpageedit-v2/update-logs/'
   }
-  InPageEdit.version = '2.13.4';
+  InPageEdit.version = '2.13.4-2';
   // 冻结重要全局变量
   Object.freeze(InPageEdit.api);
   Object.freeze(InPageEdit.version);
@@ -482,7 +482,7 @@
                 var data = data;
                 new mw.Api().post({
                   action: 'parse',
-                  title: options.editPage,
+                  title: options.page,
                   contentmodel: 'wikitext',
                   preview: true,
                   text: data
@@ -1202,17 +1202,25 @@
         doNotShowLocalWarn: false,
         editMinor: false,
         editSummary: msg('preference-summary-default'),
+        lockToolBox: false,
+        redLinkQuickEdit: true,
         outSideClose: true,
-        watchList: mw.user.options.get().watchdefault
+        watchList: Boolean(mw.user.options.get('watchdefault'))
       },
       /* 获取设置 */
-      get: function () {
+      get: function (item) {
+        var item = item || undefined;
         var local = localStorage.getItem('InPageEditPreference') || '{}',
           local = JSON.parse(local);
         if (typeof InPageEdit.myPreference === 'object') {
           local = $.extend({}, local, InPageEdit.myPreference);
         }
-        return $.extend({}, InPageEdit.preference.default, local);
+        var json = $.extend({}, InPageEdit.preference.default, local);
+        if (typeof (item) === 'string') {
+          return json[item] || null;
+        } else {
+          return json;
+        }
       },
       /**
        * @description 保存设置
@@ -1229,6 +1237,9 @@
        * @description 用户图形界面
        */
       modal: function () {
+        // 防止多开设置页面
+        if ($('#ipe-preference-form').length > 0) return;
+
         mw.hook('InPageEdit.preference').fire();
         InPageEdit.preference.set();
         var local = InPageEdit.preference.get();
@@ -1238,15 +1249,15 @@
           outSideClose: false,
           title: msg('preference-title') + ' - ' + InPageEdit.version,
           content:
-            $('<section>', { id: 'InPageEditSettingBox', class: 'ipe-preference' }).append(
+            $('<section>', { id: 'ipe-preference-form', class: 'ipe-preference-form' }).append(
               $('<h4>', { text: msg('preference-editor-label') }),
               $('<label>').append(
-                $('<input>', { id: 'outSideClose', type: 'checkbox' }),
+                $('<input>', { id: 'outSideClose', type: 'checkbox' }).prop('checked', local.outSideClose),
                 $('<span>', { text: msg('preference-outSideClose') })
               ),
               $('<br>'),
               $('<label>').append(
-                $('<input>', { id: 'editMinor', type: 'checkbox' }),
+                $('<input>', { id: 'editMinor', type: 'checkbox' }).prop('checked', local.editMinor),
                 $('<span>', { text: msg('preference-setMinor') })
               ),
               $('<br>'),
@@ -1255,7 +1266,7 @@
               $('<br>'),
               $('<input>', { id: 'editSummary', style: 'width: 96%', value: local.editSummary, placeholder: 'Edit via InPageEdit, yeah~' }),
               $('<h4>', { text: msg('preference-analysis-label') }),
-              $('<span>', { style: 'font-size: small; line-height: 0.9em', html: msg('preference-analysis-view').replace('$1', '<a href="https://doc.wjghj.cn/inpageedit-v2/analysis/" target="_blank">https://doc.wjghj.cn/inpageedit-v2/analysis/</a>') }),
+              $('<span>', { style: 'font-size: small; line-height: 0.9em', html: msg('preference-analysis-view').replace('$1', '<a href="https://dragon-fish.github.io/inpageedit-v2/analysis/" target="_blank">https://dragon-fish.github.io/inpageedit-v2/analysis/</a>') }),
               $('<h4>', { text: msg('preference-about-label') }),
               $('<button>', { class: 'btn btn-secondary', onclick: "InPageEdit.about()", text: msg('preference-aboutAndHelp') }),
               $('<button>', { class: 'btn btn-secondary', style: 'margin-left: 1em;', onclick: "InPageEdit.versionInfo()", text: msg('preference-updatelog') }),
@@ -1264,6 +1275,7 @@
               $('<br>'),
               $('<span>', { style: 'font-size: small; line-height: 0.9em', text: msg('preference-savelocal') }).append(
                 $('<a>', { href: 'javascript:;', id: 'ipeSaveLocalShow', text: msg('preference-savelocal-btn') }).click(function () {
+                  // 永久保存（本地用户页）
                   ssi_modal.dialog({
                     className: 'in-page-edit',
                     center: true,
@@ -1274,11 +1286,7 @@
                       label: msg('ok')
                     }
                   });
-                  $('#ipeSaveLocal textarea').val('window.InPageEdit = window.InPageEdit || {}; // Keep this line\nInPageEdit.myPreference = ' + JSON.stringify({
-                    outSideClose: $('#InPageEditSettingBox #ipeSetoutSideClose').prop('checked'),
-                    editMinor: $('#InPageEditSettingBox #ipeSetMinor').prop('checked'),
-                    editSummary: $('#InPageEditSettingBox #ipeSetSummary').val()
-                  }) + '; // InPageEdit preference');
+                  $('#ipeSaveLocal textarea').val('window.InPageEdit = window.InPageEdit || {}; // Keep this line\nInPageEdit.myPreference = ' + JSON.stringify($('#ipe-preference-form').data()) + '; // InPageEdit preference');
                 })
               )
             ),
@@ -1289,54 +1297,62 @@
             label: msg('preference-reset'),
             className: 'btn btn-danger',
             method: function (a, modal) {
-              $('#InPageEditSettingBox #ipeSetoutSideClose').prop('checked', true);
-              $('#InPageEditSettingBox #ipeSetMinor').prop('checked', false);
-              $('#InPageEditSettingBox #ipeSetSummary').val(msg('preference-summary-default'));
+              ssi_modal.confirm({
+                title: msg('preference-reset-confirm-title'),
+                content: msg('preference-reset-confirm'),
+                className: 'in-page-edit',
+                center: true,
+                okBtn: {
+                  label: msg('ok'),
+                  className: 'btn btn-danger'
+                },
+                cancelBtn: {
+                  label: msg('cancel'),
+                  className: 'btn'
+                }
+              }, (res) => {
+                if (res) {
+                  InPageEdit.preference.set(InPageEdit.preference.default);
+                  modal.close();
+                } else {
+                  return false;
+                }
+              });
             }
           }, {
             label: msg('preference-save'),
             className: 'btn btn-primary',
             method: function (a, modal) {
-              InPageEdit.preference.set({
-                outSideClose: $('#InPageEditSettingBox #ipeSetoutSideClose').prop('checked'),
-                editMinor: $('#InPageEditSettingBox #ipeSetMinor').prop('checked'),
-                editSummary: $('#InPageEditSettingBox #ipeSetSummary').val()
-              });
+              InPageEdit.preference.set($('#ipe-preference-form').data());
               modal.close();
             }
           }
           ],
           onShow: function () {
-            $('.in-page-edit.ipe-preference').data()
+            function setData() {
+              if (this.type === 'checkbox') {
+                $('#ipe-preference-form').data(this.id, this.checked);
+              } else if (this.type === 'text') {
+                $('#ipe-preference-form').data(this.id, this.value);
+              }
+            }
+            $('#ipe-preference-form input').each(setData).change(setData);
+
+            if (typeof (InPageEdit.myPreference) !== 'undefined') {
+              $('#ipe-preference-form input, .ipe-preference .ssi-modalBtn').attr({ 'disabled': 'disabled' });
+              if (InPageEdit.preference.get('doNotShowLocalWarn') !== true) {
+                ssi_modal.dialog({
+                  content: msg('preference-savelocal-popup-haslocal').replace('$1', '<a href="' + mw.util.getUrl('Special:Mypage/common.js') + '">' + msg('preference-savelocal-popup-yourjspage') + '</a>'),
+                  className: 'in-page-edit',
+                  center: true,
+                  okBtn: {
+                    className: 'btn btn-primary btn-single'
+                  }
+                });
+              }
+            }
           }
         });
-        if (local.outSideClose) {
-          $('#InPageEditSettingBox #ipeSetoutSideClose').prop('checked', true);
-        }
-        if (local.editMinor) {
-          $('#InPageEditSettingBox #ipeSetMinor').prop('checked', true);
-        }
-
-        if (typeof (InPageEdit.myPreference) !== 'undefined') {
-          $('.ipe-preference .ssi-buttons .ssi-modalBtn').attr('disabled', '');
-          if (typeof (InPageEdit.myPreference.editMinor) === 'boolean') {
-            $('#InPageEditSettingBox #ipeSetMinor').prop('checked', InPageEdit.myPreference.editMinor).attr('disabled', '');
-          }
-          if (typeof (InPageEdit.myPreference.outSideClose) === 'boolean') {
-            $('#InPageEditSettingBox #ipeSetoutSideClose').prop('checked', InPageEdit.myPreference.outSideClose).attr('disabled', '');
-          }
-          if (typeof (InPageEdit.myPreference.editSummary) === 'string') {
-            $('#InPageEditSettingBox #ipeSetSummary').attr('disabled', '').val(InPageEdit.myPreference.editSummary);
-          }
-          ssi_modal.dialog({
-            content: msg('preference-savelocal-popup-haslocal').replace('$1', '<a href="' + mw.util.getUrl('Special:Mypage/common.js') + '">' + msg('preference-savelocal-popup-yourjspage') + '</a>'),
-            className: 'in-page-edit',
-            center: true,
-            okBtn: {
-              className: 'btn btn-primary btn-single'
-            }
-          });
-        }
       }
     }
 
@@ -1531,8 +1547,13 @@
      * @param {Element} element parent element to find edit links
      */
     InPageEdit.articleLink = function (element) {
-      if (element === undefined)
-        element = $('#mw-content-text a');
+      if (element === undefined) {
+        if (InPageEdit.preference.get('redLinkQuickEdit') === true) {
+          element = $('#mw-content-text a');
+        } else {
+          element = $('#mw-content-text a:not(.new)');
+        }
+      }
       element.each(function (i) {
         if ($(this).attr('href') === undefined)
           return;
@@ -1922,11 +1943,21 @@
         if ($(this).hasClass('opened') && !$(this).hasClass('click')) {
           toolBoxInner.addClass('click');
         } else if ($(this).hasClass('click')) {
+          InPageEdit.preference.set({
+            lockToolBox: false
+          });
           toolBoxInner.removeClass('click opened');
         } else {
+          InPageEdit.preference.set({
+            lockToolBox: true
+          });
           toolBoxInner.addClass('click opened');
         }
       });
+      // 如果锁定过工具盒，那么久自动展开
+      if (InPageEdit.preference.get('lockToolBox') === true) {
+        toolBoxInner.addClass('click opened');
+      }
       $('#ipe-edit-toolbox').hover(function () {
         toolBoxInner.addClass('hover opened');
       }, function () {

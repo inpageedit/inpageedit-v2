@@ -6,7 +6,7 @@
     </tr>
     <tr>
       <td colspan="2"><img alt="Ipe-toolbox.gif"
-          src="https://vignette.wikia.nocookie.net/dev/images/e/ec/Ipe-toolbox.gif" width="250" height="250"><br>
+          src="https://img.moegirl.org/common/0/04/Ipe-toolbox-2.gif" width="240" height="240"><br>
       </td>
     </tr>
     <tr>
@@ -56,11 +56,11 @@
 [Wiki](https://github.com/Dragon-Fish/InPageEdit-v2/wiki)
 
 ## 特色功能
-> 详见 [InPageEdit-v2 GitHub Page](https://dragon-fish.github.io/InPageEdit-v2/)
+> 详见 [InPageEdit-v2 GitHub Page](https://dragon-fish.github.io/inpageedit-v2/)
 
 ## 如何安装 
 ### 小工具Gadget(已引入的wiki)
-前往[[Special:参数设置#mw-prefsection-gadgets|Special:参数设置]]，勾选“InPageEdit-v2”
+前往 **Special:参数设置**，勾选“InPageEdit-v2”
 
 ### 个人JS 
 [![](https://data.jsdelivr.com/v1/package/gh/dragon-fish/inpageedit-v2/badge)](https://www.jsdelivr.com/package/gh/dragon-fish/inpageedit-v2)
@@ -78,14 +78,14 @@ mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/scr
 
 ### 自定义功能 
 InPageEdit采用模块化设计，你可以自由调用IPE提供的几乎所有功能
-: 详见：[[/SDK]]
+> 详见：[Wiki](https://github.com/Dragon-Fish/InPageEdit-v2/wiki)
 
 ## 卸载插件 
 ### 停止使用Gadget 
-前往`Special:参数设置`，取消勾选“InPageEdit-v2”
+前往**Special:参数设置**，取消勾选“InPageEdit-v2”
 
 ### 删除个人js 
-删除您的`个人JS页`中的以下代码：
+删除您的**个人JS页**中的以下代码：
 ```javascript
 mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/script.min.js');
 ```
@@ -120,7 +120,7 @@ mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/scr
 * jQuery > 2.2.0
 
 ### 更新日志 
-> 详见 [Update logs](https://dragon-fish.github.io/InPageEdit-v2/update-logs.html)
+> 详见 [Update logs](https://dragon-fish.github.io/inpageedit-v2/update-logs.html)
 
 ### 源代码 
 https://github.com/Dragon-Fish/InPageEdit-v2
@@ -142,4 +142,4 @@ https://github.com/Dragon-Fish/InPageEdit-v2
 InPageEdit-v2 is a JavaScript-based MediaWiki plug-in, written by [机智的小鱼君](https://wjghj.cn/wiki/机智的小鱼君)
 
 © Original by Wjghj Project, [GNU General Public License 3.0](https://www.gnu.org/licenses/gpl-3.0-standalone.html) (2019- )<br/>
-See more: [GitHub](https://github.com/Dragon-Fish/InPageEdit-v2) | [Update logs](https://dragon-fish.github.io/InPageEdit-v2/update-logs.html) | [File issues](https://github.com/Dragon-Fish/InPageEdit-v2/issues)
+See more: [GitHub](https://github.com/Dragon-Fish/InPageEdit-v2) | [Update logs](https://dragon-fish.github.io/inpageedit-v2/update-logs/) | [File issues](https://github.com/Dragon-Fish/InPageEdit-v2/issues)
