@@ -1,4 +1,4 @@
-.icon, .ssi-modalOuter.ssi-fullScreen .ssi-modalWindow .ssi-displayIcon, .ssi-topIcons .ssi-displayIcon, .ssi-topIcons .ssi-closeIcon, .ssi-modalNavigation .ssi-modalPrev span, .ssi-modalNavigation .ssi-modalNext span, .notify.ssi-success .ssi-modalTitle span.success, .notify.ssi-info .ssi-modalTitle span.success, .notify.ssi-warning .ssi-modalTitle span.success, .notify.ssi-error .ssi-modalTitle span.success, .notify.ssi-info .ssi-modalTitle span.info, .notify.ssi-warning .ssi-modalTitle span.warning, .notify.ssi-error .ssi-modalTitle span.error {
+.ssi-modal .icon, .ssi-modalOuter.ssi-fullScreen .ssi-modalWindow .ssi-displayIcon, .ssi-topIcons .ssi-displayIcon, .ssi-topIcons .ssi-closeIcon, .ssi-modalNavigation .ssi-modalPrev span, .ssi-modalNavigation .ssi-modalNext span, .notify.ssi-success .ssi-modalTitle span.success, .notify.ssi-info .ssi-modalTitle span.success, .notify.ssi-warning .ssi-modalTitle span.success, .notify.ssi-error .ssi-modalTitle span.success, .notify.ssi-info .ssi-modalTitle span.info, .notify.ssi-warning .ssi-modalTitle span.warning, .notify.ssi-error .ssi-modalTitle span.error {
   background-image: url("images/sprite.png");
 }
 

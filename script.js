@@ -33,7 +33,7 @@
   // 模态框
   mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/ssi-modal.min.js');
   /** 样式表 **/
-  $('title').after(
+  $('head').prepend(
     // 模态框
     $('<link>', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/ssi-modal.min.css' }),
     // FontAwesome
@@ -56,11 +56,6 @@
     function msg(i) {
       return i18n.msg(i).parse();
     }
-    /** HTML 组件 **/
-    const $br = $('<br/>'),
-      $clear = $('<div>', { style: 'clear:both' }),
-      $hr = $('<hr/>'),
-      $progress = $('<div>', { class: 'ipe-progress', style: 'width: 100%' }).append($('<div>', { class: 'ipe-progress-bar' }));
 
     /**
      * @module 快速编辑模块

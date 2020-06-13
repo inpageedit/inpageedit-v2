@@ -5,8 +5,7 @@
       </td>
     </tr>
     <tr>
-      <td colspan="2"><img alt="Ipe-toolbox.gif"
-          src="https://img.moegirl.org/common/0/04/Ipe-toolbox-2.gif" width="240" height="240"><br>
+      <td colspan="2"><img src="https://img.moegirl.org/common/0/04/Ipe-toolbox-2.gif" width="240" height="240"><br>
       </td>
     </tr>
     <tr>
@@ -44,7 +43,7 @@
           Polski (pl)<br>
           ‪中文(简体)‬ (zh-hans)<br>
           ‪中文(繁體)‬ (zh-hant)<br>
-          <a target="_blank" rel="nofollow noreferrer noopener" class="external text"
+          <a target="_blank"
             href="https://github.com/Dragon-Fish/InPageEdit-v2/blob/master/i18n/i18n.json">翻译</a>
         </div>
       </td>
