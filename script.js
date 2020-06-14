@@ -429,13 +429,13 @@
               var data = data;
               console.info('[InPageEdit] 获取页面基础信息成功');
               console.timeEnd('[InPageEdit] 获取页面基础信息');
-              $('.ipe-editor.timestamp-' + timestamp).attr('data-basetimestamp', data.query.pages[options.pageId].touched);
+              $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp', data['query']['pages'][options.pageId]['revisions'][0]['timestamp']);
               queryDone(data);
             }).fail(function (a, b, errorThrown) {
               var data = errorThrown;
               console.timeEnd('[InPageEdit] 获取页面基础信息');
               console.warn('[InPageEdit] 获取页面基础信息失败');
-              $('.ipe-editor.timestamp-' + timestamp).attr('data-basetimestamp', now);
+              $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp', now);
               queryDone(data);
             });
 
@@ -657,7 +657,7 @@
         InPageEdit.progress(msg('editor-title-saving'));
         options.jsonPost = {
           action: 'edit',
-          basetimestamp: $('.ipe-editor.timestamp-' + timestamp).attr('data-basetimestamp'),
+          basetimestamp: $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp'),
           starttimestamp: now,
           text: pValue.text,
           title: pValue.page,
