@@ -488,7 +488,7 @@
               new mw.Api().get({
                 action: 'query',
                 meta: 'allmessages',
-                ammessages: 'Editnotice-' + options.namespace + '|' + 'Editnotice-' + options.namespace + options.page.replace(mw.config.get('wgFormattedNamespaces')[options.namespace] + ':', '')
+                ammessages: 'Editnotice-' + options.namespace + '|' + 'Editnotice-' + options.namespace + '-' + options.page.replace(mw.config.get('wgFormattedNamespaces')[options.namespace] + ':', '')
               }).done(function (data) {
                 var wikitextNs = data.query.allmessages[0]['*'] || '',
                   wikitextPage = data.query.allmessages[1]['*'] || '';
