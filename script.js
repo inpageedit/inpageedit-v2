@@ -1345,16 +1345,9 @@
 
             if (typeof (InPageEdit.myPreference) !== 'undefined') {
               $('#ipe-preference-form input, .ipe-preference .ssi-modalBtn').attr({ 'disabled': 'disabled' });
-              if (InPageEdit.preference.get('doNotShowLocalWarn') !== true) {
-                ssi_modal.dialog({
-                  content: msg('preference-savelocal-popup-haslocal').replace('$1', '<a href="' + mw.util.getUrl('Special:Mypage/common.js') + '">' + msg('preference-savelocal-popup-yourjspage') + '</a>'),
-                  className: 'in-page-edit',
-                  center: true,
-                  okBtn: {
-                    className: 'btn btn-primary btn-single'
-                  }
-                });
-              }
+              $('#ipe-preference-form').prepend(
+                $('<p>', { class: 'has-local-warn', style: 'padding-left: 8px; border-left: 6px solid orange; font-size: small;', html: msg('preference-savelocal-popup-haslocal').replace('$1', '<a href="' + mw.util.getUrl('Special:Mypage/common.js') + '">' + msg('preference-savelocal-popup-yourjspage') + '</a>') })
+              );
             }
           }
         });
