@@ -65,12 +65,11 @@
 }
 
 .in-page-edit .ssi-topIcons .ssi-closeIcon {
-  background: none;
+  background: 0 0;
   color: #d33;
-  height: 1.1em;
-  width: 2em;
   font-size: 20px;
-  line-height: 1.2;
+  margin: 0;
+  padding: 8px 12px;
 }
 
 .in-page-edit .ssi-topIcons .ssi-closeIcon:hover {
