@@ -313,6 +313,7 @@
   border: 1px solid #ccc;
   border-radius: 2px;
   transition: all 0.2s;
+  line-height: 1.5em;
 }
 
 .in-page-edit input:focus {
