@@ -21,7 +21,7 @@
     aboutUrl: 'https://dragon-fish.github.io/inpageedit-v2/about/',
     updatelogsUrl: 'https://dragon-fish.github.io/inpageedit-v2/update-logs/'
   }
-  InPageEdit.version = '2.13.4-2';
+  InPageEdit.version = '2.13.4-3';
   // 冻结重要全局变量
   Object.freeze(InPageEdit.api);
   Object.freeze(InPageEdit.version);
@@ -133,7 +133,7 @@
         content:
           $('<div>').append(
             $('<div>', { class: 'ipe-progress', style: 'width: 100%' }).append($('<div>', { class: 'ipe-progress-bar' })),
-            $('<section>', { class: 'editForm' }).append(
+            $('<section>', { class: 'hideBeforeLoaded' }).append(
               // 编辑工具条
               $('<div>', { class: 'editTools' }).append(
                 $('<div>', { class: 'btnGroup' }).append(
@@ -174,7 +174,7 @@
               // 编辑框
               $('<textarea>', { class: 'editArea', style: 'margin-top: 0;' }),
               // 页面分析
-              $('<div>', { class: 'editOptionsLabel editForm' }).append(
+              $('<div>', { class: 'editOptionsLabel hideBeforeLoaded' }).append(
                 $('<aside>', { class: 'detailArea' }).append(
                   $('<label>', { class: 'detailToggle', text: msg('editor-detail-button-toggle') }),
                   $('<div>', { class: 'detailBtnGroup' }).append(
@@ -207,7 +207,7 @@
         /* 按钮 */
         buttons: [{
           label: msg('editor-button-save'),
-          className: 'btn btn-primary leftBtn editForm save-btn',
+          className: 'btn btn-primary leftBtn hideBeforeLoaded save-btn',
           method: function (e, modal) {
             var modal = modal;
             ssi_modal.confirm({
@@ -241,22 +241,18 @@
           }
         }, {
           label: msg('editor-button-preview'),
-          className: 'btn btn-secondary leftBtn editForm',
+          className: 'btn btn-secondary leftBtn hideBeforeLoaded',
           method: function () {
             _analysis('preview_edit');
             var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
             InPageEdit.quickPreview({
-              action: 'parse',
               title: options.page,
-              text: text,
-              prop: 'text',
-              preview: true,
-              format: 'json'
+              text: text
             });
           }
         }, {
           label: msg('editor-button-diff'),
-          className: 'btn btn-secondary leftBtn editForm',
+          className: 'btn btn-secondary leftBtn hideBeforeLoaded',
           method: function () {
             _analysis('quick_diff_edit');
             var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
@@ -280,11 +276,26 @@
         /* 预加载 */
         beforeShow: function () {
           // 设置样式
-          $('.ipe-editor.timestamp-' + timestamp + ' .editForm').hide();
+          $('.ipe-editor.timestamp-' + timestamp + ' .hideBeforeLoaded').hide();
           $('.ipe-editor.timestamp-' + timestamp + ' .ipe-progress').css('margin', Number($(window).height() / 3 - 50) + 'px 0');
           $('.ipe-editor.timestamp-' + timestamp + ' .editArea').css('height', $(window).height() / 3 * 2 - 100);
           $('.ipe-editor.timestamp-' + timestamp + ' .editOptionsLabel').prependTo('.ipe-editor.timestamp-' + timestamp + ' .ssi-buttons');
           $('.ipe-editor.timestamp-' + timestamp + ' .leftBtn').appendTo('.ipe-editor.timestamp-' + timestamp + ' .ssi-leftButtons');
+          $('.ipe-editor.timestamp-' + timestamp + ' .ssi-modalTitle').append(
+            $('<a>', {
+              class: 'showEditNotice',
+              href: 'javascript:void(0);',
+              html: '<i class="fa fa-info-circle"></i> ' + msg('editor-has-editNotice'),
+              style: 'display: none;'
+            }).click(function () {
+              ssi_modal.show({
+                className: 'in-page-edit',
+                center: true,
+                title: msg('editor-title-editNotice'),
+                content: '<section class="editNotice">' + $('.ipe-editor.timestamp-' + timestamp).data('editNotice') + '</section>'
+              });
+            })
+          );
 
           /** Edit-Tool 扩展 **/
           function insertText(strings, obj) {
@@ -393,7 +404,7 @@
             }
             // 设定一堆子样式
             $('.ipe-editor.timestamp-' + timestamp + ' .ipe-progress').hide();
-            $('.ipe-editor.timestamp-' + timestamp + ' .editForm').fadeIn(500);
+            $('.ipe-editor.timestamp-' + timestamp + ' .hideBeforeLoaded').fadeIn(500);
             $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val(options.editText + '\n');
 
             if (options.section !== null) {
@@ -423,32 +434,35 @@
             if (options.pageId !== -1) {
               queryJson.pageids = options.pageId;
             } else {
-              queryJson.titles = options.editPage;
+              queryJson.titles = options.page;
             }
             new mw.Api().get(queryJson).done(function (data) {
               var data = data;
               console.info('[InPageEdit] 获取页面基础信息成功');
               console.timeEnd('[InPageEdit] 获取页面基础信息');
-              $('.ipe-editor.timestamp-' + timestamp).attr('data-basetimestamp', data.query.pages[options.pageId].touched);
+              // 记录页面最后编辑时间，防止编辑冲突
+              $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp', data['query']['pages'][options.pageId]['revisions'][0]['timestamp']);
               queryDone(data);
             }).fail(function (a, b, errorThrown) {
               var data = errorThrown;
               console.timeEnd('[InPageEdit] 获取页面基础信息');
               console.warn('[InPageEdit] 获取页面基础信息失败');
-              $('.ipe-editor.timestamp-' + timestamp).attr('data-basetimestamp', now);
+              $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp', now);
               queryDone(data);
             });
 
             // 页面保护等级和编辑提示等
             function queryDone(data) {
               var data = data;
-              if (data.query.pages[options.pageId]['protection'].length > 0) {
-                var protection = data.query.pages[options.pageId]['protection'];
+              options.namespace = data.query.pages[options.pageId].ns;
+              options.protection = data.query.pages[options.pageId]['protection'] || [];
+
+              if (options.protection.length > 0) {
                 for (var i = 0; i < protection.length; i++) {
-                  if (protection[i].type === 'edit') {
+                  if (options.protection[i].type === 'edit') {
                     if (
-                      (protection[i].level === 'autoconfirmed' && !_hasRight('autoconfirmed')) ||
-                      (protection[i].level === 'sysop' && !_hasRight('editprotected')) ||
+                      (options.protection[i].level === 'autoconfirmed' && !_hasRight('autoconfirmed')) ||
+                      (options.protection[i].level === 'sysop' && !_hasRight('editprotected')) ||
                       (config.wgNamespaceNumber === 8 && !_hasRight('editinterface'))
                     ) {
                       ssi_modal.notify('dialog', {
@@ -469,37 +483,32 @@
                   }
                 }
               }
+
               // 获取编辑提示
-              $.get(config.wgScript, {
-                action: 'raw',
-                title: 'MediaWiki:Editnotice-' + data.query.pages[options.pageId].ns
-              }, function (data) {
-                var data = data;
+              new mw.Api().get({
+                action: 'query',
+                meta: 'allmessages',
+                ammessages: 'Editnotice-' + options.namespace + '|' + 'Editnotice-' + options.namespace + '-' + options.page.replace(mw.config.get('wgFormattedNamespaces')[options.namespace] + ':', '')
+              }).done(function (data) {
+                var wikitextNs = data.query.allmessages[0]['*'] || '',
+                  wikitextPage = data.query.allmessages[1]['*'] || '';
+                if (wikitextNs === '' && wikitextPage === '') return; // 没有编辑提示
                 new mw.Api().post({
                   action: 'parse',
                   title: options.page,
                   contentmodel: 'wikitext',
                   preview: true,
-                  text: data
+                  text: wikitextPage + '\n' + wikitextNs
                 }).done(function (data) {
                   var data = data;
                   options.editNotice = data.parse.text['*'];
-                  $('.ipe-editor.timestamp-' + timestamp + ' .ssi-modalTitle').append(
-                    $('<a>', {
-                      id: 'showEditNotice',
-                      href: 'javascript:;',
-                      html: '<i class="fa fa-info-circle"></i> ' + msg('editor-has-editNotice')
-                    }).click(function () {
-                      ssi_modal.show({
-                        className: 'in-page-edit',
-                        center: true,
-                        title: msg('editor-title-editNotice'),
-                        content: '<section class="editNotice">' + options.editNotice + '</section>'
-                      });
-                    })
-                  );
+                  var notice = $('.ipe-editor.timestamp-' + timestamp).data('editNotice') || '';
+                  notice += '\n' + options.editNotice;
+                  $('.ipe-editor.timestamp-' + timestamp).data('editNotice', notice);
+                  $('.ipe-editor.timestamp-' + timestamp + ' .showEditNotice').show();
                 });
               });
+
             }
           }
         },
@@ -544,6 +553,7 @@
             });
           }
           function closeNoReload() {
+            $(window).unbind('beforeunload');
             modal.options.keepContent = false;
             modal.options.beforeClose = '';
             modal.close();
@@ -657,7 +667,7 @@
         InPageEdit.progress(msg('editor-title-saving'));
         options.jsonPost = {
           action: 'edit',
-          basetimestamp: $('.ipe-editor.timestamp-' + timestamp).attr('data-basetimestamp'),
+          basetimestamp: $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp'),
           starttimestamp: now,
           text: pValue.text,
           title: pValue.page,
@@ -1203,16 +1213,16 @@
         watchList: Boolean(mw.user.options.get('watchdefault'))
       },
       /* 获取设置 */
-      get: function (item) {
-        var item = item || undefined;
+      get: function (setting) {
+        var setting = setting || undefined;
         var local = localStorage.getItem('InPageEditPreference') || '{}',
           local = JSON.parse(local);
         if (typeof InPageEdit.myPreference === 'object') {
           local = $.extend({}, local, InPageEdit.myPreference);
         }
         var json = $.extend({}, InPageEdit.preference.default, local);
-        if (typeof (item) === 'string') {
-          return json[item] || null;
+        if (typeof (setting) === 'string') {
+          return json.hasOwnProperty(setting) ? json[setting] : null;
         } else {
           return json;
         }
@@ -1335,16 +1345,9 @@
 
             if (typeof (InPageEdit.myPreference) !== 'undefined') {
               $('#ipe-preference-form input, .ipe-preference .ssi-modalBtn').attr({ 'disabled': 'disabled' });
-              if (InPageEdit.preference.get('doNotShowLocalWarn') !== true) {
-                ssi_modal.dialog({
-                  content: msg('preference-savelocal-popup-haslocal').replace('$1', '<a href="' + mw.util.getUrl('Special:Mypage/common.js') + '">' + msg('preference-savelocal-popup-yourjspage') + '</a>'),
-                  className: 'in-page-edit',
-                  center: true,
-                  okBtn: {
-                    className: 'btn btn-primary btn-single'
-                  }
-                });
-              }
+              $('#ipe-preference-form').prepend(
+                $('<p>', { class: 'has-local-warn', style: 'padding-left: 8px; border-left: 6px solid orange; font-size: small;', html: msg('preference-savelocal-popup-haslocal').replace('$1', '<a href="' + mw.util.getUrl('Special:Mypage/common.js') + '">' + msg('preference-savelocal-popup-yourjspage') + '</a>') })
+              );
             }
           }
         });
@@ -1600,17 +1603,27 @@
      * @module 快速预览文章页
      * @param params {Object} 
      */
-    InPageEdit.quickPreview = function (params) {
+    InPageEdit.quickPreview = function (params, modalSize = 'large', center = false) {
+      var defaultOptions = {
+        action: 'parse',
+        preview: true,
+        disableeditsection: true,
+        prop: 'text',
+        preview: true,
+        format: 'json'
+      }
+      var options = $.extend({}, defaultOptions, params);
       mw.hook('InPageEdit.quickPreview').fire();
       var timestamp = new Date().getTime();
       console.time('[InPageEdit] Request preview');
       ssi_modal.show({
-        sizeClass: 'large',
+        sizeClass: new RegExp(/dialog|small|smallToMedium|medium|mediumToLarge|large|full|auto/).test(modalSize) ? modalSize : 'large',
+        center: Boolean(center),
         className: 'in-page-edit previewbox',
         title: msg('preview-title'),
         content: $('<section>').append(
           $('<div>', { class: 'ipe-progress', style: 'width: 100%' }).append($('<div>', { class: 'ipe-progress-bar' })),
-          $('<div>', { id: 'InPageEditPreview', 'data-timestamp': timestamp, style: 'display:none', text: msg('preview-placeholder') })
+          $('<div>', { class: 'InPageEditPreview', 'data-timestamp': timestamp, style: 'display:none', text: msg('preview-placeholder') })
         ),
         fixedHeight: true,
         fitScreen: true,
@@ -1618,16 +1631,16 @@
         onShow: function (modal) {
           $('.previewbox .ipe-progress').css('margin-top', $('.previewbox .ipe-progress').parent().height() / 2);
           $('.previewbox .hideThisBtn').hide();
-          new mw.Api().post(params).then(function (data) {
+          new mw.Api().post(options).then(function (data) {
             console.timeEnd('[InPageEdit] Request preview');
             var content = data.parse.text['*'];
             $('.previewbox .ipe-progress').hide(150);
-            $('#InPageEditPreview[data-timestamp="' + timestamp + '"]').fadeIn(500).html(content);
+            $('.InPageEditPreview[data-timestamp="' + timestamp + '"]').fadeIn(500).html(content);
           }).fail(function () {
             console.timeEnd('[InPageEdit] Request preview');
             console.warn('[InPageEdit] 预览失败');
             $('.previewbox .ipe-progress').hide(150);
-            $('#InPageEditPreview[data-timestamp="' + timestamp + '"]').fadeIn(500).html(msg('preview-error'));
+            $('.InPageEditPreview[data-timestamp="' + timestamp + '"]').fadeIn(500).html(msg('preview-error'));
           });
         }
       });
@@ -1949,7 +1962,7 @@
           toolBoxInner.addClass('click opened');
         }
       });
-      // 如果锁定过工具盒，那么久自动展开
+      // 如果锁定过工具盒，就自动展开
       if (InPageEdit.preference.get('lockToolBox') === true) {
         toolBoxInner.addClass('click opened');
       }

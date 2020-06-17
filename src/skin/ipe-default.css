@@ -15,11 +15,6 @@
   font-size: 16px;
 }
 
-.in-page-edit .material-icons {
-  position: relative;
-  top: 2px;
-}
-
 .in-page-edit .ssi-modalWindow {
   padding: 0;
   border-radius: 0;
@@ -70,12 +65,11 @@
 }
 
 .in-page-edit .ssi-topIcons .ssi-closeIcon {
-  background: none;
+  background: 0 0;
   color: #d33;
-  height: 1.1em;
-  width: 2em;
   font-size: 20px;
-  line-height: 1.2;
+  margin: 0;
+  padding: 8px 12px;
 }
 
 .in-page-edit .ssi-topIcons .ssi-closeIcon:hover {
@@ -199,16 +193,10 @@
   font-family: inherit;
 }
 
-.in-page-edit .ssi-modalTitle #showEditNotice {
+.in-page-edit .ssi-modalTitle .showEditNotice {
   font-size: small;
   display: block;
   line-height: 0;
-}
-
-.in-page-edit .ssi-modalTitle #showEditNotice .material-icons {
-  font-size: small;
-  position: relative;
-  top: 2px;
 }
 
 .in-page-edit.ipe-editor .ssi-buttons {
@@ -313,6 +301,7 @@
   border: 1px solid #ccc;
   border-radius: 2px;
   transition: all 0.2s;
+  line-height: 1.5em;
 }
 
 .in-page-edit input:focus {
