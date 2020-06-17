@@ -21,7 +21,7 @@
     aboutUrl: 'https://dragon-fish.github.io/inpageedit-v2/about/',
     updatelogsUrl: 'https://dragon-fish.github.io/inpageedit-v2/update-logs/'
   }
-  InPageEdit.version = '2.13.4-2';
+  InPageEdit.version = '2.13.4-3';
   // 冻结重要全局变量
   Object.freeze(InPageEdit.api);
   Object.freeze(InPageEdit.version);
