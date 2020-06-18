@@ -458,7 +458,7 @@
               options.protection = data.query.pages[options.pageId]['protection'] || [];
 
               if (options.protection.length > 0) {
-                for (var i = 0; i < protection.length; i++) {
+                for (var i = 0; i < options.protection.length; i++) {
                   if (options.protection[i].type === 'edit') {
                     if (
                       (options.protection[i].level === 'autoconfirmed' && !_hasRight('autoconfirmed')) ||
