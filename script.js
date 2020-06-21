@@ -19,9 +19,10 @@
   InPageEdit.api = {
     analysis: 'https://doc.wjghj.cn/inpageedit-v2/analysis/api/index.php',
     aboutUrl: 'https://dragon-fish.github.io/inpageedit-v2/about/',
+    analysisUrl: 'https://dragon-fish.github.io/inpageedit-v2/analysis/',
     updatelogsUrl: 'https://dragon-fish.github.io/inpageedit-v2/update-logs/'
   }
-  InPageEdit.version = '2.13.4-3';
+  InPageEdit.version = '2.13.4-4';
   // 冻结重要全局变量
   Object.freeze(InPageEdit.api);
   Object.freeze(InPageEdit.version);
@@ -451,12 +452,13 @@
               queryDone(data);
             });
 
-            // 页面保护等级和编辑提示等
+            /** 页面保护等级和编辑提示等 **/
             function queryDone(data) {
               var data = data;
-              options.namespace = data.query.pages[options.pageId].ns;
-              options.protection = data.query.pages[options.pageId]['protection'] || [];
+              options.namespace = data.query.pages[options.pageId].ns; // 名字空间ID
+              options.protection = data.query.pages[options.pageId]['protection'] || []; // 保护等级
 
+              // 页面是否被保护
               if (options.protection.length > 0) {
                 for (var i = 0; i < options.protection.length; i++) {
                   if (options.protection[i].type === 'edit') {
@@ -485,14 +487,21 @@
               }
 
               // 获取编辑提示
+              var namespaceNoticePage = 'Editnotice-' + options.namespace,
+                pageNoticePage = namespaceNoticePage + '-' +
+                  options.page
+                    .replace(/_/, ' ') // 将页面名里的 _ 转换为空格
+                    .replace(config.wgFormattedNamespaces[options.namespace] + ':', ''); // 去掉名字空间
+
               new mw.Api().get({
                 action: 'query',
                 meta: 'allmessages',
-                ammessages: 'Editnotice-' + options.namespace + '|' + 'Editnotice-' + options.namespace + '-' + options.page.replace(mw.config.get('wgFormattedNamespaces')[options.namespace] + ':', '')
+                ammessages: namespaceNoticePage + '|' + pageNoticePage
               }).done(function (data) {
                 var wikitextNs = data.query.allmessages[0]['*'] || '',
                   wikitextPage = data.query.allmessages[1]['*'] || '';
                 if (wikitextNs === '' && wikitextPage === '') return; // 没有编辑提示
+                // 将编辑提示解析为 html
                 new mw.Api().post({
                   action: 'parse',
                   title: options.page,
@@ -1267,11 +1276,11 @@
               ),
               $('<br>'),
               $('<h4>', { text: msg('preference-summary-label') }),
-              $('<label>', { for: 'editSummary', style: 'padding-left: 0; font-size: small', html: msg('preference-editSummary').replace('%br%', '<br/>').replace('$1', '<code>$oldid</code>').replace('$2', '<code>' + msg('editor-summary-rivision') + ' [[Special:Diff/oldid]]</code>').replace('$3', '<code>$section</code>').replace('$4', '<code>/* SECTION TITLE */</code>') }),
+              $('<label>', { for: 'editSummary', style: 'padding-left: 0; font-size: small', html: msg('preference-editSummary') }),
               $('<br>'),
               $('<input>', { id: 'editSummary', style: 'width: 96%', value: local.editSummary, placeholder: 'Edit via InPageEdit, yeah~' }),
               $('<h4>', { text: msg('preference-analysis-label') }),
-              $('<span>', { style: 'font-size: small; line-height: 0.9em', html: msg('preference-analysis-view').replace('$1', '<a href="https://dragon-fish.github.io/inpageedit-v2/analysis/" target="_blank">https://dragon-fish.github.io/inpageedit-v2/analysis/</a>') }),
+              $('<span>', { style: 'font-size: small; line-height: 0.9em', html: msg('preference-analysis-view').replace('$1', '<a href="' + InPageEdit.api.analysisUrl + '" target="_blank">' + InPageEdit.api.analysisUrl + '</a>') }),
               $('<h4>', { text: msg('preference-about-label') }),
               $('<button>', { class: 'btn btn-secondary', onclick: "InPageEdit.about()", text: msg('preference-aboutAndHelp') }),
               $('<button>', { class: 'btn btn-secondary', style: 'margin-left: 1em;', onclick: "InPageEdit.versionInfo()", text: msg('preference-updatelog') }),
@@ -1285,7 +1294,7 @@
                     className: 'in-page-edit',
                     center: true,
                     title: msg('preference-savelocal-popup-title'),
-                    content: '<section id="ipeSaveLocal"><b>' + msg('preference-savelocal-popup-notrecommended') + '</b><br/>' + msg('preference-savelocal-popup') + '<br/><textarea style="font-size: small;" readonly></textarea><br/>' + msg('preference-savelocal-popup-notice') + '</section>',
+                    content: '<section id="ipeSaveLocal">' + msg('preference-savelocal-popup') + '<br/><textarea style="font-size: small; max-width: 100%; min-width: 100%; height: 4em; max-height: 8em" readonly></textarea><br/>' + msg('preference-savelocal-popup-notice') + '</section>',
                     okBtn: {
                       className: 'btn btn-primary btn-single',
                       label: msg('ok')
@@ -1758,7 +1767,7 @@
           onClose: function () {
             ssi_modal.notify('', {
               className: 'in-page-edit',
-              content: msg('updatelog-after-close').replace('$1', '<a href="' + msg('updatelog-url') + '" to="_blank">' + msg('updatelog-url') + '</a>').replace('$2', '<a href="https://github.com/Dragon-Fish/InPageEdit-v2">' + msg('updatelog-file-issue') + '</a>'),
+              content: msg('updatelog-after-close').replace('$1', '<a href="' + InPageEdit.api.updatelogsUrl + '" to="_blank">' + InPageEdit.api.updatelogsUrl + '</a>').replace('$2', '<a href="https://github.com/Dragon-Fish/InPageEdit-v2">' + msg('updatelog-file-issue') + '</a>'),
               closeAfter: {
                 time: 10
               }
@@ -1949,16 +1958,13 @@
       var toolBoxInner = $('#ipe-edit-toolbox #toolbox-toggle, #ipe-edit-toolbox .btn-group');
       $('#ipe-edit-toolbox #toolbox-toggle').click(function () {
         if ($(this).hasClass('opened') && !$(this).hasClass('click')) {
+          InPageEdit.preference.set({ lockToolBox: true });
           toolBoxInner.addClass('click');
         } else if ($(this).hasClass('click')) {
-          InPageEdit.preference.set({
-            lockToolBox: false
-          });
-          toolBoxInner.removeClass('click opened');
+          InPageEdit.preference.set({ lockToolBox: false });
+          toolBoxInner.removeClass('click');
         } else {
-          InPageEdit.preference.set({
-            lockToolBox: true
-          });
+          InPageEdit.preference.set({ lockToolBox: true });
           toolBoxInner.addClass('click opened');
         }
       });
