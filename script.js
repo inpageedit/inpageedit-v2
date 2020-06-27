@@ -507,6 +507,7 @@
                   title: options.page,
                   contentmodel: 'wikitext',
                   preview: true,
+                  pst: true,
                   text: wikitextPage + '\n' + wikitextNs
                 }).done(function (data) {
                   var data = data;
