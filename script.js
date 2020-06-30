@@ -259,22 +259,15 @@
             var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
             InPageEdit.quickPreview({
               title: options.page,
-              text: text
+              text: text,
+              pst: true
             });
           }
         }, {
           label: msg('editor-button-diff'),
-          className: 'btn btn-secondary leftBtn hideBeforeLoaded',
+          className: 'btn btn-secondary leftBtn hideBeforeLoaded diff-btn',
           method: function () {
-            _analysis('quick_diff_edit');
-            var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
-            var diffJson = {};
-            diffJson.fromtext = options.editText;
-            diffJson.totext = text;
-            diffJson.hideBtn = true;
-            diffJson.pageName = options.page;
-            diffJson.isPreview = true;
-            InPageEdit.quickDiff(diffJson);
+            // ...
           }
         }, {
           label: msg('cancel'),
@@ -433,6 +426,19 @@
             }
             if (options.revision !== null && options.revision !== '' && options.revision !== config.wgCurRevisionId) {
               $('.ipe-editor.timestamp-' + timestamp + ' .editPage').after('<span class="editRevision">(' + msg('editor-title-editRevision') + '：' + options.revision + ')</span>');
+              $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').click(() => {
+                _analysis('quick_diff_edit');
+                var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
+                var diffJson = {};
+                diffJson.fromrev = options.revision;
+                diffJson.totext = text;
+                diffJson.hideBtn = true;
+                diffJson.pageName = options.page;
+                diffJson.isPreview = true;
+                InPageEdit.quickDiff(diffJson);
+              });
+            } else {
+              $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').attr('disabled', true);
             }
 
             // 获取页面基础信息
@@ -453,7 +459,7 @@
               console.info('[InPageEdit] 获取页面基础信息成功');
               console.timeEnd('[InPageEdit] 获取页面基础信息');
               // 记录页面最后编辑时间，防止编辑冲突
-              $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp', data['query']['pages'][options.pageId]['revisions'][0]['timestamp']);
+              $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp', data['query']['pages'][options.pageId].hasOwnProperty('revisions') ? data['query']['pages'][options.pageId]['revisions'][0]['timestamp'] : now);
               queryDone(data);
             }).fail(function (a, b, errorThrown) {
               var data = errorThrown;
@@ -468,10 +474,28 @@
               var data = data;
               options.namespace = data.query.pages[options.pageId].ns; // 名字空间ID
               options.protection = data.query.pages[options.pageId]['protection'] || []; // 保护等级
-
+              if (data.query.pages[options.pageId].hasOwnProperty('revisions')) {
+                options.revision = data.query.pages[options.pageId]['revisions'][0]['revid']; // 版本号
+              }
+              console.info('revid', options.revision);
               // 使页面名标准化
               options.page = data.query.pages[options.pageId].title;
               $('.ipe-editor.timestamp-' + timestamp + ' .editPage').text(options.page);
+
+              if (options.revision) {
+                $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').attr('disabled', false).click(function () {
+                  _analysis('quick_diff_edit');
+                  var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
+                  var diffJson = {
+                    fromrev: options.revision,
+                    totext: text,
+                    hideBtn: true,
+                    pageName: options.page,
+                    isPreview: true
+                  }
+                  InPageEdit.quickDiff(diffJson);
+                })
+              }
 
               // 页面是否被保护
               if (options.protection.length > 0) {
@@ -522,7 +546,6 @@
                   title: options.page,
                   contentmodel: 'wikitext',
                   preview: true,
-                  pst: true,
                   text: wikitextPage + '\n' + wikitextNs
                 }).done(function (data) {
                   var data = data;
