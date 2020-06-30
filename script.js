@@ -19,9 +19,10 @@
   InPageEdit.api = {
     analysis: 'https://doc.wjghj.cn/inpageedit-v2/analysis/api/index.php',
     aboutUrl: 'https://dragon-fish.github.io/inpageedit-v2/about/',
+    analysisUrl: 'https://dragon-fish.github.io/inpageedit-v2/analysis/',
     updatelogsUrl: 'https://dragon-fish.github.io/inpageedit-v2/update-logs/'
   }
-  InPageEdit.version = '2.13.4-3';
+  InPageEdit.version = '2.13.4-4';
   // 冻结重要全局变量
   Object.freeze(InPageEdit.api);
   Object.freeze(InPageEdit.version);
@@ -44,17 +45,23 @@
 
   /** 导入 i18n 组件 **/
   mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/i18n-js@master/script.min.js');
-  mw.hook('dfgh.i18n').add(function (i18no) {
-    i18no.loadMessages('InPageEdit-v2').then(init);
+  mw.hook('dfgh.i18n').add((i18nJs) => {
+    i18nJs.loadMessages('InPageEdit-v2').then(init);
   });
 
   /**
    * @function InPageEdit
    */
   function init(i18n) {
-    // i18n
-    function msg(i) {
-      return i18n.msg(i).parse();
+    /**
+     * @function i18n模块
+     * @param {string} 'message-name', '$1', '$2', ...
+     * @example msg('updatelog-update-success', InPageEdit.version) => InPageEdit <version> has been installed.
+     */
+    function msg() {
+      var args = Array.prototype.slice.call(arguments);
+      var msgName = args.shift();
+      return i18n.msg(msgName, ...args).parse();
     }
 
     /**
@@ -70,6 +77,11 @@
       mw.hook('InPageEdit.quickEdit').fire();
       /** 获取设定信息，设置缺省值 **/
       var options = options || {};
+      if (typeof options === 'string') {
+        options = {
+          page: options
+        }
+      }
       var defaultOptions = {
         page: config.wgPageName,
         pageId: -1,
@@ -247,22 +259,15 @@
             var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
             InPageEdit.quickPreview({
               title: options.page,
-              text: text
+              text: text,
+              pst: true
             });
           }
         }, {
           label: msg('editor-button-diff'),
-          className: 'btn btn-secondary leftBtn hideBeforeLoaded',
+          className: 'btn btn-secondary leftBtn hideBeforeLoaded diff-btn',
           method: function () {
-            _analysis('quick_diff_edit');
-            var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
-            var diffJson = {};
-            diffJson.fromtext = options.editText;
-            diffJson.totext = text;
-            diffJson.hideBtn = true;
-            diffJson.pageName = options.page;
-            diffJson.isPreview = true;
-            InPageEdit.quickDiff(diffJson);
+            // ...
           }
         }, {
           label: msg('cancel'),
@@ -421,6 +426,19 @@
             }
             if (options.revision !== null && options.revision !== '' && options.revision !== config.wgCurRevisionId) {
               $('.ipe-editor.timestamp-' + timestamp + ' .editPage').after('<span class="editRevision">(' + msg('editor-title-editRevision') + '：' + options.revision + ')</span>');
+              $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').click(() => {
+                _analysis('quick_diff_edit');
+                var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
+                var diffJson = {};
+                diffJson.fromrev = options.revision;
+                diffJson.totext = text;
+                diffJson.hideBtn = true;
+                diffJson.pageName = options.page;
+                diffJson.isPreview = true;
+                InPageEdit.quickDiff(diffJson);
+              });
+            } else {
+              $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').attr('disabled', true);
             }
 
             // 获取页面基础信息
@@ -441,7 +459,7 @@
               console.info('[InPageEdit] 获取页面基础信息成功');
               console.timeEnd('[InPageEdit] 获取页面基础信息');
               // 记录页面最后编辑时间，防止编辑冲突
-              $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp', data['query']['pages'][options.pageId]['revisions'][0]['timestamp']);
+              $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp', data['query']['pages'][options.pageId].hasOwnProperty('revisions') ? data['query']['pages'][options.pageId]['revisions'][0]['timestamp'] : now);
               queryDone(data);
             }).fail(function (a, b, errorThrown) {
               var data = errorThrown;
@@ -451,12 +469,35 @@
               queryDone(data);
             });
 
-            // 页面保护等级和编辑提示等
+            /** 页面保护等级和编辑提示等 **/
             function queryDone(data) {
               var data = data;
-              options.namespace = data.query.pages[options.pageId].ns;
-              options.protection = data.query.pages[options.pageId]['protection'] || [];
+              options.namespace = data.query.pages[options.pageId].ns; // 名字空间ID
+              options.protection = data.query.pages[options.pageId]['protection'] || []; // 保护等级
+              if (data.query.pages[options.pageId].hasOwnProperty('revisions')) {
+                options.revision = data.query.pages[options.pageId]['revisions'][0]['revid']; // 版本号
+              }
+              console.info('revid', options.revision);
+              // 使页面名标准化
+              options.page = data.query.pages[options.pageId].title;
+              $('.ipe-editor.timestamp-' + timestamp + ' .editPage').text(options.page);
 
+              if (options.revision) {
+                $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').attr('disabled', false).click(function () {
+                  _analysis('quick_diff_edit');
+                  var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
+                  var diffJson = {
+                    fromrev: options.revision,
+                    totext: text,
+                    hideBtn: true,
+                    pageName: options.page,
+                    isPreview: true
+                  }
+                  InPageEdit.quickDiff(diffJson);
+                })
+              }
+
+              // 页面是否被保护
               if (options.protection.length > 0) {
                 for (var i = 0; i < options.protection.length; i++) {
                   if (options.protection[i].type === 'edit') {
@@ -485,14 +526,21 @@
               }
 
               // 获取编辑提示
+              var namespaceNoticePage = 'Editnotice-' + options.namespace,
+                pageNoticePage = namespaceNoticePage + '-' +
+                  options.page
+                    .replace(/_/, ' ') // 将页面名里的 _ 转换为空格
+                    .replace(config.wgFormattedNamespaces[options.namespace] + ':', ''); // 去掉名字空间
+
               new mw.Api().get({
                 action: 'query',
                 meta: 'allmessages',
-                ammessages: 'Editnotice-' + options.namespace + '|' + 'Editnotice-' + options.namespace + '-' + options.page.replace(mw.config.get('wgFormattedNamespaces')[options.namespace] + ':', '')
+                ammessages: namespaceNoticePage + '|' + pageNoticePage
               }).done(function (data) {
                 var wikitextNs = data.query.allmessages[0]['*'] || '',
                   wikitextPage = data.query.allmessages[1]['*'] || '';
                 if (wikitextNs === '' && wikitextPage === '') return; // 没有编辑提示
+                // 将编辑提示解析为 html
                 new mw.Api().post({
                   action: 'parse',
                   title: options.page,
@@ -743,6 +791,7 @@
           ssi_modal.show({
             className: 'in-page-edit',
             sizeClass: 'dialog',
+            center: true,
             title: msg('editor-save-error'),
             content: errorInfo + '<hr style="clear: both" />' + errorMore
           });
@@ -862,7 +911,7 @@
               ssi_modal.notify('success', {
                 className: 'in-page-edit',
                 title: msg('notify-success'),
-                content: msg('notify-fAndR-done').replace('$1', rcount)
+                content: msg('notify-fAndR-done', rcount)
               });
               // modal.close();
             }
@@ -872,30 +921,31 @@
     }
 
     /** 快速重定向模块 **/
-    InPageEdit.redirect = InPageEdit.quickRedirect = function (type) {
+    InPageEdit.redirect = InPageEdit.quickRedirect = function (type = 'to') {
       mw.hook('InPageEdit.quickRedirect').fire();
-      _analysis('find_replace');
       var text = '#REDIRECT [[:$1]]',
         question,
         target,
         json = {
           action: 'edit',
-          minor: JSON.parse(localStorage.getItem('InPageEditPreference')).editMinor,
+          minor: InPageEdit.preference.get('editMinor'),
           token: mw.user.tokens.get('editToken'),
           errorformat: 'plaintext'
         },
         summary;
 
-      switch (type) {
-        case 'to':
-          json.title = config.wgPageName;
-          question = msg('redirect-question-to').replace('$1', '<b>' + config.wgPageName.replace(/\_/g, ' ') + '</b>');
-          break;
-        case 'from':
-          question = msg('redirect-question-from').replace('$1', '<b>' + config.wgPageName.replace(/\_/g, ' ') + '</b>');
-          json.text = text.replace('$1', config.wgPageName);
-          break;
+      if (type === 'to') {
+        json.title = config.wgPageName;
+        question = msg('redirect-question-to', '<b>' + config.wgPageName.replace(/_/g, ' ') + '</b>');
+      } else if (type === 'from') {
+        question = msg('redirect-question-from', '<b>' + config.wgPageName.replace(/_/g, ' ') + '</b>');
+        summary = msg('redirect-summary') + ' → [[:' + config.wgPageName + ']]';
+        json.text = text.replace('$1', config.wgPageName);
+      } else {
+        console.error('[InPageEdit] quickRedirect only accept "from" or "to"');
+        return;
       }
+
       ssi_modal.show({
         outSideClose: false,
         className: 'in-page-edit quick-redirect',
@@ -918,14 +968,19 @@
           className: 'btn btn-primary btn-single okBtn',
           method: function (a, modal) {
             target = $('.in-page-edit.quick-redirect #redirect-page').val();
-            if (target === '' || target === config.wgPageName || target === config.wgPageName.replace(/\_/g, ' ')) {
+            if (target === '' || target.toLowerCase().replace(/_/g, ' ') === config.wgPageName.toLowerCase().replace(/_/g, ' ')) {
               $('.in-page-edit.quick-redirect #redirect-page').css('box-shadow', '0 0 4px #f00');
               return;
             }
 
             _analysis('quick_redirect');
 
-            summary = msg('redirect-summary') + ' → [[:' + target + ']]';
+            if (type === 'to') {
+              summary = msg('redirect-summary') + ' → [[:' + target + ']]';
+              json.text = text.replace('$1', target);
+            } else if (type === 'from') {
+              json.title = target;
+            }
             if ($('.in-page-edit.quick-redirect #redirect-reason').val() !== '') {
               summary = summary + ' (' + $('.in-page-edit.quick-redirect #redirect-reason').val() + ')';
             }
@@ -934,14 +989,6 @@
             $('.in-page-edit.quick-redirect .ipe-progress').show();
             $('.in-page-edit.quick-redirect section').hide();
             $('.in-page-edit.quick-redirect .okBtn').attr('disabled', 'disabled');
-            switch (type) {
-              case 'to':
-                json.text = text.replace('$1', target);
-                break;
-              case 'from':
-                json.title = target;
-                break;
-            }
 
             new mw.Api().post(json).done(function () {
               $('.in-page-edit.quick-redirect .ipe-progress').addClass('done');
@@ -987,7 +1034,7 @@
         title: msg('delete-title'),
         content: $('<div>').append(
           $('<section>', { id: 'InPageEditDeletepage' }).append(
-            $('<span>', { html: msg('delete-reason').replace('$1', '<b>' + page.replace(/\_/g, ' ') + '</b>') }),
+            $('<span>', { html: msg('delete-reason', '<b>' + page.replace(/\_/g, ' ') + '</b>') }),
             $('<br>'),
             $('<label>', { for: 'delete-reason', text: msg('editSummary') }),
             $('<input>', { id: 'delete-reason', style: 'width:96%', onclick: "$(this).css('box-shadow', '')" })
@@ -1050,7 +1097,7 @@
                     ssi_modal.notify('success', {
                       className: 'in-page-edit',
                       title: msg('notify-success'),
-                      content: msg('notify-delete-success').replace('$1', page)
+                      content: msg('notify-delete-success', page)
                     });
                   }).fail(function (errorCode, feedback, errorThrown) {
                     ssi_modal.notify('error', {
@@ -1089,7 +1136,7 @@
         title: msg('rename-title'),
         content:
           $('<section>').append(
-            $('<label>', { for: 'move-to', html: msg('rename-moveTo').replace('$1', '<b>' + from.replace(/\_/g, ' ') + '</b>') }),
+            $('<label>', { for: 'move-to', html: msg('rename-moveTo', '<b>' + from.replace(/\_/g, ' ') + '</b>') }),
             $('<br>'),
             $('<input>', { id: 'move-to', style: 'width:96%', onclick: "$(this).css('box-shadow','')" }),
             $('<br>'),
@@ -1267,11 +1314,11 @@
               ),
               $('<br>'),
               $('<h4>', { text: msg('preference-summary-label') }),
-              $('<label>', { for: 'editSummary', style: 'padding-left: 0; font-size: small', html: msg('preference-editSummary').replace('%br%', '<br/>').replace('$1', '<code>$oldid</code>').replace('$2', '<code>' + msg('editor-summary-rivision') + ' [[Special:Diff/oldid]]</code>').replace('$3', '<code>$section</code>').replace('$4', '<code>/* SECTION TITLE */</code>') }),
+              $('<label>', { for: 'editSummary', style: 'padding-left: 0; font-size: small', html: msg('preference-editSummary') }),
               $('<br>'),
               $('<input>', { id: 'editSummary', style: 'width: 96%', value: local.editSummary, placeholder: 'Edit via InPageEdit, yeah~' }),
               $('<h4>', { text: msg('preference-analysis-label') }),
-              $('<span>', { style: 'font-size: small; line-height: 0.9em', html: msg('preference-analysis-view').replace('$1', '<a href="https://dragon-fish.github.io/inpageedit-v2/analysis/" target="_blank">https://dragon-fish.github.io/inpageedit-v2/analysis/</a>') }),
+              $('<span>', { style: 'font-size: small; line-height: 0.9em', html: msg('preference-analysis-view', '<a href="' + InPageEdit.api.analysisUrl + '" target="_blank">' + InPageEdit.api.analysisUrl + '</a>') }),
               $('<h4>', { text: msg('preference-about-label') }),
               $('<button>', { class: 'btn btn-secondary', onclick: "InPageEdit.about()", text: msg('preference-aboutAndHelp') }),
               $('<button>', { class: 'btn btn-secondary', style: 'margin-left: 1em;', onclick: "InPageEdit.versionInfo()", text: msg('preference-updatelog') }),
@@ -1285,13 +1332,13 @@
                     className: 'in-page-edit',
                     center: true,
                     title: msg('preference-savelocal-popup-title'),
-                    content: '<section id="ipeSaveLocal"><b>' + msg('preference-savelocal-popup-notrecommended') + '</b><br/>' + msg('preference-savelocal-popup') + '<br/><textarea style="font-size: small;" readonly></textarea><br/>' + msg('preference-savelocal-popup-notice') + '</section>',
+                    content: '<section id="ipeSaveLocal">' + msg('preference-savelocal-popup') + '<br/><textarea style="font-size: small; max-width: 100%; min-width: 100%; height: 4em; max-height: 8em" readonly></textarea><br/>' + msg('preference-savelocal-popup-notice') + '</section>',
                     okBtn: {
                       className: 'btn btn-primary btn-single',
                       label: msg('ok')
                     }
                   });
-                  $('#ipeSaveLocal textarea').val('window.InPageEdit = window.InPageEdit || {}; // Keep this line\nInPageEdit.myPreference = ' + JSON.stringify($('#ipe-preference-form').data()) + '; // InPageEdit preference');
+                  $('#ipeSaveLocal textarea').val('/** InPageEdit preference **/\nwindow.InPageEdit = window.InPageEdit || {};\nInPageEdit.myPreference = ' + JSON.stringify($('#ipe-preference-form').data(), null, 2));
                 })
               )
             ),
@@ -1346,7 +1393,7 @@
             if (typeof (InPageEdit.myPreference) !== 'undefined') {
               $('#ipe-preference-form input, .ipe-preference .ssi-modalBtn').attr({ 'disabled': 'disabled' });
               $('#ipe-preference-form').prepend(
-                $('<p>', { class: 'has-local-warn', style: 'padding-left: 8px; border-left: 6px solid orange; font-size: small;', html: msg('preference-savelocal-popup-haslocal').replace('$1', '<a href="' + mw.util.getUrl('Special:Mypage/common.js') + '">' + msg('preference-savelocal-popup-yourjspage') + '</a>') })
+                $('<p>', { class: 'has-local-warn', style: 'padding-left: 8px; border-left: 6px solid orange; font-size: small;', html: msg('preference-savelocal-popup-haslocal', '<a href="' + mw.util.getUrl('Special:Mypage/common.js') + '">' + msg('preference-savelocal-popup-yourjspage') + '</a>') })
               );
             }
           }
@@ -1392,6 +1439,11 @@
       param.action = 'compare';
       param.prop = 'diff|diffsize|rel|ids|title|user|comment|parsedcomment|size';
       param.format = 'json';
+      if (param.totext) {
+        param.topst = true;
+      } else if (param.fromtext) {
+        param.frompst = true;
+      }
       new mw.Api().post(param).then(function (data) {
         var diffTable = data.compare['*'];
         $('.in-page-edit.quick-diff .ipe-progress').hide();
@@ -1740,7 +1792,7 @@
         if (typeof (ssi_modal) === undefined) return;
         ssi_modal.notify('', {
           title: msg('updatelog-update-success-title'),
-          content: msg('updatelog-update-success').replace('$1', version),
+          content: msg('updatelog-update-success', version),
           className: 'in-page-edit',
           buttons: [{
             className: 'btn btn-primary',
@@ -1758,7 +1810,7 @@
           onClose: function () {
             ssi_modal.notify('', {
               className: 'in-page-edit',
-              content: msg('updatelog-after-close').replace('$1', '<a href="' + msg('updatelog-url') + '" to="_blank">' + msg('updatelog-url') + '</a>').replace('$2', '<a href="https://github.com/Dragon-Fish/InPageEdit-v2">' + msg('updatelog-file-issue') + '</a>'),
+              content: msg('updatelog-after-close', '<a href="' + InPageEdit.api.updatelogsUrl + '" to="_blank">' + InPageEdit.api.updatelogsUrl + '</a>').replace('$2', '<a href="https://github.com/Dragon-Fish/InPageEdit-v2">' + msg('updatelog-file-issue') + '</a>'),
               closeAfter: {
                 time: 10
               }
@@ -1949,16 +2001,13 @@
       var toolBoxInner = $('#ipe-edit-toolbox #toolbox-toggle, #ipe-edit-toolbox .btn-group');
       $('#ipe-edit-toolbox #toolbox-toggle').click(function () {
         if ($(this).hasClass('opened') && !$(this).hasClass('click')) {
+          InPageEdit.preference.set({ lockToolBox: true });
           toolBoxInner.addClass('click');
         } else if ($(this).hasClass('click')) {
-          InPageEdit.preference.set({
-            lockToolBox: false
-          });
-          toolBoxInner.removeClass('click opened');
+          InPageEdit.preference.set({ lockToolBox: false });
+          toolBoxInner.removeClass('click');
         } else {
-          InPageEdit.preference.set({
-            lockToolBox: true
-          });
+          InPageEdit.preference.set({ lockToolBox: true });
           toolBoxInner.addClass('click opened');
         }
       });
