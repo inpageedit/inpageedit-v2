@@ -768,6 +768,7 @@
           ssi_modal.show({
             className: 'in-page-edit',
             sizeClass: 'dialog',
+            center: true,
             title: msg('editor-save-error'),
             content: errorInfo + '<hr style="clear: both" />' + errorMore
           });
