@@ -853,7 +853,7 @@
         "preference-outSideClose": "點擊編輯器外側關閉",
         "preference-setMinor": "預設編輯為次要修訂",
         "preference-summary-label": "變更摘要",
-        "preference-editSummary": "<code>$code</code> - 將會被替換為<code>/* 段落名稱 */</code><br><code>$oldid</code> - 將會被替換為<code>編輯自[[Special:Diff/oldid]]</code>",
+        "preference-editSummary": "<code>$section</code> - 將會被替換為<code>/* 段落名稱 */</code><br><code>$oldid</code> - 將會被替換為<code>編輯自[[Special:Diff/oldid]]</code>",
         "preference-analysis-label": "資料收集",
         "preference-analysis-view": "此外掛會收集您一些非敏感的資訊，用於記錄外掛的使用情況以便研究發展的方向，您可以在$1找到此外掛收集的資訊。",
         "preference-about-label": "關於InPageEdit",
