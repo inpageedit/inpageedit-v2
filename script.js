@@ -1318,7 +1318,7 @@
                       label: msg('ok')
                     }
                   });
-                  $('#ipeSaveLocal textarea').val('window.InPageEdit = window.InPageEdit || {}; // Keep this line\nInPageEdit.myPreference = ' + JSON.stringify($('#ipe-preference-form').data()) + '; // InPageEdit preference');
+                  $('#ipeSaveLocal textarea').val('/** InPageEdit preference **/\nwindow.InPageEdit = window.InPageEdit || {};\nInPageEdit.myPreference = ' + JSON.stringify($('#ipe-preference-form').data(), null, 2));
                 })
               )
             ),
