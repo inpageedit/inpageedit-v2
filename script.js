@@ -911,17 +911,18 @@
         },
         summary;
 
-      switch (type) {
-        case 'to':
-          json.title = config.wgPageName;
-          question = msg('redirect-question-to', '<b>' + config.wgPageName.replace(/_/g, ' ') + '</b>');
-          break;
-        case 'from':
-          question = msg('redirect-question-from', '<b>' + config.wgPageName.replace(/_/g, ' ') + '</b>');
-          summary = msg('redirect-summary') + ' → [[:' + config.wgPageName + ']]';
-          json.text = text.replace('$1', config.wgPageName);
-          break;
+      if (type === 'to') {
+        json.title = config.wgPageName;
+        question = msg('redirect-question-to', '<b>' + config.wgPageName.replace(/_/g, ' ') + '</b>');
+      } else if (type === 'from') {
+        question = msg('redirect-question-from', '<b>' + config.wgPageName.replace(/_/g, ' ') + '</b>');
+        summary = msg('redirect-summary') + ' → [[:' + config.wgPageName + ']]';
+        json.text = text.replace('$1', config.wgPageName);
+      } else {
+        console.error('[InPageEdit] quickRedirect only accept "from" or "to"');
+        return;
       }
+
       ssi_modal.show({
         outSideClose: false,
         className: 'in-page-edit quick-redirect',
@@ -951,8 +952,11 @@
 
             _analysis('quick_redirect');
 
-            if (type = 'to') {
+            if (type === 'to') {
               summary = msg('redirect-summary') + ' → [[:' + target + ']]';
+              json.text = text.replace('$1', target);
+            } else if (type === 'from') {
+              json.title = target;
             }
             if ($('.in-page-edit.quick-redirect #redirect-reason').val() !== '') {
               summary = summary + ' (' + $('.in-page-edit.quick-redirect #redirect-reason').val() + ')';
@@ -962,14 +966,6 @@
             $('.in-page-edit.quick-redirect .ipe-progress').show();
             $('.in-page-edit.quick-redirect section').hide();
             $('.in-page-edit.quick-redirect .okBtn').attr('disabled', 'disabled');
-            switch (type) {
-              case 'to':
-                json.text = text.replace('$1', target);
-                break;
-              case 'from':
-                json.title = target;
-                break;
-            }
 
             new mw.Api().post(json).done(function () {
               $('.in-page-edit.quick-redirect .ipe-progress').addClass('done');
