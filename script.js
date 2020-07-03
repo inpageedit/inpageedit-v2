@@ -1322,7 +1322,7 @@
        */
       set: function (settingKey = {}, settingValue = undefined) {
         var options = {};
-        if (typeof settingKey === 'string' && value !== undefined) {
+        if (typeof settingKey === 'string' && settingValue !== undefined) {
           options[settingKey] = settingValue;
         } else if (typeof settingKey === 'object') {
           options = settingKey;
@@ -1877,36 +1877,27 @@
           }
         });
       }
-      特殊提示
-      if (localStorage.InPageEditNoticeId !== InPageEdit.specialNotice.id) {
-        ssi_modal.notify('dialog', {
-          className: 'in-page-edit ipe-special-notice',
-          title: InPageEdit.specialNotice.title,
-          content: InPageEdit.specialNotice.content,
-          okBtn: {
-            label: _msg('updatelog-dismiss'),
-            className: 'btn btn-primary'
-          }
-        }, function (e, modal) {
-          localStorage.InPageEditNoticeId = InPageEdit.specialNotice.id;
-          modal.close();
-        });
+      if (localStorage.getItem('InPageEditNoticeId') !== _msg('noticeid')) {
+        InPageEdit.specialNotice();
       }
     })();
 
-    特别通知
-    if (InPageEdit.isCanary) {
-      InPageEdit.specialNotice = {
-        id: _msg('noticeid-canary'),
-        title: _msg('version-notice-canary-title'),
-        content: _msg('version-notice-canary')
-      }
-    } else {
-      InPageEdit.specialNotice = {
-        id: _msg('noticeid'),
+    /**
+     * @module 特别通知
+     */
+    InPageEdit.specialNotice = function () {
+      ssi_modal.notify('dialog', {
+        className: 'in-page-edit ipe-special-notice',
         title: _msg('version-notice-title'),
-        content: _msg('version-notice')
-      }
+        content: _msg('version-notice'),
+        okBtn: {
+          label: _msg('updatelog-dismiss'),
+          className: 'btn btn-primary'
+        }
+      }, function (e, modal) {
+        localStorage.setItem('InPageEditNoticeId', _msg('noticeid'));
+        modal.close();
+      });
     }
 
     /**
@@ -1995,13 +1986,9 @@
      */
     mw.hook('InPageEdit').add(function () {
       // 检测是否为文章页
-      if (config.wgIsArticle === false) {
-        console.warn('%c[InPageEdit] 不是文章页面，未载入工具盒。', 'color:orange;font-size:1.2em;font-weight:bold');
+      if (!config.wgIsArticle || $('#ipe-edit-toolbox').length > 0) {
+        console.warn('[InPageEdit] 未载入 Toolbox');
         return;
-      }
-
-      if ($('#ipe-edit-toolbox').length > 0) {
-        $('#ipe-edit-toolbox').remove();
       }
 
       /** IPE工具盒 **/
