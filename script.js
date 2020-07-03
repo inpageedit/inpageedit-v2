@@ -1371,6 +1371,12 @@
               $('<h4>', { text: _msg('preference-about-label') }),
               $('<button>', { class: 'btn btn-secondary', onclick: "InPageEdit.about()", text: _msg('preference-aboutAndHelp') }),
               $('<button>', { class: 'btn btn-secondary', style: 'margin-left: 1em;', onclick: "InPageEdit.versionInfo()", text: _msg('preference-updatelog') }),
+              $('<a>', { href: 'https://ipe.miraheze.org/wiki/', target: '_blank' }).append(
+                $('<button>', { class: 'btn btn-secondary', text: _msg('preference-translate'), style: 'margin-left: 1em;' })
+              ),
+              $('<a>', { href: 'https://discord.gg/VUVAh8w', target: '_blank' }).append(
+                $('<button>', { class: 'btn btn-secondary', text: _msg('preference-discord'), style: 'margin-left: 1em;' })
+              ),
               $hr,
               $('<strong>', { style: 'font-size: small; line-height: 0.9em', text: _msg('preference-savelocal-label') }),
               $br,
@@ -1381,7 +1387,7 @@
                     className: 'in-page-edit',
                     center: true,
                     title: _msg('preference-savelocal-popup-title'),
-                    content: '<section id="ipeSaveLocal">' + _msg('preference-savelocal-popup') + '<br/><textarea style="font-size: small; max-width: 100%; min-width: 100%; height: 4em; max-height: 8em" readonly></textarea><br/>' + _msg('preference-savelocal-popup-notice') + '</section>',
+                    content: '<section id="ipeSaveLocal">' + _msg('preference-savelocal-popup') + '<br/><textarea style="font-size: 12px; resize: none; width: 100%; height: 10em;" readonly></textarea><br/>' + _msg('preference-savelocal-popup-notice') + '</section>',
                     okBtn: {
                       className: 'btn btn-primary btn-single',
                       label: _msg('ok')
@@ -1871,37 +1877,37 @@
           }
         });
       }
-      // 特殊提示
-      // if (localStorage.InPageEditNoticeId !== InPageEdit.specialNotice.id) {
-      //   ssi_modal.notify('dialog', {
-      //     className: 'in-page-edit ipe-special-notice',
-      //     title: InPageEdit.specialNotice.title,
-      //     content: InPageEdit.specialNotice.content,
-      //     okBtn: {
-      //       label: _msg('updatelog-dismiss'),
-      //       className: 'btn btn-primary'
-      //     }
-      //   }, function (e, modal) {
-      //     localStorage.InPageEditNoticeId = InPageEdit.specialNotice.id;
-      //     modal.close();
-      //   });
-      // }
+      特殊提示
+      if (localStorage.InPageEditNoticeId !== InPageEdit.specialNotice.id) {
+        ssi_modal.notify('dialog', {
+          className: 'in-page-edit ipe-special-notice',
+          title: InPageEdit.specialNotice.title,
+          content: InPageEdit.specialNotice.content,
+          okBtn: {
+            label: _msg('updatelog-dismiss'),
+            className: 'btn btn-primary'
+          }
+        }, function (e, modal) {
+          localStorage.InPageEditNoticeId = InPageEdit.specialNotice.id;
+          modal.close();
+        });
+      }
     })();
 
-    // 特别通知
-    // if (InPageEdit.isCanary) {
-    //   InPageEdit.specialNotice = {
-    //     id: _msg('noticeid-canary'),
-    //     title: _msg('version-notice-canary-title'),
-    //     content: _msg('version-notice-canary')
-    //   }
-    // } else {
-    //   InPageEdit.specialNotice = {
-    //     id: _msg('noticeid'),
-    //     title: _msg('version-notice-title'),
-    //     content: _msg('version-notice')
-    //   }
-    // }
+    特别通知
+    if (InPageEdit.isCanary) {
+      InPageEdit.specialNotice = {
+        id: _msg('noticeid-canary'),
+        title: _msg('version-notice-canary-title'),
+        content: _msg('version-notice-canary')
+      }
+    } else {
+      InPageEdit.specialNotice = {
+        id: _msg('noticeid'),
+        title: _msg('version-notice-title'),
+        content: _msg('version-notice')
+      }
+    }
 
     /**
      * @description 获取用户权限信息
@@ -1955,7 +1961,6 @@
         // console.info('[InPageEdit] 我们已不再收集您使用插件的信息。');
         // return;
       }
-      var functionID = functionID;
       var submitdata = {
         'action': 'submit',
         'url': config.wgServer + config.wgArticlePath.replace('$1', ''),
@@ -1966,7 +1971,7 @@
       $.ajax({
         url: InPageEdit.api.analysis,
         data: submitdata,
-        type: 'get',
+        type: 'post',
         dataType: 'json'
       }).done(function (data) {
         console.log('[InPageEdit] Analysis response\nStatus: ' + data.status + '\nMessage: ' + data.msg);
@@ -1993,6 +1998,10 @@
       if (config.wgIsArticle === false) {
         console.warn('%c[InPageEdit] 不是文章页面，未载入工具盒。', 'color:orange;font-size:1.2em;font-weight:bold');
         return;
+      }
+
+      if ($('#ipe-edit-toolbox').length > 0) {
+        $('#ipe-edit-toolbox').remove();
       }
 
       /** IPE工具盒 **/
