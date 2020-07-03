@@ -14,7 +14,7 @@
    * @description 检查插件是否已经运行，创建全局函数
    */
   window.InPageEdit = window.InPageEdit || {};
-  if (typeof (InPageEdit.version) !== 'undefined') throw '[InPageEdit] 已经有一个IPE插件在执行了';
+  if (typeof (InPageEdit.version) !== 'undefined') { throw '[InPageEdit] 已经有一个IPE插件在执行了'; }
   InPageEdit.isCanary = false;
   InPageEdit.api = {
     analysis: 'https://doc.wjghj.cn/inpageedit-v2/analysis/api/index.php',
@@ -22,20 +22,29 @@
     analysisUrl: 'https://dragon-fish.github.io/inpageedit-v2/analysis/',
     updatelogsUrl: 'https://dragon-fish.github.io/inpageedit-v2/update-logs/'
   }
-  InPageEdit.version = '2.13.4-4';
+  InPageEdit.version = '2.13.4-5';
   // 冻结重要全局变量
   Object.freeze(InPageEdit.api);
   Object.freeze(InPageEdit.version);
 
-  // 缓存常用函数
-  var config = mw.config.get();
+  /**
+   * @description 常用变量以及函数
+   */
+  var config = mw.config.get(),
+    _loadScript = function (src) {
+      return $.ajax({
+        url: src,
+        dataType: 'script',
+        crossDomain: !0,
+        cache: !0
+      });
+    };
 
-  /** 导入依赖 **/
-  // 模态框
-  mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/ssi-modal.min.js');
-  // I18n-js
-  mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/i18n-js@master/script.min.js');
-  // 样式表
+  /**
+   * @name 导入依赖
+   * @description 加载需要的依赖项，然后进行初始化
+   */
+  /* 样式表 */
   $('head').prepend(
     // 模态框
     $('<link>', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/ssi-modal.min.css' }),
@@ -44,12 +53,15 @@
     // 覆写
     $('<link>', { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/skin/ipe-default.min.css' })
   );
-
-  /** 等待依赖项目加载完毕，然后初始化主函数 **/
-  mw.hook('dfgh.i18n').add(i18nJs => {
-    i18nJs.loadMessages('InPageEdit-v2').then(() => {
-      mw.hook('ssi_modal').add(init);
-    });
+  /* I18n-js */
+  _loadScript('https://cdn.jsdelivr.net/gh/dragon-fish/i18n-js@master/script.min.js'); // 因为留有钩子，无需异步，与模态框同时加载提升速度
+  /* 模态框 */
+  _loadScript('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/ssi-modal.min.js').done(() => {
+    mw.hook('dfgh.i18n').add(i18nJs => {
+      i18nJs.loadMessages('InPageEdit-v2').then(init);
+    })
+  }).fail((...res) => {
+    console.error('[InPageEdit] 初始化时遇到致命错误：', ...res);
   });
 
   /**
@@ -67,7 +79,7 @@
     }
 
     /**
-     * @description 常用的 html 结构
+     * @description 常用 html 结构
      */
     var $br = '<br>',
       $hr = '<hr>',
@@ -1264,7 +1276,10 @@
      * @module 个人设置模块
      */
     InPageEdit.preference = {
-      /* 预设值 */
+      /**
+       * @name 预设值
+       * @return {object}
+       */
       "default": {
         doNotCollectMyInfo: false,
         doNotShowLocalWarn: false,
@@ -1275,34 +1290,52 @@
         outSideClose: true,
         watchList: Boolean(mw.user.options.get('watchdefault'))
       },
-      /* 获取设置 */
+      /**
+       * @name 获取设置 
+       * @description 合并保存在用户页的设置以及localStorage的设置，有容错机制
+       * @param {string} setting 返回相应的设置，为空时返回全部设置
+       * @return {object|string}
+       */
       get: function (setting) {
         var setting = setting || undefined;
-        var local = localStorage.getItem('InPageEditPreference') || '{}',
-          local = JSON.parse(local);
+        var local = localStorage.getItem('InPageEditPreference') || '{}';
+        try {
+          var local = JSON.parse(local);
+        } catch (e) {
+          var local = {};
+        }
         if (typeof InPageEdit.myPreference === 'object') {
           local = $.extend({}, local, InPageEdit.myPreference);
         }
         var json = $.extend({}, InPageEdit.preference.default, local);
-        if (typeof (setting) === 'string') {
+        if (typeof (setting) === 'string' && setting !== '') {
           return json.hasOwnProperty(setting) ? json[setting] : null;
         } else {
           return json;
         }
       },
       /**
-       * @description 保存设置
-       * @param {Object} options 
+       * @name 保存设置
+       * @param {Object|string} settingKey
+       * @param {any} settingValue
+       * @example 可以这样 InPageEdit.preference.set({ key: 'value' }) 也可以 InPageEdit.preference.set('key', 'value')
        */
-      set: function (options) {
-        var options = options || {};
-        if (typeof options !== 'object') return;
+      set: function (settingKey = {}, settingValue = undefined) {
+        var options = {};
+        if (typeof settingKey === 'string' && value !== undefined) {
+          options[settingKey] = settingValue;
+        } else if (typeof settingKey === 'object') {
+          options = settingKey;
+        } else {
+          return;
+        }
         options = $.extend({}, InPageEdit.preference.get(), options);
         options = JSON.stringify(options);
         localStorage.setItem('InPageEditPreference', options);
       },
       /**
-       * @description 用户图形界面
+       * @name 用户图形界面
+       * @description 打开可视化设置窗口
        */
       modal: function () {
         // 防止多开设置页面
