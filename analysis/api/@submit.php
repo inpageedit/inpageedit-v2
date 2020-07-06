@@ -8,12 +8,13 @@
  * - 2020年4月23日
  *   - [破坏性更新]改变数据结构
  */
-function _submit($url, $sitename, $username, $function)
+function _submit($data)
 {
     ## 调用封装库
     require_once('util.mongodb.class.php');
     $mongoLib = m_mgdb::i("inpageedit");
     $collection = 'analysis';
+    $collection_date = 'date';
 
     ## 变量
     $command = [];
@@ -21,6 +22,15 @@ function _submit($url, $sitename, $username, $function)
     $msg = [];
     $finalResult = [];
     $today = date('Y-m-d');
+    $url = $data['url'];
+    $sitename = $data['sitename'];
+    $username = $data['username'];
+    $function = $data['function'];
+    $limit = $data['limit'] || 'max';
+    $from = $data['from'] || 0;
+    if ($limit === 'max'|| $limit > 25) {
+        $limit = 25;
+    }
 
     ## 参数有误
     if (!$url||!$sitename||!$username||!$function) {
@@ -48,8 +58,8 @@ function _submit($url, $sitename, $username, $function)
     ## 查询 Wiki
     $query = $mongoLib->command([
       'find'=>$collection,
-      'filter'=> [
-        'url'=>$url
+      'filter' => [
+        '_id' => $url
       ]
     ], []);
     $query = $query->toArray();
@@ -57,6 +67,7 @@ function _submit($url, $sitename, $username, $function)
     if (empty($query)) {
         ## Wiki不存在，增设该数据表
         $insert = array(
+            '_id' => $url,
             'url' => $url,
             'sitename' => $sitename,
             '_total' => 1,
@@ -185,7 +196,7 @@ function _submit($url, $sitename, $username, $function)
         # 查询语句
         $updates = [
             [
-                'q' => ['url' => $url],
+                'q' => ['_id' => $url],
                 'u' => ['$set'=>
                     $settingdata
                 ]
@@ -199,9 +210,9 @@ function _submit($url, $sitename, $username, $function)
 
     /** 记录本日次数 **/
     $queryDate = $mongoLib->command([
-        'find'=> 'date',
-        'filter'=> [
-          'date'=>$today
+        'find'=> $collection_date,
+        'filter' => [
+          '_id' => $today
         ]
     ], []);
     $queryDate = $queryDate->toArray();
@@ -211,8 +222,9 @@ function _submit($url, $sitename, $username, $function)
     if (empty($queryDate)) {
         ## 建立一个
         $msg[] = 'Insert new date to date collection.';
-        $mongoLib->insert('date', [
+        $mongoLib->insert($collection_date, [
             [
+                '_id' => $today,
                 'date' => $today,
                 'times' => 1
             ]
@@ -222,9 +234,9 @@ function _submit($url, $sitename, $username, $function)
         $queryDate = json_encode($queryDate);
         $queryDate = json_decode($queryDate, true);
         $queryDate['times']++;
-        $mongoLib->update('date', [
+        $mongoLib->update($collection_date, [
             [
-                'q' => ['date' => $today],
+                'q' => ['_id' => $today],
                 'u' => ['$set'=>
                     [
                         'times' => $queryDate['times']

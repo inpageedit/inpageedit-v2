@@ -668,6 +668,7 @@
   background: white;
   padding: 0px 4px;
   box-shadow: 0 0 4px gray;
+  pointer-events: none;
   display: none;
 }
 

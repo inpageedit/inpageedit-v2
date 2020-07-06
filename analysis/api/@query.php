@@ -10,22 +10,34 @@
  * @param from [num] Query skip (not use)
  * @return finalResult [array]
  */
-function _query($type, $url, $sitename, $username, $date, $limit, $from)
+function _query($data)
 {
     ## 调用封装库
     require_once('util.mongodb.class.php');
     $mongoLib = m_mgdb::i("inpageedit");
+    $collection = 'analysis';
+    $collection_date = 'date';
 
     ## 变量
     $command = [];
     $msg = [];
     $finalResult = [];
+    $type = $data['type'];
+    $url = $data['url'];
+    $sitename = $data['sitename'];
+    $username = $data['username'];
+    $function = $data['function'];
+    $limit = $data['limit'] || 'max';
+    $from = $data['from'] || 0;
+    if ($limit === 'max'|| $limit > 25) {
+        $limit = 25;
+    }
 
     ## 查询哪种数据
     switch ($type) {
         case 'date':
             $msg[] = 'Find dates';
-            $command['find'] = 'date';
+            $command['find'] = $collection_date;
             if ($date) {
                 $command['filter'] = ['date' => $date];
             }
@@ -35,7 +47,7 @@ function _query($type, $url, $sitename, $username, $date, $limit, $from)
         case 'site':
         case 'wiki':
             $msg[] = 'Find wikis';
-            $command['find'] = 'analysis';
+            $command['find'] = $collection;
             ## 是否查询特定 Wiki
             if ($sitename) {
                 $msg[] = 'Find wiki with sitename: ' . $sitename;
