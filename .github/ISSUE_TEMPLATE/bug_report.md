@@ -2,7 +2,7 @@
 name: 故障反馈/Bug report
 about: 如果你遇到了程序错误，请选此项/Create a report to help us improve
 title: "[BUG] 关于xxx的故障/The bug is about xxx"
-labels: bug
+labels: Bug
 assignees: Dragon-Fish
 
 ---
