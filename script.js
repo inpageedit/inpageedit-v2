@@ -10,19 +10,22 @@
   root.InPageEdit = factory(root.jQuery);
 })(this, function ($) {
   'use strict';
-  /**
-   * @description 检查插件是否已经运行，创建全局函数
-   */
+
+  // 创建全局函数，检查插件是否已经运行
   window.InPageEdit = window.InPageEdit || {};
-  if (typeof (InPageEdit.version) !== 'undefined') { throw '[InPageEdit] 已经有一个IPE插件在执行了'; }
-  InPageEdit.isCanary = false;
+  if (InPageEdit.hasOwnProperty('version')) {
+    throw '[InPageEdit] InPageEdit 已经在运行了';
+  }
+
+  // 重要全局变量
+  InPageEdit.version = '2.13.4-6';
   InPageEdit.api = {
-    analysis: 'https://doc.wjghj.cn/inpageedit-v2/analysis/api/index.php',
     aboutUrl: 'https://dragon-fish.github.io/inpageedit-v2/about/',
+    analysis: 'https://doc.wjghj.cn/inpageedit-v2/analysis/api/index.php',
     analysisUrl: 'https://dragon-fish.github.io/inpageedit-v2/analysis/',
     updatelogsUrl: 'https://dragon-fish.github.io/inpageedit-v2/update-logs/'
   }
-  InPageEdit.version = '2.13.4-6';
+
   // 冻结重要全局变量
   Object.freeze(InPageEdit.api);
   Object.freeze(InPageEdit.version);
@@ -35,8 +38,8 @@
       return $.ajax({
         url: src,
         dataType: 'script',
-        crossDomain: !0,
-        cache: !0
+        crossDomain: true,
+        cache: true
       });
     };
 
@@ -71,8 +74,8 @@
    */
   function init(i18n) {
     /**
-     * @function i18n模块
-     * @param {string} 'message-name', '$1', '$2', ...
+     * @module _msg i18n模块
+     * @param {string} args 'message-name', '$1', '$2', ...
      * @example _msg('updatelog-update-success', InPageEdit.version) => InPageEdit <version> has been installed.
      */
     function _msg(...args) {
@@ -1395,7 +1398,7 @@
                       label: _msg('ok')
                     }
                   });
-                  $('#ipeSaveLocal textarea').val('/** InPageEdit preference **/\nwindow.InPageEdit = window.InPageEdit || {};\nInPageEdit.myPreference = ' + JSON.stringify($('#ipe-preference-form').data(), null, 2));
+                  $('#ipeSaveLocal textarea').val('/** InPageEdit Preferences **/\nwindow.InPageEdit = window.InPageEdit || {}; // Keep this line\nInPageEdit.myPreference = ' + JSON.stringify($.extend({}, InPageEdit.preference.get(), $('#ipe-preference-form').data()), null, 2));
                 })
               )
             ),
@@ -1788,9 +1791,12 @@
 
     /**
      * @module progress 载入中模块
-     * @param title
-     *  - √Boolean× true: Mark top progress box as done; false: Close top progress box
-     *  - "String" Show new progress box with title @default 'Loading...'
+     * @param {Boolean|String} title
+     * @default "Loading..."
+     * @returns
+     * - true: Mark top progress box as done
+     * - false: Close top progress box
+     * - String: Show new progress box with title
      */
     InPageEdit.progress = function (title) {
       if (title === true) {
@@ -1858,11 +1864,11 @@
      */
     InPageEdit.about = function () {
       ssi_modal.show({
-        title: '关于InPageEdit',
+        title: _msg('preference-about-label'),
         className: 'in-page-edit in-page-edit-about',
         // sizeClass: 'dialog',
         content: $('<section>').append(
-          $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: 'https://dragon-fish.github.io/inpageedit-v2/about/?iframe=1' })
+          $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: InPageEdit.api.aboutUrl })
         )
       });
     }
@@ -2110,8 +2116,10 @@
     // Init End
   }
 
-  // 花里胡哨的加载提示
+  // Fire the Hook
   mw.hook('InPageEdit').fire();
+
+  // 花里胡哨的加载提示
   console.info('    ____      ____                   ______    ___ __              _    _____ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_            | |  / /__ \\\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/  ______    | | / /__/ /\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_   /_____/    | |/ // __/ \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/              |___//____/ \n                      /____/');
 
   return InPageEdit;
