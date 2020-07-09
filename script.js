@@ -86,7 +86,7 @@
       $progress = '<div class="ipe-progress" style="width: 100%"><div class="ipe-progress-bar"></div></div>';
 
     /**
-     * @module 快速编辑模块
+     * @module quickEdit 快速编辑模块
      * 
      * @param {Object} options
      * @param {String} options.page edit page (default: wgPageName)
@@ -502,7 +502,7 @@
               if (data.query.pages[options.pageId].hasOwnProperty('revisions')) {
                 options.revision = data.query.pages[options.pageId]['revisions'][0]['revid']; // 版本号
               }
-              console.info('revid', options.revision);
+
               // 使页面名标准化
               options.page = data.query.pages[options.pageId].title;
               $('.ipe-editor.timestamp-' + timestamp + ' .editPage').text(options.page);
@@ -840,7 +840,7 @@
     }
 
     /**
-     * @module 查找替换模块
+     * @module findAndReplace 查找替换模块
      * @param {element} contengut Textarea
      */
     InPageEdit.findAndReplace = function (contengut) {
@@ -1273,7 +1273,7 @@
     }
 
     /**
-     * @module 个人设置模块
+     * @module preference 个人设置模块
      */
     InPageEdit.preference = {
       /**
@@ -1457,7 +1457,7 @@
     }
 
     /**
-     * @module 快速页面差异模块
+     * @module quickDiff 快速页面差异模块
      * @param {Object} param standard MediaWiki API params
      */
     InPageEdit.quickDiff = function (param) {
@@ -1466,20 +1466,29 @@
       if ($('[href*="mediawiki.diff.styles"]').length < 1) {
         mw.loader.load(mw.util.wikiScript('load') + '?modules=mediawiki.legacy.shared|mediawiki.diff.styles&only=styles', 'text/css');
       }
+      var $modalTitle,
+        $diffArea,
+        $loading;
       if ($('.quick-diff').length > 0) {
         console.info('[InPageEdit] Quick diff 正在加载新内容');
-        $('.in-page-edit.quick-diff .diffArea').hide().html(_msg('diff-loading'));
-        if (param.isPreview) {
-          $('.quick-diff').appendTo('body');
-        }
+        $modalTitle = $('.quick-diff .pageName');
+        $diffArea = $('.quick-diff .diffArea');
+        $loading = $('.quick-diff .ipe-progress');
+        $modalTitle.text(_msg('diff-loading'));
+        $diffArea.hide();
+        $('.quick-diff').appendTo('body');
       } else {
+        $modalTitle = $('<span>', { class: 'pageName', text: _msg('diff-loading') });
+        $diffArea = $('<div>', { class: 'diffArea', style: 'display: none' });
+        $loading = $($progress);
+
         ssi_modal.show({
           className: 'in-page-edit quick-diff',
           sizeClass: 'large',
           fixedHeight: true,
           fitScreen: true,
-          title: '<span class="pageName">' + _msg('diff-loading') + '</span>',
-          content: $progress + '<div class="diffArea"></div>',
+          title: $modalTitle,
+          content: $('<div>').append($loading, $diffArea),
           buttons: [{
             label: _msg('diff-button-todiffpage'),
             className: 'btn btn-secondary toDiffPage',
@@ -1489,8 +1498,8 @@
           }]
         });
       }
-      $('.in-page-edit.quick-diff .ipe-progress').show().css('margin-top', $('.in-page-edit.quick-diff .ipe-progress').parent().height() / 2);
-      $('.quick-diff button.toDiffPage').unbind();
+      $loading.show().css('margin-top', $loading.parent().height() / 2);
+      $('.quick-diff .toDiffPage').unbind();
       param.action = 'compare';
       param.prop = 'diff|diffsize|rel|ids|title|user|comment|parsedcomment|size';
       param.format = 'json';
@@ -1501,7 +1510,7 @@
       }
       new mw.Api().post(param).then(function (data) {
         var diffTable = data.compare['*'];
-        $('.in-page-edit.quick-diff .ipe-progress').hide();
+        $loading.hide();
         if (param.pageName === undefined) {
           var toTitle = data.compare.totitle;
         } else {
@@ -1510,92 +1519,114 @@
         var userlink = function (user) {
           return '<a class="diff-user" href="' + mw.util.getUrl('User:' + user) + '">' + user + '</a> (<a href="' + mw.util.getUrl('User_talk:' + user) + '">' + _msg('diff-usertalk') + '</a> | <a href="' + mw.util.getUrl('Special:Contributions/' + user) + '">' + _msg('diff-usercontrib') + '</a> | <a href="' + mw.util.getUrl('Special:Block/' + user) + '">' + _msg('diff-userblock') + '</a>)';
         }
-        $('.quick-diff .pageName').html(_msg('diff-title') + ': <u>' + toTitle + '</u>');
-        $('.quick-diff .diffArea').show().html(`
-          <table class="diff diffTable">
-            <colgroup>
-              <col class="diff-marker">
-              <col class="diff-content">
-              <col class="diff-marker">
-              <col class="diff-content">
-            </colgroup>
-            <tbody>
-              <tr class="diff-title">
-                <td colspan="2" class="diff-otitle">
-                  <a class="" href="${config.wgScript}?oldid=${data.compare.fromrevid}">${data.compare.fromtitle}</a> (<span class="diff-version">${_msg('diff-version')}${data.compare.fromrevid}</span>) (<a class="editLink" href="${config.wgScript}?action=edit&title=${data.compare.fromtitle}&oldid=${data.compare.fromrevid}">${_msg('diff-edit')}</a>)
-                  <br/>
-                  ${userlink(data.compare.fromuser)}
-                  <br/>
-                  (<span class="diff-comment">${data.compare.fromparsedcomment}</span>)
-                  <br/>
-                  <a class="prevVersion ipe-analysis-quick_diff_modalclick" href="javascript:void(0);" onclick="InPageEdit.quickDiff({fromrev:${data.compare.fromrevid},torelative:'prev'});">←${_msg('diff-prev')}</a>
-                </td>
-                <td colspan="2" class="diff-ntitle">
-                  <a class="" href="${config.wgScript}?oldid=${data.compare.torevid}">${data.compare.totitle}</a> (<span class="diff-version">${_msg('diff-version')}${data.compare.torevid}</span>) (<a class="editLink" href="${config.wgScript}?action=edit&title=${data.compare.totitle}&oldid=${data.compare.torevid}">${_msg('diff-edit')}</a>)
-                  <br/>
-                  ${userlink(data.compare.touser)}
-                  <br/>
-                  (<span class="diff-comment">${data.compare.toparsedcomment}</span>)
-                  <br/>
-                  <a class="nextVersion ipe-analysis-quick_diff_modalclick" href="javascript:void(0);" onclick="InPageEdit.quickDiff({fromrev:${data.compare.torevid},torelative:'next'});">${_msg('diff-nextv')}→</a>
-                </td>
-              </tr>
-              ${diffTable}
-              <tr class="diffSize" style="text-align: center;">
-                <td colspan="2">${data.compare.fromsize}${_msg('diff-bytes')}</td>
-                <td colspan="2">${data.compare.tosize}${_msg('diff-bytes')}</td>
-              </tr>
-            </tbody>
-          </table>
-        `);
-        $('.ipe-analysis-quick_diff_modalclick').click(function () {
-          _analysis('quick_diff_modalclick');
-        });
+        $modalTitle.html(_msg('diff-title') + ': <u>' + toTitle + '</u>');
+        $diffArea.show().html('').append(
+          $('<table>', { class: 'diff difftable' }).append(
+            $('<colgroup>').append(
+              $('<col>', { class: 'diff-marker' }),
+              $('<col>', { class: 'diff-content' }),
+              $('<col>', { class: 'diff-marker' }),
+              $('<col>', { class: 'diff-content' })
+            ),
+            $('<tbody>').append(
+              $('<tr>').append(
+                $('<td>', { colspan: 2, class: 'diff-otitle' }).append(
+                  $('<a>', { href: config.wgScript + '?oldid=' + data.compare.fromrevid, text: data.compare.fromtitle }),
+                  ' (',
+                  $('<span>', { class: 'diff-version', text: _msg('diff-version') + data.compare.fromrevid }),
+                  ') (',
+                  $('<a>', { class: 'editLink', href: config.wgScript + '?action=edit&title=' + data.compare.fromtitle + '&oldid=' + data.compare.fromrevid }),
+                  ')',
+                  $br,
+                  userlink(data.compare.fromuser),
+                  $br,
+                  ' (',
+                  $('<span>', { class: 'diff-comment', text: data.compare.fromparsedcomment }),
+                  ') ',
+                  $br,
+                  $('<a>', { class: 'prevVersion ipe-analysis-quick_diff_modalclick', href: 'javascript:void(0);', text: '←' + _msg('diff-prev') }).click(() => {
+                    InPageEdit.quickDiff({
+                      fromrev: data.compare.fromrevid,
+                      torelative: 'prev'
+                    });
+                  })
+                ),
+                $('<td>', { colspan: 2, class: 'diff-ntitle' }).append(
+                  $('<a>', { href: config.wgScript + '?oldid=' + data.compare.torevid, text: data.compare.totitle }),
+                  ' (',
+                  $('<span>', { class: 'diff-version', text: _msg('diff-version') + data.compare.torevid }),
+                  ') (',
+                  $('<a>', { class: 'editLink', href: config.wgScript + '?action=edit&title=' + data.compare.totitle + '&oldid=' + data.compare.torevid }),
+                  ')',
+                  $br,
+                  userlink(data.compare.touser),
+                  $br,
+                  ' (',
+                  $('<span>', { class: 'diff-comment', text: data.compare.toparsedcomment }),
+                  ') ',
+                  $br,
+                  $('<a>', { class: 'nextVersion ipe-analysis-quick_diff_modalclick', href: 'javascript:void(0);', text: _msg('diff-nextv') + '→' }).click(() => {
+                    _analysis('quick_diff_modalclick');
+                    InPageEdit.quickDiff({
+                      fromrev: data.compare.torevid,
+                      torelative: 'next'
+                    });
+                  })
+                )
+              ),
+              diffTable,
+              $('<tr>', { class: 'diffSize', style: 'text-align: center' }).append(
+                $('<td>', { colspan: '2', text: data.compare.fromsize + _msg('diff-bytes') }),
+                $('<td>', { colspan: '2', text: data.compare.tosize + _msg('diff-bytes') })
+              )
+            )
+          )
+        );
         $('.quick-diff button.toDiffPage').click(function () {
           location.href = config.wgScript + '?oldid=' + data.compare.fromrevid + '&diff=' + data.compare.torevid;
         });
         InPageEdit.articleLink($('.quick-diff .editLink'));
         if (param.isPreview === true) {
           $('.quick-diff button.toDiffPage').hide();
-          $('.quick-diff .diff-otitle').html('<b>' + _msg('diff-title-original-content') + '</b>');
-          $('.quick-diff .diff-ntitle').html('<b>' + _msg('diff-title-your-content') + '</b>');
+          $diffArea.find('.diff-otitle').html('<b>' + _msg('diff-title-original-content') + '</b>');
+          $diffArea.find('.diff-ntitle').html('<b>' + _msg('diff-title-your-content') + '</b>');
         }
         if (data.compare.fromsize === undefined || data.compare.tosize === undefined) {
-          $('.quick-diff .diffSize').hide();
+          $diffArea.find('.diffSize').hide();
         }
         // 无上一版本或下一版本
         if (data.compare.fromrevid === undefined && param.isPreview !== true) {
-          $('.quick-diff .diff-otitle').html('<span class="noPrevVerson">' + data.warnings.compare['*'] + '</span>');
+          $diffArea.find('.diff-otitle').html('<span class="noPrevVerson">' + data.warnings.compare['*'] + '</span>');
         } else if (data.compare.torevid === undefined && param.isPreview !== true) {
-          $('.quick-diff .diff-ntitle').html('<span class="noNextVerson">' + data.warnings.compare['*'] + '</span>');
+          $diffArea.find('.diff-ntitle').html('<span class="noNextVerson">' + data.warnings.compare['*'] + '</span>');
         }
         // GitHub@issue#5 修复被隐藏版本的问题
         if (data.compare.fromtexthidden !== undefined) {
-          $('.quick-diff .diff-otitle .diff-version').addClass('diff-hidden-history');
+          $diffArea.find('.diff-otitle .diff-version').addClass('diff-hidden-history');
         }
         if (data.compare.totexthidden !== undefined) {
-          $('.quick-diff .diff-ntitle .diff-version').addClass('diff-hidden-history');
+          $diffArea.find('.diff-ntitle .diff-version').addClass('diff-hidden-history');
         }
         if (data.compare.fromuserhidden !== undefined) {
-          $('.quick-diff .diff-otitle .diff-user').addClass('diff-hidden-history');
+          $diffArea.find('.diff-otitle .diff-user').addClass('diff-hidden-history');
         }
         if (data.compare.touserhidden !== undefined) {
-          $('.quick-diff .diff-ntitle .diff-user').addClass('diff-hidden-history');
+          $diffArea.find('.diff-ntitle .diff-user').addClass('diff-hidden-history');
         }
         if (data.compare.fromcommenthidden !== undefined) {
-          $('.quick-diff .diff-otitle .diff-comment').addClass('diff-hidden-history');
+          $diffArea.find('.diff-comment').addClass('diff-hidden-history');
         }
         if (data.compare.tocommenthidden !== undefined) {
-          $('.quick-diff .diff-ntitle .diff-comment').addClass('diff-hidden-history');
+          $diffArea.find('.diff-ntitle .diff-comment').addClass('diff-hidden-history');
         }
         if (data.hasOwnProperty('error')) {
           console.warn('[InPageEdit] 快速差异获取时系统告知出现问题');
-          $('.diffArea').html(_msg('diff-error') + ': ' + data.error.info + '(<code>' + data.error.code + '</code>)');
+          $diffArea.html(_msg('diff-error') + ': ' + data.error.info + '(<code>' + data.error.code + '</code>)');
         }
       }).fail(function (errorCode, feedback, errorThrown) {
         console.warn('[InPageEdit] 快速差异获取失败');
-        $('.in-page-edit.quick-diff .ipe-progress').hide();
-        $('.diffArea').show().html(_msg('diff-error') + ': ' + errorThrown.error['info'] + '(<code>' + errorThrown.error['code'] + '</code>)');
+        $loading.hide();
+        $diffArea.show().html(_msg('diff-error') + ': ' + errorThrown.error['info'] + '(<code>' + errorThrown.error['code'] + '</code>)');
       });
     }
     // 加载预设的快速最近更改模块
@@ -1648,7 +1679,7 @@
     }
 
     /**
-     * @module 获取段落编辑以及编辑链接
+     * @module articleLink 获取段落编辑以及编辑链接
      * @param {Element} element parent element to find edit links
      */
     InPageEdit.articleLink = function (element) {
@@ -1707,10 +1738,10 @@
     }
 
     /**
-     * @module 快速预览文章页
+     * @module quickPreview 快速预览文章页
      * @param params {Object} 
      */
-    InPageEdit.quickPreview = function (params, modalSize = 'large', center = false) {
+    InPageEdit.preview = InPageEdit.quickPreview = function (params, modalSize = 'large', center = false) {
       var defaultOptions = {
         action: 'parse',
         preview: true,
@@ -1754,7 +1785,7 @@
     }
 
     /**
-     * @module 载入中模块
+     * @module progress 载入中模块
      * @param title
      *  - √Boolean× true: Mark top progress box as done; false: Close top progress box
      *  - "String" Show new progress box with title @default 'Loading...'
@@ -1786,7 +1817,7 @@
     }
 
     /**
-     * @module 版本信息模块
+     * @module versionInfo 版本信息模块
      * @description Show Update Logs Modal box
      */
     InPageEdit.versionInfo = function () {
@@ -1820,7 +1851,7 @@
     };
 
     /**
-     * @module 关于插件模块
+     * @module about 关于插件模块
      * @description Show "What is" modal box of IPE2
      */
     InPageEdit.about = function () {
@@ -1835,7 +1866,25 @@
     }
 
     /**
-     * @module 获取版本更新提示
+     * @module specialNotice 特别通知
+     */
+    InPageEdit.specialNotice = function () {
+      ssi_modal.notify('dialog', {
+        className: 'in-page-edit ipe-special-notice',
+        title: _msg('version-notice-title'),
+        content: _msg('version-notice'),
+        okBtn: {
+          label: _msg('updatelog-dismiss'),
+          className: 'btn btn-primary'
+        }
+      }, function (e, modal) {
+        localStorage.setItem('InPageEditNoticeId', _msg('noticeid'));
+        modal.close();
+      });
+    }
+
+    /**
+     * @module updateNotice 获取版本更新提示
      */
     !(function () {
       var version = InPageEdit.version;
@@ -1880,25 +1929,7 @@
       if (localStorage.getItem('InPageEditNoticeId') !== _msg('noticeid')) {
         InPageEdit.specialNotice();
       }
-    })();
-
-    /**
-     * @module 特别通知
-     */
-    InPageEdit.specialNotice = function () {
-      ssi_modal.notify('dialog', {
-        className: 'in-page-edit ipe-special-notice',
-        title: _msg('version-notice-title'),
-        content: _msg('version-notice'),
-        okBtn: {
-          label: _msg('updatelog-dismiss'),
-          className: 'btn btn-primary'
-        }
-      }, function (e, modal) {
-        localStorage.setItem('InPageEditNoticeId', _msg('noticeid'));
-        modal.close();
-      });
-    }
+    }());
 
     /**
      * @description 获取用户权限信息
@@ -1928,7 +1959,7 @@
     }());
 
     /** 
-     * @module 是否拥有权限
+     * @module _hasRight 是否拥有权限
      * @param {String} right
      * @return {Boolean}
      */
@@ -1944,7 +1975,7 @@
     };
 
     /**
-     * @module 提交统计信息模块
+     * @module _analysis 提交统计信息模块
      * @description Internal module
      */
     const _analysis = function (functionID) {
@@ -1982,7 +2013,7 @@
     }());
 
     /**
-     * @module Toolbox模块
+     * @module toolbox 工具盒模块
      */
     mw.hook('InPageEdit').add(function () {
       // 检测是否为文章页
