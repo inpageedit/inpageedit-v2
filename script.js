@@ -8,7 +8,7 @@
  */
 !(function (root, factory) {
   root.InPageEdit = factory(root.jQuery);
-}(this, function ($) {
+})(this, function ($) {
   'use strict';
   /**
    * @description 检查插件是否已经运行，创建全局函数
@@ -1929,7 +1929,7 @@
       if (localStorage.getItem('InPageEditNoticeId') !== _msg('noticeid')) {
         InPageEdit.specialNotice();
       }
-    }());
+    })();
 
     /**
      * @description 获取用户权限信息
@@ -1956,7 +1956,7 @@
           }
         });
       }
-    }());
+    })();
 
     /** 
      * @module _hasRight 是否拥有权限
@@ -1998,7 +1998,7 @@
       }).done(function (data) {
         console.log('[InPageEdit] Analysis response\nStatus: ' + data.status + '\nMessage: ' + data.msg);
       });
-    }
+    };
 
     /**
      * @description 页面载入完成，自动加载某些模块
@@ -2010,7 +2010,7 @@
       InPageEdit.loadQuickDiff();
       // 加载段落编辑模块
       InPageEdit.articleLink();
-    }());
+    })();
 
     /**
      * @module toolbox 工具盒模块
@@ -2114,4 +2114,4 @@
 
   return InPageEdit;
 
-}));
+});
