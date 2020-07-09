@@ -22,7 +22,7 @@
     analysisUrl: 'https://dragon-fish.github.io/inpageedit-v2/analysis/',
     updatelogsUrl: 'https://dragon-fish.github.io/inpageedit-v2/update-logs/'
   }
-  InPageEdit.version = '2.13.4-5';
+  InPageEdit.version = '2.13.4-6';
   // 冻结重要全局变量
   Object.freeze(InPageEdit.api);
   Object.freeze(InPageEdit.version);
@@ -58,7 +58,9 @@
   /* 模态框 */
   _loadScript('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/ssi-modal.min.js').done(() => {
     mw.hook('dfgh.i18n').add(i18nJs => {
-      i18nJs.loadMessages('InPageEdit-v2').then(init);
+      i18nJs.loadMessages('InPageEdit-v2', {
+        noCache: Boolean(InPageEdit.version !== localStorage.getItem('InPageEditVersion') || mw.util.getParamValue('i18n') === 'nocache') // 更新翻译缓存
+      }).then(init);
     })
   }).fail((...res) => {
     console.error('[InPageEdit] 初始化时遇到致命错误：', ...res);
@@ -1367,15 +1369,15 @@
               $br,
               $('<input>', { id: 'editSummary', style: 'width: 96%', value: local.editSummary, placeholder: 'Edit via InPageEdit, yeah~' }),
               $('<h4>', { text: _msg('preference-analysis-label') }),
-              $('<span>', { style: 'font-size: small; line-height: 0.9em', html: _msg('preference-analysis-view', '<a href="' + InPageEdit.api.analysisUrl + '" target="_blank">' + InPageEdit.api.analysisUrl + '</a>') }),
+              $('<span>', { style: 'font-size: small; line-height: 0.9em', html: _msg('preference-analysis-view', `[${InPageEdit.api.analysisUrl} ${InPageEdit.api.analysisUrl}]`) }),
               $('<h4>', { text: _msg('preference-about-label') }),
               $('<button>', { class: 'btn btn-secondary', onclick: "InPageEdit.about()", text: _msg('preference-aboutAndHelp') }),
               $('<button>', { class: 'btn btn-secondary', style: 'margin-left: 1em;', onclick: "InPageEdit.versionInfo()", text: _msg('preference-updatelog') }),
-              $('<a>', { href: 'https://ipe.miraheze.org/wiki/', target: '_blank' }).append(
-                $('<button>', { class: 'btn btn-secondary', text: _msg('preference-translate'), style: 'margin-left: 1em;' })
+              $('<a>', { href: 'https://ipe.miraheze.org/wiki/', target: '_blank', style: 'margin-left: 1em;' }).append(
+                $('<button>', { class: 'btn btn-secondary', text: _msg('preference-translate') })
               ),
-              $('<a>', { href: 'https://discord.gg/VUVAh8w', target: '_blank' }).append(
-                $('<button>', { class: 'btn btn-secondary', text: _msg('preference-discord'), style: 'margin-left: 1em;' })
+              $('<a>', { href: 'https://discord.gg/VUVAh8w', target: '_blank', style: 'margin-left: 1em;' }).append(
+                $('<button>', { class: 'btn btn-secondary', text: _msg('preference-discord') })
               ),
               $hr,
               $('<strong>', { style: 'font-size: small; line-height: 0.9em', text: _msg('preference-savelocal-label') }),
@@ -1448,7 +1450,7 @@
             if (typeof (InPageEdit.myPreference) !== 'undefined') {
               $('#ipe-preference-form input, .ipe-preference .ssi-modalBtn').attr({ 'disabled': 'disabled' });
               $('#ipe-preference-form').prepend(
-                $('<p>', { class: 'has-local-warn', style: 'padding-left: 8px; border-left: 6px solid orange; font-size: small;', html: _msg('preference-savelocal-popup-haslocal', '<a href="' + mw.util.getUrl('Special:Mypage/common.js') + '">' + _msg('preference-savelocal-popup-yourjspage') + '</a>') })
+                $('<p>', { class: 'has-local-warn', style: 'padding-left: 8px; border-left: 6px solid orange; font-size: small;', html: _msg('preference-savelocal-popup-haslocal') })
               );
             }
           }
@@ -1498,7 +1500,7 @@
           }]
         });
       }
-      $loading.show().css('margin-top', $loading.parent().height() / 2);
+      $loading.show().css('margin-top', $('.quick-diff .ssi-modalContent').height() / 2);
       $('.quick-diff .toDiffPage').unbind();
       param.action = 'compare';
       param.prop = 'diff|diffsize|rel|ids|title|user|comment|parsedcomment|size';
@@ -1910,7 +1912,7 @@
           onClose: function () {
             ssi_modal.notify('', {
               className: 'in-page-edit',
-              content: _msg('updatelog-after-close', '<a href="' + InPageEdit.api.updatelogsUrl + '" to="_blank">' + InPageEdit.api.updatelogsUrl + '</a>').replace('$2', '<a href="https://github.com/Dragon-Fish/InPageEdit-v2">' + _msg('updatelog-file-issue') + '</a>'),
+              content: _msg('updatelog-after-close', `[${InPageEdit.api.updatelogsUrl} ${InPageEdit.api.updatelogsUrl}]`, `[https://github.com/Dragon-Fish/InPageEdit-v2 ${_msg('updatelog-file-issue')}]`),
               closeAfter: {
                 time: 10
               },
