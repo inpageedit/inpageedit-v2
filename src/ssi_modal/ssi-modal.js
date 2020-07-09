@@ -1772,7 +1772,6 @@
    */
   if (typeof mw === 'object') {
     if (mw.hasOwnProperty('hook')) {
-      console.info('Fired');
       mw.hook('ssi_modal').fire();
     }
   }
