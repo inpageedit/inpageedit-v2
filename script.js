@@ -1521,7 +1521,7 @@
         } else {
           var toTitle = param.pageName;
         }
-        var userlink = function (user) {
+        var userLink = function (user) {
           return '<a class="diff-user" href="' + mw.util.getUrl('User:' + user) + '">' + user + '</a> (<a href="' + mw.util.getUrl('User_talk:' + user) + '">' + _msg('diff-usertalk') + '</a> | <a href="' + mw.util.getUrl('Special:Contributions/' + user) + '">' + _msg('diff-usercontrib') + '</a> | <a href="' + mw.util.getUrl('Special:Block/' + user) + '">' + _msg('diff-userblock') + '</a>)';
         }
         $modalTitle.html(_msg('diff-title') + ': <u>' + toTitle + '</u>');
@@ -1540,13 +1540,13 @@
                   ' (',
                   $('<span>', { class: 'diff-version', text: _msg('diff-version') + data.compare.fromrevid }),
                   ') (',
-                  $('<a>', { class: 'editLink', href: config.wgScript + '?action=edit&title=' + data.compare.fromtitle + '&oldid=' + data.compare.fromrevid }),
+                  $('<a>', { class: 'editLink', href: config.wgScript + '?action=edit&title=' + data.compare.fromtitle + '&oldid=' + data.compare.fromrevid, text: _msg('diff-edit') }),
                   ')',
                   $br,
-                  userlink(data.compare.fromuser),
+                  userLink(data.compare.fromuser),
                   $br,
                   ' (',
-                  $('<span>', { class: 'diff-comment', text: data.compare.fromparsedcomment }),
+                  $('<span>', { class: 'diff-comment', html: data.compare.fromparsedcomment }),
                   ') ',
                   $br,
                   $('<a>', { class: 'prevVersion ipe-analysis-quick_diff_modalclick', href: 'javascript:void(0);', text: '←' + _msg('diff-prev') }).click(() => {
@@ -1561,13 +1561,13 @@
                   ' (',
                   $('<span>', { class: 'diff-version', text: _msg('diff-version') + data.compare.torevid }),
                   ') (',
-                  $('<a>', { class: 'editLink', href: config.wgScript + '?action=edit&title=' + data.compare.totitle + '&oldid=' + data.compare.torevid }),
+                  $('<a>', { class: 'editLink', href: config.wgScript + '?action=edit&title=' + data.compare.totitle + '&oldid=' + data.compare.torevid, text: _msg('diff-edit') }),
                   ')',
                   $br,
-                  userlink(data.compare.touser),
+                  userLink(data.compare.touser),
                   $br,
                   ' (',
-                  $('<span>', { class: 'diff-comment', text: data.compare.toparsedcomment }),
+                  $('<span>', { class: 'diff-comment', html: data.compare.toparsedcomment }),
                   ') ',
                   $br,
                   $('<a>', { class: 'nextVersion ipe-analysis-quick_diff_modalclick', href: 'javascript:void(0);', text: _msg('diff-nextv') + '→' }).click(() => {
@@ -1685,7 +1685,7 @@
 
     /**
      * @module articleLink 获取段落编辑以及编辑链接
-     * @param {Element} element parent element to find edit links
+     * @param {Element} element jQuery element to find edit links
      */
     InPageEdit.articleLink = function (element) {
       if (element === undefined) {
