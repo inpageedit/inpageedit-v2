@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title><%= title %> | Wjghj API</title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <h1><% if (typeof header !== 'undefined') { %><%= header %><% } else { %>Welcome to <%= title %><% } %></h1>
+  <p><% if (typeof content !== 'undefined') { %><%= content %><% } else { %>Welcome to <%= title %><% } %></p>
+</body>
+
+</html>
