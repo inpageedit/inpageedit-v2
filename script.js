@@ -21,7 +21,7 @@
   InPageEdit.version = '2.13.4-6';
   InPageEdit.api = {
     aboutUrl: 'https://dragon-fish.github.io/inpageedit-v2/about/',
-    analysis: 'https://doc.wjghj.cn/inpageedit-v2/analysis/api/index.php',
+    analysis: 'https://api.wjghj.cn/inpageedit/submit',
     analysisUrl: 'https://dragon-fish.github.io/inpageedit-v2/analysis/',
     updatelogsUrl: 'https://dragon-fish.github.io/inpageedit-v2/update-logs/'
   }

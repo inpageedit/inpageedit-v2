@@ -4,9 +4,11 @@
   "scripts": {
     "start": "pm2 start ./bin/www --watch --name wjghj-api",
     "dev": "nodemon ./bin/www",
-    "stop": "pm2 stop wjghj-api && pm2 delete wjghj-api"
+    "stop": "pm2 stop wjghj-api && pm2 delete wjghj-api",
+    "check": "sh ./checkstatus.sh"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "ejs": "~2.6.1",
