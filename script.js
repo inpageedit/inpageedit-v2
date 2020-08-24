@@ -12,18 +12,18 @@
   'use strict';
 
   // 创建全局函数，检查插件是否已经运行
-  window.InPageEdit = window.InPageEdit || {};
+  var InPageEdit = window.InPageEdit || {};
   if (InPageEdit.hasOwnProperty('version')) {
     throw '[InPageEdit] InPageEdit 已经在运行了';
   }
 
   // 重要全局变量
-  InPageEdit.version = '2.13.4-6';
+  InPageEdit.version = '2.13.4-7';
   InPageEdit.api = {
-    aboutUrl: 'https://dragon-fish.github.io/inpageedit-v2/about/',
+    aboutUrl: 'https://ipe.netlify.app/',
     analysis: 'https://doc.wjghj.cn/inpageedit-v2/analysis/api/index.php',
     analysisUrl: 'https://dragon-fish.github.io/inpageedit-v2/analysis/',
-    updatelogsUrl: 'https://dragon-fish.github.io/inpageedit-v2/update-logs/'
+    updatelogsUrl: 'https://ipe.netlify.app/update/'
   }
 
   // 冻结重要全局变量
@@ -41,7 +41,8 @@
         crossDomain: true,
         cache: true
       });
-    };
+    },
+    mwApi = new mw.Api();
 
   /**
    * @name 导入依赖
@@ -408,7 +409,7 @@
           }
 
           // 解析页面内容
-          new mw.Api().get(options.jsonGet).done(function (data) {
+          mwApi.get(options.jsonGet).done(function (data) {
             var data = data;
             console.timeEnd('[InPageEdit] 获取页面源代码');
             contentDone(data);
@@ -484,7 +485,7 @@
             } else {
               queryJson.titles = options.page;
             }
-            new mw.Api().get(queryJson).done(function (data) {
+            mwApi.get(queryJson).done(function (data) {
               var data = data;
               console.info('[InPageEdit] 获取页面基础信息成功');
               console.timeEnd('[InPageEdit] 获取页面基础信息');
@@ -565,7 +566,7 @@
                     .replace(/_/, ' ') // 将页面名里的 _ 转换为空格
                     .replace(config.wgFormattedNamespaces[options.namespace] + ':', ''); // 去掉名字空间
 
-              new mw.Api().get({
+              mwApi.get({
                 action: 'query',
                 meta: 'allmessages',
                 ammessages: namespaceNoticePage + '|' + pageNoticePage
@@ -574,7 +575,7 @@
                   wikitextPage = data.query.allmessages[1]['*'] || '';
                 if (wikitextNs === '' && wikitextPage === '') return; // 没有编辑提示
                 // 将编辑提示解析为 html
-                new mw.Api().post({
+                mwApi.post({
                   action: 'parse',
                   title: options.page,
                   contentmodel: 'wikitext',
@@ -720,7 +721,7 @@
               method: function (a, modal) { modal.close() }
             }],
             onShow: function () {
-              new mw.Api().get({
+              mwApi.get({
                 action: 'query',
                 format: 'json',
                 prop: 'imageinfo',
@@ -761,7 +762,7 @@
           delete options.jsonPost.basetimestamp;
         }
 
-        new mw.Api().postWithToken('csrf', options.jsonPost).done(saveSuccess).fail(saveError);
+        mwApi.postWithToken('csrf', options.jsonPost).done(saveSuccess).fail(saveError);
 
         // 保存正常
         function saveSuccess(data, feedback, errorThrown) {
@@ -953,7 +954,10 @@
       });
     }
 
-    /** 快速重定向模块 **/
+    /**
+     * @module quickRedirect 快速重定向模块
+     * @param {'from'|'to'} type
+     */
     InPageEdit.redirect = InPageEdit.quickRedirect = function (type = 'to') {
       mw.hook('InPageEdit.quickRedirect').fire();
       var text = '#REDIRECT [[:$1]]',
@@ -961,8 +965,9 @@
         target,
         json = {
           action: 'edit',
+          createonly: 1,
           minor: InPageEdit.preference.get('editMinor'),
-          token: mw.user.tokens.get('editToken'),
+          format: 'json',
           errorformat: 'plaintext'
         },
         summary;
@@ -1001,7 +1006,7 @@
           className: 'btn btn-primary btn-single okBtn',
           method: function (a, modal) {
             target = $('.in-page-edit.quick-redirect #redirect-page').val();
-            if (target === '' || target.toLowerCase().replace(/_/g, ' ') === config.wgPageName.toLowerCase().replace(/_/g, ' ')) {
+            if (target === '' || target.replace(/_/g, ' ') === config.wgPageName.replace(/_/g, ' ')) {
               $('.in-page-edit.quick-redirect #redirect-page').css('box-shadow', '0 0 4px #f00');
               return;
             }
@@ -1023,7 +1028,13 @@
             $('.in-page-edit.quick-redirect section').hide();
             $('.in-page-edit.quick-redirect .okBtn').attr('disabled', 'disabled');
 
-            new mw.Api().post(json).done(function () {
+            mwApi.postWithToken('csrf', json).done(successed).fail(failed);
+            // 重定向成功
+            function successed(data) {
+              if (data.hasOwnProperty('errors')) {
+                failed(data.errors[0].code, data);
+                return;
+              }
               $('.in-page-edit.quick-redirect .ipe-progress').addClass('done');
               ssi_modal.notify('success', {
                 className: 'in-page-edit',
@@ -1036,26 +1047,48 @@
                 $('.in-page-edit.quick-redirect .ipe-progress').addClass('done');
                 setTimeout(function () { modal.close() }, 2000);
               }
-            }).fail(function () {
+            }
+            // 重定向失败
+            function failed(errorCode, errorThrown) {
               $('.in-page-edit.quick-redirect .ipe-progress').hide();
               $('.in-page-edit.quick-redirect section').show();
               $('.in-page-edit.quick-redirect .okBtn').attr('disabled', false);
               $('.in-page-edit.quick-redirect .ipe-progress').addClass('done');
               ssi_modal.notify('error', {
                 className: 'in-page-edit',
-                content: _msg('notify-redirect-error'),
+                content: _msg('notify-redirect-error') + '<br>' + errorThrown.errors[0]['*'] + ' (<code>' + errorCode + '</code>)',
                 title: _msg('notify-error')
               });
-            });
+              // 如果是由于页面存在，给出解决方案
+              if (errorCode === 'articleexists') {
+                var fromPage,
+                  toPage;
+                if (type === 'from') {
+                  fromPage = target;
+                  toPage = config.wgPageName;
+                } else if (type === 'to') {
+                  fromPage = config.wgPageName;
+                  toPage = target;
+                }
+                _resolveExists(fromPage, {
+                  delete: 'Delete for redirect to [[' + toPage + ']]',
+                  edit: 'Modify for redirect'
+                });
+              }
+            }
           }
         }
         ]
       });
     }
 
-    /** 删除页面模块 **/
-    InPageEdit.deletepage = InPageEdit.quickDelete = function (page) {
+    /** 
+     * @module quickDelete 删除页面模块
+     * @param {String} page
+     */
+    InPageEdit.deletepage = InPageEdit.quickDelete = function (page, givenReason = '') {
       mw.hook('InPageEdit.quickDelete').fire();
+      console.log('Quick delete', page, givenReason);
       var reason,
         page = page || config.wgPageName;
 
@@ -1070,7 +1103,7 @@
             $('<span>', { html: _msg('delete-reason', '<b>' + page.replace(/\_/g, ' ') + '</b>') }),
             $br,
             $('<label>', { for: 'delete-reason', text: _msg('editSummary') }),
-            $('<input>', { id: 'delete-reason', style: 'width:96%', onclick: "$(this).css('box-shadow', '')" })
+            $('<input>', { id: 'delete-reason', style: 'width:96%', onclick: "$(this).css('box-shadow', '')", value: givenReason })
           )
         ),
         beforeShow: function () {
@@ -1121,7 +1154,7 @@
               }, function (result) {
                 if (result) {
                   reason = _msg('delete-title') + ' (' + reason + ')';
-                  new mw.Api().postWithToken('csrf', {
+                  mwApi.postWithToken('csrf', {
                     action: 'delete',
                     title: page,
                     reason: reason,
@@ -1150,8 +1183,12 @@
       });
     }
 
-    /** 重命名模块 **/
-    InPageEdit.renamepage = InPageEdit.quickRename = function (from, to) {
+    /**
+     * @module quickRename 快速重命名模块
+     * @param {String} from
+     * @param {String} to
+     */
+    InPageEdit.renamepage = InPageEdit.quickMove = InPageEdit.quickRename = function (from, to) {
       mw.hook('InPageEdit.quickRename').fire();
       var from = from || config.wgPageName,
         to = to || '',
@@ -1222,7 +1259,7 @@
             } else {
               reason = _msg('rename-summary') + ' → [[:' + to + ']] (' + reason + ')';
             }
-            new mw.Api().postWithToken('csrf', {
+            mwApi.postWithToken('csrf', {
               action: 'move',
               from: from,
               to: to,
@@ -1245,17 +1282,9 @@
                 content: _msg('notify-rename-error') + ': ' + errorThrown.error.info + '<code>' + errorThrown.error.code + '</code>',
                 title: _msg('notify-error')
               });
+              // 如果原因是页面已存在，给出解决方案
               if (errorThrown.error.code === 'articleexists') {
-                ssi_modal.dialog({
-                  className: 'in-page-edit',
-                  title: _msg('rename-articleexists-title'),
-                  center: true,
-                  content: _msg('rename-articleexists'),
-                  okBtn: {
-                    label: _msg('ok'),
-                    className: 'btn btn-primary only-btn'
-                  }
-                });
+                _resolveExists(to, 'For move page [[' + from + ']] to here.');
               }
             });
           }
@@ -1513,7 +1542,7 @@
       } else if (param.fromtext) {
         param.frompst = true;
       }
-      new mw.Api().post(param).then(function (data) {
+      mwApi.post(param).then(function (data) {
         var diffTable = data.compare['*'];
         $loading.hide();
         if (param.pageName === undefined) {
@@ -1774,7 +1803,7 @@
         onShow: function (modal) {
           $('.previewbox .ipe-progress').css('margin-top', $('.previewbox .ipe-progress').parent().height() / 2);
           $('.previewbox .hideThisBtn').hide();
-          new mw.Api().post(options).then(function (data) {
+          mwApi.post(options).then(function (data) {
             console.timeEnd('[InPageEdit] Request preview');
             var content = data.parse.text['*'];
             $('.previewbox .ipe-progress').hide(150);
@@ -1940,6 +1969,66 @@
     })();
 
     /**
+     * @module _resolveExists 解决目标页面已存在的问题
+     * @param {String} page 需要解决的页面
+     * @param {Object|String} reason 填字符串则直接指定两种原因
+     * @param {String} reason.delete 删除原因
+     * @param {String} reason.edit 编辑原因
+     */
+    var _resolveExists = function (page, reason = {}) {
+      var canDelete = _hasRight('delete');
+
+      if (typeof reason === 'string') {
+        reason = {
+          delete: reason,
+          edit: reason
+        }
+      }
+
+      ssi_modal.show({
+        className: 'in-page-edit resovle-exists',
+        sizeClass: 'dialog',
+        center: true,
+        outSideClose: false,
+        title: _msg('target-exists-title'),
+        content: _msg((canDelete ? 'target-exists-can-delete' : 'target-exists-no-delete'), page),
+        buttons: [
+          {
+            className: 'btn btn-danger btn-exists-delete-target',
+            label: _msg('quick-delete'),
+            method: (a, modal) => {
+              modal.close();
+              InPageEdit.quickDelete(page, reason.delete || null);
+            }
+          },
+          {
+            className: 'btn btn-primary',
+            label: _msg('quick-edit'),
+            method: (a, modal) => {
+              InPageEdit.quickEdit({
+                page: page,
+                summary: (reason.edit ? '[InPageEdit] ' + reason : null),
+                reload: false
+              })
+            }
+          },
+          {
+            className: 'btn btn-secondary' + (canDelete ? ' btn-single' : ''),
+            label: _msg('cancel'),
+            method: (a, modal) => {
+              modal.close();
+            }
+          }
+        ],
+        onShow: () => {
+          if (!canDelete) {
+            $('.btn-exists-delete-target').hide();
+          }
+        }
+      });
+    }
+
+    /**
      * @description 获取用户权限信息
      */
     !(function () {
@@ -1951,7 +2040,7 @@
         mw.config.set('wgUserRights', []);
       });
       if (mw.user.getName() !== null) {
-        new mw.Api().get({
+        mwApi.get({
           action: 'query',
           list: 'users',
           usprop: 'blockinfo',
