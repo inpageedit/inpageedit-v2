@@ -966,7 +966,9 @@
         json = {
           action: 'edit',
           minor: InPageEdit.preference.get('editMinor'),
+          createonly: true,
           token: mw.user.tokens.get('editToken'),
+          format: 'json',
           errorformat: 'plaintext'
         },
         summary;
@@ -1027,7 +1029,12 @@
             $('.in-page-edit.quick-redirect section').hide();
             $('.in-page-edit.quick-redirect .okBtn').attr('disabled', 'disabled');
 
-            mwApi.post(json).done(function () {
+            mwApi.post(json).done(successed).fail(failed);
+            var successed = (data) => {
+              if (data.hasOwnProperty('errors')) {
+                failed(data.errors[0].code, data);
+                return;
+              }
               $('.in-page-edit.quick-redirect .ipe-progress').addClass('done');
               ssi_modal.notify('success', {
                 className: 'in-page-edit',
@@ -1040,17 +1047,19 @@
                 $('.in-page-edit.quick-redirect .ipe-progress').addClass('done');
                 setTimeout(function () { modal.close() }, 2000);
               }
-            }).fail(function () {
+            }
+            var failed = (errorCode, errorThrown) => {
               $('.in-page-edit.quick-redirect .ipe-progress').hide();
               $('.in-page-edit.quick-redirect section').show();
               $('.in-page-edit.quick-redirect .okBtn').attr('disabled', false);
               $('.in-page-edit.quick-redirect .ipe-progress').addClass('done');
+              // errorThrown.errors = errorThrown.errors || [{ '*': 'Unknown error.' }];
               ssi_modal.notify('error', {
                 className: 'in-page-edit',
-                content: _msg('notify-redirect-error'),
+                content: _msg('notify-redirect-error') + '<br><code>' + errorCode + '</code> ' + errorThrown.errors[0]['*'],
                 title: _msg('notify-error')
               });
-            });
+            }
           }
         }
         ]
