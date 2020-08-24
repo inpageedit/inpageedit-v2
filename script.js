@@ -965,9 +965,8 @@
         target,
         json = {
           action: 'edit',
+          createonly: 1,
           minor: InPageEdit.preference.get('editMinor'),
-          createonly: true,
-          token: mw.user.tokens.get('editToken'),
           format: 'json',
           errorformat: 'plaintext'
         },
@@ -1029,8 +1028,9 @@
             $('.in-page-edit.quick-redirect section').hide();
             $('.in-page-edit.quick-redirect .okBtn').attr('disabled', 'disabled');
 
-            mwApi.post(json).done(successed).fail(failed);
-            var successed = (data) => {
+            mwApi.postWithToken('csrf', json).done(successed).fail(failed);
+            // 重定向成功
+            function successed(data) {
               if (data.hasOwnProperty('errors')) {
                 failed(data.errors[0].code, data);
                 return;
@@ -1048,7 +1048,8 @@
                 setTimeout(function () { modal.close() }, 2000);
               }
             }
-            var failed = (errorCode, errorThrown) => {
+            // 重定向失败
+            function failed(errorCode, errorThrown) {
               $('.in-page-edit.quick-redirect .ipe-progress').hide();
               $('.in-page-edit.quick-redirect section').show();
               $('.in-page-edit.quick-redirect .okBtn').attr('disabled', false);
@@ -1056,7 +1057,7 @@
               // errorThrown.errors = errorThrown.errors || [{ '*': 'Unknown error.' }];
               ssi_modal.notify('error', {
                 className: 'in-page-edit',
-                content: _msg('notify-redirect-error') + '<br><code>' + errorCode + '</code> ' + errorThrown.errors[0]['*'],
+                content: _msg('notify-redirect-error') + '<br>' + errorThrown.errors[0]['*'] + ' (<code>' + errorCode + '</code>)',
                 title: _msg('notify-error')
               });
             }
