@@ -1054,12 +1054,27 @@
               $('.in-page-edit.quick-redirect section').show();
               $('.in-page-edit.quick-redirect .okBtn').attr('disabled', false);
               $('.in-page-edit.quick-redirect .ipe-progress').addClass('done');
-              // errorThrown.errors = errorThrown.errors || [{ '*': 'Unknown error.' }];
               ssi_modal.notify('error', {
                 className: 'in-page-edit',
                 content: _msg('notify-redirect-error') + '<br>' + errorThrown.errors[0]['*'] + ' (<code>' + errorCode + '</code>)',
                 title: _msg('notify-error')
               });
+              // 如果是由于页面存在，给出解决方案
+              if (errorCode === 'articleexists') {
+                var fromPage,
+                  toPage;
+                if (type === 'from') {
+                  fromPage = target;
+                  toPage = config.wgPageName;
+                } else if (type === 'to') {
+                  fromPage = config.wgPageName;
+                  toPage = target;
+                }
+                _resolveExists(fromPage, {
+                  delete: 'Delete for redirect to [[' + toPage + ']]',
+                  edit: 'Modify for redirect'
+                });
+              }
             }
           }
         }
@@ -1071,8 +1086,9 @@
      * @module quickDelete 删除页面模块
      * @param {String} page
      */
-    InPageEdit.deletepage = InPageEdit.quickDelete = function (page) {
+    InPageEdit.deletepage = InPageEdit.quickDelete = function (page, givenReason = '') {
       mw.hook('InPageEdit.quickDelete').fire();
+      console.log('Quick delete', page, givenReason);
       var reason,
         page = page || config.wgPageName;
 
@@ -1087,7 +1103,7 @@
             $('<span>', { html: _msg('delete-reason', '<b>' + page.replace(/\_/g, ' ') + '</b>') }),
             $br,
             $('<label>', { for: 'delete-reason', text: _msg('editSummary') }),
-            $('<input>', { id: 'delete-reason', style: 'width:96%', onclick: "$(this).css('box-shadow', '')" })
+            $('<input>', { id: 'delete-reason', style: 'width:96%', onclick: "$(this).css('box-shadow', '')", value: givenReason })
           )
         ),
         beforeShow: function () {
@@ -1167,8 +1183,12 @@
       });
     }
 
-    /** 重命名模块 **/
-    InPageEdit.renamepage = InPageEdit.quickRename = function (from, to) {
+    /**
+     * @module quickRename 快速重命名模块
+     * @param {String} from
+     * @param {String} to
+     */
+    InPageEdit.renamepage = InPageEdit.quickMove = InPageEdit.quickRename = function (from, to) {
       mw.hook('InPageEdit.quickRename').fire();
       var from = from || config.wgPageName,
         to = to || '',
@@ -1262,17 +1282,9 @@
                 content: _msg('notify-rename-error') + ': ' + errorThrown.error.info + '<code>' + errorThrown.error.code + '</code>',
                 title: _msg('notify-error')
               });
+              // 如果原因是页面已存在，给出解决方案
               if (errorThrown.error.code === 'articleexists') {
-                ssi_modal.dialog({
-                  className: 'in-page-edit',
-                  title: _msg('rename-articleexists-title'),
-                  center: true,
-                  content: _msg('rename-articleexists'),
-                  okBtn: {
-                    label: _msg('ok'),
-                    className: 'btn btn-primary only-btn'
-                  }
-                });
+                _resolveExists(to, 'For move page [[' + from + ']] to here.');
               }
             });
           }
@@ -1955,6 +1967,66 @@
         InPageEdit.specialNotice();
       }
     })();
+
+    /**
+     * @module _resolveExists 解决目标页面已存在的问题
+     * @param {String} page 需要解决的页面
+     * @param {Object|String} reason 填字符串则直接指定两种原因
+     * @param {String} reason.delete 删除原因
+     * @param {String} reason.edit 编辑原因
+     */
+    var _resolveExists = function (page, reason = {}) {
+      var canDelete = _hasRight('delete');
+
+      if (typeof reason === 'string') {
+        reason = {
+          delete: reason,
+          edit: reason
+        }
+      }
+
+      ssi_modal.show({
+        className: 'in-page-edit resovle-exists',
+        sizeClass: 'dialog',
+        center: true,
+        outSideClose: false,
+        title: _msg('target-exists-title'),
+        content: _msg((canDelete ? 'target-exists-can-delete' : 'target-exists-no-delete'), page),
+        buttons: [
+          {
+            className: 'btn btn-danger btn-exists-delete-target',
+            label: _msg('quick-delete'),
+            method: (a, modal) => {
+              modal.close();
+              InPageEdit.quickDelete(page, reason.delete || null);
+            }
+          },
+          {
+            className: 'btn btn-primary',
+            label: _msg('quick-edit'),
+            method: (a, modal) => {
+              InPageEdit.quickEdit({
+                page: page,
+                summary: (reason.edit ? '[InPageEdit] ' + reason : null),
+                reload: false
+              })
+            }
+          },
+          {
+            className: 'btn btn-secondary' + (canDelete ? ' btn-single' : ''),
+            label: _msg('cancel'),
+            method: (a, modal) => {
+              modal.close();
+            }
+          }
+        ],
+        onShow: () => {
+          if (!canDelete) {
+            $('.btn-exists-delete-target').hide();
+          }
+        }
+      });
+    }
 
     /**
      * @description 获取用户权限信息

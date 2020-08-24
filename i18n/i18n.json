@@ -84,9 +84,9 @@
         "delete-reason-default": "No longer used",
         "delete-title": "Quick Delete",
         "delete-no-right": "You do NOT have permission to delete the page.",
-        "delete-reason": "Why are you want to deleting this page?",
+        "delete-reason": "Why are you want to deleting $1 ?",
         "delete-confirm-title": "Delete confirm",
-        "delete-confirm-content": "Are you sure you want to delete this page? You can restore it later in Special:DeletedPages",
+        "delete-confirm-content": "Are you sure you want to delete this page? You can restore it later in [[Special:DeletedPages]]",
         "notify-delete-success": "Deletion successful",
         "notify-delete-error": "Some error(s) occurred while deleting the page",
         "rename-title": "Quick Rename Page",
@@ -154,7 +154,10 @@
         "editor-edittool-custom-label": "Custom",
         "editor-reload-page": "Reload the page after saving",
         "preference-reset-confirm-title": "Restore your preferences",
-        "preference-reset-confirm": "Are you sure you want to restore your preferences to default?"
+        "preference-reset-confirm": "Are you sure you want to restore your preferences to default?",
+        "target-exists-title": "Target page exists",
+        "target-exists-no-delete": "Page [[$1]] already exists. Do you want to view this page?",
+        "target-exists-can-delete": "Page [[$1]] already exists. Do you want to view this page or just delete it?"
     },
     "ar": {
         "version-notice-title": "نجاح التثبيت",
@@ -752,7 +755,7 @@
         "editor-detail-title-images": "本页面使用的图片",
         "editor-detail-images-quickview": "快速查看",
         "editor-detail-images-upload": "(重新)上传",
-        "delete-reason": "删除此页面的理由是什么？",
+        "delete-reason": "您为什么要删除$1？",
         "editor-edittool-header": "标题",
         "editor-edittool-header-text": "标题文字",
         "editor-edittool-bold": "粗体文字",
@@ -766,7 +769,10 @@
         "editor-edittool-custom-label": "自定",
         "editor-reload-page": "保存后刷新页面",
         "preference-reset-confirm-title": "还原偏好设置",
-        "preference-reset-confirm": "确定要将您的偏好设置还原为默认状态吗？"
+        "preference-reset-confirm": "确定要将您的偏好设置还原为默认状态吗？",
+        "target-exists-title": "目标页面已存在",
+        "target-exists-no-delete": "页面 [[$1]] 已存在，你想查看此页面吗？",
+        "target-exists-can-delete": "页面 [[$1]] 已存在，您可以查看或者删除该页面"
     },
     "zh-hant": {
         "quick-edit": "快速編輯",
