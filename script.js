@@ -23,6 +23,7 @@
     aboutUrl: 'https://ipe.netlify.app/',
     analysis: 'https://doc.wjghj.cn/inpageedit-v2/analysis/api/index.php',
     analysisUrl: 'https://dragon-fish.github.io/inpageedit-v2/analysis/',
+    githubLink: 'https://github.com/Dragon-Fish/InPageEdit-v2',
     updatelogsUrl: 'https://ipe.netlify.app/update/'
   }
 
@@ -1863,19 +1864,19 @@
         className: 'in-page-edit update-logs-modal',
         title: _msg('updatelog-title') + ' - <span id="yourVersion">' + InPageEdit.version + '</span>',
         content: $('<section>').append(
-          $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: 'https://dragon-fish.github.io/inpageedit-v2/update-logs/?iframe=1' })
+          $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: InPageEdit.api.updatelogsUrl })
         ),
         buttons: [{
           label: 'GitHub',
           className: 'btn btn-secondary',
           method: function () {
-            window.open('https://github.com/Dragon-Fish/InPageEdit-v2');
+            window.open(InPageEdit.api.githubLink);
           }
         }, {
           label: _msg('updatelog-about'),
           className: 'btn btn-secondary',
           method: function () {
-            window.open('https://dragon-fish.github.io/inpageedit-v2/');
+            window.open(InPageEdit.api.aboutUrl);
           }
         }, {
           label: _msg('close'),
@@ -1947,7 +1948,7 @@
           onClose: function () {
             ssi_modal.notify('', {
               className: 'in-page-edit',
-              content: _msg('updatelog-after-close', `[${InPageEdit.api.updatelogsUrl} ${InPageEdit.api.updatelogsUrl}]`, `[https://github.com/Dragon-Fish/InPageEdit-v2 ${_msg('updatelog-file-issue')}]`),
+              content: _msg('updatelog-after-close', `[${InPageEdit.api.updatelogsUrl} ${InPageEdit.api.updatelogsUrl}]`, `[${InPageEdit.api.githubLink}/issues ${_msg('updatelog-file-issue')}]`),
               closeAfter: {
                 time: 10
               },
