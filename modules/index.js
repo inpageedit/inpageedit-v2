@@ -17,7 +17,7 @@ if (typeof InPageEdit.version !== 'undefined') {
 }
 
 // 导入全部模块
-import { quickEdit } from './quickEdit.js';
+// import { quickEdit } from './quickEdit.js';
 import test from './test.js';
 
 // 写入模块
