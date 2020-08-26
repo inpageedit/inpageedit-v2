@@ -1,10 +1,11 @@
-import { ssi_modal } from '../src/ssi_modal/ssi-modal.js';
+// const ssi_modal = require('../src/ssi_modal/ssi-modal.js');
+const { _msg } = require('./_msg');
 
-import { pluginPreference } from './pluginPreference.js';
-import { findAndReplace } from './findAndReplace.js';
-import { quickPreview } from './quickPreview.js';
-import { quickDiff } from './quickDiff.js';
-import { progress } from '../methods/progress.js'
+const { findAndReplace } = require('./findAndReplace.js');
+const { pluginPreference } = require('./pluginPreference.js');
+const { progress } = require('./progress.js')
+const { quickPreview } = require('./quickPreview.js');
+const { quickDiff } = require('./quickDiff.js');
 
 /**
  * @module quickEdit 快速编辑模块
@@ -760,6 +761,6 @@ function quickEdit(options) {
   }
 }
 
-export {
+module.exports = {
   quickEdit
 }
