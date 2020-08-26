@@ -1,11 +1,13 @@
 // const ssi_modal = require('../src/ssi_modal/ssi-modal.js');
+var mwApi = new mw.Api();
+
 const { _msg } = require('./_msg');
 
-const { findAndReplace } = require('./findAndReplace.js');
-const { pluginPreference } = require('./pluginPreference.js');
-const { progress } = require('./progress.js')
-const { quickPreview } = require('./quickPreview.js');
-const { quickDiff } = require('./quickDiff.js');
+const { findAndReplace } = require('./findAndReplace');
+const { pluginPreference } = require('./pluginPreference');
+const { progress } = require('./progress')
+const { quickPreview } = require('./quickPreview');
+const { quickDiff } = require('./quickDiff');
 
 /**
  * @module quickEdit 快速编辑模块
@@ -16,7 +18,7 @@ const { quickDiff } = require('./quickDiff.js');
  * @param {Number} options.section edit section
  * @param {Boolean} options.reload if reload page after save successful (default: true)
  */
-function quickEdit(options) {
+var quickEdit = function (options) {
   mw.hook('InPageEdit.quickEdit').fire();
   /** 获取设定信息，设置缺省值 **/
   var options = options || {};

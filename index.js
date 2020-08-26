@@ -16,17 +16,44 @@ if (typeof InPageEdit.version !== 'undefined') {
   throw '[InPageEdit] InPageEdit 已经在运行了';
 }
 
-InPageEdit.version = '14.0.0';
 
 // 导入全部模块
-// const { quickEdit } = require('./module/quickEdit');
-const test = require('./module/test');
 const { _msg } = require('./module/_msg');
+const { about } = require('./module/about');
+const { articleLink } = require('./module/articleLink');
+const { findAndReplace } = require('./module/findAndReplace');
+const { loadQuickDiff } = require('./module/loadQuickDiff');
+const { quickEdit } = require('./module/quickEdit');
+const { quickPreview } = require('./module/quickPreview');
+const { quickRedirect } = require('./module/quickRedirect');
+const { quickRename } = require('./module/quickRename');
+const { specialNotice } = require('./module/specialNotice');
+const version = require('./module/version');
+const { versionInfo } = require('./module/versionInfo');
 
 // 写入模块
-InPageEdit = $.extend({}, InPageEdit, {
-  // quickEdit,
-  test,
+InPageEdit = {
+  about,
+  articleLink,
+  findAndReplace,
+  quickEdit,
+  quickPreview,
+  quickRedirect,
+  quickRename,
+  specialNotice,
+  version,
+  versionInfo,
+}
+
+// 锁定重要变量
+var importantVariables = [
+  'api',
+  'version',
+]
+importantVariables.forEach(key => {
+  try {
+    Object.freeze(InPageEdit[key]);
+  } catch (e) { }
 });
 
 // 写入全局变量 window.InPageEdit
