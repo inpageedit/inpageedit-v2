@@ -16,22 +16,28 @@ if (typeof InPageEdit.version !== 'undefined') {
   throw '[InPageEdit] InPageEdit 已经在运行了';
 }
 
-InPageEdit.version = require('./package.json').version;
+InPageEdit.version = '14.0.0';
 
 // 导入全部模块
 // const { quickEdit } = require('./module/quickEdit');
 const test = require('./module/test');
+const { _msg } = require('./module/_msg');
 
 // 写入模块
-InPageEdit = {
+InPageEdit = $.extend({}, InPageEdit, {
   // quickEdit,
   test,
-}
+});
 
-/** 
- * @return {Object} window.InPageEdit
- */
+// 写入全局变量 window.InPageEdit
 window.InPageEdit = InPageEdit;
+
+// 触发钩子
+mw.hook('InPageEdit')
+  // 传入上下文
+  .fire({
+    _msg
+  });
 
 // 花里胡哨的加载提示
 console.info('    ____      ____                   ______    ___ __              _    _____ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_            | |  / /__ \\\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/  ______    | | / /__/ /\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_   /_____/    | |/ // __/ \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/              |___//____/ \n                      /____/');

@@ -112,25 +112,48 @@ if (typeof InPageEdit.version !== 'undefined') {
   throw '[InPageEdit] InPageEdit 已经在运行了';
 }
 
-InPageEdit.version = __webpack_require__(/*! ./package.json */ "./package.json").version;
+InPageEdit.version = '14.0.0';
 
 // 导入全部模块
 // const { quickEdit } = require('./module/quickEdit');
 const test = __webpack_require__(/*! ./module/test */ "./module/test.js");
+const { _msg } = __webpack_require__(/*! ./module/_msg */ "./module/_msg.js");
 
 // 写入模块
-InPageEdit = {
+InPageEdit = $.extend({}, InPageEdit, {
   // quickEdit,
   test,
-}
+});
 
-/** 
- * @return {Object} window.InPageEdit
- */
+// 写入全局变量 window.InPageEdit
 window.InPageEdit = InPageEdit;
+
+// 触发钩子
+mw.hook('InPageEdit')
+  // 传入上下文
+  .fire({
+    _msg
+  });
 
 // 花里胡哨的加载提示
 console.info('    ____      ____                   ______    ___ __              _    _____ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_            | |  / /__ \\\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/  ______    | | / /__/ /\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_   /_____/    | |/ // __/ \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/              |___//____/ \n                      /____/');
+
+/***/ }),
+
+/***/ "./module/_msg.js":
+/*!************************!*\
+  !*** ./module/_msg.js ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _msg(i) {
+  return `(i18njs-${i})`
+}
+
+module.exports = {
+  _msg
+}
 
 /***/ }),
 
@@ -144,17 +167,6 @@ console.info('    ____      ____                   ______    ___ __             
 module.exports = function test() {
   console.log('InPageEdit is runing version', window.InPageEdit.version);
 }
-
-/***/ }),
-
-/***/ "./package.json":
-/*!**********************!*\
-  !*** ./package.json ***!
-  \**********************/
-/*! exports provided: name, version, description, main, dependencies, devDependencies, scripts, repository, keywords, author, license, bugs, homepage, default */
-/***/ (function(module) {
-
-module.exports = JSON.parse("{\"name\":\"inpageedit-v2\",\"version\":\"14.0.0\",\"description\":\"A useful MediaWiki JavaScript Plugin written with jQuery\",\"main\":\"index.js\",\"dependencies\":{\"jquery\":\">1.9.x\",\"ssi-modal\":\"1.0.28\"},\"devDependencies\":{\"webpack\":\"^4.44.1\",\"webpack-cli\":\"^3.3.12\"},\"scripts\":{\"build\":\"webpack && set MINIFY=1 && webpack\",\"dev\":\"webpack --watch --output-filename [name].test.js\"},\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/Dragon-Fish/InPageEdit-v2.git\"},\"keywords\":[\"mediawiki\",\"mediawiki-gadget\",\"inpageedit\"],\"author\":\"Dragon Fish\",\"license\":\"GPL-3.0-or-later\",\"bugs\":{\"url\":\"https://github.com/Dragon-Fish/InPageEdit-v2/issues\"},\"homepage\":\"https://github.com/Dragon-Fish/InPageEdit-v2#readme\"}");
 
 /***/ })
 
