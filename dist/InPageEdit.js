@@ -93,7 +93,6 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
 /**
  * @license GPL-3.0 GNU GENERAL PUBLIC LICENSE 3.0
  *
@@ -103,22 +102,26 @@
  * @url https://github.com/Dragon-Fish/InPageEdit-v2
  */
 
+!(async function () {
+  'use strict';
 
+  // 创建 InPageEdit 变量
+  var InPageEdit = window.InPageEdit || {};
 
-// 创建 InPageEdit 变量
-var InPageEdit = window.InPageEdit || {};
+  // 防止多次运行
+  if (typeof InPageEdit.version !== 'undefined') {
+    throw '[InPageEdit] InPageEdit 已经在运行了';
+  }
 
-// 防止多次运行
-if (typeof InPageEdit.version !== 'undefined') {
-  throw '[InPageEdit] InPageEdit 已经在运行了';
-}
+  // 初始化插件
+  var init = __webpack_require__(/*! ./method/init */ "./method/init.js");
 
-// 初始化插件
-var init = __webpack_require__(/*! ./method/init */ "./method/init.js");
+  InPageEdit = await init();
 
-// 定义全局变量
-window.InPageEdit = init();
+  // 定义全局变量
+  window.InPageEdit = InPageEdit;
 
+})();
 
 /***/ }),
 
@@ -189,6 +192,9 @@ const { articleLink } = __webpack_require__(/*! ../module/articleLink */ "./modu
 const { findAndReplace } = __webpack_require__(/*! ../module/findAndReplace */ "./module/findAndReplace.js");
 const { loadQuickDiff } = __webpack_require__(/*! ../module/loadQuickDiff */ "./module/loadQuickDiff.js");
 const { pluginPreference } = __webpack_require__(/*! ../module/pluginPreference */ "./module/pluginPreference.js");
+const { progress } = __webpack_require__(/*! ../module/progress */ "./module/progress.js");
+const { quickDelete } = __webpack_require__(/*! ../module/quickDelete */ "./module/quickDelete.js");
+const { quickDiff } = __webpack_require__(/*! ../module/quickDiff */ "./module/quickDiff.js");
 const { quickEdit } = __webpack_require__(/*! ../module/quickEdit */ "./module/quickEdit.js");
 const { quickPreview } = __webpack_require__(/*! ../module/quickPreview */ "./module/quickPreview.js");
 const { quickRedirect } = __webpack_require__(/*! ../module/quickRedirect */ "./module/quickRedirect.js");
@@ -202,57 +208,70 @@ const { versionInfo } = __webpack_require__(/*! ../module/versionInfo */ "./modu
  * @method initMain
  * @return {Object} InPageEdit
  */
-module.exports = function init() {
+module.exports = async function init() {
 
   // 加载前置插件以及样式表
   loadStyles();
-  loadScript('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/ssi-modal.min.js').then(() => {
-    // 初始化前置模块
-    pluginPreference.set();
-    getUserInfo();
-    loadQuickDiff();
-    articleLink();
-    updateNotice();
+  await loadScript('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/ssi-modal.min.js');
+  // 初始化前置模块
+  pluginPreference.set();
+  getUserInfo();
+  loadQuickDiff();
+  articleLink();
+  updateNotice();
 
-    // 写入模块
-    var InPageEdit = {
-      about,
-      api,
-      articleLink,
-      findAndReplace,
-      quickEdit,
-      quickPreview,
-      quickRedirect,
-      quickRename,
-      specialNotice,
-      version,
-      versionInfo,
+  // 写入模块
+  var InPageEdit = {
+    about,
+    api,
+    articleLink,
+    findAndReplace,
+    loadQuickDiff,
+    pluginPreference,
+    progress,
+    quickDelete,
+    quickDiff,
+    quickEdit,
+    quickPreview,
+    quickRedirect,
+    quickRename,
+    specialNotice,
+    version,
+    versionInfo,
+    // 别名 Alias
+    fnr: findAndReplace,
+    delete: quickDelete,
+    diff: quickDiff,
+    edit: quickEdit,
+    preview: quickPreview,
+    redirect: quickRedirect,
+    quickMove: quickRename,
+    rename: quickRename,
+  }
+
+  // 锁定重要变量
+  var importantVariables = [
+    'api',
+    'version',
+  ];
+  importantVariables.forEach(key => {
+    try {
+      Object.freeze(InPageEdit[key]);
+    } catch (e) {
+      // Do nothing
     }
-
-    // 锁定重要变量
-    var importantVariables = [
-      'api',
-      'version',
-    ];
-    importantVariables.forEach(key => {
-      try {
-        Object.freeze(InPageEdit[key]);
-      } catch (e) {
-        // Do nothing
-      }
-    });
-
-    // 触发钩子，传入上下文
-    mw.hook('InPageEdit').fire({
-      _msg
-    });
-
-    // 花里胡哨的加载提示
-    console.info('    ____      ____                   ______    ___ __              _    _____ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_            | |  / /__ \\\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/  ______    | | / /__/ /\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_   /_____/    | |/ // __/ \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/              |___//____/ \n                      /____/');
-
-    // 传回InPageEdit
-    return InPageEdit;
   });
+
+  // 触发钩子，传入上下文
+  mw.hook('InPageEdit').fire({
+    _msg
+  });
+
+  // 花里胡哨的加载提示
+  console.info('    ____      ____                   ______    ___ __              _    _____ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_            | |  / /__ \\\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/  ______    | | / /__/ /\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_   /_____/    | |/ // __/ \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/              |___//____/ \n                      /____/');
+
+  // 传回InPageEdit
+  return InPageEdit;
 }
 
 /***/ }),
@@ -478,8 +497,24 @@ module.exports = {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-function _msg(i) {
-  return `(i18njs-${i})`
+/********************************
+ ********** 未完工的模块 **********
+ ********************************/
+
+// const { i18n } = require('../method/i18njs');
+
+/**
+ * @module _msg
+ * @param {String} msgKey 消息的键
+ * @param  {...String} params 替代占位符的内容，可以解析简单的wikitext
+ */
+function _msg(msgKey, ...params) {
+  var after = '';
+  if (params.length > 0) {
+    after = ': ' + params.join(', ')
+  }
+  return `(i18njs-${msgKey}${after})`;
+  // return i18n.msg(msgKey,...params).parse();
 }
 
 module.exports = {
