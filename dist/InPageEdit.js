@@ -185,6 +185,7 @@ const { loadStyles } = __webpack_require__(/*! ./loadStyles */ "./method/loadSty
 const { updateNotice } = __webpack_require__(/*! ./updateNotice */ "./method/updateNotice.js");
 
 // 导入全部模块
+const { _analysis } = __webpack_require__(/*! ../module/_analysis */ "./module/_analysis.js");
 const { _msg } = __webpack_require__(/*! ../module/_msg */ "./module/_msg.js");
 const { about } = __webpack_require__(/*! ../module/about */ "./module/about.js");
 const api = __webpack_require__(/*! ../module/api.json */ "./module/api.json");
@@ -192,6 +193,7 @@ const { articleLink } = __webpack_require__(/*! ../module/articleLink */ "./modu
 const { findAndReplace } = __webpack_require__(/*! ../module/findAndReplace */ "./module/findAndReplace.js");
 const { loadQuickDiff } = __webpack_require__(/*! ../module/loadQuickDiff */ "./module/loadQuickDiff.js");
 const { pluginPreference } = __webpack_require__(/*! ../module/pluginPreference */ "./module/pluginPreference.js");
+const { pluginStore } = __webpack_require__(/*! ../module/pluginStore */ "./module/pluginStore.js");
 const { progress } = __webpack_require__(/*! ../module/progress */ "./module/progress.js");
 const { quickDelete } = __webpack_require__(/*! ../module/quickDelete */ "./module/quickDelete.js");
 const { quickDiff } = __webpack_require__(/*! ../module/quickDiff */ "./module/quickDiff.js");
@@ -219,6 +221,9 @@ module.exports = async function init() {
   loadQuickDiff();
   articleLink();
   updateNotice();
+
+  // 暂定，触发工具盒插件
+  pluginStore.load('toolbox.js');
 
   // 写入模块
   var InPageEdit = {
@@ -264,7 +269,9 @@ module.exports = async function init() {
 
   // 触发钩子，传入上下文
   mw.hook('InPageEdit').fire({
-    _msg
+    _analysis,
+    _msg,
+    InPageEdit
   });
 
   // 花里胡哨的加载提示
@@ -317,12 +324,16 @@ function loadStyles() {
     '/src/skin/ipe-default.css',
     // ssi-modal Style
     '/src/ssi_modal/ssi-modal.css',
+    // FontAwesome
+    'https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css',
   ];
 
   styleFiles.forEach(link => {
-    console.log('[InPageEdit] 加载样式', cdn + link)
+    if (/^https?:\/\//.test(link) !== true) {
+      link = cdn + link;
+    }
     $('head').prepend(
-      $('<link>', { href: cdn + link, rel: 'stylesheet', 'data-ipe': 'style' })
+      $('<link>', { href: link, rel: 'stylesheet', 'data-ipe': 'style' })
     );
   });
 }
@@ -408,7 +419,7 @@ var api = __webpack_require__(/*! ./api.json */ "./module/api.json");
 
 /**
  * @module _analysis 提交统计信息模块
- * @description Internal module
+ * @param {String} functionID 模块ID，例如 quick_edit
  */
 const _analysis = function (functionID) {
   if (InPageEdit.doNotCollectMyInfo === true) {
@@ -1124,6 +1135,66 @@ var pluginPreference = {
 
 module.exports = {
   pluginPreference
+}
+
+/***/ }),
+
+/***/ "./module/pluginStore.js":
+/*!*******************************!*\
+  !*** ./module/pluginStore.js ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/********************************
+ ********** 未完工的模块 **********
+ ********************************/
+
+const pluginsIndex = __webpack_require__(/*! ../plugins/index.json */ "./plugins/index.json");
+const _msg = __webpack_require__(/*! ./_msg */ "./module/_msg.js");
+
+var cdn = document.currentScript.src;
+var thisScript = new RegExp('/dist/InPageEdit(.min)?.js$', 'i');
+cdn = cdn.replace(thisScript, '');
+
+/**
+ * @module pluginStore 加载InPageEdit插件
+ */
+var pluginStore = {
+  /**
+   * @module pluginStore.get 打开插件商店
+   */
+  get() {
+    ssi_modal.show({
+      className: 'in-page-edit plugins-store',
+      sizeClass: 'dialog',
+      center: true,
+      title: _msg('plugins-store-title'),
+      content: 'Under development...',
+      buttons: [{
+        label: _msg('ok'),
+        className: 'btn btn-single',
+        method(a, modal) {
+          modal.close();
+        }
+      }]
+    })
+  },
+  /**
+   * @module pluginStore.load 载入插件
+   * @param {String} name 
+   */
+  load(name) {
+    if (pluginsIndex[name]) {
+      mw.loader.load(cdn + '/plugins/' + name);
+    } else {
+      console.warn('[InPageEdit] 无法找到插件', name);
+    }
+  }
+}
+
+module.exports = {
+  pluginStore
 }
 
 /***/ }),
@@ -2743,6 +2814,17 @@ module.exports = {
 /***/ (function(module) {
 
 module.exports = JSON.parse("{\"name\":\"inpageedit-v2\",\"version\":\"14.0.0\",\"description\":\"A useful MediaWiki JavaScript Plugin written with jQuery\",\"main\":\"index.js\",\"dependencies\":{\"jquery\":\">1.9.x\",\"ssi-modal\":\"1.0.28\"},\"devDependencies\":{\"css-loader\":\"^4.2.2\",\"eslint\":\"^7.7.0\",\"file-loader\":\"^6.0.0\",\"style-loader\":\"^1.2.1\",\"webpack\":\"^4.44.1\",\"webpack-cli\":\"^3.3.12\"},\"scripts\":{\"build\":\"webpack && set MINIFY=1 && webpack\",\"dev\":\"webpack --watch --output-filename [name].test.js\",\"test\":\"eslint ./index.js ./module/*.js ./method/*.js\"},\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/Dragon-Fish/InPageEdit-v2.git\"},\"keywords\":[\"mediawiki\",\"mediawiki-gadget\",\"inpageedit\"],\"author\":\"Dragon Fish\",\"license\":\"GPL-3.0-or-later\",\"bugs\":{\"url\":\"https://github.com/Dragon-Fish/InPageEdit-v2/issues\"},\"homepage\":\"https://github.com/Dragon-Fish/InPageEdit-v2#readme\"}");
+
+/***/ }),
+
+/***/ "./plugins/index.json":
+/*!****************************!*\
+  !*** ./plugins/index.json ***!
+  \****************************/
+/*! exports provided: demo.js, toolbox.js, edit-any-page.js, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"demo.js\":{\"name\":\"Plugin Demo\",\"description\":\"A InPageEdit Plugin Demo\"},\"toolbox.js\":{\"name\":\"InPageEdit Toolbox\",\"author\":\"机智的小鱼君\",\"description\":\"[Official] Add a toolbox in the bottom-right corner of your screen. Let you quickly access frequently used IPE functions.\"},\"edit-any-page.js\":{\"name\":\"Edit any page\",\"author\":\"机智的小鱼君\",\"description\":\"Add a button into IPE Toolbox that let you edit any page any where\",\"dependency\":[\"toobox.js\"]}}");
 
 /***/ })
 
