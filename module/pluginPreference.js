@@ -1,3 +1,5 @@
+var InPageEdit = window.InPageEdit || {};
+
 const { _analysis } = require('./_analysis');
 const { _msg } = require('./_msg');
 const { $br, $hr } = require('./_elements');

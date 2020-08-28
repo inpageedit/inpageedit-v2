@@ -830,6 +830,8 @@ module.exports = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+var InPageEdit = window.InPageEdit || {};
+
 const { _analysis } = __webpack_require__(/*! ./_analysis */ "./module/_analysis.js");
 const { _msg } = __webpack_require__(/*! ./_msg */ "./module/_msg.js");
 const { $br, $hr } = __webpack_require__(/*! ./_elements */ "./module/_elements.js");
