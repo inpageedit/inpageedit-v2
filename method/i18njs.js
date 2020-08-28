@@ -1,22 +1,28 @@
-/**
- * 还没改编完，要把 Dev Wiki 插件改造成 CommonJs 模块真尼玛要命
- */
-
-/**
- * @name i18n-js Library for accessing i18n messages
+/* <nowiki>
+ * Library for accessing i18n messages for use in Dev Wiki scripts.
+ * See [[I18n-js]] for documentation.
  *
  * @author Cqm <https://dev.fandom.com/User:Cqm>
  * @author OneTwoThreeFall <https://dev.fandom.com/User:OneTwoThreeFall>
- * @author 机智的小鱼君 Dragon Fish
  *
  * @version 0.5.8
  *
- * @notes This library is adapted from Fandom Dev Wiki <https://dev.fandom.com>
+ * @notes Also used by VSTF wiki for their reporting forms (with a non-dev i18n.json page)
+ * @notes This is apparently a commonly used library for a number of scripts and also includes
+ *        a check to prevent double loading. This can make it painful to test from your JS
+ *        console. To get around this, add ?usesitejs=0&useuserjs=0 to your URL.
  */
 
 'use strict';
 
-/**
+window.i18njs = window.i18njs || {};
+
+// prevent double loading and loss of cache
+if (window.i18njs.loadMessages !== undefined) {
+  return;
+}
+
+/*
  * Cache of mw config variables.
  */
 var conf = mw.config.get([
@@ -25,23 +31,23 @@ var conf = mw.config.get([
   'wgUserLanguage'
 ]),
 
-  /**
+  /*
    * Current time in milliseconds, used to set and check cache age.
    */
   now = Date.now(),
 
-  /**
+  /*
    * Cache of loaded I18n instances.
    */
   cache = {},
 
-  /**
+  /*
    * Initial overrides object, initialised below with the i18n global variable.
    * Allows end-users to override specific messages. See documentation for how to use.
    */
   overrides = null,
 
-  /**
+  /*
    * Language fallbacks for those that don't fallback to English.
    * Shouldn't need updating unless Wikia change theirs.
    *
@@ -216,7 +222,7 @@ var conf = mw.config.get([
     'zh-yue': 'yue'
   };
 
-/**
+/*
  * Get a translation of a message from the messages object in the
  * requested language.
  *
@@ -251,7 +257,7 @@ function getMsg(messages, name, lang, messageKey) {
   return getMsg(messages, name, lang);
 }
 
-/**
+/*
  * Substitute arguments into the string, where arguments are represented
  * as $n where n > 0.
  *
@@ -269,7 +275,7 @@ function handleArgs(message, args) {
   return message;
 }
 
-/**
+/*
  * Generate a HTML link using the supplied parameters.
  *
  * @param href The href of the link which will be converted to
@@ -281,17 +287,19 @@ function handleArgs(message, args) {
  *
  * @return The generated link.
  */
-function makeLink(href, text, hasProtocol) {
+function makeLink(href, text, hasProtocol, blank) {
   text = text || href;
   href = hasProtocol ? href : mw.util.getUrl(href);
 
   text = mw.html.escape(text);
   href = mw.html.escape(href);
 
-  return '<a href="' + href + '" title="' + text + '">' + text + '</a>';
+  blank = blank ? 'target="_blank"' : '';
+
+  return '<a href="' + href + '" title="' + text + '"' + blank + '>' + text + '</a>';
 }
 
-/**
+/*
  * Allow basic inline HTML tags in wikitext.does not support <a> as that's handled by the
  * wikitext links instead.
  *
@@ -377,10 +385,11 @@ function sanitiseHtml(html) {
   return $div.prop('innerHTML');
 }
 
-/**
+/*
  * Parse some basic wikitext into HTML. Also supports basic inline HTML tags.
  *
  * Will process:
+ * - http/https
  * - [url text]
  * - [[pagename]]
  * - [[pagename|text]]
@@ -409,7 +418,7 @@ function parse(message) {
 
   return message
     .replace(urlRgx, function (_match, href, text) {
-      return makeLink(href, text, true);
+      return makeLink(href, text, true, true);
     })
     .replace(simplePageRgx, function (_match, href) {
       return makeLink(href);
@@ -425,7 +434,7 @@ function parse(message) {
     });
 }
 
-/**
+/*
  * Parse markdown links into HTML. Also supports basic inline HTML tags.
  *
  * Will process:
@@ -461,7 +470,7 @@ function markdown(message) {
     });
 }
 
-/**
+/*
  * Create a new Message instance.
  *
  * @param message The name of the message.
@@ -483,12 +492,12 @@ function message(messages, defaultLang, args, messageKey) {
   }
 
   return {
-    /**
+    /*
      * Boolean representing whether the message exists.
      */
     exists: msg !== noMsg,
 
-    /**
+    /*
      * Parse wikitext links in the message and return the result.
      *
      * @return The resulting string.
@@ -503,7 +512,7 @@ function message(messages, defaultLang, args, messageKey) {
       return parse(msg);
     },
 
-    /**
+    /*
      * Parse markdown links in the message and return the result.
      *
      * @return The resulting string.
@@ -518,7 +527,7 @@ function message(messages, defaultLang, args, messageKey) {
       return markdown(msg);
     },
 
-    /**
+    /*
      * Escape any HTML in the message and return the result.
      *
      * @return The resulting string.
@@ -527,7 +536,7 @@ function message(messages, defaultLang, args, messageKey) {
       return mw.html.escape(msg);
     },
 
-    /**
+    /*
      * Return the message as is.
      *
      * @return The resulting string.
@@ -538,7 +547,7 @@ function message(messages, defaultLang, args, messageKey) {
   };
 }
 
-/**
+/*
  * Create a new i18n object.
  *
  * @param messages The message object to look translations up in.
@@ -554,7 +563,7 @@ function i18n(messages, name) {
   }
 
   return {
-    /**
+    /*
      * Set the default language.
      *
      * @param lang The language code to use by default.
@@ -563,7 +572,7 @@ function i18n(messages, name) {
       defaultLang = lang;
     },
 
-    /**
+    /*
      * Set the language for the next msg call.
      *
      * @param lang The language code to use for the next `msg` call.
@@ -575,14 +584,14 @@ function i18n(messages, name) {
       return this;
     },
 
-    /**
+    /*
      * Set the default language to the content language.
      */
     useContentLang: function () {
       defaultLang = conf.wgContentLanguage;
     },
 
-    /**
+    /*
      * Set the language for the next `msg` call to the content language.
      *
      * @return The current object for use in chaining.
@@ -593,14 +602,14 @@ function i18n(messages, name) {
     },
 
 
-    /**
+    /*
      * Set the default language to the user's language.
      */
     useUserLang: function () {
       defaultLang = conf.wgUserLanguage;
     },
 
-    /**
+    /*
      * Set the language for the next msg call to the user's language.
      *
      * @return The current object for use in chaining.
@@ -610,7 +619,7 @@ function i18n(messages, name) {
       return this;
     },
 
-    /**
+    /*
      * Create a new instance of Message.
      */
     msg: function () {
@@ -625,14 +634,14 @@ function i18n(messages, name) {
       return message(messages, lang, args, messageKey);
     },
 
-    /**
+    /*
      * For accessing the raw messages.
      */
     _messages: messages
   };
 }
 
-/**
+/*
  * Strip block comments from a JSON string which are illegal under the JSON spec.
  * This is a bit basic, so will remove comments inside strings too.
  *
@@ -647,7 +656,7 @@ function stripComments(json) {
   return json;
 }
 
-/**
+/*
  * Save messages string to local storage for caching.
  *
  * @param name
@@ -667,11 +676,11 @@ function saveToCache(name, json, cacheVersion) {
     localStorage.setItem(keyPrefix + '-timestamp', now);
     localStorage.setItem(keyPrefix + '-version', cacheVersion || 0);
   } catch (e) {
-    console.warn('[I18n-js] Failed to save i18n cache')
+    // ...
   }
 }
 
-/**
+/*
  * Parse JSON string loaded from page and create an i18n object.
  *
  * @param name
@@ -711,7 +720,7 @@ function parseMessagesToObject(name, res, cacheVersion) {
   return obj;
 }
 
-/**
+/*
  * Load messages string from local storage cache and add to cache object.
  *
  * @param name
@@ -719,7 +728,7 @@ function parseMessagesToObject(name, res, cacheVersion) {
  */
 function loadFromCache(name, minCacheVersion) {
   var keyPrefix = 'i18n-cache-' + name,
-    cacheDelay = 1000 * 60 * 60 * 24 * 2, // 2 days
+    twoDays = 1000 * 60 * 60 * 24 * 2,
     cacheContent,
     cacheTimestamp,
     cacheVersion;
@@ -729,21 +738,21 @@ function loadFromCache(name, minCacheVersion) {
     cacheTimestamp = Number(localStorage.getItem(keyPrefix + '-timestamp'));
     cacheVersion = Number(localStorage.getItem(keyPrefix + '-version'));
   } catch (e) {
-    console.warn('[I18n-js] Failed to load i18n from cache')
+    // ...
   }
 
   // only use cached messages if cache is less than two days old
   // and if cache version is greater than or equal to requested version
   if (
     cacheContent &&
-    now - cacheTimestamp < cacheDelay &&
+    now - cacheTimestamp < twoDays &&
     cacheVersion >= minCacheVersion
   ) {
     parseMessagesToObject(name, cacheContent);
   }
 }
 
-/**
+/*
  * Load messages stored as JSON on a page.
  *
  * @param name The name of the script the messages are for. This will be
@@ -781,8 +790,6 @@ function loadMessages(name, options, url) {
       var res = JSON.stringify(data);
       deferred.resolve(parseMessagesToObject(name, res, cacheVersion));
     })
-  } else {
-    deferred.resolve(parseMessagesToObject(name, {}, cacheVersion));
   }
 
   return deferred;
@@ -790,7 +797,7 @@ function loadMessages(name, options, url) {
 
 // expose under the dev global
 var i18njs = {
-  loadMessages,
+  loadMessages: loadMessages,
 
   // 'hidden' functions to allow testing
   _stripComments: stripComments,
@@ -801,6 +808,15 @@ var i18njs = {
   _markdown: markdown,
   _fallbacks: fallbacks
 }
+
+window.i18njs = i18njs;
+
+// initialise overrides object
+window.i18njs.overrides = window.i18njs.overrides || {};
+overrides = window.i18njs.overrides;
+
+// fire an event on load
+mw.hook('i18njs').fire(i18njs);
 
 module.exports = {
   i18njs
