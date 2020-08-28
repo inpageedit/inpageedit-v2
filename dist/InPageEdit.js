@@ -1085,7 +1085,7 @@ module.exports = async function init() {
     noCache: Boolean(InPageEdit.version !== localStorage.getItem('InPageEditVersion') || mw.util.getParamValue('i18n') === 'nocache') // 更新翻译缓存
   },
     _dir + '/i18n/languages.json'
-  ).then(() => {
+  ).then(_i18n => {
     // 初始化前置模块
     pluginPreference.set();
     getUserInfo();
@@ -1098,6 +1098,7 @@ module.exports = async function init() {
 
     // 写入模块
     var InPageEdit = {
+      _i18n,
       about,
       api,
       articleLink,
@@ -1380,10 +1381,9 @@ module.exports = {
   !*** ./module/_msg.js ***!
   \************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-var { i18njs } = __webpack_require__(/*! ../method/i18njs */ "./method/i18njs.js");
-const _dir = __webpack_require__(/*! ../method/_dir */ "./method/_dir.js");
+var i18n = window.InPageEdit.i18n;
 
 /**
  * @module _msg
@@ -1391,10 +1391,6 @@ const _dir = __webpack_require__(/*! ../method/_dir */ "./method/_dir.js");
  * @param  {...String} params 替代占位符的内容，可以解析简单的wikitext
  */
 var _msg = async function (msgKey, ...params) {
-  var i18n;
-  await i18njs.loadMessages('InPageEdit-v2', {
-    noCache: Boolean(InPageEdit.version !== localStorage.getItem('InPageEditVersion') || mw.util.getParamValue('i18n') === 'nocache') // 更新翻译缓存
-  }, _dir + '/i18n/languages.json').then(data => i18n = data);
   return i18n.msg(msgKey, ...params).parse();
 }
 

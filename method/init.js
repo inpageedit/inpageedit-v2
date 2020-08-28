@@ -41,7 +41,7 @@ module.exports = async function init() {
     noCache: Boolean(InPageEdit.version !== localStorage.getItem('InPageEditVersion') || mw.util.getParamValue('i18n') === 'nocache') // 更新翻译缓存
   },
     _dir + '/i18n/languages.json'
-  ).then(() => {
+  ).then(_i18n => {
     // 初始化前置模块
     pluginPreference.set();
     getUserInfo();
@@ -54,6 +54,7 @@ module.exports = async function init() {
 
     // 写入模块
     var InPageEdit = {
+      _i18n,
       about,
       api,
       articleLink,
