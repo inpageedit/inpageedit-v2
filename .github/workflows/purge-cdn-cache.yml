@@ -6,7 +6,8 @@ name: Purge jsDelivr CDN Cache
 # events but only for the master branch
 on:
   push:
-    branches: [master]
+    branches:
+      - master
   # pull_request:
   #   branches: [ master ]
 
@@ -25,6 +26,4 @@ jobs:
       # Runs a single command using the runners shell
       - name: Send purge requests
         run: |
-          curl https://purge.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/script.js
-          curl https://purge.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/script.min.js
-          curl https://purge.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/i18n/i18n.json
+          curl https://purge.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/
