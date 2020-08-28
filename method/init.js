@@ -5,6 +5,7 @@ const { loadStyles } = require('./loadStyles');
 const { updateNotice } = require('./updateNotice');
 
 // 导入全部模块
+const { _analysis } = require('../module/_analysis');
 const { _msg } = require('../module/_msg');
 const { about } = require('../module/about');
 const api = require('../module/api.json');
@@ -12,6 +13,7 @@ const { articleLink } = require('../module/articleLink');
 const { findAndReplace } = require('../module/findAndReplace');
 const { loadQuickDiff } = require('../module/loadQuickDiff');
 const { pluginPreference } = require('../module/pluginPreference');
+const { pluginStore } = require('../module/pluginStore');
 const { progress } = require('../module/progress');
 const { quickDelete } = require('../module/quickDelete');
 const { quickDiff } = require('../module/quickDiff');
@@ -39,6 +41,9 @@ module.exports = async function init() {
   loadQuickDiff();
   articleLink();
   updateNotice();
+
+  // 暂定，触发工具盒插件
+  pluginStore.load('toolbox.js');
 
   // 写入模块
   var InPageEdit = {
@@ -84,7 +89,9 @@ module.exports = async function init() {
 
   // 触发钩子，传入上下文
   mw.hook('InPageEdit').fire({
-    _msg
+    _analysis,
+    _msg,
+    InPageEdit
   });
 
   // 花里胡哨的加载提示

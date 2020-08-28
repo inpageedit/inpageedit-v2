@@ -306,7 +306,10 @@ module.exports = {
 /***/ (function(module, exports) {
 
 function loadStyles() {
-  const cdn = 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master';
+  // const cdn = 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master';
+  var cdn = document.currentScript.src;
+  var thisScript = new RegExp('/dist/InPageEdit(.min)?.js$', 'i');
+  cdn = cdn.replace(thisScript, '');
 
   // 放在越上面优先级越高
   const styleFiles = [
@@ -317,6 +320,7 @@ function loadStyles() {
   ];
 
   styleFiles.forEach(link => {
+    console.log('[InPageEdit] 加载样式', cdn + link)
     $('head').prepend(
       $('<link>', { href: cdn + link, rel: 'stylesheet', 'data-ipe': 'style' })
     );
@@ -2738,7 +2742,7 @@ module.exports = {
 /*! exports provided: name, version, description, main, dependencies, devDependencies, scripts, repository, keywords, author, license, bugs, homepage, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"name\":\"inpageedit-v2\",\"version\":\"14.0.0\",\"description\":\"A useful MediaWiki JavaScript Plugin written with jQuery\",\"main\":\"index.js\",\"dependencies\":{\"jquery\":\">1.9.x\",\"ssi-modal\":\"1.0.28\"},\"devDependencies\":{\"eslint\":\"^7.7.0\",\"webpack\":\"^4.44.1\",\"webpack-cli\":\"^3.3.12\"},\"scripts\":{\"build\":\"webpack && set MINIFY=1 && webpack\",\"dev\":\"webpack --watch --output-filename [name].test.js\",\"test\":\"eslint ./index.js ./module/*.js ./method/*.js\"},\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/Dragon-Fish/InPageEdit-v2.git\"},\"keywords\":[\"mediawiki\",\"mediawiki-gadget\",\"inpageedit\"],\"author\":\"Dragon Fish\",\"license\":\"GPL-3.0-or-later\",\"bugs\":{\"url\":\"https://github.com/Dragon-Fish/InPageEdit-v2/issues\"},\"homepage\":\"https://github.com/Dragon-Fish/InPageEdit-v2#readme\"}");
+module.exports = JSON.parse("{\"name\":\"inpageedit-v2\",\"version\":\"14.0.0\",\"description\":\"A useful MediaWiki JavaScript Plugin written with jQuery\",\"main\":\"index.js\",\"dependencies\":{\"jquery\":\">1.9.x\",\"ssi-modal\":\"1.0.28\"},\"devDependencies\":{\"css-loader\":\"^4.2.2\",\"eslint\":\"^7.7.0\",\"file-loader\":\"^6.0.0\",\"style-loader\":\"^1.2.1\",\"webpack\":\"^4.44.1\",\"webpack-cli\":\"^3.3.12\"},\"scripts\":{\"build\":\"webpack && set MINIFY=1 && webpack\",\"dev\":\"webpack --watch --output-filename [name].test.js\",\"test\":\"eslint ./index.js ./module/*.js ./method/*.js\"},\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/Dragon-Fish/InPageEdit-v2.git\"},\"keywords\":[\"mediawiki\",\"mediawiki-gadget\",\"inpageedit\"],\"author\":\"Dragon Fish\",\"license\":\"GPL-3.0-or-later\",\"bugs\":{\"url\":\"https://github.com/Dragon-Fish/InPageEdit-v2/issues\"},\"homepage\":\"https://github.com/Dragon-Fish/InPageEdit-v2#readme\"}");
 
 /***/ })
 

@@ -8,7 +8,10 @@
     "ssi-modal": "1.0.28"
   },
   "devDependencies": {
+    "css-loader": "^4.2.2",
     "eslint": "^7.7.0",
+    "file-loader": "^6.0.0",
+    "style-loader": "^1.2.1",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
