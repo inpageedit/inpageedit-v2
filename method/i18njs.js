@@ -666,7 +666,9 @@ function saveToCache(name, json, cacheVersion) {
     localStorage.setItem(keyPrefix + '-content', JSON.stringify(json));
     localStorage.setItem(keyPrefix + '-timestamp', now);
     localStorage.setItem(keyPrefix + '-version', cacheVersion || 0);
-  } catch (e) { }
+  } catch (e) {
+    console.warn('[I18n-js] Failed to save i18n cache')
+  }
 }
 
 /**
@@ -726,7 +728,9 @@ function loadFromCache(name, minCacheVersion) {
     cacheContent = localStorage.getItem(keyPrefix + '-content');
     cacheTimestamp = Number(localStorage.getItem(keyPrefix + '-timestamp'));
     cacheVersion = Number(localStorage.getItem(keyPrefix + '-version'));
-  } catch (e) { }
+  } catch (e) {
+    console.warn('[I18n-js] Failed to load i18n from cache')
+  }
 
   // only use cached messages if cache is less than two days old
   // and if cache version is greater than or equal to requested version
@@ -751,7 +755,7 @@ function loadFromCache(name, minCacheVersion) {
  *
  * @return A jQuery.Deferred instance.
  */
-function loadMessages(file, name, options) {
+function loadMessages(name, options, url) {
   options = options || {};
 
   var deferred = $.Deferred(),
@@ -765,20 +769,27 @@ function loadMessages(file, name, options) {
   }
 
   if (useCache) {
-    loadFromCache(file, name, cacheVersion);
+    loadFromCache(name, cacheVersion);
   }
 
   if (cache[name] && useCache) {
     return deferred.resolve(cache[name]);
   }
 
-  deferred.resolve(parseMessagesToObject(name, res, cacheVersion));
+  if (url) {
+    $.getJSON(url).then(data => {
+      var res = JSON.stringify(data);
+      deferred.resolve(parseMessagesToObject(name, res, cacheVersion));
+    })
+  } else {
+    deferred.resolve(parseMessagesToObject(name, {}, cacheVersion));
+  }
 
   return deferred;
 }
 
 // expose under the dev global
-i18njs = $.extend(i18njs, {
+var i18njs = {
   loadMessages,
 
   // 'hidden' functions to allow testing
@@ -789,7 +800,7 @@ i18njs = $.extend(i18njs, {
   _parse: parse,
   _markdown: markdown,
   _fallbacks: fallbacks
-});
+}
 
 module.exports = {
   i18njs

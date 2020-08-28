@@ -21,9 +21,9 @@
   // 初始化插件
   var init = require('./method/init');
 
-  InPageEdit = await init();
+  var mainFunctions = await init();
 
-  // 定义全局变量
-  window.InPageEdit = InPageEdit;
+  // 合并入全局变量
+  window.InPageEdit = $.extend({}, window.InPageEdit, mainFunctions);
 
 })();
