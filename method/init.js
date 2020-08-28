@@ -12,6 +12,9 @@ const { articleLink } = require('../module/articleLink');
 const { findAndReplace } = require('../module/findAndReplace');
 const { loadQuickDiff } = require('../module/loadQuickDiff');
 const { pluginPreference } = require('../module/pluginPreference');
+const { progress } = require('../module/progress');
+const { quickDelete } = require('../module/quickDelete');
+const { quickDiff } = require('../module/quickDiff');
 const { quickEdit } = require('../module/quickEdit');
 const { quickPreview } = require('../module/quickPreview');
 const { quickRedirect } = require('../module/quickRedirect');
@@ -43,6 +46,11 @@ module.exports = function init() {
       api,
       articleLink,
       findAndReplace,
+      loadQuickDiff,
+      pluginPreference,
+      progress,
+      quickDelete,
+      quickDiff,
       quickEdit,
       quickPreview,
       quickRedirect,
@@ -50,6 +58,15 @@ module.exports = function init() {
       specialNotice,
       version,
       versionInfo,
+      // 别名 Alias
+      fnr: findAndReplace,
+      delete: quickDelete,
+      diff: quickDiff,
+      edit: quickEdit,
+      preview: quickPreview,
+      redirect: quickRedirect,
+      quickMove: quickRename,
+      rename: quickRename,
     }
 
     // 锁定重要变量
