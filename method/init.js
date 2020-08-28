@@ -1,6 +1,4 @@
 // 导入方法
-const _dir = require('./_dir');
-const { i18njs } = require('./i18njs');
 const { loadScript } = require('./loadScript');
 const { getUserInfo } = require('./getUserInfo');
 const { loadStyles } = require('./loadStyles');

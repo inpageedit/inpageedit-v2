@@ -254,11 +254,6 @@ var conf = mw.config.get([
 ]),
 
   /*
-   * Current time in milliseconds, used to set and check cache age.
-   */
-  now = Date.now(),
-
-  /*
    * Cache of loaded I18n instances.
    */
   cache = {},
@@ -864,45 +859,6 @@ function i18n(messages, name) {
 }
 
 /*
- * Strip block comments from a JSON string which are illegal under the JSON spec.
- * This is a bit basic, so will remove comments inside strings too.
- *
- * @param json The JSON string.
- *
- * @return The JSON string after any comments have been removed.
- */
-function stripComments(json) {
-  json = json
-    .trim()
-    .replace(/\/\*[\s\S]*?\*\//g, '');
-  return json;
-}
-
-/*
- * Save messages string to local storage for caching.
- *
- * @param name
- * @param json The JSON object.
- * @param cacheVersion Cache version requested by the loading script.
- */
-function saveToCache(name, json, cacheVersion) {
-  var keyPrefix = 'i18n-cache-' + name;
-
-  // don't cache empty JSON
-  if (Object.keys(json).length === 0) {
-    return;
-  }
-
-  try {
-    localStorage.setItem(keyPrefix + '-content', JSON.stringify(json));
-    localStorage.setItem(keyPrefix + '-timestamp', now);
-    localStorage.setItem(keyPrefix + '-version', cacheVersion || 0);
-  } catch (e) {
-    // ...
-  }
-}
-
-/*
  * Parse JSON string loaded from page and create an i18n object.
  *
  * @param name
@@ -911,14 +867,13 @@ function saveToCache(name, json, cacheVersion) {
  *
  * @return The resulting i18n object.
  */
-function parseMessagesToObject(name, res, cacheVersion) {
+function parseMessagesToObject(name, res) {
   var json = {},
     obj,
     msg;
 
   // handle parse errors gracefully
   try {
-    res = stripComments(res);
     json = JSON.parse(res);
   } catch (e) {
     msg = e.message;
@@ -935,43 +890,7 @@ function parseMessagesToObject(name, res, cacheVersion) {
   // cache the result in case it's used multiple times
   cache[name] = obj;
 
-  if (typeof cacheVersion === 'number') {
-    saveToCache(name, json, cacheVersion);
-  }
-
   return obj;
-}
-
-/*
- * Load messages string from local storage cache and add to cache object.
- *
- * @param name
- * @param minCacheVersion Minimum cache version requested by the loading script.
- */
-function loadFromCache(name, minCacheVersion) {
-  var keyPrefix = 'i18n-cache-' + name,
-    twoDays = 1000 * 60 * 60 * 24 * 2,
-    cacheContent,
-    cacheTimestamp,
-    cacheVersion;
-
-  try {
-    cacheContent = localStorage.getItem(keyPrefix + '-content');
-    cacheTimestamp = Number(localStorage.getItem(keyPrefix + '-timestamp'));
-    cacheVersion = Number(localStorage.getItem(keyPrefix + '-version'));
-  } catch (e) {
-    // ...
-  }
-
-  // only use cached messages if cache is less than two days old
-  // and if cache version is greater than or equal to requested version
-  if (
-    cacheContent &&
-    now - cacheTimestamp < twoDays &&
-    cacheVersion >= minCacheVersion
-  ) {
-    parseMessagesToObject(name, cacheContent);
-  }
 }
 
 /*
@@ -988,30 +907,15 @@ function loadFromCache(name, minCacheVersion) {
  */
 function loadMessages(name, options, file) {
   options = options || {};
-
-  var deferred = $.Deferred(),
-    useCache = (options.noCache || conf.debug) !== true,
-    cacheVersion = Number(options.cacheVersion) || 0;
-
   // if using the special 'qqx' language code, there's no need to load
   // the messages, so resolve with an empty i18n object and return early
   if (conf.wgUserLanguage === 'qqx') {
     return i18n({}, name);
   }
 
-  if (useCache) {
-    loadFromCache(name, cacheVersion);
-  }
-
-  if (cache[name] && useCache) {
-    return cache[name];
-  }
-
   if (file) {
-    return parseMessagesToObject(name, JSON.stringify(file), cacheVersion);
+    return parseMessagesToObject(name, JSON.stringify(file));
   }
-
-  return deferred;
 }
 
 // expose under the dev global
@@ -1019,8 +923,6 @@ var i18njs = {
   loadMessages,
 
   // 'hidden' functions to allow testing
-  _stripComments: stripComments,
-  _saveToCache: saveToCache,
   _getMsg: getMsg,
   _handleArgs: handleArgs,
   _parse: parse,
@@ -1028,9 +930,10 @@ var i18njs = {
   _fallbacks: fallbacks
 }
 
-window.i18njs = i18njs;
+// window.i18njs = i18njs;
 
 // initialise overrides object
+window.i18njs = window.i18njs || {};
 window.i18njs.overrides = window.i18njs.overrides || {};
 overrides = window.i18njs.overrides;
 
@@ -1051,8 +954,6 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 导入方法
-const _dir = __webpack_require__(/*! ./_dir */ "./method/_dir.js");
-const { i18njs } = __webpack_require__(/*! ./i18njs */ "./method/i18njs.js");
 const { loadScript } = __webpack_require__(/*! ./loadScript */ "./method/loadScript.js");
 const { getUserInfo } = __webpack_require__(/*! ./getUserInfo */ "./method/getUserInfo.js");
 const { loadStyles } = __webpack_require__(/*! ./loadStyles */ "./method/loadStyles.js");
