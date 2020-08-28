@@ -1292,7 +1292,7 @@ var { i18njs } = __webpack_require__(/*! ../method/i18njs */ "./method/i18njs.js
  * @param {String} msgKey 消息的键
  * @param  {...String} params 替代占位符的内容，可以解析简单的wikitext
  */
-var _msg = async function (msgKey, ...params) {
+var _msg = function (msgKey, ...params) {
   var i18n = i18njs.loadMessages('InPageEdit', {}, __webpack_require__(/*! ../i18n/languages.json */ "./i18n/languages.json"));
   return i18n.msg(msgKey, ...params).parse();
 }
