@@ -125,6 +125,36 @@
 
 /***/ }),
 
+/***/ "./method/_dir.js":
+/*!************************!*\
+  !*** ./method/_dir.js ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * @returns {String} https://cdn.jsdelivr.net/... 结尾没有/
+ */
+function getDir() {
+  var thisScript = document.currentScript.src;
+  var thisUrl = thisScript.split('/');
+  // 理论上入口文件位于 /dist/*.js
+  // 因此删掉最后两位路径
+  thisUrl.pop();
+  thisUrl.pop();
+  thisUrl = thisUrl.join('/');
+  return thisUrl;
+}
+
+/**
+ * @constant {String} _dir CDN URL
+ */
+const _dir = getDir();
+
+module.exports = _dir;
+
+/***/ }),
+
 /***/ "./method/getUserInfo.js":
 /*!*******************************!*\
   !*** ./method/getUserInfo.js ***!
@@ -310,13 +340,11 @@ module.exports = {
   !*** ./method/loadStyles.js ***!
   \******************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+const _dir = __webpack_require__(/*! ./_dir */ "./method/_dir.js");
 
 function loadStyles() {
-  // const cdn = 'https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master';
-  var cdn = document.currentScript.src;
-  var thisScript = new RegExp('/dist/InPageEdit(.min)?.js$', 'i');
-  cdn = cdn.replace(thisScript, '');
 
   // 放在越上面优先级越高
   const styleFiles = [
@@ -330,7 +358,7 @@ function loadStyles() {
 
   styleFiles.forEach(link => {
     if (/^https?:\/\//.test(link) !== true) {
-      link = cdn + link;
+      link = _dir + link;
     }
     $('head').prepend(
       $('<link>', { href: link, rel: 'stylesheet', 'data-ipe': 'style' })
@@ -1151,11 +1179,8 @@ module.exports = {
  ********************************/
 
 const pluginsIndex = __webpack_require__(/*! ../plugins/index.json */ "./plugins/index.json");
+const _dir = __webpack_require__(/*! ../method/_dir */ "./method/_dir.js");
 const _msg = __webpack_require__(/*! ./_msg */ "./module/_msg.js");
-
-var cdn = document.currentScript.src;
-var thisScript = new RegExp('/dist/InPageEdit(.min)?.js$', 'i');
-cdn = cdn.replace(thisScript, '');
 
 /**
  * @module pluginStore 加载InPageEdit插件
@@ -1186,7 +1211,7 @@ var pluginStore = {
    */
   load(name) {
     if (pluginsIndex[name]) {
-      mw.loader.load(cdn + '/plugins/' + name);
+      mw.loader.load(_dir + '/plugins/' + name);
     } else {
       console.warn('[InPageEdit] 无法找到插件', name);
     }

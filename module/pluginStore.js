@@ -3,11 +3,8 @@
  ********************************/
 
 const pluginsIndex = require('../plugins/index.json');
+const _dir = require('../method/_dir');
 const _msg = require('./_msg');
-
-var cdn = document.currentScript.src;
-var thisScript = new RegExp('/dist/InPageEdit(.min)?.js$', 'i');
-cdn = cdn.replace(thisScript, '');
 
 /**
  * @module pluginStore 加载InPageEdit插件
@@ -38,7 +35,7 @@ var pluginStore = {
    */
   load(name) {
     if (pluginsIndex[name]) {
-      mw.loader.load(cdn + '/plugins/' + name);
+      mw.loader.load(_dir + '/plugins/' + name);
     } else {
       console.warn('[InPageEdit] 无法找到插件', name);
     }
