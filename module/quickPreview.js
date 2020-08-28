@@ -1,4 +1,5 @@
 const { _msg } = require('./_msg');
+const { $progress } = require('./_elements');
 
 var mwApi = new mw.Api();
 
@@ -12,7 +13,6 @@ var quickPreview = function (params, modalSize = 'large', center = false) {
     preview: true,
     disableeditsection: true,
     prop: 'text',
-    preview: true,
     format: 'json'
   }
   var options = $.extend({}, defaultOptions, params);
@@ -31,7 +31,7 @@ var quickPreview = function (params, modalSize = 'large', center = false) {
     fixedHeight: true,
     fitScreen: true,
     buttons: [{ label: '', className: 'hideThisBtn' }],
-    onShow: function (modal) {
+    onShow() {
       $('.previewbox .ipe-progress').css('margin-top', $('.previewbox .ipe-progress').parent().height() / 2);
       $('.previewbox .hideThisBtn').hide();
       mwApi.post(options).then(function (data) {

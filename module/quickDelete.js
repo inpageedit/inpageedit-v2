@@ -1,4 +1,9 @@
 var mwApi = new mw.Api();
+var config = mw.config.get();
+const { _analysis } = require('./_analysis');
+const { _msg } = require('./_msg');
+const { _hasRight } = require('./_hasRight');
+const { $br } = require('./_elements');
 
 /** 
  * @module quickDelete 删除页面模块
@@ -7,8 +12,8 @@ var mwApi = new mw.Api();
 var quickDelete = function (page, givenReason = '') {
   mw.hook('InPageEdit.quickDelete').fire();
   console.log('Quick delete', page, givenReason);
-  var reason,
-    page = page || config.wgPageName;
+  var reason;
+  page = page || config.wgPageName;
 
   ssi_modal.show({
     outSideClose: false,
@@ -18,7 +23,7 @@ var quickDelete = function (page, givenReason = '') {
     title: _msg('delete-title'),
     content: $('<div>').append(
       $('<section>', { id: 'InPageEditDeletepage' }).append(
-        $('<span>', { html: _msg('delete-reason', '<b>' + page.replace(/\_/g, ' ') + '</b>') }),
+        $('<span>', { html: _msg('delete-reason', '<b>' + page.replace(/_/g, ' ') + '</b>') }),
         $br,
         $('<label>', { for: 'delete-reason', text: _msg('editSummary') }),
         $('<input>', { id: 'delete-reason', style: 'width:96%', onclick: "$(this).css('box-shadow', '')", value: givenReason })
@@ -77,7 +82,7 @@ var quickDelete = function (page, givenReason = '') {
                 title: page,
                 reason: reason,
                 format: 'json'
-              }).then(function (data) {
+              }).then(() => {
                 ssi_modal.notify('success', {
                   className: 'in-page-edit',
                   title: _msg('notify-success'),

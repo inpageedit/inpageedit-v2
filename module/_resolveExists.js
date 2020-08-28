@@ -1,5 +1,8 @@
 const { _msg } = require('./_msg');
-const { _hasRight } = require('./_hasRight.js');
+const { _hasRight } = require('./_hasRight');
+
+const { quickDelete } = require('./quickDelete');
+const { quickEdit } = require('./quickEdit');
 
 /**
  * @module _resolveExists 解决目标页面已存在的问题
@@ -29,16 +32,16 @@ var _resolveExists = function (page, reason = {}) {
       {
         className: 'btn btn-danger btn-exists-delete-target',
         label: _msg('quick-delete'),
-        method: (a, modal) => {
+        method(a, modal) {
           modal.close();
-          InPageEdit.quickDelete(page, reason.delete || null);
+          quickDelete(page, reason.delete || null);
         }
       },
       {
         className: 'btn btn-primary',
         label: _msg('quick-edit'),
-        method: (a, modal) => {
-          InPageEdit.quickEdit({
+        method() {
+          quickEdit({
             page: page,
             summary: (reason.edit ? '[InPageEdit] ' + reason : null),
             reload: false
@@ -59,4 +62,8 @@ var _resolveExists = function (page, reason = {}) {
       }
     }
   });
+}
+
+module.exports = {
+  _resolveExists
 }

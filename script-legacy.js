@@ -13,7 +13,7 @@
 
   // 创建全局函数，检查插件是否已经运行
   var InPageEdit = window.InPageEdit || {};
-  if (InPageEdit.hasOwnProperty('version')) {
+  if (InPageEdit.version) {
     throw '[InPageEdit] InPageEdit 已经在运行了';
   }
 

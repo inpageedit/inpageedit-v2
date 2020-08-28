@@ -1,7 +1,9 @@
+const { _analysis } = require('./_analysis');
+const { _msg } = require('./_msg');
+const { $br, $hr } = require('./_elements');
+
 const api = require('./api.json')
 const version = require('./version');
-
-const { $br, $hr } = require('./_elements');
 
 /**
  * @module preference 个人设置模块
@@ -28,19 +30,19 @@ var pluginPreference = {
    * @return {object|string}
    */
   get: function (setting) {
-    var setting = setting || undefined;
+    setting = setting || undefined;
     var local = localStorage.getItem('InPageEditPreference') || '{}';
     try {
-      var local = JSON.parse(local);
+      local = JSON.parse(local);
     } catch (e) {
-      var local = {};
+      local = {};
     }
     if (typeof InPageEdit.myPreference === 'object') {
       local = $.extend({}, local, InPageEdit.myPreference);
     }
     var json = $.extend({}, pluginPreference.default, local);
     if (typeof (setting) === 'string' && setting !== '') {
-      return json.hasOwnProperty(setting) ? json[setting] : null;
+      return json.setting ? json[setting] : null;
     } else {
       return json;
     }

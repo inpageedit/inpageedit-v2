@@ -1,3 +1,6 @@
+var config = mw.config.get();
+const { _msg } = require('./_msg');
+
 const { pluginPreference } = require('./pluginPreference');
 const { quickEdit } = require('./quickEdit');
 
@@ -13,7 +16,7 @@ var articleLink = function (element) {
       element = $('#mw-content-text a:not(.new)');
     }
   }
-  element.each(function (i) {
+  element.each(() => {
     if ($(this).attr('href') === undefined)
       return;
     var url = $(this).attr('href'),

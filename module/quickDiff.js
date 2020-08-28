@@ -1,4 +1,8 @@
 var mwApi = new mw.Api();
+var config = mw.config.get();
+
+const { _analysis } = require('./_analysis');
+const { _msg } = require('./_msg');
 
 const { articleLink } = require('./articleLink');
 const { $br, $progress } = require('./_elements');
@@ -57,11 +61,12 @@ var quickDiff = function (param) {
   }
   mwApi.post(param).then(function (data) {
     var diffTable = data.compare['*'];
+    var toTitle;
     $loading.hide();
     if (param.pageName === undefined) {
-      var toTitle = data.compare.totitle;
+      toTitle = data.compare.totitle;
     } else {
-      var toTitle = param.pageName;
+      toTitle = param.pageName;
     }
     var userLink = function (user) {
       return '<a class="diff-user" href="' + mw.util.getUrl('User:' + user) + '">' + user + '</a> (<a href="' + mw.util.getUrl('User_talk:' + user) + '">' + _msg('diff-usertalk') + '</a> | <a href="' + mw.util.getUrl('Special:Contributions/' + user) + '">' + _msg('diff-usercontrib') + '</a> | <a href="' + mw.util.getUrl('Special:Block/' + user) + '">' + _msg('diff-userblock') + '</a>)';
@@ -166,7 +171,7 @@ var quickDiff = function (param) {
     if (data.compare.tocommenthidden !== undefined) {
       $diffArea.find('.diff-ntitle .diff-comment').addClass('diff-hidden-history');
     }
-    if (data.hasOwnProperty('error')) {
+    if (data.error) {
       console.warn('[InPageEdit] 快速差异获取时系统告知出现问题');
       $diffArea.html(_msg('diff-error') + ': ' + data.error.info + '(<code>' + data.error.code + '</code>)');
     }

@@ -1,7 +1,10 @@
+const { _msg } = require('./_msg');
+const { $br } = require('./_elements');
+
 /**
-     * @module findAndReplace 查找替换模块
-     * @param {element} element Textarea
-     */
+ * @module findAndReplace 查找替换模块
+ * @param {element} element Textarea
+ */
 function findAndReplace(element) {
   if (element === undefined) element = $('.in-page-edit.ipe-editor:last .editArea');
   var origin = element.val();
@@ -44,7 +47,7 @@ function findAndReplace(element) {
       {
         label: _msg('fAndR-button-undo'),
         className: 'btn btn-danger',
-        method: function (e, modal) {
+        method() {
           element.val(origin);
           ssi_modal.notify('info', {
             className: 'in-page-edit',
@@ -57,7 +60,7 @@ function findAndReplace(element) {
       {
         className: 'btn btn-primary',
         label: _msg('fAndR-button-replace'),
-        method: function (a, modal) {
+        method() {
           /**
            * 查找替换主函数
            * 借鉴：https://dev.fandom.com/wiki/MediaWiki:FindAndReplace/code.js
@@ -85,7 +88,7 @@ function findAndReplace(element) {
           if (enableregex === 1) {
             searchfor = $('#find_this').val();
           } else {
-            searchfor = $('#find_this').val().replace(/\r/gi, '').replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1');
+            searchfor = $('#find_this').val().replace(/\r/gi, '').replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1');
           }
           searchexp = new RegExp(searchfor, flags);
           var rcount = 0;

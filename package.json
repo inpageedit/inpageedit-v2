@@ -8,12 +8,14 @@
     "ssi-modal": "1.0.28"
   },
   "devDependencies": {
+    "eslint": "^7.7.0",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
   "scripts": {
     "build": "webpack && set MINIFY=1 && webpack",
-    "dev": "webpack --watch --output-filename [name].test.js"
+    "dev": "webpack --watch --output-filename [name].test.js",
+    "test": "eslint ./index.js ./module/*.js ./method/*.js"
   },
   "repository": {
     "type": "git",

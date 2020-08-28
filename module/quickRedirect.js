@@ -1,6 +1,11 @@
 var mwApi = new mw.Api();
-const { _msg } = require('./_msg');
+var config = mw.config.get();
 
+const { _analysis } = require('./_analysis');
+const { _msg } = require('./_msg');
+const { $br, $progress } = require('./_elements');
+
+const { _resolveExists } = require('./_resolveExists');
 const { pluginPreference } = require('./pluginPreference');
 
 /**
@@ -80,7 +85,7 @@ var quickRedirect = function (type = 'to') {
         mwApi.postWithToken('csrf', json).done(successed).fail(failed);
         // 重定向成功
         function successed(data) {
-          if (data.hasOwnProperty('errors')) {
+          if (data.errors) {
             failed(data.errors[0].code, data);
             return;
           }

@@ -1,3 +1,5 @@
+const { _msg } = require('./_msg');
+
 const api = require('./api.json');
 
 /**

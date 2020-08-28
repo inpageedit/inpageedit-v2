@@ -1,4 +1,11 @@
 var mwApi = new mw.Api();
+var config = mw.config.get();
+
+const { _analysis } = require('./_analysis');
+const { _msg } = require('./_msg');
+const { _hasRight } = require('./_hasRight');
+const { _resolveExists } = require('./_resolveExists');
+const { $br } = require('./_elements');
 
 const { progress } = require('./progress');
 
@@ -9,13 +16,12 @@ const { progress } = require('./progress');
  */
 var quickRename = function (from, to) {
   mw.hook('InPageEdit.quickRename').fire();
-  var from = from || config.wgPageName,
-    to = to || '',
-    reason,
+  from = from || config.wgPageName;
+  to = to || '';
+  var reason,
     movetalk,
     movesubpages,
-    noredirect,
-    ignorewarnings;
+    noredirect;
 
   ssi_modal.show({
     outSideClose: false,
@@ -25,7 +31,7 @@ var quickRename = function (from, to) {
     title: _msg('rename-title'),
     content:
       $('<section>').append(
-        $('<label>', { for: 'move-to', html: _msg('rename-moveTo', '<b>' + from.replace(/\_/g, ' ') + '</b>') }),
+        $('<label>', { for: 'move-to', html: _msg('rename-moveTo', '<b>' + from.replace(/_/g, ' ') + '</b>') }),
         $br,
         $('<input>', { id: 'move-to', style: 'width:96%', onclick: "$(this).css('box-shadow','')" }),
         $br,
@@ -60,7 +66,7 @@ var quickRename = function (from, to) {
       className: 'btn btn-primary',
       method: function () {
         to = $('.in-page-edit.quick-rename #move-to').val();
-        if (to === '' || to === config.wgPageName || to === config.wgPageName.replace(/\_/g, ' ')) {
+        if (to === '' || to === config.wgPageName || to === config.wgPageName.replace(/_/g, ' ')) {
           $('.in-page-edit.quick-rename #move-to').css('box-shadow', '0 0 4px #f00');
           return;
         }

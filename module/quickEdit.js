@@ -1,7 +1,11 @@
-// const ssi_modal = require('../src/ssi_modal/ssi-modal.js');
 var mwApi = new mw.Api();
+var config = mw.config.get();
 
+const { _analysis } = require('./_analysis');
 const { _msg } = require('./_msg');
+const { _hasRight } = require('./_hasRight');
+
+const { $br, $progress } = require('./_elements');
 
 const { findAndReplace } = require('./findAndReplace');
 const { pluginPreference } = require('./pluginPreference');
@@ -21,7 +25,7 @@ const { quickDiff } = require('./quickDiff');
 var quickEdit = function (options) {
   mw.hook('InPageEdit.quickEdit').fire();
   /** 获取设定信息，设置缺省值 **/
-  var options = options || {};
+  options = options || {};
   if (typeof options === 'string') {
     options = {
       page: options
@@ -86,7 +90,7 @@ var quickEdit = function (options) {
 
   // 显示主窗口
   ssi_modal.show({
-    title: _msg('editor-title-editing') + ': <u class="editPage">' + options.page.replace(/\_/g, ' ') + '</u>',
+    title: _msg('editor-title-editing') + ': <u class="editPage">' + options.page.replace(/_/g, ' ') + '</u>',
     content:
       $('<div>').append(
         $progress,
@@ -165,8 +169,7 @@ var quickEdit = function (options) {
     buttons: [{
       label: _msg('editor-button-save'),
       className: 'btn btn-primary leftBtn hideBeforeLoaded save-btn',
-      method: function (e, modal) {
-        var modal = modal;
+      method(e, modal) {
         ssi_modal.confirm({
           className: 'in-page-edit',
           center: true,
@@ -249,8 +252,7 @@ var quickEdit = function (options) {
 
       /** Edit-Tool 扩展 **/
       function insertText(strings, obj) {
-        var strings = strings,
-          textarea = obj || $('.in-page-edit.ipe-editor .editArea')[0],
+        var textarea = obj || $('.in-page-edit.ipe-editor .editArea')[0],
           start = textarea.selectionStart,
           stop = textarea.selectionEnd,
           selectedText = textarea.value.slice(start, stop);
@@ -264,19 +266,21 @@ var quickEdit = function (options) {
         textarea.setSelectionRange(selectStart, selectStart + (selectedText.length || strings.middle.length || 0));
         textarea.focus();
       }
+      // 添加按钮
+      function addBtn(open, middle, close, icon) {
+        open = open || '';
+        middle = middle || '';
+        close = close || '';
+        icon = 'fa-' + icon || 'fa-wrench';
+        $('.ipe-editor.timestamp-' + timestamp + ' .btnGroup.extra').append(
+          $('<button>', { class: 'editToolBtn btn', 'data-open': open, 'data-middle': middle, 'data-close': close, html: `<i class="fa ${icon}"></i>` })
+        );
+      }
       // 用户自定义按钮
       if (InPageEdit.buttons) {
         var btns = InPageEdit.buttons;
         $('.ipe-editor.timestamp-' + timestamp + ' .btnGroup.extra').show();
-        function addBtn(open, middle, close, icon) {
-          var open = open || '',
-            middle = middle || '',
-            close = close || '',
-            icon = 'fa-' + icon || 'fa-wrench';
-          $('.ipe-editor.timestamp-' + timestamp + ' .btnGroup.extra').append(
-            $('<button>', { class: 'editToolBtn btn', 'data-open': open, 'data-middle': middle, 'data-close': close, html: `<i class="fa ${icon}"></i>` })
-          );
-        }
+
         for (var i = 0; i < btns.length; i++) {
           var btn = btns[i];
           addBtn(btn.open, btn.middle, btn.close, btn.text);
@@ -299,7 +303,7 @@ var quickEdit = function (options) {
   * @event onShow
   * @description 模态框显示后
   */
-    onShow: function (a, modal) {
+    onShow() {
       mw.hook('InPageEdit.quickEdit.modal').fire();
       // 绑定事件，在尝试离开页面时提示
       $('.ipe-editor.timestamp-' + timestamp + ' .editArea').change(function () {
@@ -328,7 +332,6 @@ var quickEdit = function (options) {
 
       // 解析页面内容
       mwApi.get(options.jsonGet).done(function (data) {
-        var data = data;
         console.timeEnd('[InPageEdit] 获取页面源代码');
         contentDone(data);
       }).fail(function (a, b, errorThrown) {
@@ -340,10 +343,9 @@ var quickEdit = function (options) {
 
       // 页面内容获取完毕，后续工作
       function contentDone(data) {
-        var data = data;
         options.pageDetail = data;
 
-        if (data.hasOwnProperty('error')) {
+        if (data.error) {
           console.warn('[InPageEdit]警告：无法获取页面内容');
           options.editText = '<!-- ' + data.error.info + ' -->';
           options.pageId = -1;
@@ -357,16 +359,17 @@ var quickEdit = function (options) {
         $('.ipe-editor.timestamp-' + timestamp + ' .hideBeforeLoaded').fadeIn(500);
         $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val(options.editText + '\n');
 
+        var summaryVal;
         if (options.section !== null) {
-          var val = $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val();
-          val = val.replace(/\$section/ig, '/* ' + data.parse.sections[0].line + ' */');
-          $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val(val);
+          summaryVal = $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val();
+          summaryVal = summaryVal.replace(/\$section/ig, '/* ' + data.parse.sections[0].line + ' */');
+          $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val(summaryVal);
           $('.ipe-editor.timestamp-' + timestamp + ' .editPage').after('<span class="editSection">→' + data.parse.sections[0].line + '</span>');
           options.jumpTo = '#' + data.parse.sections[0].anchor;
         } else {
-          var val = $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val();
-          val = val.replace(/\$section/ig, '');
-          $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val(val);
+          summaryVal = $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val();
+          summaryVal = summaryVal.replace(/\$section/ig, '');
+          $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val(summaryVal);
           options.jumpTo = '';
         }
         if (options.revision !== null && options.revision !== '' && options.revision !== config.wgCurRevisionId) {
@@ -404,11 +407,10 @@ var quickEdit = function (options) {
           queryJson.titles = options.page;
         }
         mwApi.get(queryJson).done(function (data) {
-          var data = data;
           console.info('[InPageEdit] 获取页面基础信息成功');
           console.timeEnd('[InPageEdit] 获取页面基础信息');
           // 记录页面最后编辑时间，防止编辑冲突
-          $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp', data['query']['pages'][options.pageId].hasOwnProperty('revisions') ? data['query']['pages'][options.pageId]['revisions'][0]['timestamp'] : now);
+          $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp', data['query']['pages'][options.pageId].revisions ? data['query']['pages'][options.pageId]['revisions'][0]['timestamp'] : now);
           queryDone(data);
         }).fail(function (a, b, errorThrown) {
           var data = errorThrown;
@@ -420,10 +422,9 @@ var quickEdit = function (options) {
 
         /** 页面保护等级和编辑提示等 **/
         function queryDone(data) {
-          var data = data;
           options.namespace = data.query.pages[options.pageId].ns; // 名字空间ID
           options.protection = data.query.pages[options.pageId]['protection'] || []; // 保护等级
-          if (data.query.pages[options.pageId].hasOwnProperty('revisions')) {
+          if (data.query.pages[options.pageId].revisions) {
             options.revision = data.query.pages[options.pageId]['revisions'][0]['revid']; // 版本号
           }
 
@@ -500,7 +501,6 @@ var quickEdit = function (options) {
               preview: true,
               text: wikitextPage + '\n' + wikitextNs
             }).done(function (data) {
-              var data = data;
               options.editNotice = data.parse.text['*'];
               var notice = $('.ipe-editor.timestamp-' + timestamp).data('editNotice') || '';
               notice += '\n' + options.editNotice;
@@ -572,7 +572,7 @@ var quickEdit = function (options) {
       case 'showTemplates':
         var templates = options.pageDetail.parse.templates,
           templateName;
-        for (var i = 0; i < templates.length; i++) {
+        for (let i = 0; i < templates.length; i++) {
           templateName = templates[i]['*'];
           $('<li>').append(
             $('<a>', { href: mw.util.getUrl(templateName), target: '_blank', text: templateName }),
@@ -591,7 +591,7 @@ var quickEdit = function (options) {
       case 'showImages':
         var images = options.pageDetail.parse.images,
           imageName;
-        for (var i = 0; i < images.length; i++) {
+        for (let i = 0; i < images.length; i++) {
           imageName = images[i];
           $('<li>').append(
             $('<a>', { href: mw.util.getUrl('File:' + imageName), target: '_balnk', text: imageName }),
@@ -632,7 +632,9 @@ var quickEdit = function (options) {
         buttons: [{
           label: _msg('editor-detail-images-upload'),
           className: 'btn btn-primary',
-          method: function (a, modal) { window.open(config.wgScript + '?title=Special:Upload&wpDestFile=' + imageName + '&wpForReUpload=1') }
+          method() {
+            window.open(config.wgScript + '?title=Special:Upload&wpDestFile=' + imageName + '&wpForReUpload=1');
+          }
         }, {
           label: _msg('close'),
           className: 'btn btn-secondary',
@@ -661,8 +663,6 @@ var quickEdit = function (options) {
 
   // 发布编辑模块
   function postArticle(pValue, modal) {
-    var pValue = pValue,
-      modal = modal;
     _analysis('quick_edit_save');
     progress(_msg('editor-title-saving'));
     options.jsonPost = {
@@ -724,8 +724,7 @@ var quickEdit = function (options) {
     function saveError(errorCode, feedback, errorThrown) {
       progress(false);
       var data = errorThrown || errorCode; // 规范错误代码
-      var errorCode,
-        errorInfo,
+      var errorInfo,
         errorMore = '';
       if (data.errors !== undefined) {
         errorCode = data.errors[0].code;

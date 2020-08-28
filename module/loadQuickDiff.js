@@ -1,4 +1,6 @@
+var config = mw.config.get();
 const { _msg } = require('./_msg');
+const { _analysis } = require('./_analysis');
 
 const { quickDiff } = require('./quickDiff');
 
@@ -7,7 +9,7 @@ const { quickDiff } = require('./quickDiff');
  */
 var loadQuickDiff = function () {
   // 最近更改
-  function addLink(origin) {
+  function addLink() {
     $('.mw-changeslist-groupdiff, .mw-changeslist-diff, .mw-changeslist-diff-cur, .mw-history-histlinks a').unbind('click', ipeDiffLink);
     var ipeDiffLink = $('.mw-changeslist-groupdiff, .mw-changeslist-diff, .mw-changeslist-diff-cur, .mw-history-histlinks a').click(function (e) {
       e.preventDefault();
