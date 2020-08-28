@@ -37,75 +37,68 @@ module.exports = async function init() {
   // 加载前置插件以及样式表
   loadStyles();
   await loadScript('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/ssi-modal.min.js');
-  i18njs.loadMessages('InPageEdit-v2', {
-    noCache: Boolean(InPageEdit.version !== localStorage.getItem('InPageEditVersion') || mw.util.getParamValue('i18n') === 'nocache') // 更新翻译缓存
-  },
-    _dir + '/i18n/languages.json'
-  ).then(_i18n => {
-    // 初始化前置模块
-    pluginPreference.set();
-    getUserInfo();
-    loadQuickDiff();
-    articleLink();
-    updateNotice();
+  // 初始化前置模块
+  pluginPreference.set();
+  getUserInfo();
+  loadQuickDiff();
+  articleLink();
+  updateNotice();
 
-    // 暂定，触发工具盒插件
-    pluginStore.load('toolbox.js');
+  // 暂定，触发工具盒插件
+  pluginStore.load('toolbox.js');
 
-    // 写入模块
-    var InPageEdit = {
-      _i18n,
-      about,
-      api,
-      articleLink,
-      findAndReplace,
-      loadQuickDiff,
-      pluginPreference,
-      progress,
-      quickDelete,
-      quickDiff,
-      quickEdit,
-      quickPreview,
-      quickRedirect,
-      quickRename,
-      specialNotice,
-      version,
-      versionInfo,
-      // 别名 Alias
-      fnr: findAndReplace,
-      delete: quickDelete,
-      diff: quickDiff,
-      edit: quickEdit,
-      preview: quickPreview,
-      redirect: quickRedirect,
-      quickMove: quickRename,
-      rename: quickRename,
+  // 写入模块
+  var InPageEdit = {
+    about,
+    api,
+    articleLink,
+    findAndReplace,
+    loadQuickDiff,
+    pluginPreference,
+    progress,
+    quickDelete,
+    quickDiff,
+    quickEdit,
+    quickPreview,
+    quickRedirect,
+    quickRename,
+    specialNotice,
+    version,
+    versionInfo,
+    // 别名 Alias
+    fnr: findAndReplace,
+    delete: quickDelete,
+    diff: quickDiff,
+    edit: quickEdit,
+    preview: quickPreview,
+    redirect: quickRedirect,
+    quickMove: quickRename,
+    rename: quickRename,
+  }
+
+  // 锁定重要变量
+  var importantVariables = [
+    'api',
+    'version',
+  ];
+  importantVariables.forEach(key => {
+    try {
+      Object.freeze(InPageEdit[key]);
+    } catch (e) {
+      // Do nothing
     }
-
-    // 锁定重要变量
-    var importantVariables = [
-      'api',
-      'version',
-    ];
-    importantVariables.forEach(key => {
-      try {
-        Object.freeze(InPageEdit[key]);
-      } catch (e) {
-        // Do nothing
-      }
-    });
-
-    // 触发钩子，传入上下文
-    mw.hook('InPageEdit').fire({
-      _analysis,
-      _msg,
-      InPageEdit
-    });
-
-    // 花里胡哨的加载提示
-    console.info('    ____      ____                   ______    ___ __              _    _____ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_            | |  / /__ \\\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/  ______    | | / /__/ /\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_   /_____/    | |/ // __/ \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/              |___//____/ \n                      /____/');
-
-    // 传回InPageEdit
-    return InPageEdit;
   });
+
+  // 触发钩子，传入上下文
+  mw.hook('InPageEdit').fire({
+    _analysis,
+    _msg,
+    InPageEdit
+  });
+
+  // 花里胡哨的加载提示
+  console.info('    ____      ____                   ______    ___ __              _    _____ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_            | |  / /__ \\\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/  ______    | | / /__/ /\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_   /_____/    | |/ // __/ \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/              |___//____/ \n                      /____/');
+
+  // 传回InPageEdit
+  return InPageEdit;
 }
