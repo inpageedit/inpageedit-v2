@@ -764,7 +764,7 @@ function loadFromCache(name, minCacheVersion) {
  *
  * @return A jQuery.Deferred instance.
  */
-function loadMessages(name, options, url) {
+function loadMessages(name, options, file) {
   options = options || {};
 
   var deferred = $.Deferred(),
@@ -774,7 +774,7 @@ function loadMessages(name, options, url) {
   // if using the special 'qqx' language code, there's no need to load
   // the messages, so resolve with an empty i18n object and return early
   if (conf.wgUserLanguage === 'qqx') {
-    return deferred.resolve(i18n({}, name));
+    return i18n({}, name);
   }
 
   if (useCache) {
@@ -782,14 +782,11 @@ function loadMessages(name, options, url) {
   }
 
   if (cache[name] && useCache) {
-    return deferred.resolve(cache[name]);
+    return cache[name];
   }
 
-  if (url) {
-    $.getJSON(url).then(data => {
-      var res = JSON.stringify(data);
-      deferred.resolve(parseMessagesToObject(name, res, cacheVersion));
-    })
+  if (file) {
+    return parseMessagesToObject(name, JSON.stringify(file), cacheVersion);
   }
 
   return deferred;
@@ -797,7 +794,7 @@ function loadMessages(name, options, url) {
 
 // expose under the dev global
 var i18njs = {
-  loadMessages: loadMessages,
+  loadMessages,
 
   // 'hidden' functions to allow testing
   _stripComments: stripComments,
