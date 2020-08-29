@@ -10,7 +10,7 @@ const version = require('./version');
 /**
  * @module preference 个人设置模块
  */
-var pluginPreference = {
+var preference = {
   /**
    * @name 预设值
    * @return {object}
@@ -42,9 +42,9 @@ var pluginPreference = {
     if (typeof InPageEdit.myPreference === 'object') {
       local = $.extend({}, local, InPageEdit.myPreference);
     }
-    var json = $.extend({}, pluginPreference.default, local);
+    var json = $.extend({}, preference.default, local);
     if (typeof (setting) === 'string' && setting !== '') {
-      return json.setting ? json[setting] : null;
+      return json[setting] ? json[setting] : null;
     } else {
       return json;
     }
@@ -53,7 +53,7 @@ var pluginPreference = {
    * @name 保存设置
    * @param {Object|string} settingKey
    * @param {any} settingValue
-   * @example 可以这样 pluginPreference.set({ key: 'value' }) 也可以 pluginPreference.set('key', 'value')
+   * @example 可以这样 preference.set({ key: 'value' }) 也可以 preference.set('key', 'value')
    */
   set: function (settingKey = {}, settingValue = undefined) {
     var options = {};
@@ -64,7 +64,7 @@ var pluginPreference = {
     } else {
       return;
     }
-    options = $.extend({}, pluginPreference.get(), options);
+    options = $.extend({}, preference.get(), options);
     options = JSON.stringify(options);
     localStorage.setItem('InPageEditPreference', options);
   },
@@ -77,8 +77,8 @@ var pluginPreference = {
     if ($('#ipe-preference-form').length > 0) return;
 
     mw.hook('pluginPreference').fire();
-    pluginPreference.set();
-    var local = pluginPreference.get();
+    preference.set();
+    var local = preference.get();
     _analysis('plugin_setting');
 
     ssi_modal.show({
@@ -128,7 +128,7 @@ var pluginPreference = {
                   label: _msg('ok')
                 }
               });
-              $('#ipeSaveLocal textarea').val('/** InPageEdit Preferences **/\nwindow.InPageEdit = window.InPageEdit || {}; // Keep this line\nInPageEdit.myPreference = ' + JSON.stringify($.extend({}, pluginPreference.get(), $('#ipe-preference-form').data()), null, 2));
+              $('#ipeSaveLocal textarea').val('/** InPageEdit Preferences **/\nwindow.InPageEdit = window.InPageEdit || {}; // Keep this line\nInPageEdit.myPreference = ' + JSON.stringify($.extend({}, preference.get(), $('#ipe-preference-form').data()), null, 2));
             })
           )
         ),
@@ -154,7 +154,7 @@ var pluginPreference = {
             }
           }, (res) => {
             if (res) {
-              pluginPreference.set(pluginPreference.default);
+              preference.set(preference.default);
               modal.close();
             } else {
               return false;
@@ -165,7 +165,7 @@ var pluginPreference = {
         label: _msg('preference-save'),
         className: 'btn btn-primary',
         method: function (a, modal) {
-          pluginPreference.set($('#ipe-preference-form').data());
+          preference.set($('#ipe-preference-form').data());
           modal.close();
         }
       }
@@ -192,5 +192,5 @@ var pluginPreference = {
 }
 
 module.exports = {
-  pluginPreference
+  preference
 }

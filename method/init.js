@@ -12,7 +12,7 @@ const api = require('../module/api.json');
 const { articleLink } = require('../module/articleLink');
 const { findAndReplace } = require('../module/findAndReplace');
 const { loadQuickDiff } = require('../module/loadQuickDiff');
-const { pluginPreference } = require('../module/pluginPreference');
+const { preference } = require('../module/preference');
 const { pluginStore } = require('../module/pluginStore');
 const { progress } = require('../module/progress');
 const { quickDelete } = require('../module/quickDelete');
@@ -36,7 +36,7 @@ module.exports = async function init() {
   loadStyles();
   await loadScript('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/ssi-modal.min.js');
   // 初始化前置模块
-  pluginPreference.set();
+  preference.set();
   getUserInfo();
   loadQuickDiff();
   articleLink();
@@ -52,7 +52,7 @@ module.exports = async function init() {
     articleLink,
     findAndReplace,
     loadQuickDiff,
-    pluginPreference,
+    preference,
     progress,
     quickDelete,
     quickDiff,

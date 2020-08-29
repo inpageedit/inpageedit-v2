@@ -55,7 +55,7 @@ mw.hook('InPageEdit').add(({
         $('<li>', { class: 'btn-tip-group' }).append(
           $('<div>', { class: 'btn-tip', text: _msg('ipe-preference') }),
           $('<button>', { id: 'preference-btn', class: 'ipe-toolbox-btn', html: '<i class="fa fa-gear"></i>' }).click(function () {
-            InPageEdit.pluginPreference.modal();
+            InPageEdit.preference.modal();
           })
         )
       )
@@ -73,18 +73,18 @@ mw.hook('InPageEdit').add(({
   var toolBoxInner = $toolbox.find('#toolbox-toggle, .btn-group');
   $toolbox.find('#toolbox-toggle').click(function () {
     if ($(this).hasClass('opened') && !$(this).hasClass('click')) {
-      InPageEdit.pluginPreference.set({ lockToolBox: true });
+      InPageEdit.preference.set({ lockToolBox: true });
       toolBoxInner.addClass('click');
     } else if ($(this).hasClass('click')) {
-      InPageEdit.pluginPreference.set({ lockToolBox: false });
+      InPageEdit.preference.set({ lockToolBox: false });
       toolBoxInner.removeClass('click');
     } else {
-      InPageEdit.pluginPreference.set({ lockToolBox: true });
+      InPageEdit.preference.set({ lockToolBox: true });
       toolBoxInner.addClass('click opened');
     }
   });
   // 如果锁定过工具盒，就自动展开
-  if (InPageEdit.pluginPreference.get('lockToolBox') === true) {
+  if (InPageEdit.preference.get('lockToolBox') === true) {
     toolBoxInner.addClass('click opened');
   }
   // 鼠标覆盖与离开

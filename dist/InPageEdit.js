@@ -967,7 +967,7 @@ const api = __webpack_require__(/*! ../module/api.json */ "./module/api.json");
 const { articleLink } = __webpack_require__(/*! ../module/articleLink */ "./module/articleLink.js");
 const { findAndReplace } = __webpack_require__(/*! ../module/findAndReplace */ "./module/findAndReplace.js");
 const { loadQuickDiff } = __webpack_require__(/*! ../module/loadQuickDiff */ "./module/loadQuickDiff.js");
-const { pluginPreference } = __webpack_require__(/*! ../module/pluginPreference */ "./module/pluginPreference.js");
+const { preference } = __webpack_require__(/*! ../module/preference */ "./module/preference.js");
 const { pluginStore } = __webpack_require__(/*! ../module/pluginStore */ "./module/pluginStore.js");
 const { progress } = __webpack_require__(/*! ../module/progress */ "./module/progress.js");
 const { quickDelete } = __webpack_require__(/*! ../module/quickDelete */ "./module/quickDelete.js");
@@ -991,7 +991,7 @@ module.exports = async function init() {
   loadStyles();
   await loadScript('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/ssi-modal.min.js');
   // 初始化前置模块
-  pluginPreference.set();
+  preference.set();
   getUserInfo();
   loadQuickDiff();
   articleLink();
@@ -1007,7 +1007,7 @@ module.exports = async function init() {
     articleLink,
     findAndReplace,
     loadQuickDiff,
-    pluginPreference,
+    preference,
     progress,
     quickDelete,
     quickDiff,
@@ -1434,7 +1434,7 @@ module.exports = JSON.parse("{\"aboutUrl\":\"https://ipe.netlify.app/\",\"analys
 var config = mw.config.get();
 const { _msg } = __webpack_require__(/*! ./_msg */ "./module/_msg.js");
 
-const { pluginPreference } = __webpack_require__(/*! ./pluginPreference */ "./module/pluginPreference.js");
+const { preference } = __webpack_require__(/*! ./preference */ "./module/preference.js");
 const { quickEdit } = __webpack_require__(/*! ./quickEdit */ "./module/quickEdit.js");
 
 /**
@@ -1443,7 +1443,7 @@ const { quickEdit } = __webpack_require__(/*! ./quickEdit */ "./module/quickEdit
  */
 var articleLink = function (element) {
   if (element === undefined) {
-    if (pluginPreference.get('redLinkQuickEdit') === true) {
+    if (preference.get('redLinkQuickEdit') === true) {
       element = $('#mw-content-text a');
     } else {
       element = $('#mw-content-text a:not(.new)');
@@ -1698,212 +1698,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./module/pluginPreference.js":
-/*!************************************!*\
-  !*** ./module/pluginPreference.js ***!
-  \************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var InPageEdit = window.InPageEdit || {};
-
-const { _analysis } = __webpack_require__(/*! ./_analysis */ "./module/_analysis.js");
-const { _msg } = __webpack_require__(/*! ./_msg */ "./module/_msg.js");
-const { $br, $hr } = __webpack_require__(/*! ./_elements */ "./module/_elements.js");
-
-const api = __webpack_require__(/*! ./api.json */ "./module/api.json")
-const version = __webpack_require__(/*! ./version */ "./module/version.js");
-
-/**
- * @module preference 个人设置模块
- */
-var pluginPreference = {
-  /**
-   * @name 预设值
-   * @return {object}
-   */
-  "default": {
-    doNotCollectMyInfo: false,
-    doNotShowLocalWarn: false,
-    editMinor: false,
-    editSummary: _msg('preference-summary-default'),
-    lockToolBox: false,
-    redLinkQuickEdit: true,
-    outSideClose: true,
-    watchList: Boolean(mw.user.options.get('watchdefault'))
-  },
-  /**
-   * @name 获取设置 
-   * @description 合并保存在用户页的设置以及localStorage的设置，有容错机制
-   * @param {string} setting 返回相应的设置，为空时返回全部设置
-   * @return {object|string}
-   */
-  get: function (setting) {
-    setting = setting || undefined;
-    var local = localStorage.getItem('InPageEditPreference') || '{}';
-    try {
-      local = JSON.parse(local);
-    } catch (e) {
-      local = {};
-    }
-    if (typeof InPageEdit.myPreference === 'object') {
-      local = $.extend({}, local, InPageEdit.myPreference);
-    }
-    var json = $.extend({}, pluginPreference.default, local);
-    if (typeof (setting) === 'string' && setting !== '') {
-      return json.setting ? json[setting] : null;
-    } else {
-      return json;
-    }
-  },
-  /**
-   * @name 保存设置
-   * @param {Object|string} settingKey
-   * @param {any} settingValue
-   * @example 可以这样 pluginPreference.set({ key: 'value' }) 也可以 pluginPreference.set('key', 'value')
-   */
-  set: function (settingKey = {}, settingValue = undefined) {
-    var options = {};
-    if (typeof settingKey === 'string' && settingValue !== undefined) {
-      options[settingKey] = settingValue;
-    } else if (typeof settingKey === 'object') {
-      options = settingKey;
-    } else {
-      return;
-    }
-    options = $.extend({}, pluginPreference.get(), options);
-    options = JSON.stringify(options);
-    localStorage.setItem('InPageEditPreference', options);
-  },
-  /**
-   * @name 用户图形界面
-   * @description 打开可视化设置窗口
-   */
-  modal: function () {
-    // 防止多开设置页面
-    if ($('#ipe-preference-form').length > 0) return;
-
-    mw.hook('pluginPreference').fire();
-    pluginPreference.set();
-    var local = pluginPreference.get();
-    _analysis('plugin_setting');
-
-    ssi_modal.show({
-      outSideClose: false,
-      title: _msg('preference-title') + ' - ' + version,
-      content:
-        $('<section>', { id: 'ipe-preference-form', class: 'ipe-preference-form' }).append(
-          $('<h4>', { text: _msg('preference-editor-label') }),
-          $('<label>').append(
-            $('<input>', { id: 'outSideClose', type: 'checkbox' }).prop('checked', local.outSideClose),
-            $('<span>', { text: _msg('preference-outSideClose') })
-          ),
-          $br,
-          $('<label>').append(
-            $('<input>', { id: 'editMinor', type: 'checkbox' }).prop('checked', local.editMinor),
-            $('<span>', { text: _msg('preference-setMinor') })
-          ),
-          $br,
-          $('<h4>', { text: _msg('preference-summary-label') }),
-          $('<label>', { for: 'editSummary', style: 'padding-left: 0; font-size: small', html: _msg('preference-editSummary') }),
-          $br,
-          $('<input>', { id: 'editSummary', style: 'width: 96%', value: local.editSummary, placeholder: 'Edit via InPageEdit, yeah~' }),
-          $('<h4>', { text: _msg('preference-analysis-label') }),
-          $('<span>', { style: 'font-size: small; line-height: 0.9em', html: _msg('preference-analysis-view', `[${api.analysisUrl} ${api.analysisUrl}]`) }),
-          $('<h4>', { text: _msg('preference-about-label') }),
-          $('<button>', { class: 'btn btn-secondary', onclick: "InPageEdit.about()", text: _msg('preference-aboutAndHelp') }),
-          $('<button>', { class: 'btn btn-secondary', style: 'margin-left: 1em;', onclick: "InPageEdit.versionInfo()", text: _msg('preference-updatelog') }),
-          $('<a>', { href: 'https://ipe.miraheze.org/wiki/', target: '_blank', style: 'margin-left: 1em;' }).append(
-            $('<button>', { class: 'btn btn-secondary', text: _msg('preference-translate') })
-          ),
-          $('<a>', { href: 'https://discord.gg/VUVAh8w', target: '_blank', style: 'margin-left: 1em;' }).append(
-            $('<button>', { class: 'btn btn-secondary', text: _msg('preference-discord') })
-          ),
-          $hr,
-          $('<strong>', { style: 'font-size: small; line-height: 0.9em', text: _msg('preference-savelocal-label') }),
-          $br,
-          $('<span>', { style: 'font-size: small; line-height: 0.9em', text: _msg('preference-savelocal') }).append(
-            $('<a>', { href: 'javascript:;', id: 'ipeSaveLocalShow', text: _msg('preference-savelocal-btn') }).click(function () {
-              // 永久保存（本地用户页）
-              ssi_modal.dialog({
-                className: 'in-page-edit',
-                center: true,
-                title: _msg('preference-savelocal-popup-title'),
-                content: '<section id="ipeSaveLocal">' + _msg('preference-savelocal-popup') + '<br/><textarea style="font-size: 12px; resize: none; width: 100%; height: 10em;" readonly></textarea><br/>' + _msg('preference-savelocal-popup-notice') + '</section>',
-                okBtn: {
-                  className: 'btn btn-primary btn-single',
-                  label: _msg('ok')
-                }
-              });
-              $('#ipeSaveLocal textarea').val('/** InPageEdit Preferences **/\nwindow.InPageEdit = window.InPageEdit || {}; // Keep this line\nInPageEdit.myPreference = ' + JSON.stringify($.extend({}, pluginPreference.get(), $('#ipe-preference-form').data()), null, 2));
-            })
-          )
-        ),
-      sizeClass: 'dialog',
-      className: 'in-page-edit ipe-preference',
-      center: true,
-      buttons: [{
-        label: _msg('preference-reset'),
-        className: 'btn btn-danger',
-        method: function (a, modal) {
-          ssi_modal.confirm({
-            title: _msg('preference-reset-confirm-title'),
-            content: _msg('preference-reset-confirm'),
-            className: 'in-page-edit',
-            center: true,
-            okBtn: {
-              label: _msg('ok'),
-              className: 'btn btn-danger'
-            },
-            cancelBtn: {
-              label: _msg('cancel'),
-              className: 'btn'
-            }
-          }, (res) => {
-            if (res) {
-              pluginPreference.set(pluginPreference.default);
-              modal.close();
-            } else {
-              return false;
-            }
-          });
-        }
-      }, {
-        label: _msg('preference-save'),
-        className: 'btn btn-primary',
-        method: function (a, modal) {
-          pluginPreference.set($('#ipe-preference-form').data());
-          modal.close();
-        }
-      }
-      ],
-      onShow: function () {
-        function setData() {
-          if (this.type === 'checkbox') {
-            $('#ipe-preference-form').data(this.id, this.checked);
-          } else if (this.type === 'text') {
-            $('#ipe-preference-form').data(this.id, this.value);
-          }
-        }
-        $('#ipe-preference-form input').each(setData).change(setData);
-
-        if (typeof (InPageEdit.myPreference) !== 'undefined') {
-          $('#ipe-preference-form input, .ipe-preference .ssi-modalBtn').attr({ 'disabled': 'disabled' });
-          $('#ipe-preference-form').prepend(
-            $('<p>', { class: 'has-local-warn', style: 'padding-left: 8px; border-left: 6px solid orange; font-size: small;', html: _msg('preference-savelocal-popup-haslocal') })
-          );
-        }
-      }
-    });
-  }
-}
-
-module.exports = {
-  pluginPreference
-}
-
-/***/ }),
-
 /***/ "./module/pluginStore.js":
 /*!*******************************!*\
   !*** ./module/pluginStore.js ***!
@@ -1957,6 +1751,212 @@ var pluginStore = {
 
 module.exports = {
   pluginStore
+}
+
+/***/ }),
+
+/***/ "./module/preference.js":
+/*!******************************!*\
+  !*** ./module/preference.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var InPageEdit = window.InPageEdit || {};
+
+const { _analysis } = __webpack_require__(/*! ./_analysis */ "./module/_analysis.js");
+const { _msg } = __webpack_require__(/*! ./_msg */ "./module/_msg.js");
+const { $br, $hr } = __webpack_require__(/*! ./_elements */ "./module/_elements.js");
+
+const api = __webpack_require__(/*! ./api.json */ "./module/api.json")
+const version = __webpack_require__(/*! ./version */ "./module/version.js");
+
+/**
+ * @module preference 个人设置模块
+ */
+var preference = {
+  /**
+   * @name 预设值
+   * @return {object}
+   */
+  "default": {
+    doNotCollectMyInfo: false,
+    doNotShowLocalWarn: false,
+    editMinor: false,
+    editSummary: _msg('preference-summary-default'),
+    lockToolBox: false,
+    redLinkQuickEdit: true,
+    outSideClose: true,
+    watchList: Boolean(mw.user.options.get('watchdefault'))
+  },
+  /**
+   * @name 获取设置 
+   * @description 合并保存在用户页的设置以及localStorage的设置，有容错机制
+   * @param {string} setting 返回相应的设置，为空时返回全部设置
+   * @return {object|string}
+   */
+  get: function (setting) {
+    setting = setting || undefined;
+    var local = localStorage.getItem('InPageEditPreference') || '{}';
+    try {
+      local = JSON.parse(local);
+    } catch (e) {
+      local = {};
+    }
+    if (typeof InPageEdit.myPreference === 'object') {
+      local = $.extend({}, local, InPageEdit.myPreference);
+    }
+    var json = $.extend({}, preference.default, local);
+    if (typeof (setting) === 'string' && setting !== '') {
+      return json[setting] ? json[setting] : null;
+    } else {
+      return json;
+    }
+  },
+  /**
+   * @name 保存设置
+   * @param {Object|string} settingKey
+   * @param {any} settingValue
+   * @example 可以这样 preference.set({ key: 'value' }) 也可以 preference.set('key', 'value')
+   */
+  set: function (settingKey = {}, settingValue = undefined) {
+    var options = {};
+    if (typeof settingKey === 'string' && settingValue !== undefined) {
+      options[settingKey] = settingValue;
+    } else if (typeof settingKey === 'object') {
+      options = settingKey;
+    } else {
+      return;
+    }
+    options = $.extend({}, preference.get(), options);
+    options = JSON.stringify(options);
+    localStorage.setItem('InPageEditPreference', options);
+  },
+  /**
+   * @name 用户图形界面
+   * @description 打开可视化设置窗口
+   */
+  modal: function () {
+    // 防止多开设置页面
+    if ($('#ipe-preference-form').length > 0) return;
+
+    mw.hook('pluginPreference').fire();
+    preference.set();
+    var local = preference.get();
+    _analysis('plugin_setting');
+
+    ssi_modal.show({
+      outSideClose: false,
+      title: _msg('preference-title') + ' - ' + version,
+      content:
+        $('<section>', { id: 'ipe-preference-form', class: 'ipe-preference-form' }).append(
+          $('<h4>', { text: _msg('preference-editor-label') }),
+          $('<label>').append(
+            $('<input>', { id: 'outSideClose', type: 'checkbox' }).prop('checked', local.outSideClose),
+            $('<span>', { text: _msg('preference-outSideClose') })
+          ),
+          $br,
+          $('<label>').append(
+            $('<input>', { id: 'editMinor', type: 'checkbox' }).prop('checked', local.editMinor),
+            $('<span>', { text: _msg('preference-setMinor') })
+          ),
+          $br,
+          $('<h4>', { text: _msg('preference-summary-label') }),
+          $('<label>', { for: 'editSummary', style: 'padding-left: 0; font-size: small', html: _msg('preference-editSummary') }),
+          $br,
+          $('<input>', { id: 'editSummary', style: 'width: 96%', value: local.editSummary, placeholder: 'Edit via InPageEdit, yeah~' }),
+          $('<h4>', { text: _msg('preference-analysis-label') }),
+          $('<span>', { style: 'font-size: small; line-height: 0.9em', html: _msg('preference-analysis-view', `[${api.analysisUrl} ${api.analysisUrl}]`) }),
+          $('<h4>', { text: _msg('preference-about-label') }),
+          $('<button>', { class: 'btn btn-secondary', onclick: "InPageEdit.about()", text: _msg('preference-aboutAndHelp') }),
+          $('<button>', { class: 'btn btn-secondary', style: 'margin-left: 1em;', onclick: "InPageEdit.versionInfo()", text: _msg('preference-updatelog') }),
+          $('<a>', { href: 'https://ipe.miraheze.org/wiki/', target: '_blank', style: 'margin-left: 1em;' }).append(
+            $('<button>', { class: 'btn btn-secondary', text: _msg('preference-translate') })
+          ),
+          $('<a>', { href: 'https://discord.gg/VUVAh8w', target: '_blank', style: 'margin-left: 1em;' }).append(
+            $('<button>', { class: 'btn btn-secondary', text: _msg('preference-discord') })
+          ),
+          $hr,
+          $('<strong>', { style: 'font-size: small; line-height: 0.9em', text: _msg('preference-savelocal-label') }),
+          $br,
+          $('<span>', { style: 'font-size: small; line-height: 0.9em', text: _msg('preference-savelocal') }).append(
+            $('<a>', { href: 'javascript:;', id: 'ipeSaveLocalShow', text: _msg('preference-savelocal-btn') }).click(function () {
+              // 永久保存（本地用户页）
+              ssi_modal.dialog({
+                className: 'in-page-edit',
+                center: true,
+                title: _msg('preference-savelocal-popup-title'),
+                content: '<section id="ipeSaveLocal">' + _msg('preference-savelocal-popup') + '<br/><textarea style="font-size: 12px; resize: none; width: 100%; height: 10em;" readonly></textarea><br/>' + _msg('preference-savelocal-popup-notice') + '</section>',
+                okBtn: {
+                  className: 'btn btn-primary btn-single',
+                  label: _msg('ok')
+                }
+              });
+              $('#ipeSaveLocal textarea').val('/** InPageEdit Preferences **/\nwindow.InPageEdit = window.InPageEdit || {}; // Keep this line\nInPageEdit.myPreference = ' + JSON.stringify($.extend({}, preference.get(), $('#ipe-preference-form').data()), null, 2));
+            })
+          )
+        ),
+      sizeClass: 'dialog',
+      className: 'in-page-edit ipe-preference',
+      center: true,
+      buttons: [{
+        label: _msg('preference-reset'),
+        className: 'btn btn-danger',
+        method: function (a, modal) {
+          ssi_modal.confirm({
+            title: _msg('preference-reset-confirm-title'),
+            content: _msg('preference-reset-confirm'),
+            className: 'in-page-edit',
+            center: true,
+            okBtn: {
+              label: _msg('ok'),
+              className: 'btn btn-danger'
+            },
+            cancelBtn: {
+              label: _msg('cancel'),
+              className: 'btn'
+            }
+          }, (res) => {
+            if (res) {
+              preference.set(preference.default);
+              modal.close();
+            } else {
+              return false;
+            }
+          });
+        }
+      }, {
+        label: _msg('preference-save'),
+        className: 'btn btn-primary',
+        method: function (a, modal) {
+          preference.set($('#ipe-preference-form').data());
+          modal.close();
+        }
+      }
+      ],
+      onShow: function () {
+        function setData() {
+          if (this.type === 'checkbox') {
+            $('#ipe-preference-form').data(this.id, this.checked);
+          } else if (this.type === 'text') {
+            $('#ipe-preference-form').data(this.id, this.value);
+          }
+        }
+        $('#ipe-preference-form input').each(setData).change(setData);
+
+        if (typeof (InPageEdit.myPreference) !== 'undefined') {
+          $('#ipe-preference-form input, .ipe-preference .ssi-modalBtn').attr({ 'disabled': 'disabled' });
+          $('#ipe-preference-form').prepend(
+            $('<p>', { class: 'has-local-warn', style: 'padding-left: 8px; border-left: 6px solid orange; font-size: small;', html: _msg('preference-savelocal-popup-haslocal') })
+          );
+        }
+      }
+    });
+  }
+}
+
+module.exports = {
+  preference
 }
 
 /***/ }),
@@ -2348,7 +2348,7 @@ const { _hasRight } = __webpack_require__(/*! ./_hasRight */ "./module/_hasRight
 const { $br, $progress } = __webpack_require__(/*! ./_elements */ "./module/_elements.js");
 
 const { findAndReplace } = __webpack_require__(/*! ./findAndReplace */ "./module/findAndReplace.js");
-const { pluginPreference } = __webpack_require__(/*! ./pluginPreference */ "./module/pluginPreference.js");
+const { preference } = __webpack_require__(/*! ./preference */ "./module/preference.js");
 const { progress } = __webpack_require__(/*! ./progress */ "./module/progress.js")
 const { quickPreview } = __webpack_require__(/*! ./quickPreview */ "./module/quickPreview.js");
 const { quickDiff } = __webpack_require__(/*! ./quickDiff */ "./module/quickDiff.js");
@@ -2363,7 +2363,6 @@ const { quickDiff } = __webpack_require__(/*! ./quickDiff */ "./module/quickDiff
  * @param {Boolean} options.reload if reload page after save successful (default: true)
  */
 var quickEdit = function (options) {
-  mw.hook('InPageEdit.quickEdit').fire();
   /** 获取设定信息，设置缺省值 **/
   options = options || {};
   if (typeof options === 'string') {
@@ -2395,7 +2394,7 @@ var quickEdit = function (options) {
   }
 
   /** 获取用户设置 **/
-  var preference = pluginPreference.get();
+  var userPreference = preference.get();
 
   /** 缓存时间戳 **/
   var date = new Date(),
@@ -2403,7 +2402,7 @@ var quickEdit = function (options) {
     now = date.toUTCString();
 
   /** 将选项合并并标准化 **/
-  options = $.extend({}, defaultOptions, options, preference);
+  options = $.extend({}, defaultOptions, options, userPreference);
   options.page = decodeURIComponent(options.page); // 解码网址 Unicode
 
   _analysis('quick_edit');
@@ -2423,6 +2422,77 @@ var quickEdit = function (options) {
     }
   }
 
+  // 模态框内部
+  var $content = $('<div>').append(
+    $progress,
+    $('<section>', { class: 'hideBeforeLoaded' }).append(
+      // 编辑工具条
+      $('<div>', { class: 'editTools' }).append(
+        $('<div>', { class: 'btnGroup' }).append(
+          $('<div>', { class: 'toolSelect' }).append(
+            $('<div>', { class: 'label', text: _msg('editor-edittool-header') }),
+            $('<ul>', { class: 'ul-list' }).append(
+              $('<li>', { class: 'editToolBtn', 'data-open': '\n== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ==\n', text: 'H2' }),
+              $('<li>', { class: 'editToolBtn', 'data-open': '\n=== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ===\n', text: 'H3' }),
+              $('<li>', { class: 'editToolBtn', 'data-open': '\n==== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ====\n', text: 'H4' }),
+              $('<li>', { class: 'editToolBtn', 'data-open': '\n===== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' =====\n', text: 'H5' })
+            )
+          )
+        ),
+        $('<div>', { class: 'btnGroup' }).append(
+          $('<span>', { class: 'label', text: '格式' }),
+          $('<button>', { class: 'editToolBtn fa fa-bold btn', 'data-open': "'''", 'data-middle': _msg('editor-edittool-bold'), 'data-close': "'''" }),
+          $('<button>', { class: 'editToolBtn fa fa-italic btn', 'data-open': "''", 'data-middle': _msg('editor-edittool-italic'), 'data-close': "''" }),
+          $('<button>', { class: 'editToolBtn fa fa-list-ul btn', 'data-open': '\n* ', 'data-middle': _msg('editor-edittool-list-bulleted'), 'data-close': '\n' }),
+          $('<button>', { class: 'editToolBtn fa fa-list-ol btn', 'data-open': '\n# ', 'data-middle': _msg('editor-edittool-list-numbered'), 'data-close': '\n' }),
+          $('<button>', { class: 'editToolBtn fa fa-won btn', 'data-open': '<' + 'nowiki>', 'data-middle': _msg('editor-edittool-nowiki'), 'data-close': '</nowiki>' }),
+          $('<button>', { class: 'editToolBtn fa fa-level-down fa-rotate-90 btn', 'data-open': '<br>\n', 'data-middle': '', 'data-close': '' })
+        ),
+        $('<div>', { class: 'btnGroup' }).append(
+          $('<span>', { class: 'label', text: '插入' }),
+          $('<button>', { class: 'editToolBtn fa fa-link btn', 'data-open': '[' + '[', 'data-middle': _msg('editor-edittool-internal-link'), 'data-close': ']]' }),
+          $('<button>', { class: 'editToolBtn fa fa-file-image-o btn', 'data-open': '[' + '[File:', 'data-middle': 'Example.png', 'data-close': '|thumb]]' }),
+          $('<button>', { class: 'editToolBtn btn', 'data-open': '\n<' + 'gallery>\n', 'data-middle': 'Example1.jpg|Description\nExample2.png|Description', 'data-close': '\n</gallery>\n', html: '<span class="fa-stack"><i class="fa fa-picture-o fa-stack-1x"></i><i class="fa fa-picture-o fa-stack-1x" style="left: 2px;top: 2px;text-shadow: 1px 1px 0 #fff;"></i></span>' })
+        ),
+        $('<div>', { class: 'btnGroup extra', style: 'display: none' }).append(
+          $('<span>', { class: 'label', text: '自定义' })
+        ),
+        $('<div>', { class: 'btnGroup special-tools', style: 'float: right' }).append(
+          $('<button>', { class: 'btn fa fa-search' }).click(function () {
+            findAndReplace($('.ipe-editor.timestamp-' + timestamp + ' .editArea'));
+          })
+        )
+      ),
+      // 编辑框
+      $('<textarea>', { class: 'editArea', style: 'margin-top: 0;' }),
+      // 页面分析
+      $('<div>', { class: 'editOptionsLabel hideBeforeLoaded' }).append(
+        $('<aside>', { class: 'detailArea' }).append(
+          $('<label>', { class: 'detailToggle', text: _msg('editor-detail-button-toggle') }),
+          $('<div>', { class: 'detailBtnGroup' }).append(
+            $('<a>', { href: 'javascript:;', class: 'detailBtn', id: 'showTemplates', text: _msg('editor-detail-button-templates') }),
+            ' | ',
+            $('<a>', { href: 'javascript:;', class: 'detailBtn', id: 'showImages', text: _msg('editor-detail-button-images') })
+          )
+        ),
+        // 摘要&小编辑
+        $('<label>', { for: 'editSummary', text: _msg('editSummary') }),
+        $br,
+        $('<input>', { class: 'editSummary', id: 'editSummary', placeholder: 'Edit via InPageEdit~', value: options.editSummary.replace(/\$oldid/ig, options.summaryRevision) }),
+        $br,
+        $('<label>').append(
+          $('<input>', { type: 'checkbox', class: 'editMinor', id: 'editMinor', checked: options.editMinor }),
+          $('<span>', { text: _msg('markAsMinor') })
+        ),
+        $br,
+        $('<label>').append(
+          $('<input>', { type: 'checkbox', class: 'reloadPage', id: 'reloadPage', checked: options.reload }),
+          $('<span>', { text: _msg('editor-reload-page') })
+        )
+      )
+    )
+  );
+
   // Debug
   console.time('[InPageEdit] 获取页面源代码');
   console.info('[InPageEdit] QuickEdit start with options:');
@@ -2431,76 +2501,7 @@ var quickEdit = function (options) {
   // 显示主窗口
   ssi_modal.show({
     title: _msg('editor-title-editing') + ': <u class="editPage">' + options.page.replace(/_/g, ' ') + '</u>',
-    content:
-      $('<div>').append(
-        $progress,
-        $('<section>', { class: 'hideBeforeLoaded' }).append(
-          // 编辑工具条
-          $('<div>', { class: 'editTools' }).append(
-            $('<div>', { class: 'btnGroup' }).append(
-              $('<div>', { class: 'toolSelect' }).append(
-                $('<div>', { class: 'label', text: _msg('editor-edittool-header') }),
-                $('<ul>', { class: 'ul-list' }).append(
-                  $('<li>', { class: 'editToolBtn', 'data-open': '\n== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ==\n', text: 'H2' }),
-                  $('<li>', { class: 'editToolBtn', 'data-open': '\n=== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ===\n', text: 'H3' }),
-                  $('<li>', { class: 'editToolBtn', 'data-open': '\n==== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ====\n', text: 'H4' }),
-                  $('<li>', { class: 'editToolBtn', 'data-open': '\n===== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' =====\n', text: 'H5' })
-                )
-              )
-            ),
-            $('<div>', { class: 'btnGroup' }).append(
-              $('<span>', { class: 'label', text: '格式' }),
-              $('<button>', { class: 'editToolBtn fa fa-bold btn', 'data-open': "'''", 'data-middle': _msg('editor-edittool-bold'), 'data-close': "'''" }),
-              $('<button>', { class: 'editToolBtn fa fa-italic btn', 'data-open': "''", 'data-middle': _msg('editor-edittool-italic'), 'data-close': "''" }),
-              $('<button>', { class: 'editToolBtn fa fa-list-ul btn', 'data-open': '\n* ', 'data-middle': _msg('editor-edittool-list-bulleted'), 'data-close': '\n' }),
-              $('<button>', { class: 'editToolBtn fa fa-list-ol btn', 'data-open': '\n# ', 'data-middle': _msg('editor-edittool-list-numbered'), 'data-close': '\n' }),
-              $('<button>', { class: 'editToolBtn fa fa-won btn', 'data-open': '<' + 'nowiki>', 'data-middle': _msg('editor-edittool-nowiki'), 'data-close': '</nowiki>' }),
-              $('<button>', { class: 'editToolBtn fa fa-level-down fa-rotate-90 btn', 'data-open': '<br>\n', 'data-middle': '', 'data-close': '' })
-            ),
-            $('<div>', { class: 'btnGroup' }).append(
-              $('<span>', { class: 'label', text: '插入' }),
-              $('<button>', { class: 'editToolBtn fa fa-link btn', 'data-open': '[' + '[', 'data-middle': _msg('editor-edittool-internal-link'), 'data-close': ']]' }),
-              $('<button>', { class: 'editToolBtn fa fa-file-image-o btn', 'data-open': '[' + '[File:', 'data-middle': 'Example.png', 'data-close': '|thumb]]' }),
-              $('<button>', { class: 'editToolBtn btn', 'data-open': '\n<' + 'gallery>\n', 'data-middle': 'Example1.jpg|Description\nExample2.png|Description', 'data-close': '\n</gallery>\n', html: '<span class="fa-stack"><i class="fa fa-picture-o fa-stack-1x"></i><i class="fa fa-picture-o fa-stack-1x" style="left: 2px;top: 2px;text-shadow: 1px 1px 0 #fff;"></i></span>' })
-            ),
-            $('<div>', { class: 'btnGroup extra', style: 'display: none' }).append(
-              $('<span>', { class: 'label', text: '自定义' })
-            ),
-            $('<div>', { class: 'btnGroup special-tools', style: 'float: right' }).append(
-              $('<button>', { class: 'btn fa fa-search' }).click(function () {
-                findAndReplace($('.ipe-editor.timestamp-' + timestamp + ' .editArea'));
-              })
-            )
-          ),
-          // 编辑框
-          $('<textarea>', { class: 'editArea', style: 'margin-top: 0;' }),
-          // 页面分析
-          $('<div>', { class: 'editOptionsLabel hideBeforeLoaded' }).append(
-            $('<aside>', { class: 'detailArea' }).append(
-              $('<label>', { class: 'detailToggle', text: _msg('editor-detail-button-toggle') }),
-              $('<div>', { class: 'detailBtnGroup' }).append(
-                $('<a>', { href: 'javascript:;', class: 'detailBtn', id: 'showTemplates', text: _msg('editor-detail-button-templates') }),
-                ' | ',
-                $('<a>', { href: 'javascript:;', class: 'detailBtn', id: 'showImages', text: _msg('editor-detail-button-images') })
-              )
-            ),
-            // 摘要&小编辑
-            $('<label>', { for: 'editSummary', text: _msg('editSummary') }),
-            $br,
-            $('<input>', { class: 'editSummary', id: 'editSummary', placeholder: 'Edit via InPageEdit~', value: options.editSummary.replace(/\$oldid/ig, options.summaryRevision) }),
-            $br,
-            $('<label>').append(
-              $('<input>', { type: 'checkbox', class: 'editMinor', id: 'editMinor', checked: options.editMinor }),
-              $('<span>', { text: _msg('markAsMinor') })
-            ),
-            $br,
-            $('<label>').append(
-              $('<input>', { type: 'checkbox', class: 'reloadPage', id: 'reloadPage', checked: options.reload }),
-              $('<span>', { text: _msg('editor-reload-page') })
-            )
-          )
-        )
-      ),
+    content: $content,
     outSideClose: options.outSideClose,
     className: 'in-page-edit ipe-editor timestamp-' + timestamp,
     sizeClass: 'large',
@@ -2525,10 +2526,10 @@ var quickEdit = function (options) {
         },
           function (result) {
             if (result) {
-              var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val(),
-                minor = $('.ipe-editor.timestamp-' + timestamp + ' .editMinor').prop('checked'),
+              var text = $content.find('.editArea').val(),
+                minor = $content.find('.editMinor').prop('checked'),
                 section = options.section,
-                summary = $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val();
+                summary = $content.find('.editSummary').val();
               postArticle({
                 text: text,
                 page: options.page,
@@ -2544,7 +2545,7 @@ var quickEdit = function (options) {
       className: 'btn btn-secondary leftBtn hideBeforeLoaded',
       method: function () {
         _analysis('preview_edit');
-        var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
+        var text = $content.find('.editArea').val();
         quickPreview({
           title: options.page,
           text: text,
@@ -2569,10 +2570,10 @@ var quickEdit = function (options) {
     /* 预加载 */
     beforeShow: function () {
       // 设置样式
-      $('.ipe-editor.timestamp-' + timestamp + ' .hideBeforeLoaded').hide();
-      $('.ipe-editor.timestamp-' + timestamp + ' .ipe-progress').css('margin', Number($(window).height() / 3 - 50) + 'px 0');
-      $('.ipe-editor.timestamp-' + timestamp + ' .editArea').css('height', $(window).height() / 3 * 2 - 100);
-      $('.ipe-editor.timestamp-' + timestamp + ' .editOptionsLabel').prependTo('.ipe-editor.timestamp-' + timestamp + ' .ssi-buttons');
+      $content.find('.hideBeforeLoaded').hide();
+      $content.find('.ipe-progress').css('margin', Number($(window).height() / 3 - 50) + 'px 0');
+      $content.find('.editArea').css('height', $(window).height() / 3 * 2 - 100);
+      $content.find('.editOptionsLabel').prependTo('.ipe-editor.timestamp-' + timestamp + ' .ssi-buttons');
       $('.ipe-editor.timestamp-' + timestamp + ' .leftBtn').appendTo('.ipe-editor.timestamp-' + timestamp + ' .ssi-leftButtons');
       $('.ipe-editor.timestamp-' + timestamp + ' .ssi-modalTitle').append(
         $('<a>', {
@@ -2585,7 +2586,7 @@ var quickEdit = function (options) {
             className: 'in-page-edit',
             center: true,
             title: _msg('editor-title-editNotice'),
-            content: '<section class="editNotice">' + $('.ipe-editor.timestamp-' + timestamp).data('editNotice') + '</section>'
+            content: '<section class="editNotice">' + $content.data('editNotice') + '</section>'
           });
         })
       );
@@ -2612,21 +2613,21 @@ var quickEdit = function (options) {
         middle = middle || '';
         close = close || '';
         icon = 'fa-' + icon || false;
-        $('.ipe-editor.timestamp-' + timestamp + ' .btnGroup.extra').append(
+        $content.find('.btnGroup.extra').append(
           $('<button>', { class: 'editToolBtn btn', 'data-open': open, 'data-middle': middle, 'data-close': close, html: `<i class="fa ${icon}"></i>` })
         );
       }
       // 用户自定义按钮
       if (InPageEdit.buttons) {
         var btns = InPageEdit.buttons;
-        $('.ipe-editor.timestamp-' + timestamp + ' .btnGroup.extra').show();
+        $content.find('.btnGroup.extra').show();
 
         for (var i = 0; i < btns.length; i++) {
           var btn = btns[i];
           addBtn(btn.open, btn.middle, btn.close, btn.text);
         }
       }
-      $('.ipe-editor.timestamp-' + timestamp + ' .editToolBtn').click(function (e) {
+      $content.find('.editToolBtn').click(function (e) {
         e.preventDefault();
         var $this = $(this),
           $open = $this.attr('data-open') || '',
@@ -2636,7 +2637,7 @@ var quickEdit = function (options) {
           open: $open,
           middle: $middle,
           close: $close
-        }, $('.ipe-editor.timestamp-' + timestamp + ' .editArea')[0]);
+        }, $content.find('.editArea')[0]);
       });
     },
     /**
@@ -2644,7 +2645,9 @@ var quickEdit = function (options) {
   * @description 模态框显示后
   */
     onShow() {
-      mw.hook('InPageEdit.quickEdit.modal').fire();
+      mw.hook('InPageEdit.quickEdit').fire({
+        $modal: $content
+      });
       // 绑定事件，在尝试离开页面时提示
       $('.ipe-editor.timestamp-' + timestamp + ' .editArea').change(function () {
         $(this).attr('data-modifiled', 'true');
@@ -2689,27 +2692,27 @@ var quickEdit = function (options) {
           console.warn('[InPageEdit]警告：无法获取页面内容');
           options.editText = '<!-- ' + data.error.info + ' -->';
           options.pageId = -1;
-          $('.ipe-editor.timestamp-' + timestamp + ' .detailArea').hide();
+          $content.find('.detailArea').hide();
         } else {
           options.editText = data.parse.wikitext['*'];
           options.pageId = data.parse.pageid;
         }
         // 设定一堆子样式
-        $('.ipe-editor.timestamp-' + timestamp + ' .ipe-progress').hide();
-        $('.ipe-editor.timestamp-' + timestamp + ' .hideBeforeLoaded').fadeIn(500);
-        $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val(options.editText + '\n');
+        $content.find('.ipe-progress').hide();
+        $content.find('.hideBeforeLoaded').fadeIn(500);
+        $content.find('.editArea').val(options.editText + '\n');
 
         var summaryVal;
         if (options.section !== null) {
-          summaryVal = $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val();
+          summaryVal = $content.find('.editSummary').val();
           summaryVal = summaryVal.replace(/\$section/ig, '/* ' + data.parse.sections[0].line + ' */');
-          $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val(summaryVal);
+          $content.find('.editSummary').val(summaryVal);
           $('.ipe-editor.timestamp-' + timestamp + ' .editPage').after('<span class="editSection">→' + data.parse.sections[0].line + '</span>');
           options.jumpTo = '#' + data.parse.sections[0].anchor;
         } else {
-          summaryVal = $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val();
+          summaryVal = $content.find('.editSummary').val();
           summaryVal = summaryVal.replace(/\$section/ig, '');
-          $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val(summaryVal);
+          $content.find('.editSummary').val(summaryVal);
           options.jumpTo = '';
         }
         if (options.revision !== null && options.revision !== '' && options.revision !== config.wgCurRevisionId) {
@@ -2750,13 +2753,13 @@ var quickEdit = function (options) {
           console.info('[InPageEdit] 获取页面基础信息成功');
           console.timeEnd('[InPageEdit] 获取页面基础信息');
           // 记录页面最后编辑时间，防止编辑冲突
-          $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp', data['query']['pages'][options.pageId].revisions ? data['query']['pages'][options.pageId]['revisions'][0]['timestamp'] : now);
+          $content.data('basetimestamp', data['query']['pages'][options.pageId].revisions ? data['query']['pages'][options.pageId]['revisions'][0]['timestamp'] : now);
           queryDone(data);
         }).fail(function (a, b, errorThrown) {
           var data = errorThrown;
           console.timeEnd('[InPageEdit] 获取页面基础信息');
           console.warn('[InPageEdit] 获取页面基础信息失败');
-          $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp', now);
+          $content.data('basetimestamp', now);
           queryDone(data);
         });
 
@@ -2775,7 +2778,7 @@ var quickEdit = function (options) {
           if (options.revision) {
             $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').attr('disabled', false).click(function () {
               _analysis('quick_diff_edit');
-              var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
+              var text = $content.find('.editArea').val();
               var diffJson = {
                 fromrev: options.revision,
                 totext: text,
@@ -2842,10 +2845,10 @@ var quickEdit = function (options) {
               text: wikitextPage + '\n' + wikitextNs
             }).done(function (data) {
               options.editNotice = data.parse.text['*'];
-              var notice = $('.ipe-editor.timestamp-' + timestamp).data('editNotice') || '';
+              var notice = $content.data('editNotice') || '';
               notice += '\n' + options.editNotice;
-              $('.ipe-editor.timestamp-' + timestamp).data('editNotice', notice);
-              $('.ipe-editor.timestamp-' + timestamp + ' .showEditNotice').show();
+              $content.data('editNotice', notice);
+              $content.find('.showEditNotice').show();
             });
           });
 
@@ -2855,10 +2858,10 @@ var quickEdit = function (options) {
 
     /* 确认是否取消 */
     beforeClose: function (modal) {
-      if ($('.ipe-editor.timestamp-' + timestamp + ' .editArea').attr('data-modifiled') !== 'true') {
+      if ($content.find('.editArea').attr('data-modifiled') !== 'true') {
         close();
         return;
-      } else if ($('.ipe-editor.timestamp-' + timestamp + ' .editArea').attr('data-confirmclose') === 'true') {
+      } else if ($content.find('.editArea').attr('data-confirmclose') === 'true') {
         closeNoReload();
         return;
       }
@@ -2903,7 +2906,7 @@ var quickEdit = function (options) {
   });
 
   // 页面详情模块
-  $('.ipe-editor.timestamp-' + timestamp + ' .detailBtnGroup .detailBtn').click(function () {
+  $content.find('.detailBtnGroup .detailBtn').click(function () {
     _analysis('quick_edit_pagedetail');
     var $this = $(this),
       id = $this.attr('id'),
@@ -3007,7 +3010,7 @@ var quickEdit = function (options) {
     progress(_msg('editor-title-saving'));
     options.jsonPost = {
       action: 'edit',
-      basetimestamp: $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp'),
+      basetimestamp: $content.data('basetimestamp'),
       starttimestamp: now,
       text: pValue.text,
       title: pValue.page,
@@ -3027,7 +3030,7 @@ var quickEdit = function (options) {
       if (data.edit.result === 'Success') {
         progress(true);
         // 是否重载页面
-        if ($('.ipe-editor.timestamp-' + timestamp + ' .reloadPage').prop('checked')) {
+        if ($content.find('.reloadPage').prop('checked')) {
           var content;
           $(window).unbind('beforeunload');
           content = _msg('notify-save-success');
@@ -3044,7 +3047,7 @@ var quickEdit = function (options) {
           content = _msg('notify-save-success-noreload');
           setTimeout(function () {
             progress(false);
-            $('.ipe-editor.timestamp-' + timestamp + ' .editArea').attr('data-confirmclose', 'true');
+            $content.find('.editArea').attr('data-confirmclose', 'true');
             modal.close();
           }, 1500);
         }
@@ -3187,7 +3190,7 @@ const { _msg } = __webpack_require__(/*! ./_msg */ "./module/_msg.js");
 const { $br, $progress } = __webpack_require__(/*! ./_elements */ "./module/_elements.js");
 
 const { _resolveExists } = __webpack_require__(/*! ./_resolveExists */ "./module/_resolveExists.js");
-const { pluginPreference } = __webpack_require__(/*! ./pluginPreference */ "./module/pluginPreference.js");
+const { preference } = __webpack_require__(/*! ./preference */ "./module/preference.js");
 
 /**
  * @module quickRedirect 快速重定向模块
@@ -3201,7 +3204,7 @@ var quickRedirect = function (type = 'to') {
     json = {
       action: 'edit',
       createonly: 1,
-      minor: pluginPreference.get('editMinor'),
+      minor: preference.get('editMinor'),
       format: 'json',
       errorformat: 'plaintext'
     },

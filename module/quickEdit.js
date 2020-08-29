@@ -8,7 +8,7 @@ const { _hasRight } = require('./_hasRight');
 const { $br, $progress } = require('./_elements');
 
 const { findAndReplace } = require('./findAndReplace');
-const { pluginPreference } = require('./pluginPreference');
+const { preference } = require('./preference');
 const { progress } = require('./progress')
 const { quickPreview } = require('./quickPreview');
 const { quickDiff } = require('./quickDiff');
@@ -23,7 +23,6 @@ const { quickDiff } = require('./quickDiff');
  * @param {Boolean} options.reload if reload page after save successful (default: true)
  */
 var quickEdit = function (options) {
-  mw.hook('InPageEdit.quickEdit').fire();
   /** 获取设定信息，设置缺省值 **/
   options = options || {};
   if (typeof options === 'string') {
@@ -55,7 +54,7 @@ var quickEdit = function (options) {
   }
 
   /** 获取用户设置 **/
-  var preference = pluginPreference.get();
+  var userPreference = preference.get();
 
   /** 缓存时间戳 **/
   var date = new Date(),
@@ -63,7 +62,7 @@ var quickEdit = function (options) {
     now = date.toUTCString();
 
   /** 将选项合并并标准化 **/
-  options = $.extend({}, defaultOptions, options, preference);
+  options = $.extend({}, defaultOptions, options, userPreference);
   options.page = decodeURIComponent(options.page); // 解码网址 Unicode
 
   _analysis('quick_edit');
@@ -83,6 +82,77 @@ var quickEdit = function (options) {
     }
   }
 
+  // 模态框内部
+  var $content = $('<div>').append(
+    $progress,
+    $('<section>', { class: 'hideBeforeLoaded' }).append(
+      // 编辑工具条
+      $('<div>', { class: 'editTools' }).append(
+        $('<div>', { class: 'btnGroup' }).append(
+          $('<div>', { class: 'toolSelect' }).append(
+            $('<div>', { class: 'label', text: _msg('editor-edittool-header') }),
+            $('<ul>', { class: 'ul-list' }).append(
+              $('<li>', { class: 'editToolBtn', 'data-open': '\n== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ==\n', text: 'H2' }),
+              $('<li>', { class: 'editToolBtn', 'data-open': '\n=== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ===\n', text: 'H3' }),
+              $('<li>', { class: 'editToolBtn', 'data-open': '\n==== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ====\n', text: 'H4' }),
+              $('<li>', { class: 'editToolBtn', 'data-open': '\n===== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' =====\n', text: 'H5' })
+            )
+          )
+        ),
+        $('<div>', { class: 'btnGroup' }).append(
+          $('<span>', { class: 'label', text: '格式' }),
+          $('<button>', { class: 'editToolBtn fa fa-bold btn', 'data-open': "'''", 'data-middle': _msg('editor-edittool-bold'), 'data-close': "'''" }),
+          $('<button>', { class: 'editToolBtn fa fa-italic btn', 'data-open': "''", 'data-middle': _msg('editor-edittool-italic'), 'data-close': "''" }),
+          $('<button>', { class: 'editToolBtn fa fa-list-ul btn', 'data-open': '\n* ', 'data-middle': _msg('editor-edittool-list-bulleted'), 'data-close': '\n' }),
+          $('<button>', { class: 'editToolBtn fa fa-list-ol btn', 'data-open': '\n# ', 'data-middle': _msg('editor-edittool-list-numbered'), 'data-close': '\n' }),
+          $('<button>', { class: 'editToolBtn fa fa-won btn', 'data-open': '<' + 'nowiki>', 'data-middle': _msg('editor-edittool-nowiki'), 'data-close': '</nowiki>' }),
+          $('<button>', { class: 'editToolBtn fa fa-level-down fa-rotate-90 btn', 'data-open': '<br>\n', 'data-middle': '', 'data-close': '' })
+        ),
+        $('<div>', { class: 'btnGroup' }).append(
+          $('<span>', { class: 'label', text: '插入' }),
+          $('<button>', { class: 'editToolBtn fa fa-link btn', 'data-open': '[' + '[', 'data-middle': _msg('editor-edittool-internal-link'), 'data-close': ']]' }),
+          $('<button>', { class: 'editToolBtn fa fa-file-image-o btn', 'data-open': '[' + '[File:', 'data-middle': 'Example.png', 'data-close': '|thumb]]' }),
+          $('<button>', { class: 'editToolBtn btn', 'data-open': '\n<' + 'gallery>\n', 'data-middle': 'Example1.jpg|Description\nExample2.png|Description', 'data-close': '\n</gallery>\n', html: '<span class="fa-stack"><i class="fa fa-picture-o fa-stack-1x"></i><i class="fa fa-picture-o fa-stack-1x" style="left: 2px;top: 2px;text-shadow: 1px 1px 0 #fff;"></i></span>' })
+        ),
+        $('<div>', { class: 'btnGroup extra', style: 'display: none' }).append(
+          $('<span>', { class: 'label', text: '自定义' })
+        ),
+        $('<div>', { class: 'btnGroup special-tools', style: 'float: right' }).append(
+          $('<button>', { class: 'btn fa fa-search' }).click(function () {
+            findAndReplace($('.ipe-editor.timestamp-' + timestamp + ' .editArea'));
+          })
+        )
+      ),
+      // 编辑框
+      $('<textarea>', { class: 'editArea', style: 'margin-top: 0;' }),
+      // 页面分析
+      $('<div>', { class: 'editOptionsLabel hideBeforeLoaded' }).append(
+        $('<aside>', { class: 'detailArea' }).append(
+          $('<label>', { class: 'detailToggle', text: _msg('editor-detail-button-toggle') }),
+          $('<div>', { class: 'detailBtnGroup' }).append(
+            $('<a>', { href: 'javascript:;', class: 'detailBtn', id: 'showTemplates', text: _msg('editor-detail-button-templates') }),
+            ' | ',
+            $('<a>', { href: 'javascript:;', class: 'detailBtn', id: 'showImages', text: _msg('editor-detail-button-images') })
+          )
+        ),
+        // 摘要&小编辑
+        $('<label>', { for: 'editSummary', text: _msg('editSummary') }),
+        $br,
+        $('<input>', { class: 'editSummary', id: 'editSummary', placeholder: 'Edit via InPageEdit~', value: options.editSummary.replace(/\$oldid/ig, options.summaryRevision) }),
+        $br,
+        $('<label>').append(
+          $('<input>', { type: 'checkbox', class: 'editMinor', id: 'editMinor', checked: options.editMinor }),
+          $('<span>', { text: _msg('markAsMinor') })
+        ),
+        $br,
+        $('<label>').append(
+          $('<input>', { type: 'checkbox', class: 'reloadPage', id: 'reloadPage', checked: options.reload }),
+          $('<span>', { text: _msg('editor-reload-page') })
+        )
+      )
+    )
+  );
+
   // Debug
   console.time('[InPageEdit] 获取页面源代码');
   console.info('[InPageEdit] QuickEdit start with options:');
@@ -91,76 +161,7 @@ var quickEdit = function (options) {
   // 显示主窗口
   ssi_modal.show({
     title: _msg('editor-title-editing') + ': <u class="editPage">' + options.page.replace(/_/g, ' ') + '</u>',
-    content:
-      $('<div>').append(
-        $progress,
-        $('<section>', { class: 'hideBeforeLoaded' }).append(
-          // 编辑工具条
-          $('<div>', { class: 'editTools' }).append(
-            $('<div>', { class: 'btnGroup' }).append(
-              $('<div>', { class: 'toolSelect' }).append(
-                $('<div>', { class: 'label', text: _msg('editor-edittool-header') }),
-                $('<ul>', { class: 'ul-list' }).append(
-                  $('<li>', { class: 'editToolBtn', 'data-open': '\n== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ==\n', text: 'H2' }),
-                  $('<li>', { class: 'editToolBtn', 'data-open': '\n=== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ===\n', text: 'H3' }),
-                  $('<li>', { class: 'editToolBtn', 'data-open': '\n==== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ====\n', text: 'H4' }),
-                  $('<li>', { class: 'editToolBtn', 'data-open': '\n===== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' =====\n', text: 'H5' })
-                )
-              )
-            ),
-            $('<div>', { class: 'btnGroup' }).append(
-              $('<span>', { class: 'label', text: '格式' }),
-              $('<button>', { class: 'editToolBtn fa fa-bold btn', 'data-open': "'''", 'data-middle': _msg('editor-edittool-bold'), 'data-close': "'''" }),
-              $('<button>', { class: 'editToolBtn fa fa-italic btn', 'data-open': "''", 'data-middle': _msg('editor-edittool-italic'), 'data-close': "''" }),
-              $('<button>', { class: 'editToolBtn fa fa-list-ul btn', 'data-open': '\n* ', 'data-middle': _msg('editor-edittool-list-bulleted'), 'data-close': '\n' }),
-              $('<button>', { class: 'editToolBtn fa fa-list-ol btn', 'data-open': '\n# ', 'data-middle': _msg('editor-edittool-list-numbered'), 'data-close': '\n' }),
-              $('<button>', { class: 'editToolBtn fa fa-won btn', 'data-open': '<' + 'nowiki>', 'data-middle': _msg('editor-edittool-nowiki'), 'data-close': '</nowiki>' }),
-              $('<button>', { class: 'editToolBtn fa fa-level-down fa-rotate-90 btn', 'data-open': '<br>\n', 'data-middle': '', 'data-close': '' })
-            ),
-            $('<div>', { class: 'btnGroup' }).append(
-              $('<span>', { class: 'label', text: '插入' }),
-              $('<button>', { class: 'editToolBtn fa fa-link btn', 'data-open': '[' + '[', 'data-middle': _msg('editor-edittool-internal-link'), 'data-close': ']]' }),
-              $('<button>', { class: 'editToolBtn fa fa-file-image-o btn', 'data-open': '[' + '[File:', 'data-middle': 'Example.png', 'data-close': '|thumb]]' }),
-              $('<button>', { class: 'editToolBtn btn', 'data-open': '\n<' + 'gallery>\n', 'data-middle': 'Example1.jpg|Description\nExample2.png|Description', 'data-close': '\n</gallery>\n', html: '<span class="fa-stack"><i class="fa fa-picture-o fa-stack-1x"></i><i class="fa fa-picture-o fa-stack-1x" style="left: 2px;top: 2px;text-shadow: 1px 1px 0 #fff;"></i></span>' })
-            ),
-            $('<div>', { class: 'btnGroup extra', style: 'display: none' }).append(
-              $('<span>', { class: 'label', text: '自定义' })
-            ),
-            $('<div>', { class: 'btnGroup special-tools', style: 'float: right' }).append(
-              $('<button>', { class: 'btn fa fa-search' }).click(function () {
-                findAndReplace($('.ipe-editor.timestamp-' + timestamp + ' .editArea'));
-              })
-            )
-          ),
-          // 编辑框
-          $('<textarea>', { class: 'editArea', style: 'margin-top: 0;' }),
-          // 页面分析
-          $('<div>', { class: 'editOptionsLabel hideBeforeLoaded' }).append(
-            $('<aside>', { class: 'detailArea' }).append(
-              $('<label>', { class: 'detailToggle', text: _msg('editor-detail-button-toggle') }),
-              $('<div>', { class: 'detailBtnGroup' }).append(
-                $('<a>', { href: 'javascript:;', class: 'detailBtn', id: 'showTemplates', text: _msg('editor-detail-button-templates') }),
-                ' | ',
-                $('<a>', { href: 'javascript:;', class: 'detailBtn', id: 'showImages', text: _msg('editor-detail-button-images') })
-              )
-            ),
-            // 摘要&小编辑
-            $('<label>', { for: 'editSummary', text: _msg('editSummary') }),
-            $br,
-            $('<input>', { class: 'editSummary', id: 'editSummary', placeholder: 'Edit via InPageEdit~', value: options.editSummary.replace(/\$oldid/ig, options.summaryRevision) }),
-            $br,
-            $('<label>').append(
-              $('<input>', { type: 'checkbox', class: 'editMinor', id: 'editMinor', checked: options.editMinor }),
-              $('<span>', { text: _msg('markAsMinor') })
-            ),
-            $br,
-            $('<label>').append(
-              $('<input>', { type: 'checkbox', class: 'reloadPage', id: 'reloadPage', checked: options.reload }),
-              $('<span>', { text: _msg('editor-reload-page') })
-            )
-          )
-        )
-      ),
+    content: $content,
     outSideClose: options.outSideClose,
     className: 'in-page-edit ipe-editor timestamp-' + timestamp,
     sizeClass: 'large',
@@ -185,10 +186,10 @@ var quickEdit = function (options) {
         },
           function (result) {
             if (result) {
-              var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val(),
-                minor = $('.ipe-editor.timestamp-' + timestamp + ' .editMinor').prop('checked'),
+              var text = $content.find('.editArea').val(),
+                minor = $content.find('.editMinor').prop('checked'),
                 section = options.section,
-                summary = $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val();
+                summary = $content.find('.editSummary').val();
               postArticle({
                 text: text,
                 page: options.page,
@@ -204,7 +205,7 @@ var quickEdit = function (options) {
       className: 'btn btn-secondary leftBtn hideBeforeLoaded',
       method: function () {
         _analysis('preview_edit');
-        var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
+        var text = $content.find('.editArea').val();
         quickPreview({
           title: options.page,
           text: text,
@@ -229,10 +230,10 @@ var quickEdit = function (options) {
     /* 预加载 */
     beforeShow: function () {
       // 设置样式
-      $('.ipe-editor.timestamp-' + timestamp + ' .hideBeforeLoaded').hide();
-      $('.ipe-editor.timestamp-' + timestamp + ' .ipe-progress').css('margin', Number($(window).height() / 3 - 50) + 'px 0');
-      $('.ipe-editor.timestamp-' + timestamp + ' .editArea').css('height', $(window).height() / 3 * 2 - 100);
-      $('.ipe-editor.timestamp-' + timestamp + ' .editOptionsLabel').prependTo('.ipe-editor.timestamp-' + timestamp + ' .ssi-buttons');
+      $content.find('.hideBeforeLoaded').hide();
+      $content.find('.ipe-progress').css('margin', Number($(window).height() / 3 - 50) + 'px 0');
+      $content.find('.editArea').css('height', $(window).height() / 3 * 2 - 100);
+      $content.find('.editOptionsLabel').prependTo('.ipe-editor.timestamp-' + timestamp + ' .ssi-buttons');
       $('.ipe-editor.timestamp-' + timestamp + ' .leftBtn').appendTo('.ipe-editor.timestamp-' + timestamp + ' .ssi-leftButtons');
       $('.ipe-editor.timestamp-' + timestamp + ' .ssi-modalTitle').append(
         $('<a>', {
@@ -245,7 +246,7 @@ var quickEdit = function (options) {
             className: 'in-page-edit',
             center: true,
             title: _msg('editor-title-editNotice'),
-            content: '<section class="editNotice">' + $('.ipe-editor.timestamp-' + timestamp).data('editNotice') + '</section>'
+            content: '<section class="editNotice">' + $content.data('editNotice') + '</section>'
           });
         })
       );
@@ -272,21 +273,21 @@ var quickEdit = function (options) {
         middle = middle || '';
         close = close || '';
         icon = 'fa-' + icon || 'fa-wrench';
-        $('.ipe-editor.timestamp-' + timestamp + ' .btnGroup.extra').append(
+        $content.find('.btnGroup.extra').append(
           $('<button>', { class: 'editToolBtn btn', 'data-open': open, 'data-middle': middle, 'data-close': close, html: `<i class="fa ${icon}"></i>` })
         );
       }
       // 用户自定义按钮
       if (InPageEdit.buttons) {
         var btns = InPageEdit.buttons;
-        $('.ipe-editor.timestamp-' + timestamp + ' .btnGroup.extra').show();
+        $content.find('.btnGroup.extra').show();
 
         for (var i = 0; i < btns.length; i++) {
           var btn = btns[i];
           addBtn(btn.open, btn.middle, btn.close, btn.text);
         }
       }
-      $('.ipe-editor.timestamp-' + timestamp + ' .editToolBtn').click(function (e) {
+      $content.find('.editToolBtn').click(function (e) {
         e.preventDefault();
         var $this = $(this),
           $open = $this.attr('data-open') || '',
@@ -296,7 +297,7 @@ var quickEdit = function (options) {
           open: $open,
           middle: $middle,
           close: $close
-        }, $('.ipe-editor.timestamp-' + timestamp + ' .editArea')[0]);
+        }, $content.find('.editArea')[0]);
       });
     },
     /**
@@ -304,7 +305,9 @@ var quickEdit = function (options) {
   * @description 模态框显示后
   */
     onShow() {
-      mw.hook('InPageEdit.quickEdit.modal').fire();
+      mw.hook('InPageEdit.quickEdit').fire({
+        $modal: $content
+      });
       // 绑定事件，在尝试离开页面时提示
       $('.ipe-editor.timestamp-' + timestamp + ' .editArea').change(function () {
         $(this).attr('data-modifiled', 'true');
@@ -349,27 +352,27 @@ var quickEdit = function (options) {
           console.warn('[InPageEdit]警告：无法获取页面内容');
           options.editText = '<!-- ' + data.error.info + ' -->';
           options.pageId = -1;
-          $('.ipe-editor.timestamp-' + timestamp + ' .detailArea').hide();
+          $content.find('.detailArea').hide();
         } else {
           options.editText = data.parse.wikitext['*'];
           options.pageId = data.parse.pageid;
         }
         // 设定一堆子样式
-        $('.ipe-editor.timestamp-' + timestamp + ' .ipe-progress').hide();
-        $('.ipe-editor.timestamp-' + timestamp + ' .hideBeforeLoaded').fadeIn(500);
-        $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val(options.editText + '\n');
+        $content.find('.ipe-progress').hide();
+        $content.find('.hideBeforeLoaded').fadeIn(500);
+        $content.find('.editArea').val(options.editText + '\n');
 
         var summaryVal;
         if (options.section !== null) {
-          summaryVal = $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val();
+          summaryVal = $content.find('.editSummary').val();
           summaryVal = summaryVal.replace(/\$section/ig, '/* ' + data.parse.sections[0].line + ' */');
-          $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val(summaryVal);
+          $content.find('.editSummary').val(summaryVal);
           $('.ipe-editor.timestamp-' + timestamp + ' .editPage').after('<span class="editSection">→' + data.parse.sections[0].line + '</span>');
           options.jumpTo = '#' + data.parse.sections[0].anchor;
         } else {
-          summaryVal = $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val();
+          summaryVal = $content.find('.editSummary').val();
           summaryVal = summaryVal.replace(/\$section/ig, '');
-          $('.ipe-editor.timestamp-' + timestamp + ' .editSummary').val(summaryVal);
+          $content.find('.editSummary').val(summaryVal);
           options.jumpTo = '';
         }
         if (options.revision !== null && options.revision !== '' && options.revision !== config.wgCurRevisionId) {
@@ -410,13 +413,13 @@ var quickEdit = function (options) {
           console.info('[InPageEdit] 获取页面基础信息成功');
           console.timeEnd('[InPageEdit] 获取页面基础信息');
           // 记录页面最后编辑时间，防止编辑冲突
-          $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp', data['query']['pages'][options.pageId].revisions ? data['query']['pages'][options.pageId]['revisions'][0]['timestamp'] : now);
+          $content.data('basetimestamp', data['query']['pages'][options.pageId].revisions ? data['query']['pages'][options.pageId]['revisions'][0]['timestamp'] : now);
           queryDone(data);
         }).fail(function (a, b, errorThrown) {
           var data = errorThrown;
           console.timeEnd('[InPageEdit] 获取页面基础信息');
           console.warn('[InPageEdit] 获取页面基础信息失败');
-          $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp', now);
+          $content.data('basetimestamp', now);
           queryDone(data);
         });
 
@@ -435,7 +438,7 @@ var quickEdit = function (options) {
           if (options.revision) {
             $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').attr('disabled', false).click(function () {
               _analysis('quick_diff_edit');
-              var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
+              var text = $content.find('.editArea').val();
               var diffJson = {
                 fromrev: options.revision,
                 totext: text,
@@ -502,10 +505,10 @@ var quickEdit = function (options) {
               text: wikitextPage + '\n' + wikitextNs
             }).done(function (data) {
               options.editNotice = data.parse.text['*'];
-              var notice = $('.ipe-editor.timestamp-' + timestamp).data('editNotice') || '';
+              var notice = $content.data('editNotice') || '';
               notice += '\n' + options.editNotice;
-              $('.ipe-editor.timestamp-' + timestamp).data('editNotice', notice);
-              $('.ipe-editor.timestamp-' + timestamp + ' .showEditNotice').show();
+              $content.data('editNotice', notice);
+              $content.find('.showEditNotice').show();
             });
           });
 
@@ -515,10 +518,10 @@ var quickEdit = function (options) {
 
     /* 确认是否取消 */
     beforeClose: function (modal) {
-      if ($('.ipe-editor.timestamp-' + timestamp + ' .editArea').attr('data-modifiled') !== 'true') {
+      if ($content.find('.editArea').attr('data-modifiled') !== 'true') {
         close();
         return;
-      } else if ($('.ipe-editor.timestamp-' + timestamp + ' .editArea').attr('data-confirmclose') === 'true') {
+      } else if ($content.find('.editArea').attr('data-confirmclose') === 'true') {
         closeNoReload();
         return;
       }
@@ -563,7 +566,7 @@ var quickEdit = function (options) {
   });
 
   // 页面详情模块
-  $('.ipe-editor.timestamp-' + timestamp + ' .detailBtnGroup .detailBtn').click(function () {
+  $content.find('.detailBtnGroup .detailBtn').click(function () {
     _analysis('quick_edit_pagedetail');
     var $this = $(this),
       id = $this.attr('id'),
@@ -667,7 +670,7 @@ var quickEdit = function (options) {
     progress(_msg('editor-title-saving'));
     options.jsonPost = {
       action: 'edit',
-      basetimestamp: $('.ipe-editor.timestamp-' + timestamp).data('basetimestamp'),
+      basetimestamp: $content.data('basetimestamp'),
       starttimestamp: now,
       text: pValue.text,
       title: pValue.page,
@@ -687,7 +690,7 @@ var quickEdit = function (options) {
       if (data.edit.result === 'Success') {
         progress(true);
         // 是否重载页面
-        if ($('.ipe-editor.timestamp-' + timestamp + ' .reloadPage').prop('checked')) {
+        if ($content.find('.reloadPage').prop('checked')) {
           var content;
           $(window).unbind('beforeunload');
           content = _msg('notify-save-success');
@@ -704,7 +707,7 @@ var quickEdit = function (options) {
           content = _msg('notify-save-success-noreload');
           setTimeout(function () {
             progress(false);
-            $('.ipe-editor.timestamp-' + timestamp + ' .editArea').attr('data-confirmclose', 'true');
+            $content.find('.editArea').attr('data-confirmclose', 'true');
             modal.close();
           }, 1500);
         }

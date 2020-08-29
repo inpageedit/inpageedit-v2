@@ -6,7 +6,7 @@ const { _msg } = require('./_msg');
 const { $br, $progress } = require('./_elements');
 
 const { _resolveExists } = require('./_resolveExists');
-const { pluginPreference } = require('./pluginPreference');
+const { preference } = require('./preference');
 
 /**
  * @module quickRedirect 快速重定向模块
@@ -20,7 +20,7 @@ var quickRedirect = function (type = 'to') {
     json = {
       action: 'edit',
       createonly: 1,
-      minor: pluginPreference.get('editMinor'),
+      minor: preference.get('editMinor'),
       format: 'json',
       errorformat: 'plaintext'
     },

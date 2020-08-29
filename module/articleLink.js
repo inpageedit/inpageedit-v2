@@ -1,7 +1,7 @@
 var config = mw.config.get();
 const { _msg } = require('./_msg');
 
-const { pluginPreference } = require('./pluginPreference');
+const { preference } = require('./preference');
 const { quickEdit } = require('./quickEdit');
 
 /**
@@ -10,7 +10,7 @@ const { quickEdit } = require('./quickEdit');
  */
 var articleLink = function (element) {
   if (element === undefined) {
-    if (pluginPreference.get('redLinkQuickEdit') === true) {
+    if (preference.get('redLinkQuickEdit') === true) {
       element = $('#mw-content-text a');
     } else {
       element = $('#mw-content-text a:not(.new)');
