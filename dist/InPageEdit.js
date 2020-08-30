@@ -2483,7 +2483,7 @@ var quickEdit = function (options) {
           $modalTitle.find('.editPage').after('<span class="editRevision">(' + _msg('editor-title-editRevision') + '：' + options.revision + ')</span>');
           $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').click(() => {
             _analysis('quick_diff_edit');
-            var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
+            var text = $editArea.val();
             var diffJson = {
               fromrev: options.revision,
               totext: text,
@@ -3348,7 +3348,7 @@ module.exports = {
 /*! exports provided: name, version, description, main, dependencies, devDependencies, scripts, repository, keywords, author, license, bugs, homepage, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"name\":\"mediawiki-inpageedit\",\"version\":\"14.0.0\",\"description\":\"A useful MediaWiki JavaScript Plugin written with jQuery\",\"main\":\"index.js\",\"dependencies\":{},\"devDependencies\":{\"eslint\":\"^7.7.0\",\"webpack\":\"^4.44.1\",\"webpack-cli\":\"^3.3.12\"},\"scripts\":{\"test\":\"eslint ./index.js ./module/*.js ./method/*.js\",\"dev\":\"webpack --watch --output-filename [name].test.js\",\"build:linux\":\"webpack && MINIFY=1 webpack\",\"build:windows\":\"webpack && set MINIFY=1 && webpack\",\"publish:stable\":\"npm publish --tag latest\",\"publish:canary\":\"npm publish --tag canary\"},\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/Dragon-Fish/InPageEdit-v2.git\"},\"keywords\":[\"mediawiki\",\"mediawiki-gadget\",\"inpageedit\"],\"author\":\"Dragon-Fish\",\"license\":\"GPL-3.0-or-later\",\"bugs\":{\"url\":\"https://github.com/Dragon-Fish/InPageEdit-v2/issues\"},\"homepage\":\"https://ipe.netlify.com/\"}");
+module.exports = JSON.parse("{\"name\":\"mediawiki-inpageedit\",\"version\":\"14.0.1\",\"description\":\"A useful MediaWiki JavaScript Plugin written with jQuery\",\"main\":\"index.js\",\"dependencies\":{},\"devDependencies\":{\"eslint\":\"^7.7.0\",\"webpack\":\"^4.44.1\",\"webpack-cli\":\"^3.3.12\"},\"scripts\":{\"test\":\"eslint ./index.js ./module/*.js ./method/*.js\",\"dev\":\"webpack --watch --output-filename [name].test.js\",\"build:linux\":\"webpack && MINIFY=1 webpack\",\"build:windows\":\"webpack && set MINIFY=1 && webpack\",\"publish:stable\":\"npm publish --tag latest\",\"publish:canary\":\"npm publish --tag canary\"},\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/Dragon-Fish/InPageEdit-v2.git\"},\"keywords\":[\"mediawiki\",\"mediawiki-gadget\",\"inpageedit\"],\"author\":\"Dragon-Fish\",\"license\":\"GPL-3.0-or-later\",\"bugs\":{\"url\":\"https://github.com/Dragon-Fish/InPageEdit-v2/issues\"},\"homepage\":\"https://ipe.netlify.com/\"}");
 
 /***/ }),
 

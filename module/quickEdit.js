@@ -386,7 +386,7 @@ var quickEdit = function (options) {
           $modalTitle.find('.editPage').after('<span class="editRevision">(' + _msg('editor-title-editRevision') + '：' + options.revision + ')</span>');
           $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').click(() => {
             _analysis('quick_diff_edit');
-            var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
+            var text = $editArea.val();
             var diffJson = {
               fromrev: options.revision,
               totext: text,
