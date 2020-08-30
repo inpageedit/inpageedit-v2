@@ -1,8 +1,10 @@
 // 导入方法
+const _dir = require('./_dir');
 const { loadScript } = require('./loadScript');
 const { getUserInfo } = require('./getUserInfo');
 const { loadStyles } = require('./loadStyles');
 const { updateNotice } = require('./updateNotice');
+const { syncI18nData } = require('./syncI18nData');
 
 // 导入全部模块
 const { _analysis } = require('../module/_analysis');
@@ -32,9 +34,17 @@ const { versionInfo } = require('../module/versionInfo');
  */
 module.exports = async function init() {
 
-  // 加载前置插件以及样式表
+  // 加载样式表
   loadStyles();
-  await loadScript('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/ssi-modal.min.js');
+  // 等待 i18n 缓存
+  await syncI18nData(
+    Boolean(
+      mw.util.getParamValue('i18n', location.href) === 'nocache' ||
+      version !== localStorage.getItem('InPageEditVersion')
+    )
+  );
+  // 等待前置插件
+  await loadScript(_dir + '/src/ssi_modal/ssi-modal.min.js');
   // 初始化前置模块
   preference.set();
   getUserInfo();
@@ -42,11 +52,12 @@ module.exports = async function init() {
   articleLink();
   updateNotice();
 
-  // 暂定，触发工具盒插件
+  // !暂定，触发工具盒插件
   pluginStore.load('toolbox.js');
 
   // 写入模块
   var InPageEdit = {
+    _dir,
     about,
     api,
     articleLink,

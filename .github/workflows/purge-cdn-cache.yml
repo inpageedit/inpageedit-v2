@@ -27,3 +27,5 @@ jobs:
       - name: Send purge requests
         run: |
           curl https://purge.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/
+          curl https://purge.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/dist/
+          curl https://purge.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/i18n/

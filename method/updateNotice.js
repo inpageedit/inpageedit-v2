@@ -14,7 +14,7 @@ function updateNotice() {
       buttons: [{
         className: 'btn btn-primary',
         label: _msg('updatelog-button-versioninfo'),
-        method: function (a, modal) {
+        method(a, modal) {
           localStorage.InPageEditVersion = version;
           versionInfo();
           modal.close();
@@ -24,7 +24,7 @@ function updateNotice() {
         time: 30,
         resetOnHover: true
       },
-      onClose: function () {
+      onClose() {
         ssi_modal.notify('', {
           className: 'in-page-edit',
           content: _msg('updatelog-after-close', `[${api.updatelogsUrl} ${api.updatelogsUrl}]`, `[${api.githubLink}/issues ${_msg('updatelog-file-issue')}]`),
@@ -34,7 +34,7 @@ function updateNotice() {
           buttons: [{
             className: 'btn btn-primary',
             label: _msg('ok'),
-            method: function (a, modal) {
+            method(a, modal) {
               modal.close();
             }
           }]

@@ -86,17 +86,6 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./i18n/languages.json":
-/*!*****************************!*\
-  !*** ./i18n/languages.json ***!
-  \*****************************/
-/*! exports provided: _metadata, en, ar, fr, nl, pl, zh-hans, zh-hant, default */
-/***/ (function(module) {
-
-module.exports = JSON.parse("{\"_metadata\":{\"noTranslate\":[\"noticeid\",\"noticeid-canary\"]},\"en\":{\"noticeid\":\"build_2311_notify\",\"noticeid-canary\":\"canary\",\"version-notice-title\":\"Install successful\",\"version-notice\":\"Hello, thanks for using InPageEdit~です! The plug-in may collect your information, which will not be used for business purposes, and will not collect any of your personal cookies and privacy information. You can find the plug-in's analysis link in the preference window. If you do not want any of your information to be collected, please stop using this plug-in. For feedback, please file issues in GitHub.\",\"version-notice-canary-title\":\"Canary stability warning\",\"version-notice-canary\":\"Canary version is the version used by the author for debugging and development. Any untested experimental features may appear in this version, or even may not work normally at some time. For your experience, it is recommended to switch to the normal version!\",\"updatelog-update-success-title\":\"InPageEdit update successful\",\"updatelog-update-success\":\"InPageEdit $1 has been installed.\",\"updatelog-button-versioninfo\":\"View version info\",\"updatelog-after-close\":\"This pop-up window will not pop up again until the next version update. Find all release info at $1. If you find issues with the plug-in. $2\",\"updatelog-dismiss\":\"DISMISS\",\"updatelog-file-issue\":\"Submit it at GitHub.\",\"updatelog-title\":\"Update Log\",\"updatelog-about\":\"About\",\"quick-edit\":\"Quick Edit\",\"redirect-from\":\"Redirect from\",\"redirect-to\":\"Redirect to\",\"quick-delete\":\"Quick Delete\",\"quick-rename\":\"Quick Rename\",\"quick-diff\":\"Quick Diff\",\"ipe-preference\":\"Preferences\",\"confirm\":\"confirm\",\"cancel\":\"cancel\",\"close\":\"close\",\"done\":\"Done\",\"ok\":\"OK\",\"notify-success\":\"Success\",\"notify-info\":\"Info\",\"notify-error\":\"Error\",\"notify-editing-history\":\"You are editing old version of this page\",\"editor-title-editRevision\":\"Reversion\",\"editor-summary-rivision\":\"Edit from\",\"editor-title-editSection\":\"Part $1\",\"editor-title-editing\":\"Editing\",\"editSummary\":\"Summary\",\"markAsMinor\":\"This is a minor edit\",\"editor-button-save\":\"Save changes\",\"editor-confirm-save\":\"Are you sure you want to save the changes?\",\"editor-button-preview\":\"Show preview\",\"editor-button-diff\":\"Show changes\",\"editor-button-findAndReplace\":\"Find&Replace\",\"fAndR-title\":\"Find & Replace\",\"fAndR-find-text\":\"Find text:\",\"fAndR-replace-text\":\"Replace text:\",\"fAndR-globl\":\"Find global\",\"fAndR-case-sen\":\"Case sensitive\",\"fAndR-enable-regex\":\"Enable regex\",\"fAndR-button-undo\":\"UNDO\",\"fAndR-button-replace\":\"REPLACE\",\"notify-fAndR-undo\":\"Content has been restored to the text before F&R window was opened\",\"notify-fAndR-done\":\"$1 text replaced\",\"editor-detail-button-toggle\":\"Page details\",\"editor-detail-button-templates\":\"Templates used\",\"editor-detail-title-templates\":\"Templates used on this page\",\"editor-detail-button-images\":\"Images used\",\"editor-detail-title-images\":\"Images used on this page\",\"editor-detail-images-quickview\":\"Quick View\",\"editor-detail-images-upload\":\"(Re)upload\",\"window-leave-confirm\":\"Are you sure you want to leave this tab? Your text will NOT be saved.\",\"notify-no-right\":\"No permission\",\"editor-no-right\":\"You do NOT have permission to edit this page. You can leave comments on this page's talk page.\",\"editor-title-editNotice\":\"Editnotice\",\"editor-has-editNotice\":\"This page has editnotice!\",\"editor-leave-confirm\":\"Are you sure you want to leave the editor? Your text will NOT be saved.\",\"notify-no-change\":\"Nothing changed.\",\"editor-title-saving\":\"Publishing...\",\"notify-save-success\":\"Saved successfully. Refreshing page...\",\"notify-save-success-noreload\":\"Saved successfully.\",\"editor-save-error\":\"Some error(s) occurred while saving\",\"redirect-summary\":\"Quick redirect\",\"redirect-question-to\":\"Which page do you want to redirect $1 to?\",\"redirect-question-from\":\"Which page do you want to redirect to $1?\",\"redirect-title\":\"Quick Redirect\",\"notify-redirect-success\":\"Redirect successful.\",\"notify-redirect-error\":\"Some error(s) occurred while creating redirect\",\"delete-reason-default\":\"No longer used\",\"delete-title\":\"Quick Delete\",\"delete-no-right\":\"You do NOT have permission to delete the page.\",\"delete-reason\":\"Why are you want to deleting $1 ?\",\"delete-confirm-title\":\"Delete confirm\",\"delete-confirm-content\":\"Are you sure you want to delete this page? You can restore it later in [[Special:DeletedPages]]\",\"notify-delete-success\":\"Deletion successful\",\"notify-delete-error\":\"Some error(s) occurred while deleting the page\",\"rename-title\":\"Quick Rename Page\",\"rename-moveTo\":\"Choose a new name for $1\",\"rename-movetalk\":\"Move talk page\",\"rename-movesubpages\":\"Move subpage(s) (up to 100)\",\"rename-noredirect\":\"Don't leave a redirect behind\",\"rename-summary\":\"Quick rename\",\"notify-rename-success\":\"Rename successful\",\"notify-rename-error\":\"Some error(s) occurred while moving the page\",\"rename-articleexists-title\":\"Target page exist\",\"rename-articleexists\":\"Page with new page name already exists. The force move function is under development, stay tuned.\",\"rename-no-right\":\"You do NOT have permission to delete the page.\",\"preference-title\":\"InPageEdit preferences\",\"preference-editor-label\":\"Editor settings\",\"preference-outSideClose\":\"Click out side to close editor\",\"preference-setMinor\":\"Minor edit as default\",\"preference-summary-label\":\"Edit summary\",\"preference-editSummary\":\"<code>$section</code> - will be replaced by <code>/<!-- -->* Section header */</code><br><code>$oldid</code> - will be replaced by <code>Edit from [<!-- -->[Special:Diff/oldid]]</code>\",\"preference-analysis-label\":\"Analysis\",\"preference-analysis-view\":\"We will collect some of your non-sensitive information to record the usage of the plugin. Information will be used to improve the experience. You can find the information we collected at $1.\",\"preference-about-label\":\"About InPageEdit\",\"preference-aboutAndHelp\":\"About&Help\",\"preference-updatelog\":\"Update Log\",\"preference-savelocal-label\":\"You can save your InPageEdit-v2 preferences here.\",\"preference-savelocal\":\"Attention: Your preferences will save in your browser. That means you must save again when you change your device.\",\"preference-savelocal-btn\":\"Save locally\",\"preference-reset\":\"reset\",\"preference-save\":\"save\",\"preference-summary-default\":\"[InPageEdit] $section No summary given $oldid\",\"preference-savelocal-popup-title\":\"Save preferences locally\",\"preference-savelocal-popup\":\"Add the following code above the code that calls this plugin on your personal JS page:\",\"preference-savelocal-popup-notice\":\"Attention: If you save the settings locally, you will not be able to use this window for configuration. Although the wrong settings will be ignored, it will not prompt you what went wrong.\",\"preference-savelocal-popup-haslocal\":\"You are saving your preferences locally. You should modify your preferences at [[Special:Mypage/common.js|your personal JS page]] or global.js.\",\"preference-savelocal-popup-yourjspage\":\"your personal JS page\",\"preference-translate\":\"translate\",\"preference-discord\":\"Discord\",\"diff-loading\":\"Loading difference\",\"diff-button-todiffpage\":\"Jump to diff page\",\"diff-usertalk\":\"talk\",\"diff-usercontrib\":\"contribs\",\"diff-userblock\":\"block\",\"diff-title\":\"Difference\",\"diff-edit\":\"edit\",\"diff-version\":\"Revision\",\"diff-prev\":\"Older edit\",\"diff-nextv\":\"Newer edit\",\"diff-bytes\":\"bytes\",\"diff-title-original-content\":\"Original text\",\"diff-title-your-content\":\"Your text\",\"diff-error\":\"Failed to load difference.\",\"preview-placeholder\":\"Loading preview...\",\"preview-title\":\"Preview\",\"preview-error\":\"Failed to load preview.\",\"editor-edittool-header\":\"Header\",\"editor-edittool-header-text\":\"Header text\",\"editor-edittool-bold\":\"Bold\",\"editor-edittool-italic\":\"Italic\",\"editor-edittool-internal-link\":\"Internal link\",\"editor-edittool-list-bulleted\":\"Unordered list\",\"editor-edittool-list-numbered\":\"Ordered list\",\"editor-edittool-nowiki\":\"Nowiki text\",\"editor-edittool-format-label\":\"Format\",\"editor-edittool-insert-label\":\"Insert\",\"editor-edittool-custom-label\":\"Custom\",\"editor-reload-page\":\"Reload the page after saving\",\"preference-reset-confirm-title\":\"Restore your preferences\",\"preference-reset-confirm\":\"Are you sure you want to restore your preferences to default?\",\"target-exists-title\":\"Target page exists\",\"target-exists-no-delete\":\"Page [[$1]] already exists. Do you want to view this page?\",\"target-exists-can-delete\":\"Page [[$1]] already exists. Do you want to view this page or just delete it?\"},\"ar\":{\"version-notice-title\":\"نجاح التثبيت\",\"version-notice\":\"مرحبا ، شكرا لاستخدام انبايجاديت۔ قد يقوم المكون الإضافي بجمع معلوماتك ، والتي لن يتم استخدامها لأغراض العمل ، ولن تجمع أيًا من ملفات تعريف الارتباط الشخصية ومعلومات الخصوصية۔ يمكنك العثور على رابط تحليلات المكون الإضافي في نافذة التفضيل۔ إذا كنت لا ترغب في جمع أي من معلوماتك ، يرجى التوقف عن استخدام هذا المكون الإضافي۔ للحصول على ملاحظات  يرجى تقديم مشاكل في جيتهوب۔\",\"version-notice-canary-title\":\"تحذير استقرار الكناري\",\"version-notice-canary\":\"إصدار الكناري هو الإصدار الذي يستخدمه المؤلف لتصحيح الأخطاء والتطوير۔ قد تظهر أي ميزات تجريبية غير مجربة في هذا الإصدار ، أو قد لا تعمل بشكل طبيعي في وقت ما۔ لتجربتك ، يوصى بالتبديل إلى الإصدار العادي۔\",\"updatelog-update-success-title\":\"InPageEdit نجاح تحديث\",\"updatelog-update-success\":\"InPageEdit $1 تم تثبيت\",\"updatelog-button-versioninfo\":\"عرض معلومات الإصدار\",\"updatelog-after-close\":\"لن تظهر هذه النافذة المنبثقة مرة أخرى حتى يتم تحديث الإصدار التالي. البحث عن جميع معلومات الإصدار في 1$. إذا وجدت مشكلات في المكون الإضافي \",\"updatelog-dismiss\":\"رفض\",\"updatelog-file-issue\":\"قم بتقديمه في جيتهوب\",\"updatelog-title\":\"سجل التحديث\",\"updatelog-about\":\"حول\",\"quick-edit\":\"تحرير سريع\",\"redirect-from\":\"إعادة التوجيه من\",\"redirect-to\":\"إعادة توجيه ل\",\"quick-delete\":\"حذف سريع\",\"quick-rename\":\"إعادة تسمية سريعة\",\"quick-diff\":\"الاختلاف السريع\",\"ipe-preference\":\"التفضيلات\",\"confirm\":\"تؤكد\",\"cancel\":\"إلغاء\",\"close\":\"أغلق\",\"done\":\"منجز\",\"ok\":\"حسنا\",\"notify-success\":\"نجاح\",\"notify-info\":\"معلومات\",\"notify-error\":\"خطأ\",\"notify-editing-history\":\"أنت تقوم بتحرير نسخة قديمة من هذه الصفحة\",\"editor-title-editRevision\":\"الارتداد\",\"editor-summary-rivision\":\"تحرير من\",\"editor-title-editSection\":\"الجزء $1\",\"editor-title-editing\":\"التحرير\",\"editSummary\":\"ملخص\",\"markAsMinor\":\"هذا تعديل طفيف\",\"editor-button-save\":\"احفظ التغييرات\",\"editor-confirm-save\":\"هل أنت متأكد أنك تريد حفظ التغييرات؟\",\"editor-button-preview\":\"عرض المعاينة\",\"editor-button-diff\":\"إظهار التغييرات\",\"editor-button-findAndReplace\":\"بحث واستبدال\",\"fAndR-title\":\"بحث واستبدال\",\"fAndR-find-text\":\":بحث عن نص\",\"fAndR-replace-text\":\":استبدل النص\",\"fAndR-globl\":\"ابحث عن العالمية\",\"fAndR-case-sen\":\"حساسية الموضوع\",\"fAndR-enable-regex\":\"تمكين التعبير العادي\",\"fAndR-button-undo\":\"الغاء التحميل\",\"fAndR-button-replace\":\"يحل محل\",\"notify-fAndR-undo\":\"تمت استعادة المحتوى إلى النص قبل فتح نافذة البحث والاستبدال\",\"notify-fAndR-done\":\"تم استبدال نص 1$\",\"window-leave-confirm\":\"هل أنت متأكد أنك تريد ترك علامة التبويب هذه؟ لن يتم حفظ النص الخاص بك\",\"notify-no-right\":\"لا يوجد إذن\",\"editor-no-right\":\"ليس لديك إذن بتحرير هذه الصفحة ولكن يمكنك ترك تعليقات على صفحة نقاش هذه الصفحة\",\"editor-title-editNotice\":\"ملاحظة التحرير\",\"editor-has-editNotice\":\"تحتوي هذه الصفحة على إشعار تحرير ، انقر هنا.\",\"editor-leave-confirm\":\"هل أنت متأكد أنك تريد مغادرة المحرر؟ لن يتم حفظ النص الخاص بك\",\"notify-no-change\":\"لا شيء تغير\",\"editor-title-saving\":\"...نشر\",\"notify-save-success\":\"...حفظ الصفحة بنجاح ومنعش\",\"editor-save-error\":\"حدثت بعض الأخطاء أثناء الحفظ\",\"redirect-summary\":\"إعادة توجيه سريعة\",\"redirect-question-to\":\"ما الصفحة التي تريد إعادة توجيه 1$ إليها؟\",\"redirect-question-from\":\"ما هي الصفحة التي تريد إعادة توجيهها إلى 1$؟\",\"redirect-title\":\"إعادة التوجيه السريع\",\"notify-redirect-success\":\"تمت إعادة التوجيه بنجاح\",\"notify-redirect-error\":\"حدثت بعض الأخطاء أثناء إنشاء إعادة التوجيه\",\"delete-reason-default\":\"حدثت بعض الأخطاء أثناء إنشاء إعادة التوجيه\",\"delete-title\":\"حذف سريع\",\"delete-no-right\":\"ليس لديك إذن بحذف الصفحة\",\"delete-confirm-title\":\"تأكيد الحذف\",\"delete-confirm-content\":\"هل أنت متأكد أنك تريد حذف هذه الصفحة؟ يمكنك استعادته لاحقًا في الصفحة الخاصة بالصفحات المحذوفة\",\"notify-delete-success\":\"حذف بنجاح\",\"notify-delete-error\":\"حدثت بعض الأخطاء أثناء حذف الصفحة\",\"rename-title\":\"صفحة إعادة تسمية سريعة\",\"rename-moveTo\":\"اختر اسمًا جديدًا لـ $1\",\"rename-movetalk\":\"الخامس\",\"rename-movesubpages\":\"نقل الصفحات الفرعية حتى ١٠٠\",\"rename-noredirect\":\"لا تترك إعادة توجيه خلفك\",\"rename-summary\":\"إعادة تسمية سريعة\",\"notify-rename-success\":\"تمت إعادة التسمية بنجاح\",\"notify-rename-error\":\"حدثت بعض الأخطاء أثناء نقل الصفحة\",\"rename-articleexists-title\":\"الصفحة المستهدفة موجودة\",\"rename-articleexists\":\".الصفحة التي تحتوي على اسم الصفحة الجديدة موجودة بالفعل. وظيفة تحريك القوة قيد التطوير ، ترقبوا\",\"rename-no-right\":\"ليس لديك إذن بحذف الصفحة\",\"preference-title\":\"تفضيلات هذا البرنامج المساعد\",\"preference-editor-label\":\"إعدادات المحرر\",\"preference-outSideClose\":\"انقر خارج لإغلاق المحرر\",\"preference-setMinor\":\"تعديل طفيف كافتراضي\",\"preference-summary-label\":\"تحرير الملخص\",\"preference-analysis-label\":\"تحليل\",\"preference-analysis-view\":\"سنقوم بجمع بعض المعلومات غير الحساسة الخاصة بك لتسجيل استخدام البرنامج المساعد۔ سيتم استخدام المعلومات لتحسين التجربة۔ يمكنك العثور على المعلومات التي جمعناها في 1$۔\",\"preference-about-label\":\"حول هذا البرنامج المساعد\",\"preference-aboutAndHelp\":\"حول ومساعدة\",\"preference-updatelog\":\"سجل التحديث\",\"preference-savelocal-label\":\"يمكنك حفظ تفضيلاتك لهذا البرنامج المساعد هنا\",\"preference-savelocal\":\".تنبيه: سيتم حفظ تفضيلاتك في متصفحك. هذا يعني أنه يجب عليك الحفظ مرة أخرى عند تغيير جهازك\",\"preference-reset\":\"إعادة تعيين\",\"preference-save\":\"حفظ\",\"preference-summary-default\":\"$section $oldid لا يوجد ملخص معطى [InPageEdit] \",\"preference-savelocal-popup\":\":أضف الكود التالي أعلى الكود الذي يستدعي هذا البرنامج المساعد في صفحة جافا سكريبت الشخصية الخاصة بك\",\"preference-savelocal-popup-yourjspage\":\"صفحة جافا سكريبت الشخصية\",\"diff-loading\":\"فرق التحميل\",\"diff-button-todiffpage\":\"انتقل إلى صفحة الفروق\",\"diff-usertalk\":\"حديث\",\"diff-usercontrib\":\"يساهم\",\"diff-userblock\":\"منع\",\"diff-title\":\"فرق\",\"diff-edit\":\"تعديل\",\"diff-version\":\"مراجعة\",\"diff-prev\":\"تحرير أقدم\",\"diff-nextv\":\"تحرير أحدث\",\"diff-bytes\":\"بايت\",\"diff-title-original-content\":\"النص الأصلي\",\"diff-title-your-content\":\"نصك\",\"diff-error\":\"فشل تحميل الفرق\",\"preview-placeholder\":\"...تحميل المعاينة\",\"preview-title\":\"معاينة\",\"preview-error\":\"فشل تحميل المعاينة\"},\"fr\":{\"version-notice-title\":\"Installation réussie\",\"version-notice\":\"Salut, merci pour l'utilisation de InPageEdit ! Ce plug-in peut collecter vos informations qui ne seront pas utilisées à but commercial et ne collecte pas tous vos cookies personnel et vos renseignements personnels. Vous pouvez trouver les liens d'analyses de ce plug-in dans la fenêtre de préférences. Si vous ne voulez pas que vos informations sont collectés, désactivez ce plug-in. Pour des suggestions, veuillez signaler des problèmes sur GitHub.\",\"version-notice-canary-title\":\"Avertissement de stabilité de Canary\",\"version-notice-canary\":\"La version Canary est une version utilisée par l'auteur pour le développement et le débogage. Toutes les fonctionnalités expérimentales non testés peuvent apparaître dans cette version et peuvent ne pas fonctionner correctement à un moment. Pour votre expérience, il est recommandé de passer à la version normale !\",\"updatelog-update-success-title\":\"Mise à jour de InPageEdit réussie\",\"updatelog-update-success\":\"InPageEdit $1 a été installée.\",\"updatelog-button-versioninfo\":\"À propos de cette version\",\"updatelog-after-close\":\"Cette fenêtre secondaire n'apparaîtra plus jusqu'à la prochaine mise à jour. Toutes ces informations de cette mise à jour se trouvent $1. Si vous décelez des problèmes avec ce plug-in, $2\",\"updatelog-dismiss\":\"REJETER\",\"updatelog-file-issue\":\"Soumettez-le sur GitHub.\",\"updatelog-title\":\"Journal des mises à jour\",\"updatelog-about\":\"À propos\",\"quick-edit\":\"Modification rapide\",\"redirect-from\":\"Redirection de\",\"redirect-to\":\"Redirection à\",\"quick-delete\":\"Suppression rapide\",\"quick-rename\":\"Renommage rapide\",\"quick-diff\":\"Diff rapide\",\"ipe-preference\":\"Préférences\",\"confirm\":\"confirmer\",\"cancel\":\"annuler\",\"close\":\"fermer\",\"done\":\"Fait\",\"ok\":\"OK\",\"notify-success\":\"Réussi\",\"notify-info\":\"Info\",\"notify-error\":\"Erreur\",\"notify-editing-history\":\"Vous êtes en train de modifier une ancienne version de cette page\",\"editor-title-editRevision\":\"Réversion\",\"editor-summary-rivision\":\"Modification de\",\"editor-title-editSection\":\"Partie $1\",\"editor-title-editing\":\"Modification en cours\",\"editSummary\":\"Résumé de modification\",\"markAsMinor\":\"C'est une modification mineure\",\"editor-button-save\":\"Sauvegarder la modification\",\"editor-confirm-save\":\"Êtes-vous {{GENDER:|sûr|sûre|sûr(e)}} de vouloir sauvegarder des modifications ?\",\"editor-button-preview\":\"Afficher la prévisualisation\",\"editor-button-diff\":\"Voir la différence\",\"editor-button-findAndReplace\":\"Trouver&Remplacer\",\"fAndR-title\":\"Trouver et Remplacer\",\"fAndR-find-text\":\"Trouver le texte :\",\"fAndR-replace-text\":\"Remplacer le texte :\",\"fAndR-globl\":\"Recherche globale\",\"fAndR-case-sen\":\"Respecter la case\",\"fAndR-enable-regex\":\"Utiliser l'expression régulière\",\"fAndR-button-undo\":\"ANNULER\",\"fAndR-button-replace\":\"REMPLACER\",\"notify-fAndR-undo\":\"Le contenu a été restauré à un texte avant que la fenêtre de \\\"T&R\\\" a été ouverte\",\"notify-fAndR-done\":\"Texte de $1 remplacé\",\"window-leave-confirm\":\"Voulez-vous vraiment quitter cet onglet ? Votre texte ne sera PAS sauvegardé.\",\"notify-no-right\":\"Aucune permission\",\"editor-no-right\":\"Vous n'avez pas la permission de modifier cette page. Vous pouvez laisser vos commentaires sur cette page de discussion de cette page.\",\"editor-title-editNotice\":\"Editnotice\",\"editor-has-editNotice\":\"Cette page a editnotice!\",\"editor-leave-confirm\":\"Voulez-vous vraiment quitter l'éditeur? Votre texte ne sera PAS enregistré.\",\"notify-no-change\":\"Aucune différence.\",\"editor-title-saving\":\"Publication en cours...\",\"notify-save-success\":\"Publication effectuée, page en cours d'actualisation...\",\"editor-save-error\":\"Certaines erreurs se sont produites lors de sauvegarde\",\"redirect-summary\":\"Redirection rapide\",\"redirect-question-to\":\"Quelle page que vous voulez rediriger $1 à ?\",\"redirect-question-from\":\"Quelle page que vous voulez rediriger à $1 ?\",\"redirect-title\":\"Redirection rapide\",\"notify-redirect-success\":\"Redirection établie.\",\"notify-redirect-error\":\"Certaines erreurs se sont produites lors de la création de redirection\",\"delete-reason-default\":\"N'est plus utilisée\",\"delete-title\":\"Supprimer rapidement\",\"delete-no-right\":\"Vous n'avez pas la permission de supprimer cette page.\",\"delete-confirm-title\":\"Confirmer la suppression\",\"delete-confirm-content\":\"Voulez-vous vraiment supprimer cette page? Vous pouvez la restaurer dans Special:DeletedPages plus tard\",\"notify-delete-success\":\"Suppression effectuée\",\"notify-delete-error\":\"Certaines erreurs se sont produites lors de la suppression de cette page\",\"rename-title\":\"Renommage rapide d'une page\",\"rename-moveTo\":\"Choisissez le nouveau nom pour $1\",\"rename-movetalk\":\"Renommer la page de discussion\",\"rename-movesubpages\":\"Renommer des sous-pages (jusqu'à 100 pages)\",\"rename-noredirect\":\"Ne pas laisser la redirection\",\"rename-summary\":\"Renommage rapide\",\"notify-rename-success\":\"Renommage effectué\",\"notify-rename-error\":\"Certaines erreurs se sont produites lors du renommage de cette page\",\"rename-articleexists-title\":\"Page cible existant\",\"rename-articleexists\":\"La page avec un nouveau nom de page existe déjà. La fonction de déplacement forcé est en cours de développement, restez au courant.\",\"rename-no-right\":\"Vous n'avez pas la permission de supprimer cette page.\",\"preference-title\":\"Préférences de InPageEdit\",\"preference-editor-label\":\"Paramètres de l'éditeur\",\"preference-outSideClose\":\"Cliquez en dehors pour fermer l'éditeur\",\"preference-setMinor\":\"Modification mineure par défaut\",\"preference-summary-label\":\"Résumé de modification\",\"preference-analysis-label\":\"Analyses\",\"preference-analysis-view\":\"Nous collecterons certaines de vos informations non sensibles pour enregistrer l'utilisation du plug-in. Les informations seront utilisées pour améliorer l'expérience. Vous pouvez trouver les informations que nous avons collectées sur $1.\",\"preference-about-label\":\"À propos de InPageEdit\",\"preference-aboutAndHelp\":\"À-propos&Aide\",\"preference-updatelog\":\"Journal des mises à jour\",\"preference-savelocal-label\":\"Vous pouvez sauvegarder vos préférences de InPageEdit-v2 ici.\",\"preference-savelocal\":\"Attention : Vos préférences seront enregistrées dans votre navigateur. Cela signifie que vous devez enregistrer à nouveau lorsque vous changez votre appareil.\",\"preference-reset\":\"réinitialiser\",\"preference-save\":\"sauvegarder\",\"preference-summary-default\":\"[InPageEdit] $section Aucun résumé de modification $oldid\",\"preference-savelocal-popup\":\"Ajoutez le code suivant au-dessus du code qui invoque ce plugin sur votre page JS personnelle :\",\"preference-savelocal-popup-yourjspage\":\"votre page personnelle de JS\",\"diff-loading\":\"Chargement de la différence\",\"diff-button-todiffpage\":\"Basculer à une page de diff\",\"diff-usertalk\":\"discuter\",\"diff-usercontrib\":\"contributions\",\"diff-userblock\":\"bloquer\",\"diff-title\":\"Différence\",\"diff-edit\":\"modifier\",\"diff-version\":\"Révision\",\"diff-prev\":\"Modification précédente\",\"diff-nextv\":\"Modification suivante\",\"diff-bytes\":\"octets\",\"diff-title-original-content\":\"Texte original\",\"diff-title-your-content\":\"Votre texte\",\"diff-error\":\"Échec lors du chargement de la différence.\",\"preview-placeholder\":\"Chargement de la prévisualisation...\",\"preview-title\":\"Prévisualisation\",\"preview-error\":\"Échec lors du chargement de la prévisualisation.\"},\"nl\":{\"version-notice-title\":\"Installatie successvol\",\"version-notice\":\"Hallo, bedankt voor het gebruiken van InPageEdit~です! De plug-in kan je informatie verzamelen. Dit zal niet gebruikt worden voor zakelijke doeleinden en zal geen persoonlijke cookies en privacygevoelige informatie verzamelen. U kan de plug-in's analyse link in het voorkeurvenster vinden. Als U geen informatie verzameld wil hebben, stop alstublieft met het gebruiken van deze plug-in. Voor feedback, dien problemen alstublieft in op GitHub.\",\"version-notice-canary-title\":\"Canary stabiliteit waarschuwing\",\"version-notice-canary\":\"Canary versie is de versie gebruikt door de auteur voor debuggen en ontwikkeling. Niet geteste, experimentele kenmerken kunnen voorkomen in deze versie, of kunnen soms niet normaal werken. Voor uw ervaring is het aangeraden om over te schakelen naar de normale versie!\",\"updatelog-update-success-title\":\"InPageEdit update success\",\"updatelog-update-success\":\"InPageEdit $1 is geïnstalleerd.\",\"updatelog-button-versioninfo\":\"Bekijk versie informatie\",\"updatelog-after-close\":\"Dit pop-up venster zal niet meer verschijnen tot de volgende versie-update. Vind alle release-informatie bij $1. Als u problemen ondervindt met de plug-in. $2\",\"updatelog-dismiss\":\"AFWIJZEN\",\"updatelog-file-issue\":\"Dien het in op GitHub.\",\"updatelog-title\":\"Update Log\",\"updatelog-about\":\"Over\",\"quick-edit\":\"Snelle Bewerking\",\"redirect-from\":\"Verwijs van\",\"redirect-to\":\"Verwijs naar\",\"quick-delete\":\"Snel verwijderen\",\"quick-rename\":\"Snel hernoemen\",\"quick-diff\":\"Snelle Diff\",\"ipe-preference\":\"Voorkeuren\",\"confirm\":\"bevestigen\",\"cancel\":\"annuleren\",\"close\":\"sluiten\",\"done\":\"Klaar\",\"ok\":\"OK\",\"notify-success\":\"Succesvol\",\"notify-info\":\"Info\",\"notify-error\":\"Fout\",\"notify-editing-history\":\"U bewerkt een oudere versie van deze pagina\",\"editor-title-editRevision\":\"Herziening\",\"editor-summary-rivision\":\"Bewerking van\",\"editor-title-editSection\":\"Deel $1\",\"editor-title-editing\":\"Aan het bewerken\",\"editSummary\":\"Samenvatting\",\"markAsMinor\":\"Dit is een kleine bewerking\",\"editor-button-save\":\"Veranderingen opslaan\",\"editor-confirm-save\":\"Weet u zeker dat u de verandering wilt opslaan?\",\"editor-button-preview\":\"Toon preview\",\"editor-button-diff\":\"Toon veranderingen\",\"editor-button-findAndReplace\":\"Vinden&Vervangen\",\"fAndR-title\":\"Vinden & Vervangen\",\"fAndR-find-text\":\"Vind tekst:\",\"fAndR-replace-text\":\"Vervang tekst:\",\"fAndR-globl\":\"Vind globaal\",\"fAndR-case-sen\":\"Hoofdlettergevoelig\",\"fAndR-enable-regex\":\"Schakel regex in\",\"fAndR-button-undo\":\"ONGEDAAN MAKEN\",\"fAndR-button-replace\":\"VERVANGEN\",\"notify-fAndR-undo\":\"Inhoud is hersteld naar de tekst voordat het V & V-venster werd geopend\",\"notify-fAndR-done\":\"$1 tekst vervangen\",\"window-leave-confirm\":\"Weet u zeker dat u dit tabblad wilt verlaten? Uw tekst zal NIET opgeslagen worden.\",\"notify-no-right\":\"Geen toestemming\",\"editor-no-right\":\"U heeft GEEN toestemming om deze pagina te bewerking. U kan commentaar achterlaten op de discussie-pagina van deze pagina.\",\"editor-title-editNotice\":\"Bewerkingsbericht\",\"editor-has-editNotice\":\"Deze pagina heeft een bewerkingsbericht!\",\"editor-leave-confirm\":\"Weet u zeker dat u de bewerker wilt verlaten? Uw tekst zal NIET opgeslagen worden.\",\"notify-no-change\":\"Niets is verandert\",\"editor-title-saving\":\"Publiceren...\",\"notify-save-success\":\"Opslaan succesvol, pagina wordt herladen...\",\"editor-save-error\":\"Er zijn enkele fout(en) opgetreden tijdens het opslaan\",\"redirect-summary\":\"Snel verwijzen\",\"redirect-question-to\":\"Welke pagina wilt u $1 naar verwijzen?\",\"redirect-question-from\":\"Welke pagina wilt u verwijzen naar $1?\",\"redirect-title\":\"Snel Verwijzen\",\"notify-redirect-success\":\"Verwijzing succesvol.\",\"notify-redirect-error\":\"Er zijn enkele fout(en) opgetreden tijdens het maken van de verwijzing.\",\"delete-reason-default\":\"Niet langer gebruikt\",\"delete-title\":\"Snel Verwijderen\",\"delete-no-right\":\"U heeft GEEN toestemming om deze pagina te verwijderen.\",\"delete-confirm-title\":\"Verwijderen bevestigen\",\"delete-confirm-content\":\"Weet u zeker dat u deze pagina wilt verwijderen? You can restore it later in Special:DeletedPages\",\"notify-delete-success\":\"Succesvol verwijderd\",\"notify-delete-error\":\"Er zijn enkele fout(en) opgetreden tijdens het verwijderen van de pagina.\",\"rename-title\":\"Snel Pagina Hernoemen\",\"rename-moveTo\":\"Kies een nieuwe naam voor $1\",\"rename-movetalk\":\"Discussie-pagina verplaatsen\",\"rename-movesubpages\":\"Sub-pagina('s) verplaatsen (up to 100)\",\"rename-noredirect\":\"Laat geen verwijzing achter\",\"rename-summary\":\"Snel hernoemen\",\"notify-rename-success\":\"Hernoemen succesvol\",\"notify-rename-error\":\"Er zijn enkele fout(en) opgetreden tijdens het verplaatsen van de pagina.\",\"rename-articleexists-title\":\"Doelpagina bestaat\",\"rename-articleexists\":\"Er bestaat al een pagina met deze naam. De \\\"verplaatsing forceren\\\"-functie is in ontwikkeling, blijf op de hoogte.\",\"rename-no-right\":\"U hebt GEEN toestemming om de pagina te verwijderen.\",\"preference-title\":\"InPageEdit voorkeuren\",\"preference-editor-label\":\"Bewerker instellingen\",\"preference-outSideClose\":\"Klik buiten om de bewerker te sluiten\",\"preference-setMinor\":\"Kleine bewerking als standaard\",\"preference-summary-label\":\"Bewerk samenvatting\",\"preference-analysis-label\":\"Analyse\",\"preference-analysis-view\":\"We zullen een deel van uw niet-gevoelige informatie verzamelen om het gebruik van de plug-in vast te leggen. Informatie zal worden gebruikt om de ervaring te verbeteren. U kunt de informatie die we hebben verzameld vinden bij $1.\",\"preference-about-label\":\"Over InPageEdit\",\"preference-aboutAndHelp\":\"Over&Help\",\"preference-updatelog\":\"Update Log\",\"preference-savelocal-label\":\"U kunt uw InPageEdit-v2 voorkeuren hier opslaan.\",\"preference-savelocal\":\"Waarschuwing: Uw voorkeuren zullen opgeslagen worden in uw browser. Dat betekent dat u ze opnieuw moet opslaan wanneer u uw toestel wijzigt.\",\"preference-reset\":\"opnieuw instellen\",\"preference-save\":\"bewaren\",\"preference-summary-default\":\"[InPageEdit] $section Geen samenvatting gegeven $oldid\",\"preference-savelocal-popup\":\"Voeg de volgende code toe boven de code die deze plug-in oproept op uw persoonlijke JS-pagina:\",\"preference-savelocal-popup-yourjspage\":\"Je persoonlijke JS-pagina.\",\"diff-loading\":\"Verschil aan het laden\",\"diff-button-todiffpage\":\"Spring naar diff-pagina\",\"diff-usertalk\":\"discussie\",\"diff-usercontrib\":\"bijdragen\",\"diff-userblock\":\"blokkeren\",\"diff-title\":\"Verschil\",\"diff-edit\":\"bewerken\",\"diff-version\":\"Herziening\",\"diff-prev\":\"Oudere bewerking\",\"diff-nextv\":\"Nieuwere bewerking\",\"diff-bytes\":\"bytes\",\"diff-title-original-content\":\"Originele tekst\",\"diff-title-your-content\":\"Uw tekst\",\"diff-error\":\"Kan het verschil niet laden\",\"preview-placeholder\":\"Preview aan het laden...\",\"preview-title\":\"Preview\",\"preview-error\":\"Kan het preview niet laden.\"},\"pl\":{\"quick-edit\":\"Szybka edycja\",\"redirect-from\":\"Przekieruj z\",\"redirect-to\":\"Przekieruj do\",\"quick-delete\":\"Szybkie usuwanie\",\"quick-rename\":\"Szybka zmiana nazwy\",\"quick-diff\":\"Quick Diff\",\"ipe-preference\":\"Preferencje\",\"confirm\":\"potwierdź\",\"cancel\":\"anuluj\",\"done\":\"Gotowe\",\"ok\":\"OK\",\"notify-success\":\"Sukces\",\"notify-info\":\"Informacje\",\"notify-error\":\"Błąd\",\"notify-editing-history\":\"Edytujesz starją wersję tej strony\",\"editor-title-editRevision\":\"Wersja\",\"editor-summary-rivision\":\"Edytuj z\",\"editor-title-editSection\":\"Część $1\",\"editor-title-editing\":\"Edycja\",\"editSummary\":\"Opis zmian\",\"markAsMinor\":\"To jest drobna edycja\",\"editor-button-save\":\"Zapisz zmiany\",\"editor-confirm-save\":\"Czy na pewno chcesz zapisać zmiany?\",\"editor-button-preview\":\"Pokaż podgląd\",\"editor-button-diff\":\"Pokaż zmiany\",\"editor-button-findAndReplace\":\"Find&Replace\",\"fAndR-title\":\"Znajdź & zamień\",\"fAndR-find-text\":\"Znajdź tekst:\",\"fAndR-replace-text\":\"Zastąp tekst\",\"fAndR-globl\":\"Globalne wyszukiwanie\",\"fAndR-case-sen\":\"Rozróżniaj wielkość liter\",\"fAndR-enable-regex\":\"Włącz wyrażenia regularne\",\"fAndR-button-undo\":\"COFNIJ\",\"fAndR-button-replace\":\"ZAMIEŃ\",\"notify-fAndR-undo\":\"Treść została przywrócona do stanu sprzed otwarcia okna znajdź i zamień\",\"notify-fAndR-done\":\"$1 zamieniono\",\"window-leave-confirm\":\"Czy na pewno chcesz opuścić tę zakładkę? Tekst NIE zostanie zapisany.\",\"notify-no-right\":\"Brak uprawnień\",\"editor-no-right\":\"NIE posiadasz uprawnień do edycji tej strony. Możesz zostawić uwagi na jej stronie dyskusji.\",\"editor-title-editNotice\":\"Komunikaty\",\"editor-has-editNotice\":\"Ta strona posiada komunikaty!\",\"editor-leave-confirm\":\"Czy na pewno chcesz opuścić edytor? Tekst NIE zostanie zapisany.\",\"notify-no-change\":\"Nic nie zmieniono.\",\"editor-title-saving\":\"Publikowanie…\",\"notify-save-success\":\"Pomyślnie zapisano, odświeżanie…\",\"editor-save-error\":\"Podczas zapiswania wystąpiły błędy\",\"redirect-summary\":\"Szybkie przekierowanie\",\"redirect-question-to\":\"Do jakiej strony chcesz przekierować „$1”?\",\"redirect-question-from\":\"Jaka strona ma kierować do „$1”?\",\"redirect-title\":\"Szybkie przekierowanie\",\"notify-redirect-success\":\"Przekierowano pomyślnie\",\"notify-redirect-error\":\"Podczas przekierowywania wystąpiły błędy\",\"delete-reason-default\":\"Nieużywane\",\"delete-title\":\"Szybkie usuwanie\",\"delete-no-right\":\"NIE posiadasz uprawnień do usuwania tej strony.\",\"delete-confirm-title\":\"Potwierdź usuwanie\",\"delete-confirm-content\":\"Czy na pewno chcesz usunąć tę stronę? Możesz ją później przywrócić na Specjalna:Odtwórz\",\"notify-delete-success\":\"Usunięto pomyślnie\",\"notify-delete-error\":\"Podczas usuwania wystąpiły błędy\",\"rename-title\":\"Szybka zmiana nazwy strony\",\"rename-moveTo\":\"Wybierz nową nazwę dla „$1”\",\"rename-movetalk\":\"Przenieś stronę edyskusji\",\"rename-movesubpages\":\"Przenieś podstrony (do 100)\",\"rename-noredirect\":\"Nie pozostawiaj przekierowania pod dotychczasowym tytułem\",\"rename-summary\":\"Szybka zmiana nazwy\",\"notify-rename-success\":\"Zmieniono nazwę pomyślnie\",\"notify-rename-error\":\"Podczas zmieniania nazwy wystąpiły błędy\",\"rename-articleexists-title\":\"Strona docelowa istnieje\",\"rename-articleexists\":\"Pod nowym tytułem istnieje już inne strona. Funkcja wymuszonego przenoszenia jest ciągle tworzona, prosimy o cierpliwość.\",\"rename-no-right\":\"NIE posiadasz uprawnień do usuwania strony.\",\"preference-title\":\"Preferencje InPageEdita\",\"preference-editor-label\":\"Ustawienia edytora\",\"preference-outSideClose\":\"Kliknij z boku aby zamknąć edytor\",\"preference-setMinor\":\"Domyślnie oznaczaj edycje jako drobne\",\"preference-summary-label\":\"Opis zmian\",\"preference-analysis-label\":\"Telemetria\",\"preference-analysis-view\":\"Zbieramy niewielkie ilości niewrażliwych informacji, aby badać użycie wtyczki. Informacje te zostaną wykorzystane do poprawienia doświadczenia. Możesz znaleźć informacje które zbieramy na $1\",\"preference-about-label\":\"O InPageEdit\",\"preference-aboutAndHelp\":\"O nas & pomoc\",\"preference-updatelog\":\"Dziennik zmian\",\"preference-savelocal-label\":\"Tutaj możesz zapisać swoje preferencje InPageEdit-v2.\",\"preference-savelocal\":\"Uwaga: Preferencje zostaną zapisane w przeglądarce. Oznacza to, że musisz zapisać je ponownie po zmianie urządzenia.\",\"preference-reset\":\"resetuj\",\"preference-save\":\"zapisz\",\"preference-summary-default\":\"[InPageEdit] $section Nie podano opisu zmian $oldid\",\"preference-savelocal-popup\":\"Dodaj poniższy kod nad kodem wywołującym wtyczkę w swoim osobistym JS-ie:\",\"preference-savelocal-popup-yourjspage\":\"swojej osobistej stronie JS\",\"diff-loading\":\"Ładowanie różnicy\",\"diff-button-todiffpage\":\"Przejdź do strony różnicy\",\"diff-usertalk\":\"dyskusja\",\"diff-usercontrib\":\"wkład\",\"diff-userblock\":\"zablokuj\",\"diff-title\":\"Różnica\",\"diff-edit\":\"edytuj\",\"diff-version\":\"Wersja\",\"diff-prev\":\"Poprzednia\",\"diff-nextv\":\"Następna\",\"diff-bytes\":\"bajtów\",\"diff-title-original-content\":\"Oryginalny tekst\",\"diff-title-your-content\":\"Twój tekst\",\"diff-error\":\"Ładowanie różnicy nie powiodło się.\",\"preview-placeholder\":\"Ładowanie podglądu…\",\"preview-title\":\"Podgląd\",\"preview-error\":\"Ładowanie podglądu nie powiodło się.\"},\"zh-hans\":{\"quick-edit\":\"快速编辑\",\"redirect-from\":\"重定向至此\",\"redirect-to\":\"重定向到\",\"quick-delete\":\"快速删除\",\"quick-rename\":\"快速重命名\",\"ipe-preference\":\"偏好设置\",\"confirm\":\"确定\",\"cancel\":\"取消\",\"done\":\"完成\",\"ok\":\"好的\",\"notify-success\":\"成功\",\"notify-info\":\"注意\",\"notify-error\":\"警告\",\"notify-editing-history\":\"你正在编辑此页面的历史版本\",\"editor-title-editRevision\":\"历史版本\",\"editor-summary-rivision\":\"编辑自\",\"editor-title-editSection\":\"第$1部分\",\"editor-title-editing\":\"正在编辑\",\"editSummary\":\"编辑摘要\",\"markAsMinor\":\"标记为小编辑\",\"editor-button-save\":\"保存更改\",\"editor-confirm-save\":\"确定要保存编辑吗？\",\"editor-button-preview\":\"显示预览\",\"editor-button-diff\":\"比较差异\",\"editor-button-findAndReplace\":\"查找替换\",\"window-leave-confirm\":\"确定离开页面吗？您的编辑不会被保存。\",\"notify-no-right\":\"权限不足\",\"editor-no-right\":\"您没有编辑此页面的权限，您可以在讨论页提交修改建议。\",\"editor-title-editNotice\":\"编辑提示\",\"editor-has-editNotice\":\"当前页面有编辑提示！\",\"editor-leave-confirm\":\"您输入的内容尚未保存，确定关闭窗口吗？\",\"notify-no-change\":\"没有进行任何改动\",\"editor-title-saving\":\"正在保存……\",\"notify-save-success\":\"保存成功，正在刷新页面……\",\"notify-save-success-noreload\":\"保存成功！\",\"editor-save-error\":\"保存时出现错误\",\"redirect-summary\":\"快速重定向到\",\"redirect-question-to\":\"要将$1重定向到哪个页面？\",\"redirect-question-from\":\"将哪个页面重定向到$1？\",\"redirect-title\":\"快速重定向\",\"notify-redirect-success\":\"创建重定向成功！\",\"notify-redirect-error\":\"创建重定向时出现错误。\",\"delete-reason-default\":\"不再需要的页面\",\"delete-title\":\"快速删除\",\"delete-no-right\":\"您没有删除页面（delete）的权限。\",\"delete-confirm-title\":\"确认删除\",\"delete-confirm-content\":\"确定要删除这个页面吗？之后您可以从已删除页面中恢复。\",\"notify-delete-success\":\"成功删除页面\",\"notify-delete-error\":\"删除页面时发生错误\",\"rename-title\":\"快速重命名\",\"rename-moveTo\":\"您要将$1重命名为什么？\",\"rename-movetalk\":\"同时移动讨论页\",\"rename-movesubpages\":\"同时移动子页面（最多100个）\",\"rename-noredirect\":\"不留重定向\",\"rename-summary\":\"快速重命名\",\"notify-rename-success\":\"重命名成功，正在刷新页面……\",\"notify-rename-error\":\"重命名时遇到错误\",\"rename-articleexists-title\":\"目标页面已存在\",\"rename-articleexists\":\"以新页面名命名的页面存在内容，强制移动页面的功能正在开发中，敬请期待。\",\"rename-no-right\":\"您没有移动页面（move）的权限。\",\"preference-title\":\"InPageEdit偏好设置\",\"preference-editor-label\":\"编辑器设置\",\"preference-outSideClose\":\"点击编辑器外侧关闭\",\"preference-setMinor\":\"预设编辑为小编辑\",\"preference-summary-label\":\"编辑摘要\",\"preference-editSummary\":\"<code>$section</code> - 将会被替换为<code>/<!-- -->* 段落名字 */</code><br><code>$oldid</code> - 将会被替换为<code>编辑自[<!-- -->[Special:Diff/oldid]]</code>\",\"preference-analysis-label\":\"数据收集\",\"preference-analysis-view\":\"此插件会收集您的一些非敏感信息，用于记录插件的使用情况以便研究发展的方向，您可以在$1找到此插件收集的信息。\",\"preference-about-label\":\"关于InPageEdit\",\"preference-aboutAndHelp\":\"关于&帮助\",\"preference-updatelog\":\"更新日志\",\"preference-savelocal-label\":\"您可以在这里保存InPageEdit-v2的个人偏好设定。\",\"preference-savelocal\":\"注意：这些设置保存在您的浏览器本地，这意味着你必须在不同的设备上分别保存设置。\",\"preference-savelocal-btn\":\"永久保存\",\"preference-reset\":\"重置\",\"preference-save\":\"保存\",\"preference-summary-default\":\"[InPageEdit] $section 没有编辑摘要 $oldid\",\"preference-savelocal-popup-title\":\"参数设置另存为\",\"preference-savelocal-popup\":\"在您个人JS页调用本插件的代码的上方添加以下代码：\",\"preference-savelocal-popup-notice\":\"注意：如果将设置保存在本地，则将无法使用此窗口进行配置。尽管错误的设置将被忽略，但不会提示您哪里出了问题。\",\"preference-savelocal-popup-haslocal\":\"您使用个人JS将偏好设置保存在本地，您应当在[[Special:Mypage/common.js|您的个人JS页面]]或者global.js修改您的偏好设置。\",\"preference-savelocal-popup-yourjspage\":\"您的个人JS页面\",\"preference-translate\":\"改进翻译\",\"preference-discord\":\"Discord\",\"diff-loading\":\"正在加载差异……\",\"diff-button-todiffpage\":\"转到原版比较页面\",\"diff-usertalk\":\"讨论\",\"diff-usercontrib\":\"贡献\",\"diff-userblock\":\"封禁\",\"diff-title\":\"比较差异\",\"diff-edit\":\"编辑\",\"diff-version\":\"版本\",\"diff-prev\":\"上一版本\",\"diff-nextv\":\"下一版本\",\"diff-bytes\":\"字节\",\"diff-title-original-content\":\"原始内容\",\"diff-title-your-content\":\"您的编辑\",\"diff-error\":\"加载差异时遇到问题\",\"preview-placeholder\":\"正在加载预览……\",\"preview-title\":\"预览\",\"preview-error\":\"加载预览时出现错误。\",\"quick-diff\":\"快速差异\",\"fAndR-title\":\"查找 & 替换\",\"fAndR-find-text\":\"查找文字：\",\"fAndR-replace-text\":\"替换文字：\",\"fAndR-globl\":\"全局查找\",\"fAndR-case-sen\":\"区分大小写\",\"fAndR-enable-regex\":\"使用正则表达式\",\"fAndR-button-undo\":\"重置\",\"fAndR-button-replace\":\"替换\",\"notify-fAndR-undo\":\"编辑框内的文字已被还原为打开查找替换窗口前的状态\",\"notify-fAndR-done\":\"已替换$1处文字\",\"version-notice-title\":\"安装成功\",\"version-notice\":\"您好，感谢您使用InPageEdit！此插件可能会收集您的使用信息，但这些信息不会用于商业目的，也不会收集您的个人Cookie和隐私信息。您可以在设定中查看插件收集的信息统计链接。如果您不想让此插件收集您的任何信息，请停止使用此插件。如需反馈，请在GitHub中提交issue。\",\"version-notice-canary-title\":\"Canary版本稳定性警告\",\"version-notice-canary\":\"Canary版本是作者用于测试与开发的版本。未经测试的实验功能可能会出现在此版本中，甚至某些时候可能无法使用。为获得更好的体验，建议您切换至正常版本！\",\"updatelog-update-success-title\":\"InPageEdit升级成功\",\"updatelog-update-success\":\"InPageEdit已升级到$1\",\"updatelog-button-versioninfo\":\"查看更新\",\"updatelog-after-close\":\"在下一个版本更新之前之前，此窗口将不再弹出，您可以在$1找到更新信息。如果您发现了任何问题，$2\",\"updatelog-dismiss\":\"不再显示\",\"updatelog-file-issue\":\"请提交至GitHub。\",\"updatelog-title\":\"更新日志\",\"updatelog-about\":\"关于\",\"close\":\"关闭\",\"editor-detail-button-toggle\":\"页面详情\",\"editor-detail-button-templates\":\"使用的模板\",\"editor-detail-title-templates\":\"本页面引用的模板\",\"editor-detail-button-images\":\"使用的图片\",\"editor-detail-title-images\":\"本页面使用的图片\",\"editor-detail-images-quickview\":\"快速查看\",\"editor-detail-images-upload\":\"(重新)上传\",\"delete-reason\":\"您为什么要删除$1？\",\"editor-edittool-header\":\"标题\",\"editor-edittool-header-text\":\"标题文字\",\"editor-edittool-bold\":\"粗体文字\",\"editor-edittool-italic\":\"斜体文字\",\"editor-edittool-internal-link\":\"内部链接\",\"editor-edittool-list-bulleted\":\"无序列表\",\"editor-edittool-list-numbered\":\"有序列表\",\"editor-edittool-nowiki\":\"去格式化\",\"editor-edittool-format-label\":\"格式\",\"editor-edittool-insert-label\":\"插入\",\"editor-edittool-custom-label\":\"自定\",\"editor-reload-page\":\"保存后刷新页面\",\"preference-reset-confirm-title\":\"还原偏好设置\",\"preference-reset-confirm\":\"确定要将您的偏好设置还原为默认状态吗？\",\"target-exists-title\":\"目标页面已存在\",\"target-exists-no-delete\":\"页面 [[$1]] 已存在，你想查看此页面吗？\",\"target-exists-can-delete\":\"页面 [[$1]] 已存在，您可以查看或者删除该页面\"},\"zh-hant\":{\"quick-edit\":\"快速編輯\",\"redirect-from\":\"重新導向至此\",\"redirect-to\":\"重新導向到\",\"quick-delete\":\"快速刪除\",\"quick-rename\":\"快速移動\",\"ipe-preference\":\"偏好設定\",\"confirm\":\"確認\",\"cancel\":\"取消\",\"done\":\"完成\",\"ok\":\"好的\",\"notify-success\":\"成功\",\"notify-info\":\"注意\",\"notify-error\":\"警告\",\"notify-editing-history\":\"您正在編輯本頁面的舊版本\",\"editor-title-editRevision\":\"舊版本\",\"editor-summary-rivision\":\"編輯自\",\"editor-title-editSection\":\"第$1部分\",\"editor-title-editing\":\"正在編輯\",\"editSummary\":\"編輯摘要\",\"markAsMinor\":\"標記為次要修訂\",\"editor-button-save\":\"儲存變更\",\"editor-confirm-save\":\"確定要儲存變更嗎？\",\"editor-button-preview\":\"顯示預覽\",\"editor-button-diff\":\"比較差異\",\"editor-button-findAndReplace\":\"尋找與取代\",\"window-leave-confirm\":\"確定離開頁面嗎？您的變更不會被儲存。\",\"notify-no-right\":\"權限不足\",\"editor-no-right\":\"您沒有編輯此頁面的權限，您可以在討論頁提交修改建議。\",\"editor-title-editNotice\":\"編輯提示\",\"editor-has-editNotice\":\"當前頁面有編輯提示！\",\"editor-leave-confirm\":\"您輸入的內容尚未儲存，確定關閉視窗嗎？\",\"notify-no-change\":\"沒有進行任何改動\",\"editor-title-saving\":\"正在儲存……\",\"notify-save-success\":\"儲存成功，正在刷新頁面……\",\"editor-save-error\":\"儲存時出現錯誤\",\"redirect-summary\":\"快速導向到\",\"redirect-question-to\":\"要將$1重新導向到哪個頁面？\",\"redirect-question-from\":\"將哪個頁面重新導向到$1？\",\"redirect-title\":\"快速導向\",\"notify-redirect-success\":\"成功建立重新導向！\",\"notify-redirect-error\":\"建立重新導向時出現錯誤。\",\"delete-reason-default\":\"不再需要的頁面\",\"delete-title\":\"快速刪除\",\"delete-no-right\":\"您沒有刪除頁面的權限。\",\"delete-confirm-title\":\"確認刪除\",\"delete-confirm-content\":\"確定要刪除這個頁面嗎？之後您可以從已刪除頁面中恢復。\",\"notify-delete-success\":\"成功刪除頁面\",\"notify-delete-error\":\"刪除頁面時發生錯誤\",\"rename-title\":\"快速移動\",\"rename-moveTo\":\"您要將$1移動至哪裡？\",\"rename-movetalk\":\"同時移動討論頁\",\"rename-movesubpages\":\"同時移動子頁面（最多100個）\",\"rename-noredirect\":\"不留重新導向\",\"rename-summary\":\"快速移動\",\"notify-rename-success\":\"移動成功，正在刷新頁面……\",\"notify-rename-error\":\"移動時遇到錯誤\",\"rename-articleexists-title\":\"目標頁面已存在\",\"rename-articleexists\":\"以新頁面名命名的頁面存在內容，強制移動頁面的功能正在開發中，敬請期待。\",\"rename-no-right\":\"您沒有移動頁面的權限。\",\"preference-title\":\"InPageEdit偏好設定\",\"preference-editor-label\":\"編輯器設定\",\"preference-outSideClose\":\"點擊編輯器外側關閉\",\"preference-setMinor\":\"預設編輯為次要修訂\",\"preference-summary-label\":\"變更摘要\",\"preference-editSummary\":\"<code>$section</code> - 將會被替換為<code>/<!-- -->* 段落名稱 */</code><br><code>$oldid</code> - 將會被替換為<code>編輯自[<!-- -->[Special:Diff/oldid]]</code>\",\"preference-analysis-label\":\"資料收集\",\"preference-analysis-view\":\"此外掛會收集您一些非敏感的資訊，用於記錄外掛的使用情況以便研究發展的方向，您可以在$1找到此外掛收集的資訊。\",\"preference-about-label\":\"關於InPageEdit\",\"preference-aboutAndHelp\":\"關於&說明\",\"preference-updatelog\":\"更新紀錄\",\"preference-savelocal-label\":\"您可以在這裡儲存InPageEdit-v2的偏好設定。\",\"preference-savelocal\":\"注意：這些設定會儲存在您的瀏覽器本地端，這意味著您必須在不同的裝置上分別儲存設定\",\"preference-savelocal-btn\":\"永久儲存\",\"preference-reset\":\"重設\",\"preference-save\":\"儲存\",\"preference-summary-default\":\"[InPageEdit] $section 沒有編輯摘要 $oldid\",\"preference-savelocal-popup-title\":\"參數設定另存為\",\"preference-savelocal-popup\":\"在您個人JS頁調用本外掛的代碼的上方加入以下代碼：\",\"preference-savelocal-popup-notice\":\"注意：如果將設置保存在本地，則將無法使用此窗口進行配置。儘管錯誤的設置將被忽略，但不會提示您哪裡出了問題。\",\"preference-savelocal-popup-haslocal\":\"您使用個人JS將偏好設定儲存在本地端，您應當在[[Special:Mypage/common.js|您的個人JS頁]]或者global.js修改您的偏好設定。\",\"preference-savelocal-popup-yourjspage\":\"您的個人JS頁\",\"preference-translate\":\"改進翻譯\",\"preference-discord\":\"Discord\",\"diff-loading\":\"正在載入差異……\",\"diff-button-todiffpage\":\"轉到原版比較頁面\",\"diff-usertalk\":\"討論\",\"diff-usercontrib\":\"貢獻\",\"diff-userblock\":\"封鎖\",\"diff-title\":\"比較差異\",\"diff-edit\":\"變更\",\"diff-version\":\"版本\",\"diff-prev\":\"上一版本\",\"diff-nextv\":\"下一版本\",\"diff-bytes\":\"位元組\",\"diff-title-original-content\":\"原始內容\",\"diff-title-your-content\":\"您的編輯\",\"diff-error\":\"載入差異時遇到問題\",\"preview-placeholder\":\"正在載入預覽……\",\"preview-title\":\"預覽\",\"preview-error\":\"載入預覽時出現錯誤。\",\"quick-diff\":\"快速差異\",\"fAndR-title\":\"尋找與取代\",\"fAndR-find-text\":\"尋找下一個\",\"fAndR-replace-text\":\"替換文字\",\"fAndR-globl\":\"尋找全部\",\"fAndR-case-sen\":\"區分大小寫\",\"fAndR-enable-regex\":\"使用正規表示式（regex）\",\"fAndR-button-undo\":\"復原\",\"fAndR-button-replace\":\"取代\",\"notify-fAndR-undo\":\"編輯框內的文字已被還原為開啟此視窗前的狀態\",\"notify-fAndR-done\":\"成功取代$1\"}}");
-
-/***/ }),
-
 /***/ "./index.js":
 /*!******************!*\
   !*** ./index.js ***!
@@ -212,269 +201,622 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./method/i18njs.js":
-/*!**************************!*\
-  !*** ./method/i18njs.js ***!
-  \**************************/
+/***/ "./method/init.js":
+/*!************************!*\
+  !*** ./method/init.js ***!
+  \************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* <nowiki>
- * Library for accessing i18n messages for use in Dev Wiki scripts.
- * See [[I18n-js]] for documentation.
- *
- * @author Cqm <https://dev.fandom.com/User:Cqm>
- * @author OneTwoThreeFall <https://dev.fandom.com/User:OneTwoThreeFall>
- *
- * @version 0.5.8
- *
- * @notes Also used by VSTF wiki for their reporting forms (with a non-dev i18n.json page)
- * @notes This is apparently a commonly used library for a number of scripts and also includes
- *        a check to prevent double loading. This can make it painful to test from your JS
- *        console. To get around this, add ?usesitejs=0&useuserjs=0 to your URL.
+// 导入方法
+const _dir = __webpack_require__(/*! ./_dir */ "./method/_dir.js");
+const { loadScript } = __webpack_require__(/*! ./loadScript */ "./method/loadScript.js");
+const { getUserInfo } = __webpack_require__(/*! ./getUserInfo */ "./method/getUserInfo.js");
+const { loadStyles } = __webpack_require__(/*! ./loadStyles */ "./method/loadStyles.js");
+const { updateNotice } = __webpack_require__(/*! ./updateNotice */ "./method/updateNotice.js");
+const { syncI18nData } = __webpack_require__(/*! ./syncI18nData */ "./method/syncI18nData.js");
+
+// 导入全部模块
+const { _analysis } = __webpack_require__(/*! ../module/_analysis */ "./module/_analysis.js");
+const { _msg } = __webpack_require__(/*! ../module/_msg */ "./module/_msg.js");
+const { about } = __webpack_require__(/*! ../module/about */ "./module/about.js");
+const api = __webpack_require__(/*! ../module/api.json */ "./module/api.json");
+const { articleLink } = __webpack_require__(/*! ../module/articleLink */ "./module/articleLink.js");
+const { findAndReplace } = __webpack_require__(/*! ../module/findAndReplace */ "./module/findAndReplace.js");
+const { loadQuickDiff } = __webpack_require__(/*! ../module/loadQuickDiff */ "./module/loadQuickDiff.js");
+const { preference } = __webpack_require__(/*! ../module/preference */ "./module/preference.js");
+const { pluginStore } = __webpack_require__(/*! ../module/pluginStore */ "./module/pluginStore.js");
+const { progress } = __webpack_require__(/*! ../module/progress */ "./module/progress.js");
+const { quickDelete } = __webpack_require__(/*! ../module/quickDelete */ "./module/quickDelete.js");
+const { quickDiff } = __webpack_require__(/*! ../module/quickDiff */ "./module/quickDiff.js");
+const { quickEdit } = __webpack_require__(/*! ../module/quickEdit */ "./module/quickEdit.js");
+const { quickPreview } = __webpack_require__(/*! ../module/quickPreview */ "./module/quickPreview.js");
+const { quickRedirect } = __webpack_require__(/*! ../module/quickRedirect */ "./module/quickRedirect.js");
+const { quickRename } = __webpack_require__(/*! ../module/quickRename */ "./module/quickRename.js");
+const { specialNotice } = __webpack_require__(/*! ../module/specialNotice */ "./module/specialNotice.js");
+const version = __webpack_require__(/*! ../module/version */ "./module/version.js");
+const { versionInfo } = __webpack_require__(/*! ../module/versionInfo */ "./module/versionInfo.js");
+
+
+/**
+ * @method initMain
+ * @return {Object} InPageEdit
  */
+module.exports = async function init() {
 
+  // 加载样式表
+  loadStyles();
+  // 等待 i18n 缓存
+  await syncI18nData(
+    Boolean(
+      mw.util.getParamValue('i18n', location.href) === 'nocache' ||
+      version !== localStorage.getItem('InPageEditVersion')
+    )
+  );
+  // 等待前置插件
+  await loadScript(_dir + '/src/ssi_modal/ssi-modal.min.js');
+  // 初始化前置模块
+  preference.set();
+  getUserInfo();
+  loadQuickDiff();
+  articleLink();
+  updateNotice();
 
+  // !暂定，触发工具盒插件
+  pluginStore.load('toolbox.js');
 
-window.i18njs = window.i18njs || {};
+  // 写入模块
+  var InPageEdit = {
+    _dir,
+    about,
+    api,
+    articleLink,
+    findAndReplace,
+    loadQuickDiff,
+    preference,
+    progress,
+    quickDelete,
+    quickDiff,
+    quickEdit,
+    quickPreview,
+    quickRedirect,
+    quickRename,
+    specialNotice,
+    version,
+    versionInfo,
+    // 别名 Alias
+    fnr: findAndReplace,
+    delete: quickDelete,
+    diff: quickDiff,
+    edit: quickEdit,
+    preview: quickPreview,
+    redirect: quickRedirect,
+    quickMove: quickRename,
+    rename: quickRename,
+  }
 
-// prevent double loading and loss of cache
-if (window.i18njs.loadMessages !== undefined) {
-  return;
+  // 锁定重要变量
+  var importantVariables = [
+    'api',
+    'version',
+  ];
+  importantVariables.forEach(key => {
+    try {
+      Object.freeze(InPageEdit[key]);
+    } catch (e) {
+      // Do nothing
+    }
+  });
+
+  // 触发钩子，传入上下文
+  mw.hook('InPageEdit').fire({
+    _analysis,
+    _msg,
+    InPageEdit
+  });
+
+  // 花里胡哨的加载提示
+  console.info('    ____      ____                   ______    ___ __              _    _____ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_            | |  / /__ \\\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/  ______    | | / /__/ /\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_   /_____/    | |/ // __/ \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/              |___//____/ \n                      /____/');
+
+  // 传回InPageEdit
+  return InPageEdit;
 }
 
-/*
- * Cache of mw config variables.
- */
-var conf = mw.config.get([
-  'debug',
-  'wgContentLanguage',
-  'wgUserLanguage'
-]),
+/***/ }),
 
-  /*
-   * Cache of loaded I18n instances.
-   */
-  cache = {},
+/***/ "./method/loadScript.js":
+/*!******************************!*\
+  !*** ./method/loadScript.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-  /*
-   * Initial overrides object, initialised below with the i18n global variable.
-   * Allows end-users to override specific messages. See documentation for how to use.
-   */
-  overrides = null,
-
-  /*
-   * Language fallbacks for those that don't fallback to English.
-   * Shouldn't need updating unless Wikia change theirs.
-   *
-   * To generate this, use `$ grep -R "fallback =" /path/to/messages/`,
-   * pipe the result to a text file and format the result.
-   */
-  fallbacks = {
-    'ab': 'ru',
-    'ace': 'id',
-    'aln': 'sq',
-    'als': 'gsw',
-    'an': 'es',
-    'anp': 'hi',
-    'arn': 'es',
-    'arz': 'ar',
-    'av': 'ru',
-    'ay': 'es',
-    'ba': 'ru',
-    'bar': 'de',
-    'bat-smg': 'sgs',
-    'bcc': 'fa',
-    'be-x-old': 'be-tarask',
-    'bh': 'bho',
-    'bjn': 'id',
-    'bm': 'fr',
-    'bpy': 'bn',
-    'bqi': 'fa',
-    'bug': 'id',
-    'cbk-zam': 'es',
-    'ce': 'ru',
-    'ckb': 'ckb-arab',
-    'crh': 'crh-latn',
-    'crh-cyrl': 'ru',
-    'csb': 'pl',
-    'cv': 'ru',
-    'de-at': 'de',
-    'de-ch': 'de',
-    'de-formal': 'de',
-    'dsb': 'de',
-    'dtp': 'ms',
-    'eml': 'it',
-    'ff': 'fr',
-    'fiu-vro': 'vro',
-    'frc': 'fr',
-    'frp': 'fr',
-    'frr': 'de',
-    'fur': 'it',
-    'gag': 'tr',
-    'gan': 'gan-hant',
-    'gan-hans': 'zh-hans',
-    'gan-hant': 'zh-hant',
-    'gl': 'pt',
-    'glk': 'fa',
-    'gn': 'es',
-    'gsw': 'de',
-    'hif': 'hif-latn',
-    'hsb': 'de',
-    'ht': 'fr',
-    'ii': 'zh-cn',
-    'inh': 'ru',
-    'iu': 'ike-cans',
-    'jut': 'da',
-    'jv': 'id',
-    'kaa': 'kk-latn',
-    'kbd': 'kbd-cyrl',
-    'kbd-cyrl': 'ru',
-    'khw': 'ur',
-    'kiu': 'tr',
-    'kk': 'kk-cyrl',
-    'kk-arab': 'kk-cyrl',
-    'kk-cn': 'kk-arab',
-    'kk-kz': 'kk-cyrl',
-    'kk-latn': 'kk-cyrl',
-    'kk-tr': 'kk-latn',
-    'kl': 'da',
-    'koi': 'ru',
-    'ko-kp': 'ko',
-    'krc': 'ru',
-    'ks': 'ks-arab',
-    'ksh': 'de',
-    'ku': 'ku-latn',
-    'ku-arab': 'ckb',
-    'kv': 'ru',
-    'lad': 'es',
-    'lb': 'de',
-    'lbe': 'ru',
-    'lez': 'ru',
-    'li': 'nl',
-    'lij': 'it',
-    'liv': 'et',
-    'lmo': 'it',
-    'ln': 'fr',
-    'ltg': 'lv',
-    'lzz': 'tr',
-    'mai': 'hi',
-    'map-bms': 'jv',
-    'mg': 'fr',
-    'mhr': 'ru',
-    'min': 'id',
-    'mo': 'ro',
-    'mrj': 'ru',
-    'mwl': 'pt',
-    'myv': 'ru',
-    'mzn': 'fa',
-    'nah': 'es',
-    'nap': 'it',
-    'nds': 'de',
-    'nds-nl': 'nl',
-    'nl-informal': 'nl',
-    'no': 'nb',
-    'os': 'ru',
-    'pcd': 'fr',
-    'pdc': 'de',
-    'pdt': 'de',
-    'pfl': 'de',
-    'pms': 'it',
-    // 'pt': 'pt-br',
-    'pt-br': 'pt',
-    'qu': 'es',
-    'qug': 'qu',
-    'rgn': 'it',
-    'rmy': 'ro',
-    'rue': 'uk',
-    'ruq': 'ruq-latn',
-    'ruq-cyrl': 'mk',
-    'ruq-latn': 'ro',
-    'sa': 'hi',
-    'sah': 'ru',
-    'scn': 'it',
-    'sg': 'fr',
-    'sgs': 'lt',
-    'shi': 'ar',
-    'simple': 'en',
-    'sli': 'de',
-    'sr': 'sr-ec',
-    'srn': 'nl',
-    'stq': 'de',
-    'su': 'id',
-    'szl': 'pl',
-    'tcy': 'kn',
-    'tg': 'tg-cyrl',
-    'tt': 'tt-cyrl',
-    'tt-cyrl': 'ru',
-    'ty': 'fr',
-    'udm': 'ru',
-    'ug': 'ug-arab',
-    'uk': 'ru',
-    'vec': 'it',
-    'vep': 'et',
-    'vls': 'nl',
-    'vmf': 'de',
-    'vot': 'fi',
-    'vro': 'et',
-    'wa': 'fr',
-    'wo': 'fr',
-    'wuu': 'zh-hans',
-    'xal': 'ru',
-    'xmf': 'ka',
-    'yi': 'he',
-    'za': 'zh-hans',
-    'zea': 'nl',
-    'zh': 'zh-hans',
-    'zh-classical': 'lzh',
-    'zh-cn': 'zh-hans',
-    'zh-hant': 'zh-hans',
-    'zh-hk': 'zh-hant',
-    'zh-min-nan': 'nan',
-    'zh-mo': 'zh-hk',
-    'zh-my': 'zh-sg',
-    'zh-sg': 'zh-hans',
-    'zh-tw': 'zh-hant',
-    'zh-yue': 'yue'
-  };
-
-/*
- * Get a translation of a message from the messages object in the
- * requested language.
- *
- * @param messages the message object to look the message up in.
- * @param name The name of the message to get.
- * @param lang The language to get the message in.
- * @param messageKey
- *
- * @return The requested translation or the name wrapped in < ... > if no
- *     message could be found.
- */
-function getMsg(messages, name, lang, messageKey) {
-  // https://www.mediawiki.org/wiki/Help:System_message#Finding_messages_and_documentation
-  if (conf.wgUserLanguage === 'qqx') {
-    return '(i18njs-' + messageKey + '-' + name + ')';
-  }
-
-  // if the message has been overridden, use that without checking the language
-  if (overrides[messageKey] && overrides[messageKey][name]) {
-    return overrides[messageKey][name];
-  }
-
-  if (messages[lang] && messages[lang][name]) {
-    return messages[lang][name];
-  }
-
-  if (lang === 'en') {
-    return '<' + name + '>';
-  }
-
-  lang = fallbacks[lang] || 'en';
-  return getMsg(messages, name, lang);
+var loadScript = function (src) {
+  return $.ajax({
+    url: src,
+    dataType: 'script',
+    crossDomain: true,
+    cache: true
+  });
 }
 
-/*
+module.exports = {
+  loadScript
+}
+
+/***/ }),
+
+/***/ "./method/loadStyles.js":
+/*!******************************!*\
+  !*** ./method/loadStyles.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+const _dir = __webpack_require__(/*! ./_dir */ "./method/_dir.js");
+
+function loadStyles() {
+
+  // 放在越上面优先级越高
+  const styleFiles = [
+    // Default Skin
+    '/src/skin/ipe-default.css',
+    // ssi-modal Style
+    '/src/ssi_modal/ssi-modal.css',
+    // FontAwesome
+    'https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css',
+  ];
+
+  styleFiles.forEach(link => {
+    if (/^https?:\/\//.test(link) !== true) {
+      link = _dir + link;
+    }
+    $('head').prepend(
+      $('<link>', { href: link, rel: 'stylesheet', 'data-ipe': 'style' })
+    );
+  });
+}
+
+module.exports = {
+  loadStyles
+}
+
+/***/ }),
+
+/***/ "./method/syncI18nData.js":
+/*!********************************!*\
+  !*** ./method/syncI18nData.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var config = mw.config.get();
+
+const _dir = __webpack_require__(/*! ./_dir */ "./method/_dir.js");
+
+// 设置
+const cacheTime = 2 * 60 * 60 * 1000;
+const cacheUrl = _dir + '/i18n/languages.json';
+const funcName = 'InPageEdit';
+const localCacheName = 'i18n-cache-' + funcName + '-content';
+const localCacheTime = 'i18n-cache-' + funcName + '-timestamp';
+
+/**
+ * @method i18n Get i18n data
+ * @param {Boolean} noCache true - forced no cache
+ */
+async function syncI18nData(noCache) {
+  const now = new Date().getTime();
+  // 如果语言为 qqx，不返回任何东西
+  if (config.wgUserLanguage === 'qqx') {
+    console.warn('[InPageEdit] User language is qqx');
+    return true;
+  }
+  // 缓存存在且缓存未过期
+  if (localStorage.getItem(localCacheName) && (now - localStorage.getItem(localCacheTime)) < cacheTime && !noCache) {
+    var json = {}
+    try {
+      json = JSON.parse(localStorage.getItem(localCacheName))
+    } catch (e) {
+      console.warn('[InPageEdit] i18n 数据不合法');
+      await getOriginalData();
+      return true;
+    }
+    if (json.en) {
+      return true;
+    } else {
+      console.warn('[InPageEdit] i18n 数据可能已损坏');
+      await getOriginalData();
+      return true;
+    }
+  } else {
+    await getOriginalData();
+    return true;
+  }
+}
+
+/**
+ * @function saveToCache
+ */
+function saveToCache(data) {
+  const now = new Date().getTime();
+  data = JSON.stringify(data);
+  localStorage.setItem(localCacheName, data);
+  localStorage.setItem(localCacheTime, now);
+}
+
+/**
+ * @function getOriginalData
+ */
+async function getOriginalData() {
+  console.time('[InPageEdit] 从远程获取 i18n 数据');
+  var data = await $.getJSON(cacheUrl);
+  if (typeof data !== 'object') data = {}
+  saveToCache(data);
+  console.timeEnd('[InPageEdit] 从远程获取 i18n 数据');
+  return data;
+}
+
+
+module.exports = {
+  syncI18nData
+}
+
+/***/ }),
+
+/***/ "./method/updateNotice.js":
+/*!********************************!*\
+  !*** ./method/updateNotice.js ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+const version = __webpack_require__(/*! ../module/version */ "./module/version.js");
+
+const { _msg } = __webpack_require__(/*! ../module/_msg */ "./module/_msg.js");
+const api = __webpack_require__(/*! ../module/api.json */ "./module/api.json");
+const { versionInfo } = __webpack_require__(/*! ../module/versionInfo */ "./module/versionInfo.js");
+const { specialNotice } = __webpack_require__(/*! ../module/specialNotice */ "./module/specialNotice.js");
+
+function updateNotice() {
+  if (localStorage.getItem('InPageEditVersion') !== version) {
+    ssi_modal.notify('', {
+      title: _msg('updatelog-update-success-title'),
+      content: _msg('updatelog-update-success', version),
+      className: 'in-page-edit',
+      buttons: [{
+        className: 'btn btn-primary',
+        label: _msg('updatelog-button-versioninfo'),
+        method(a, modal) {
+          localStorage.InPageEditVersion = version;
+          versionInfo();
+          modal.close();
+        }
+      }],
+      closeAfter: {
+        time: 30,
+        resetOnHover: true
+      },
+      onClose() {
+        ssi_modal.notify('', {
+          className: 'in-page-edit',
+          content: _msg('updatelog-after-close', `[${api.updatelogsUrl} ${api.updatelogsUrl}]`, `[${api.githubLink}/issues ${_msg('updatelog-file-issue')}]`),
+          closeAfter: {
+            time: 10
+          },
+          buttons: [{
+            className: 'btn btn-primary',
+            label: _msg('ok'),
+            method(a, modal) {
+              modal.close();
+            }
+          }]
+        });
+        localStorage.InPageEditVersion = version;
+      }
+    });
+  }
+  if (localStorage.getItem('InPageEditNoticeId') !== _msg('noticeid')) {
+    specialNotice();
+  }
+}
+
+module.exports = {
+  updateNotice
+}
+
+/***/ }),
+
+/***/ "./module/_analysis.js":
+/*!*****************************!*\
+  !*** ./module/_analysis.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var config = mw.config.get();
+var api = __webpack_require__(/*! ./api.json */ "./module/api.json");
+
+/**
+ * @module _analysis 提交统计信息模块
+ * @param {String} functionID 模块ID，例如 quick_edit
+ */
+const _analysis = function (functionID) {
+  if (InPageEdit.doNotCollectMyInfo === true) {
+    // console.info('[InPageEdit] 我们已不再收集您使用插件的信息。');
+    // return;
+  }
+  var submitdata = {
+    'action': 'submit',
+    'url': config.wgServer + config.wgArticlePath.replace('$1', ''),
+    'sitename': config.wgSiteName,
+    'username': config.wgUserName,
+    'function': functionID
+  }
+  $.ajax({
+    url: api.analysis,
+    data: submitdata,
+    type: 'post',
+    dataType: 'json'
+  }).done(function (data) {
+    console.log('[InPageEdit] Analysis response\nStatus: ' + data.status + '\nMessage: ' + data.msg);
+  });
+}
+
+module.exports = {
+  _analysis
+}
+
+/***/ }),
+
+/***/ "./module/_elements.js":
+/*!*****************************!*\
+  !*** ./module/_elements.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/**
+ * @module _elements 常用html元素
+ */
+var $br = '<br>',
+  $hr = '<hr>',
+  $progress = '<div class="ipe-progress" style="width: 100%"><div class="ipe-progress-bar"></div></div>';
+
+module.exports = {
+  $br,
+  br: $br,
+  $hr,
+  hr: $hr,
+  $progress,
+  progress: $progress,
+}
+
+/***/ }),
+
+/***/ "./module/_hasRight.js":
+/*!*****************************!*\
+  !*** ./module/_hasRight.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var config = mw.config.get();
+
+/** 
+ * @module _hasRight 是否拥有权限
+ * @param {String} right
+ * @return {Boolean}
+ */
+const _hasRight = function (right) {
+  if (config.wgUserIsBlocked === true) {
+    return false;
+  }
+  if (mw.config.get('wgUserRights').indexOf(right) > -1) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+module.exports = {
+  _hasRight
+}
+
+/***/ }),
+
+/***/ "./module/_msg.js":
+/*!************************!*\
+  !*** ./module/_msg.js ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+const funcName = 'InPageEdit';
+const userlang = mw.config.get('wgUserLanguage');
+const i18nCache = localStorage.getItem('i18n-cache-' + funcName + '-content') || '{}';
+const overrides = window.InPageEdit && window.InPageEdit.i18n;
+const fallbacks = {
+  'ab': 'ru',
+  'ace': 'id',
+  'aln': 'sq',
+  'als': 'gsw',
+  'an': 'es',
+  'anp': 'hi',
+  'arn': 'es',
+  'arz': 'ar',
+  'av': 'ru',
+  'ay': 'es',
+  'ba': 'ru',
+  'bar': 'de',
+  'bat-smg': 'sgs',
+  'bcc': 'fa',
+  'be-x-old': 'be-tarask',
+  'bh': 'bho',
+  'bjn': 'id',
+  'bm': 'fr',
+  'bpy': 'bn',
+  'bqi': 'fa',
+  'bug': 'id',
+  'cbk-zam': 'es',
+  'ce': 'ru',
+  'ckb': 'ckb-arab',
+  'crh': 'crh-latn',
+  'crh-cyrl': 'ru',
+  'csb': 'pl',
+  'cv': 'ru',
+  'de-at': 'de',
+  'de-ch': 'de',
+  'de-formal': 'de',
+  'dsb': 'de',
+  'dtp': 'ms',
+  'eml': 'it',
+  'ff': 'fr',
+  'fiu-vro': 'vro',
+  'frc': 'fr',
+  'frp': 'fr',
+  'frr': 'de',
+  'fur': 'it',
+  'gag': 'tr',
+  'gan': 'gan-hant',
+  'gan-hans': 'zh-hans',
+  'gan-hant': 'zh-hant',
+  'gl': 'pt',
+  'glk': 'fa',
+  'gn': 'es',
+  'gsw': 'de',
+  'hif': 'hif-latn',
+  'hsb': 'de',
+  'ht': 'fr',
+  'ii': 'zh-cn',
+  'inh': 'ru',
+  'iu': 'ike-cans',
+  'jut': 'da',
+  'jv': 'id',
+  'kaa': 'kk-latn',
+  'kbd': 'kbd-cyrl',
+  'kbd-cyrl': 'ru',
+  'khw': 'ur',
+  'kiu': 'tr',
+  'kk': 'kk-cyrl',
+  'kk-arab': 'kk-cyrl',
+  'kk-cn': 'kk-arab',
+  'kk-kz': 'kk-cyrl',
+  'kk-latn': 'kk-cyrl',
+  'kk-tr': 'kk-latn',
+  'kl': 'da',
+  'koi': 'ru',
+  'ko-kp': 'ko',
+  'krc': 'ru',
+  'ks': 'ks-arab',
+  'ksh': 'de',
+  'ku': 'ku-latn',
+  'ku-arab': 'ckb',
+  'kv': 'ru',
+  'lad': 'es',
+  'lb': 'de',
+  'lbe': 'ru',
+  'lez': 'ru',
+  'li': 'nl',
+  'lij': 'it',
+  'liv': 'et',
+  'lmo': 'it',
+  'ln': 'fr',
+  'ltg': 'lv',
+  'lzz': 'tr',
+  'mai': 'hi',
+  'map-bms': 'jv',
+  'mg': 'fr',
+  'mhr': 'ru',
+  'min': 'id',
+  'mo': 'ro',
+  'mrj': 'ru',
+  'mwl': 'pt',
+  'myv': 'ru',
+  'mzn': 'fa',
+  'nah': 'es',
+  'nap': 'it',
+  'nds': 'de',
+  'nds-nl': 'nl',
+  'nl-informal': 'nl',
+  'no': 'nb',
+  'os': 'ru',
+  'pcd': 'fr',
+  'pdc': 'de',
+  'pdt': 'de',
+  'pfl': 'de',
+  'pms': 'it',
+  // 'pt': 'pt-br',
+  'pt-br': 'pt',
+  'qu': 'es',
+  'qug': 'qu',
+  'rgn': 'it',
+  'rmy': 'ro',
+  'rue': 'uk',
+  'ruq': 'ruq-latn',
+  'ruq-cyrl': 'mk',
+  'ruq-latn': 'ro',
+  'sa': 'hi',
+  'sah': 'ru',
+  'scn': 'it',
+  'sg': 'fr',
+  'sgs': 'lt',
+  'shi': 'ar',
+  'simple': 'en',
+  'sli': 'de',
+  'sr': 'sr-ec',
+  'srn': 'nl',
+  'stq': 'de',
+  'su': 'id',
+  'szl': 'pl',
+  'tcy': 'kn',
+  'tg': 'tg-cyrl',
+  'tt': 'tt-cyrl',
+  'tt-cyrl': 'ru',
+  'ty': 'fr',
+  'udm': 'ru',
+  'ug': 'ug-arab',
+  'uk': 'ru',
+  'vec': 'it',
+  'vep': 'et',
+  'vls': 'nl',
+  'vmf': 'de',
+  'vot': 'fi',
+  'vro': 'et',
+  'wa': 'fr',
+  'wo': 'fr',
+  'wuu': 'zh-hans',
+  'xal': 'ru',
+  'xmf': 'ka',
+  'yi': 'he',
+  'za': 'zh-hans',
+  'zea': 'nl',
+  'zh': 'zh-hans',
+  'zh-classical': 'lzh',
+  'zh-cn': 'zh-hans',
+  'zh-hant': 'zh-hans',
+  'zh-hk': 'zh-hant',
+  'zh-min-nan': 'nan',
+  'zh-mo': 'zh-hk',
+  'zh-my': 'zh-sg',
+  'zh-sg': 'zh-hans',
+  'zh-tw': 'zh-hant',
+  'zh-yue': 'yue'
+}
+
+/**
+ * @function toObject
+ * @param {String} data 
+ */
+function toObject(data) {
+  try {
+    return JSON.parse(data);
+  } catch (e) {
+    return {}
+  }
+}
+
+/**
  * Substitute arguments into the string, where arguments are represented
  * as $n where n > 0.
  *
@@ -483,7 +825,7 @@ function getMsg(messages, name, lang, messageKey) {
  *
  * @return The resulting message.
  */
-function handleArgs(message, args) {
+function handleArgs(message, ...args) {
   args.forEach(function (elem, index) {
     var rgx = new RegExp('\\$' + (index + 1), 'g');
     message = message.replace(rgx, elem);
@@ -492,7 +834,7 @@ function handleArgs(message, args) {
   return message;
 }
 
-/*
+/**
  * Generate a HTML link using the supplied parameters.
  *
  * @param href The href of the link which will be converted to
@@ -637,6 +979,9 @@ function parse(message) {
     .replace(urlRgx, function (_match, href, text) {
       return makeLink(href, text, true, true);
     })
+    // .replace(httpRgx, function (_match, before, href, after) {
+    //   return before + makeLink(href, href, true, true) + after;
+    // })
     .replace(simplePageRgx, function (_match, href) {
       return makeLink(href);
     })
@@ -651,650 +996,37 @@ function parse(message) {
     });
 }
 
-/*
- * Parse markdown links into HTML. Also supports basic inline HTML tags.
- *
- * Will process:
- * - [text](url)
- * - [page]
- * - [text](page)
- *
- * @param The message to process.
- *
- * @return the resulting string.
- */
-function markdown(message) {
-  // [text](url)
-  var urlRgx = /\[(.+?)\]\(((?:https?:)?\/\/.+?)\)/g,
-    // [page]
-    simplePageRgx = /\[(.+?)\]/g,
-    // [text](page)
-    pageWithTextRgx = /\[(.+?)\]\((.+?)\)/g;
-
-  if (message.indexOf('<') > -1) {
-    message = sanitiseHtml(message);
-  }
-
-  return message
-    .replace(urlRgx, function (_match, text, href) {
-      return makeLink(href, text, true);
-    })
-    .replace(simplePageRgx, function (_match, href) {
-      return makeLink(href);
-    })
-    .replace(pageWithTextRgx, function (_match, text, href) {
-      return makeLink(href, text);
-    });
-}
-
-/*
- * Create a new Message instance.
- *
- * @param message The name of the message.
- * @param defaultLang
- * @param args Any arguments to substitute into the message.
- * @param messageKey
- */
-function message(messages, defaultLang, args, messageKey) {
-  if (!args.length) {
-    return;
-  }
-
-  var msgName = args.shift(),
-    noMsg = '<' + msgName + '>',
-    msg = getMsg(messages, msgName, defaultLang, messageKey);
-
-  if (args.length) {
-    msg = handleArgs(msg, args);
-  }
-
-  return {
-    /*
-     * Boolean representing whether the message exists.
-     */
-    exists: msg !== noMsg,
-
-    /*
-     * Parse wikitext links in the message and return the result.
-     *
-     * @return The resulting string.
-     */
-    parse: function () {
-      // skip parsing if the message wasn't found otherwise
-      // the sanitisation will mess with it
-      if (!this.exists) {
-        return this.escape();
-      }
-
-      return parse(msg);
-    },
-
-    /*
-     * Parse markdown links in the message and return the result.
-     *
-     * @return The resulting string.
-     */
-    markdown: function () {
-      // skip parsing if the message wasn't found otherwise
-      // the sanitisation will mess with it
-      if (!this.exists) {
-        return this.escape();
-      }
-
-      return markdown(msg);
-    },
-
-    /*
-     * Escape any HTML in the message and return the result.
-     *
-     * @return The resulting string.
-     */
-    escape: function () {
-      return mw.html.escape(msg);
-    },
-
-    /*
-     * Return the message as is.
-     *
-     * @return The resulting string.
-     */
-    plain: function () {
-      return msg;
-    }
-  };
-}
-
-/*
- * Create a new i18n object.
- *
- * @param messages The message object to look translations up in.
- * @param name
- */
-function i18n(messages, name) {
-  var defaultLang = conf.wgUserLanguage,
-    tempLang = null,
-    messageKey = null;
-
-  if (name.indexOf('u:') !== 0) {
-    messageKey = name;
-  }
-
-  return {
-    /*
-     * Set the default language.
-     *
-     * @param lang The language code to use by default.
-     */
-    useLang: function (lang) {
-      defaultLang = lang;
-    },
-
-    /*
-     * Set the language for the next msg call.
-     *
-     * @param lang The language code to use for the next `msg` call.
-     *
-     * @return The current object for use in chaining.
-     */
-    inLang: function (lang) {
-      tempLang = lang;
-      return this;
-    },
-
-    /*
-     * Set the default language to the content language.
-     */
-    useContentLang: function () {
-      defaultLang = conf.wgContentLanguage;
-    },
-
-    /*
-     * Set the language for the next `msg` call to the content language.
-     *
-     * @return The current object for use in chaining.
-     */
-    inContentLang: function () {
-      tempLang = conf.wgContentLanguage;
-      return this;
-    },
-
-
-    /*
-     * Set the default language to the user's language.
-     */
-    useUserLang: function () {
-      defaultLang = conf.wgUserLanguage;
-    },
-
-    /*
-     * Set the language for the next msg call to the user's language.
-     *
-     * @return The current object for use in chaining.
-     */
-    inUserLang: function () {
-      tempLang = conf.wgUserLanguage;
-      return this;
-    },
-
-    /*
-     * Create a new instance of Message.
-     */
-    msg: function () {
-      var args = Array.prototype.slice.call(arguments),
-        lang = defaultLang;
-
-      if (tempLang !== null) {
-        lang = tempLang;
-        tempLang = null;
-      }
-
-      return message(messages, lang, args, messageKey);
-    },
-
-    /*
-     * For accessing the raw messages.
-     */
-    _messages: messages
-  };
-}
-
-/*
- * Parse JSON string loaded from page and create an i18n object.
- *
- * @param name
- * @param res The JSON string.
- * @param cacheVersion Cache version requested by the loading script.
- *
- * @return The resulting i18n object.
- */
-function parseMessagesToObject(name, res) {
-  var json = {},
-    obj,
-    msg;
-
-  // handle parse errors gracefully
-  try {
-    json = JSON.parse(res);
-  } catch (e) {
-    msg = e.message;
-
-    if (msg === 'Unexpected end of JSON input') {
-      msg += '. This may be caused by a non-existent i18n.json page.';
-    }
-
-    console.warn('[I18n-js] SyntaxError in messages: ' + msg);
-  }
-
-  obj = i18n(json, name);
-
-  // cache the result in case it's used multiple times
-  cache[name] = obj;
-
-  return obj;
-}
-
-/*
- * Load messages stored as JSON on a page.
- *
- * @param name The name of the script the messages are for. This will be
- *     used to get messages from
- *     https://dev.fandom.com/wiki/MediaWiki:Custom-name/i18n.json.
- * @param options Options that can be set by the loading script:
- *     cacheVersion: Minimum cache version requested by the loading script.
- *     noCache: Never load i18n from cache (not recommended for general use).
- *
- * @return A jQuery.Deferred instance.
- */
-function loadMessages(name, options, file) {
-  options = options || {};
-  // if using the special 'qqx' language code, there's no need to load
-  // the messages, so resolve with an empty i18n object and return early
-  if (conf.wgUserLanguage === 'qqx') {
-    return i18n({}, name);
-  }
-
-  if (file) {
-    return parseMessagesToObject(name, JSON.stringify(file));
-  }
-}
-
-// expose under the dev global
-var i18njs = {
-  loadMessages,
-
-  // 'hidden' functions to allow testing
-  _getMsg: getMsg,
-  _handleArgs: handleArgs,
-  _parse: parse,
-  _markdown: markdown,
-  _fallbacks: fallbacks
-}
-
-// window.i18njs = i18njs;
-
-// initialise overrides object
-window.i18njs = window.i18njs || {};
-window.i18njs.overrides = window.i18njs.overrides || {};
-overrides = window.i18njs.overrides;
-
-// fire an event on load
-mw.hook('i18njs').fire(i18njs);
-
-module.exports = {
-  i18njs
-}
-
-/***/ }),
-
-/***/ "./method/init.js":
-/*!************************!*\
-  !*** ./method/init.js ***!
-  \************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 导入方法
-const { loadScript } = __webpack_require__(/*! ./loadScript */ "./method/loadScript.js");
-const { getUserInfo } = __webpack_require__(/*! ./getUserInfo */ "./method/getUserInfo.js");
-const { loadStyles } = __webpack_require__(/*! ./loadStyles */ "./method/loadStyles.js");
-const { updateNotice } = __webpack_require__(/*! ./updateNotice */ "./method/updateNotice.js");
-
-// 导入全部模块
-const { _analysis } = __webpack_require__(/*! ../module/_analysis */ "./module/_analysis.js");
-const { _msg } = __webpack_require__(/*! ../module/_msg */ "./module/_msg.js");
-const { about } = __webpack_require__(/*! ../module/about */ "./module/about.js");
-const api = __webpack_require__(/*! ../module/api.json */ "./module/api.json");
-const { articleLink } = __webpack_require__(/*! ../module/articleLink */ "./module/articleLink.js");
-const { findAndReplace } = __webpack_require__(/*! ../module/findAndReplace */ "./module/findAndReplace.js");
-const { loadQuickDiff } = __webpack_require__(/*! ../module/loadQuickDiff */ "./module/loadQuickDiff.js");
-const { preference } = __webpack_require__(/*! ../module/preference */ "./module/preference.js");
-const { pluginStore } = __webpack_require__(/*! ../module/pluginStore */ "./module/pluginStore.js");
-const { progress } = __webpack_require__(/*! ../module/progress */ "./module/progress.js");
-const { quickDelete } = __webpack_require__(/*! ../module/quickDelete */ "./module/quickDelete.js");
-const { quickDiff } = __webpack_require__(/*! ../module/quickDiff */ "./module/quickDiff.js");
-const { quickEdit } = __webpack_require__(/*! ../module/quickEdit */ "./module/quickEdit.js");
-const { quickPreview } = __webpack_require__(/*! ../module/quickPreview */ "./module/quickPreview.js");
-const { quickRedirect } = __webpack_require__(/*! ../module/quickRedirect */ "./module/quickRedirect.js");
-const { quickRename } = __webpack_require__(/*! ../module/quickRename */ "./module/quickRename.js");
-const { specialNotice } = __webpack_require__(/*! ../module/specialNotice */ "./module/specialNotice.js");
-const version = __webpack_require__(/*! ../module/version */ "./module/version.js");
-const { versionInfo } = __webpack_require__(/*! ../module/versionInfo */ "./module/versionInfo.js");
-
-
-/**
- * @method initMain
- * @return {Object} InPageEdit
- */
-module.exports = async function init() {
-
-  // 加载前置插件以及样式表
-  loadStyles();
-  await loadScript('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/src/ssi_modal/ssi-modal.min.js');
-  // 初始化前置模块
-  preference.set();
-  getUserInfo();
-  loadQuickDiff();
-  articleLink();
-  updateNotice();
-
-  // 暂定，触发工具盒插件
-  pluginStore.load('toolbox.js');
-
-  // 写入模块
-  var InPageEdit = {
-    about,
-    api,
-    articleLink,
-    findAndReplace,
-    loadQuickDiff,
-    preference,
-    progress,
-    quickDelete,
-    quickDiff,
-    quickEdit,
-    quickPreview,
-    quickRedirect,
-    quickRename,
-    specialNotice,
-    version,
-    versionInfo,
-    // 别名 Alias
-    fnr: findAndReplace,
-    delete: quickDelete,
-    diff: quickDiff,
-    edit: quickEdit,
-    preview: quickPreview,
-    redirect: quickRedirect,
-    quickMove: quickRename,
-    rename: quickRename,
-  }
-
-  // 锁定重要变量
-  var importantVariables = [
-    'api',
-    'version',
-  ];
-  importantVariables.forEach(key => {
-    try {
-      Object.freeze(InPageEdit[key]);
-    } catch (e) {
-      // Do nothing
-    }
-  });
-
-  // 触发钩子，传入上下文
-  mw.hook('InPageEdit').fire({
-    _analysis,
-    _msg,
-    InPageEdit
-  });
-
-  // 花里胡哨的加载提示
-  console.info('    ____      ____                   ______    ___ __              _    _____ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_            | |  / /__ \\\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/  ______    | | / /__/ /\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_   /_____/    | |/ // __/ \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/              |___//____/ \n                      /____/');
-
-  // 传回InPageEdit
-  return InPageEdit;
-}
-
-/***/ }),
-
-/***/ "./method/loadScript.js":
-/*!******************************!*\
-  !*** ./method/loadScript.js ***!
-  \******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var loadScript = function (src) {
-  return $.ajax({
-    url: src,
-    dataType: 'script',
-    crossDomain: true,
-    cache: true
-  });
-}
-
-module.exports = {
-  loadScript
-}
-
-/***/ }),
-
-/***/ "./method/loadStyles.js":
-/*!******************************!*\
-  !*** ./method/loadStyles.js ***!
-  \******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-const _dir = __webpack_require__(/*! ./_dir */ "./method/_dir.js");
-
-function loadStyles() {
-
-  // 放在越上面优先级越高
-  const styleFiles = [
-    // Default Skin
-    '/src/skin/ipe-default.css',
-    // ssi-modal Style
-    '/src/ssi_modal/ssi-modal.css',
-    // FontAwesome
-    'https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css',
-  ];
-
-  styleFiles.forEach(link => {
-    if (/^https?:\/\//.test(link) !== true) {
-      link = _dir + link;
-    }
-    $('head').prepend(
-      $('<link>', { href: link, rel: 'stylesheet', 'data-ipe': 'style' })
-    );
-  });
-}
-
-module.exports = {
-  loadStyles
-}
-
-/***/ }),
-
-/***/ "./method/updateNotice.js":
-/*!********************************!*\
-  !*** ./method/updateNotice.js ***!
-  \********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-const version = __webpack_require__(/*! ../module/version */ "./module/version.js");
-
-const { _msg } = __webpack_require__(/*! ../module/_msg */ "./module/_msg.js");
-const api = __webpack_require__(/*! ../module/api.json */ "./module/api.json");
-const { versionInfo } = __webpack_require__(/*! ../module/versionInfo */ "./module/versionInfo.js");
-const { specialNotice } = __webpack_require__(/*! ../module/specialNotice */ "./module/specialNotice.js");
-
-function updateNotice() {
-  if (localStorage.getItem('InPageEditVersion') !== version) {
-    ssi_modal.notify('', {
-      title: _msg('updatelog-update-success-title'),
-      content: _msg('updatelog-update-success', version),
-      className: 'in-page-edit',
-      buttons: [{
-        className: 'btn btn-primary',
-        label: _msg('updatelog-button-versioninfo'),
-        method: function (a, modal) {
-          localStorage.InPageEditVersion = version;
-          versionInfo();
-          modal.close();
-        }
-      }],
-      closeAfter: {
-        time: 30,
-        resetOnHover: true
-      },
-      onClose: function () {
-        ssi_modal.notify('', {
-          className: 'in-page-edit',
-          content: _msg('updatelog-after-close', `[${api.updatelogsUrl} ${api.updatelogsUrl}]`, `[${api.githubLink}/issues ${_msg('updatelog-file-issue')}]`),
-          closeAfter: {
-            time: 10
-          },
-          buttons: [{
-            className: 'btn btn-primary',
-            label: _msg('ok'),
-            method: function (a, modal) {
-              modal.close();
-            }
-          }]
-        });
-        localStorage.InPageEditVersion = version;
-      }
-    });
-  }
-  if (localStorage.getItem('InPageEditNoticeId') !== _msg('noticeid')) {
-    specialNotice();
-  }
-}
-
-module.exports = {
-  updateNotice
-}
-
-/***/ }),
-
-/***/ "./module/_analysis.js":
-/*!*****************************!*\
-  !*** ./module/_analysis.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var config = mw.config.get();
-var api = __webpack_require__(/*! ./api.json */ "./module/api.json");
-
-/**
- * @module _analysis 提交统计信息模块
- * @param {String} functionID 模块ID，例如 quick_edit
- */
-const _analysis = function (functionID) {
-  if (InPageEdit.doNotCollectMyInfo === true) {
-    // console.info('[InPageEdit] 我们已不再收集您使用插件的信息。');
-    // return;
-  }
-  var submitdata = {
-    'action': 'submit',
-    'url': config.wgServer + config.wgArticlePath.replace('$1', ''),
-    'sitename': config.wgSiteName,
-    'username': config.wgUserName,
-    'function': functionID
-  }
-  $.ajax({
-    url: api.analysis,
-    data: submitdata,
-    type: 'post',
-    dataType: 'json'
-  }).done(function (data) {
-    console.log('[InPageEdit] Analysis response\nStatus: ' + data.status + '\nMessage: ' + data.msg);
-  });
-}
-
-module.exports = {
-  _analysis
-}
-
-/***/ }),
-
-/***/ "./module/_elements.js":
-/*!*****************************!*\
-  !*** ./module/_elements.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/**
- * @module _elements 常用html元素
- */
-var $br = '<br>',
-  $hr = '<hr>',
-  $progress = '<div class="ipe-progress" style="width: 100%"><div class="ipe-progress-bar"></div></div>';
-
-module.exports = {
-  $br,
-  br: $br,
-  $hr,
-  hr: $hr,
-  $progress,
-  progress: $progress,
-}
-
-/***/ }),
-
-/***/ "./module/_hasRight.js":
-/*!*****************************!*\
-  !*** ./module/_hasRight.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var config = mw.config.get();
-
-/** 
- * @module _hasRight 是否拥有权限
- * @param {String} right
- * @return {Boolean}
- */
-const _hasRight = function (right) {
-  if (config.wgUserIsBlocked === true) {
-    return false;
-  }
-  if (mw.config.get('wgUserRights').indexOf(right) > -1) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-module.exports = {
-  _hasRight
-}
-
-/***/ }),
-
-/***/ "./module/_msg.js":
-/*!************************!*\
-  !*** ./module/_msg.js ***!
-  \************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var { i18njs } = __webpack_require__(/*! ../method/i18njs */ "./method/i18njs.js");
-
 /**
  * @module _msg
  * @param {String} msgKey 消息的键
- * @param  {...String} params 替代占位符的内容，可以解析简单的wikitext
+ * @param  {String} args 替代占位符($1, $2...)的内容，可以解析简单的wikitext
  */
-var _msg = function (msgKey, ...params) {
-  var i18n = i18njs.loadMessages('InPageEdit', {}, __webpack_require__(/*! ../i18n/languages.json */ "./i18n/languages.json"));
-  return i18n.msg(msgKey, ...params).parse();
+var _msg = function (msgKey, ...args) {
+  // qqx
+  if (userlang === 'qqx') {
+    var after = '';
+    if (args.length > 0) {
+      after = ': ' + args.join(', ');
+    }
+    return `(${funcName.toLowerCase()}-${msgKey})${after}`;
+  }
+  // 获取 i18n 
+  var messages = toObject(i18nCache);
+  // 转换语言
+  var lang;
+  if (fallbacks[userlang]) lang = fallbacks[userlang];
+  if (!(messages[lang] && messages[lang][msgKey])) lang = 'en';
+  // 解析信息
+  var msg;
+  if (messages[lang][msgKey]) msg = messages[lang][msgKey];
+  if (overrides[lang] && overrides[lang][msgKey]) msg = overrides[lang][msgKey];
+  if (msg) {
+    msg = handleArgs(msg, ...args);
+    msg = parse(msg);
+    return msg;
+  } else {
+    return `<${funcName.toLowerCase()}-${msgKey}>`;
+  }
 }
 
 module.exports = {
@@ -2423,73 +2155,77 @@ var quickEdit = function (options) {
   }
 
   // 模态框内部
-  var $content = $('<div>').append(
+  var $modalTitle = $('<span>').append(
+    _msg('editor-title-editing') + ': <u class="editPage">' + options.page.replace(/_/g, ' ') + '</u>'
+  );
+  var $editTools = $('<div>', { class: 'editTools' }).append(
+    $('<div>', { class: 'btnGroup' }).append(
+      $('<div>', { class: 'toolSelect' }).append(
+        $('<div>', { class: 'label', text: _msg('editor-edittool-header') }),
+        $('<ul>', { class: 'ul-list' }).append(
+          $('<li>', { class: 'editToolBtn', 'data-open': '\n== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ==\n', text: 'H2' }),
+          $('<li>', { class: 'editToolBtn', 'data-open': '\n=== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ===\n', text: 'H3' }),
+          $('<li>', { class: 'editToolBtn', 'data-open': '\n==== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ====\n', text: 'H4' }),
+          $('<li>', { class: 'editToolBtn', 'data-open': '\n===== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' =====\n', text: 'H5' })
+        )
+      )
+    ),
+    $('<div>', { class: 'btnGroup' }).append(
+      $('<span>', { class: 'label', text: '格式' }),
+      $('<button>', { class: 'editToolBtn fa fa-bold btn', 'data-open': "'''", 'data-middle': _msg('editor-edittool-bold'), 'data-close': "'''" }),
+      $('<button>', { class: 'editToolBtn fa fa-italic btn', 'data-open': "''", 'data-middle': _msg('editor-edittool-italic'), 'data-close': "''" }),
+      $('<button>', { class: 'editToolBtn fa fa-list-ul btn', 'data-open': '\n* ', 'data-middle': _msg('editor-edittool-list-bulleted'), 'data-close': '\n' }),
+      $('<button>', { class: 'editToolBtn fa fa-list-ol btn', 'data-open': '\n# ', 'data-middle': _msg('editor-edittool-list-numbered'), 'data-close': '\n' }),
+      $('<button>', { class: 'editToolBtn fa fa-won btn', 'data-open': '<' + 'nowiki>', 'data-middle': _msg('editor-edittool-nowiki'), 'data-close': '</nowiki>' }),
+      $('<button>', { class: 'editToolBtn fa fa-level-down fa-rotate-90 btn', 'data-open': '<br>\n', 'data-middle': '', 'data-close': '' })
+    ),
+    $('<div>', { class: 'btnGroup' }).append(
+      $('<span>', { class: 'label', text: '插入' }),
+      $('<button>', { class: 'editToolBtn fa fa-link btn', 'data-open': '[' + '[', 'data-middle': _msg('editor-edittool-internal-link'), 'data-close': ']]' }),
+      $('<button>', { class: 'editToolBtn fa fa-file-image-o btn', 'data-open': '[' + '[File:', 'data-middle': 'Example.png', 'data-close': '|thumb]]' }),
+      $('<button>', { class: 'editToolBtn btn', 'data-open': '\n<' + 'gallery>\n', 'data-middle': 'Example1.jpg|Description\nExample2.png|Description', 'data-close': '\n</gallery>\n', html: '<span class="fa-stack"><i class="fa fa-picture-o fa-stack-1x"></i><i class="fa fa-picture-o fa-stack-1x" style="left: 2px;top: 2px;text-shadow: 1px 1px 0 #fff;"></i></span>' })
+    ),
+    $('<div>', { class: 'btnGroup extra', style: 'display: none' }).append(
+      $('<span>', { class: 'label', text: '自定义' })
+    ),
+    $('<div>', { class: 'btnGroup special-tools', style: 'float: right' }).append(
+      $('<button>', { class: 'btn fa fa-search' }).click(function () {
+        findAndReplace($('.ipe-editor.timestamp-' + timestamp + ' .editArea'));
+      })
+    )
+  );
+  var $editArea = $('<textarea>', { class: 'editArea', style: 'margin-top: 0;' });
+  var $optionsLabel = $('<div>', { class: 'editOptionsLabel hideBeforeLoaded' }).append(
+    $('<aside>', { class: 'detailArea' }).append(
+      $('<label>', { class: 'detailToggle', text: _msg('editor-detail-button-toggle') }),
+      $('<div>', { class: 'detailBtnGroup' }).append(
+        $('<a>', { href: 'javascript:;', class: 'detailBtn', id: 'showTemplates', text: _msg('editor-detail-button-templates') }),
+        ' | ',
+        $('<a>', { href: 'javascript:;', class: 'detailBtn', id: 'showImages', text: _msg('editor-detail-button-images') })
+      )
+    ),
+    // 摘要&小编辑
+    $('<label>', { for: 'editSummary', text: _msg('editSummary') }),
+    $br,
+    $('<input>', { class: 'editSummary', id: 'editSummary', placeholder: 'Edit via InPageEdit~', value: options.editSummary.replace(/\$oldid/ig, options.summaryRevision) }),
+    $br,
+    $('<label>').append(
+      $('<input>', { type: 'checkbox', class: 'editMinor', id: 'editMinor', checked: options.editMinor }),
+      $('<span>', { text: _msg('markAsMinor') })
+    ),
+    $br,
+    $('<label>').append(
+      $('<input>', { type: 'checkbox', class: 'reloadPage', id: 'reloadPage', checked: options.reload }),
+      $('<span>', { text: _msg('editor-reload-page') })
+    )
+  );
+  var $modalContent = $('<div>').append(
     $progress,
     $('<section>', { class: 'hideBeforeLoaded' }).append(
       // 编辑工具条
-      $('<div>', { class: 'editTools' }).append(
-        $('<div>', { class: 'btnGroup' }).append(
-          $('<div>', { class: 'toolSelect' }).append(
-            $('<div>', { class: 'label', text: _msg('editor-edittool-header') }),
-            $('<ul>', { class: 'ul-list' }).append(
-              $('<li>', { class: 'editToolBtn', 'data-open': '\n== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ==\n', text: 'H2' }),
-              $('<li>', { class: 'editToolBtn', 'data-open': '\n=== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ===\n', text: 'H3' }),
-              $('<li>', { class: 'editToolBtn', 'data-open': '\n==== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' ====\n', text: 'H4' }),
-              $('<li>', { class: 'editToolBtn', 'data-open': '\n===== ', 'data-middle': _msg('editor-edittool-header-text'), 'data-close': ' =====\n', text: 'H5' })
-            )
-          )
-        ),
-        $('<div>', { class: 'btnGroup' }).append(
-          $('<span>', { class: 'label', text: '格式' }),
-          $('<button>', { class: 'editToolBtn fa fa-bold btn', 'data-open': "'''", 'data-middle': _msg('editor-edittool-bold'), 'data-close': "'''" }),
-          $('<button>', { class: 'editToolBtn fa fa-italic btn', 'data-open': "''", 'data-middle': _msg('editor-edittool-italic'), 'data-close': "''" }),
-          $('<button>', { class: 'editToolBtn fa fa-list-ul btn', 'data-open': '\n* ', 'data-middle': _msg('editor-edittool-list-bulleted'), 'data-close': '\n' }),
-          $('<button>', { class: 'editToolBtn fa fa-list-ol btn', 'data-open': '\n# ', 'data-middle': _msg('editor-edittool-list-numbered'), 'data-close': '\n' }),
-          $('<button>', { class: 'editToolBtn fa fa-won btn', 'data-open': '<' + 'nowiki>', 'data-middle': _msg('editor-edittool-nowiki'), 'data-close': '</nowiki>' }),
-          $('<button>', { class: 'editToolBtn fa fa-level-down fa-rotate-90 btn', 'data-open': '<br>\n', 'data-middle': '', 'data-close': '' })
-        ),
-        $('<div>', { class: 'btnGroup' }).append(
-          $('<span>', { class: 'label', text: '插入' }),
-          $('<button>', { class: 'editToolBtn fa fa-link btn', 'data-open': '[' + '[', 'data-middle': _msg('editor-edittool-internal-link'), 'data-close': ']]' }),
-          $('<button>', { class: 'editToolBtn fa fa-file-image-o btn', 'data-open': '[' + '[File:', 'data-middle': 'Example.png', 'data-close': '|thumb]]' }),
-          $('<button>', { class: 'editToolBtn btn', 'data-open': '\n<' + 'gallery>\n', 'data-middle': 'Example1.jpg|Description\nExample2.png|Description', 'data-close': '\n</gallery>\n', html: '<span class="fa-stack"><i class="fa fa-picture-o fa-stack-1x"></i><i class="fa fa-picture-o fa-stack-1x" style="left: 2px;top: 2px;text-shadow: 1px 1px 0 #fff;"></i></span>' })
-        ),
-        $('<div>', { class: 'btnGroup extra', style: 'display: none' }).append(
-          $('<span>', { class: 'label', text: '自定义' })
-        ),
-        $('<div>', { class: 'btnGroup special-tools', style: 'float: right' }).append(
-          $('<button>', { class: 'btn fa fa-search' }).click(function () {
-            findAndReplace($('.ipe-editor.timestamp-' + timestamp + ' .editArea'));
-          })
-        )
-      ),
+      $editTools,
       // 编辑框
-      $('<textarea>', { class: 'editArea', style: 'margin-top: 0;' }),
-      // 页面分析
-      $('<div>', { class: 'editOptionsLabel hideBeforeLoaded' }).append(
-        $('<aside>', { class: 'detailArea' }).append(
-          $('<label>', { class: 'detailToggle', text: _msg('editor-detail-button-toggle') }),
-          $('<div>', { class: 'detailBtnGroup' }).append(
-            $('<a>', { href: 'javascript:;', class: 'detailBtn', id: 'showTemplates', text: _msg('editor-detail-button-templates') }),
-            ' | ',
-            $('<a>', { href: 'javascript:;', class: 'detailBtn', id: 'showImages', text: _msg('editor-detail-button-images') })
-          )
-        ),
-        // 摘要&小编辑
-        $('<label>', { for: 'editSummary', text: _msg('editSummary') }),
-        $br,
-        $('<input>', { class: 'editSummary', id: 'editSummary', placeholder: 'Edit via InPageEdit~', value: options.editSummary.replace(/\$oldid/ig, options.summaryRevision) }),
-        $br,
-        $('<label>').append(
-          $('<input>', { type: 'checkbox', class: 'editMinor', id: 'editMinor', checked: options.editMinor }),
-          $('<span>', { text: _msg('markAsMinor') })
-        ),
-        $br,
-        $('<label>').append(
-          $('<input>', { type: 'checkbox', class: 'reloadPage', id: 'reloadPage', checked: options.reload }),
-          $('<span>', { text: _msg('editor-reload-page') })
-        )
-      )
+      $editArea
     )
   );
 
@@ -2500,8 +2236,8 @@ var quickEdit = function (options) {
 
   // 显示主窗口
   ssi_modal.show({
-    title: _msg('editor-title-editing') + ': <u class="editPage">' + options.page.replace(/_/g, ' ') + '</u>',
-    content: $content,
+    title: $modalTitle,
+    content: $modalContent,
     outSideClose: options.outSideClose,
     className: 'in-page-edit ipe-editor timestamp-' + timestamp,
     sizeClass: 'large',
@@ -2526,10 +2262,10 @@ var quickEdit = function (options) {
         },
           function (result) {
             if (result) {
-              var text = $content.find('.editArea').val(),
-                minor = $content.find('.editMinor').prop('checked'),
+              var text = $editArea.val(),
+                minor = $optionsLabel.find('.editMinor').prop('checked'),
                 section = options.section,
-                summary = $content.find('.editSummary').val();
+                summary = $optionsLabel.find('.editSummary').val();
               postArticle({
                 text: text,
                 page: options.page,
@@ -2543,9 +2279,9 @@ var quickEdit = function (options) {
     }, {
       label: _msg('editor-button-preview'),
       className: 'btn btn-secondary leftBtn hideBeforeLoaded',
-      method: function () {
+      method() {
         _analysis('preview_edit');
-        var text = $content.find('.editArea').val();
+        var text = $editArea.val();
         quickPreview({
           title: options.page,
           text: text,
@@ -2554,26 +2290,24 @@ var quickEdit = function (options) {
       }
     }, {
       label: _msg('editor-button-diff'),
-      className: 'btn btn-secondary leftBtn hideBeforeLoaded diff-btn',
-      method: function () {
-        // ...
-      }
+      className: 'btn btn-secondary leftBtn hideBeforeLoaded diff-btn'
     }, {
       label: _msg('cancel'),
       className: 'btn btn-danger',
-      method: function (e, modal) {
+      method(e, modal) {
         modal.close();
       }
     }
     ],
 
     /* 预加载 */
-    beforeShow: function () {
+    beforeShow() {
       // 设置样式
-      $content.find('.hideBeforeLoaded').hide();
-      $content.find('.ipe-progress').css('margin', Number($(window).height() / 3 - 50) + 'px 0');
-      $content.find('.editArea').css('height', $(window).height() / 3 * 2 - 100);
-      $content.find('.editOptionsLabel').prependTo('.ipe-editor.timestamp-' + timestamp + ' .ssi-buttons');
+      $modalContent.find('.hideBeforeLoaded').hide();
+      $optionsLabel.find('.hideBeforeLoaded').hide();
+      $modalContent.find('.ipe-progress').css('margin', Number($(window).height() / 3 - 50) + 'px 0');
+      $editArea.css('height', $(window).height() / 3 * 2 - 100);
+      $('.ipe-editor.timestamp-' + timestamp + ' .ssi-buttons').append($optionsLabel);
       $('.ipe-editor.timestamp-' + timestamp + ' .leftBtn').appendTo('.ipe-editor.timestamp-' + timestamp + ' .ssi-leftButtons');
       $('.ipe-editor.timestamp-' + timestamp + ' .ssi-modalTitle').append(
         $('<a>', {
@@ -2586,14 +2320,14 @@ var quickEdit = function (options) {
             className: 'in-page-edit',
             center: true,
             title: _msg('editor-title-editNotice'),
-            content: '<section class="editNotice">' + $content.data('editNotice') + '</section>'
+            content: '<section class="editNotice">' + $modalContent.data('editNotice') + '</section>'
           });
         })
       );
 
       /** Edit-Tool 扩展 **/
       function insertText(strings, obj) {
-        var textarea = obj || $('.in-page-edit.ipe-editor .editArea')[0],
+        var textarea = obj || $editArea[0],
           start = textarea.selectionStart,
           stop = textarea.selectionEnd,
           selectedText = textarea.value.slice(start, stop);
@@ -2613,21 +2347,21 @@ var quickEdit = function (options) {
         middle = middle || '';
         close = close || '';
         icon = 'fa-' + icon || false;
-        $content.find('.btnGroup.extra').append(
+        $modalContent.find('.btnGroup.extra').append(
           $('<button>', { class: 'editToolBtn btn', 'data-open': open, 'data-middle': middle, 'data-close': close, html: `<i class="fa ${icon}"></i>` })
         );
       }
       // 用户自定义按钮
       if (InPageEdit.buttons) {
         var btns = InPageEdit.buttons;
-        $content.find('.btnGroup.extra').show();
+        $editTools.find('.btnGroup.extra').show();
 
         for (var i = 0; i < btns.length; i++) {
           var btn = btns[i];
           addBtn(btn.open, btn.middle, btn.close, btn.text);
         }
       }
-      $content.find('.editToolBtn').click(function (e) {
+      $editTools.find('.editToolBtn').click(function (e) {
         e.preventDefault();
         var $this = $(this),
           $open = $this.attr('data-open') || '',
@@ -2637,7 +2371,7 @@ var quickEdit = function (options) {
           open: $open,
           middle: $middle,
           close: $close
-        }, $content.find('.editArea')[0]);
+        }, $editArea[0]);
       });
     },
     /**
@@ -2646,7 +2380,11 @@ var quickEdit = function (options) {
   */
     onShow() {
       mw.hook('InPageEdit.quickEdit').fire({
-        $modal: $content
+        $modalTitle,
+        $modalContent,
+        $editArea,
+        $editTools,
+        $optionsLabel
       });
       // 绑定事件，在尝试离开页面时提示
       $('.ipe-editor.timestamp-' + timestamp + ' .editArea').change(function () {
@@ -2656,7 +2394,7 @@ var quickEdit = function (options) {
         });
       });
       // 获取权限
-      if (_hasRight('edit') === false) {
+      if (!_hasRight('edit')) {
         ssi_modal.notify('dialog', {
           className: 'in-page-edit',
           position: 'center bottom',
@@ -2665,7 +2403,7 @@ var quickEdit = function (options) {
           okBtn: {
             label: _msg('ok'),
             className: 'btn btn-primary',
-            method: function (e, modal) {
+            method(e, modal) {
               modal.close();
             }
           }
@@ -2692,31 +2430,32 @@ var quickEdit = function (options) {
           console.warn('[InPageEdit]警告：无法获取页面内容');
           options.editText = '<!-- ' + data.error.info + ' -->';
           options.pageId = -1;
-          $content.find('.detailArea').hide();
+          $optionsLabel.find('.detailArea').hide();
         } else {
           options.editText = data.parse.wikitext['*'];
           options.pageId = data.parse.pageid;
         }
         // 设定一堆子样式
-        $content.find('.ipe-progress').hide();
-        $content.find('.hideBeforeLoaded').fadeIn(500);
-        $content.find('.editArea').val(options.editText + '\n');
+        $modalContent.find('.ipe-progress').hide();
+        $modalContent.find('.hideBeforeLoaded').fadeIn(500);
+        $optionsLabel.find('.hideBeforeLoaded').fadeIn(500);
+        $editArea.val(options.editText + '\n');
 
         var summaryVal;
         if (options.section !== null) {
-          summaryVal = $content.find('.editSummary').val();
+          summaryVal = $optionsLabel.find('.editSummary').val();
           summaryVal = summaryVal.replace(/\$section/ig, '/* ' + data.parse.sections[0].line + ' */');
-          $content.find('.editSummary').val(summaryVal);
-          $('.ipe-editor.timestamp-' + timestamp + ' .editPage').after('<span class="editSection">→' + data.parse.sections[0].line + '</span>');
+          $optionsLabel.find('.editSummary').val(summaryVal);
+          $modalTitle.find('.editPage').after('<span class="editSection">→' + data.parse.sections[0].line + '</span>');
           options.jumpTo = '#' + data.parse.sections[0].anchor;
         } else {
-          summaryVal = $content.find('.editSummary').val();
+          summaryVal = $optionsLabel.find('.editSummary').val();
           summaryVal = summaryVal.replace(/\$section/ig, '');
-          $content.find('.editSummary').val(summaryVal);
+          $optionsLabel.find('.editSummary').val(summaryVal);
           options.jumpTo = '';
         }
         if (options.revision !== null && options.revision !== '' && options.revision !== config.wgCurRevisionId) {
-          $('.ipe-editor.timestamp-' + timestamp + ' .editPage').after('<span class="editRevision">(' + _msg('editor-title-editRevision') + '：' + options.revision + ')</span>');
+          $modalTitle.find('.editPage').after('<span class="editRevision">(' + _msg('editor-title-editRevision') + '：' + options.revision + ')</span>');
           $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').click(() => {
             _analysis('quick_diff_edit');
             var text = $('.ipe-editor.timestamp-' + timestamp + ' .editArea').val();
@@ -2753,13 +2492,13 @@ var quickEdit = function (options) {
           console.info('[InPageEdit] 获取页面基础信息成功');
           console.timeEnd('[InPageEdit] 获取页面基础信息');
           // 记录页面最后编辑时间，防止编辑冲突
-          $content.data('basetimestamp', data['query']['pages'][options.pageId].revisions ? data['query']['pages'][options.pageId]['revisions'][0]['timestamp'] : now);
+          $modalContent.data('basetimestamp', data['query']['pages'][options.pageId].revisions ? data['query']['pages'][options.pageId]['revisions'][0]['timestamp'] : now);
           queryDone(data);
         }).fail(function (a, b, errorThrown) {
           var data = errorThrown;
           console.timeEnd('[InPageEdit] 获取页面基础信息');
           console.warn('[InPageEdit] 获取页面基础信息失败');
-          $content.data('basetimestamp', now);
+          $modalContent.data('basetimestamp', now);
           queryDone(data);
         });
 
@@ -2773,12 +2512,12 @@ var quickEdit = function (options) {
 
           // 使页面名标准化
           options.page = data.query.pages[options.pageId].title;
-          $('.ipe-editor.timestamp-' + timestamp + ' .editPage').text(options.page);
+          $modalTitle.find('.editPage').text(options.page);
 
           if (options.revision) {
             $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').attr('disabled', false).click(function () {
               _analysis('quick_diff_edit');
-              var text = $content.find('.editArea').val();
+              var text = $editArea.val();
               var diffJson = {
                 fromrev: options.revision,
                 totext: text,
@@ -2810,7 +2549,7 @@ var quickEdit = function (options) {
                     okBtn: {
                       label: _msg('ok'),
                       className: 'btn btn-primary',
-                      method: function (e, modal) {
+                      method(e, modal) {
                         modal.close();
                       }
                     }
@@ -2825,7 +2564,7 @@ var quickEdit = function (options) {
           var namespaceNoticePage = 'Editnotice-' + options.namespace,
             pageNoticePage = namespaceNoticePage + '-' +
               options.page
-                .replace(/_/, ' ') // 将页面名里的 _ 转换为空格
+                .replace(/_/g, ' ') // 将页面名里的 _ 转换为空格
                 .replace(config.wgFormattedNamespaces[options.namespace] + ':', ''); // 去掉名字空间
 
           mwApi.get({
@@ -2845,10 +2584,10 @@ var quickEdit = function (options) {
               text: wikitextPage + '\n' + wikitextNs
             }).done(function (data) {
               options.editNotice = data.parse.text['*'];
-              var notice = $content.data('editNotice') || '';
+              var notice = $modalContent.data('editNotice') || '';
               notice += '\n' + options.editNotice;
-              $content.data('editNotice', notice);
-              $content.find('.showEditNotice').show();
+              $modalContent.data('editNotice', notice);
+              $modalContent.find('.showEditNotice').show();
             });
           });
 
@@ -2857,11 +2596,11 @@ var quickEdit = function (options) {
     },
 
     /* 确认是否取消 */
-    beforeClose: function (modal) {
-      if ($content.find('.editArea').attr('data-modifiled') !== 'true') {
+    beforeClose(modal) {
+      if ($editArea.attr('data-modifiled') !== 'true') {
         close();
         return;
-      } else if ($content.find('.editArea').attr('data-confirmclose') === 'true') {
+      } else if ($editArea.attr('data-confirmclose') === 'true') {
         closeNoReload();
         return;
       }
@@ -2906,7 +2645,7 @@ var quickEdit = function (options) {
   });
 
   // 页面详情模块
-  $content.find('.detailBtnGroup .detailBtn').click(function () {
+  $optionsLabel.find('.detailBtnGroup .detailBtn').click(function () {
     _analysis('quick_edit_pagedetail');
     var $this = $(this),
       id = $this.attr('id'),
@@ -2949,7 +2688,7 @@ var quickEdit = function (options) {
           className: 'in-page-edit quick-edit-detail',
           sizeClass: 'dialog',
           title: _msg('editor-detail-title-images'),
-          content: content
+          content
         });
         break;
     }
@@ -2958,7 +2697,7 @@ var quickEdit = function (options) {
       var $this = $(this);
       var page = $this.attr('data-template-name');
       quickEdit({
-        page: page
+        page
       });
     });
     $('.in-page-edit.quick-edit-detail .quickViewImage').click(function () {
@@ -2981,9 +2720,9 @@ var quickEdit = function (options) {
         }, {
           label: _msg('close'),
           className: 'btn btn-secondary',
-          method: function (a, modal) { modal.close() }
+          method(a, modal) { modal.close() }
         }],
-        onShow: function () {
+        onShow() {
           mwApi.get({
             action: 'query',
             format: 'json',
@@ -3005,21 +2744,27 @@ var quickEdit = function (options) {
   });
 
   // 发布编辑模块
-  function postArticle(pValue, modal) {
+  function postArticle({
+    text,
+    page,
+    minor,
+    summary,
+    section
+  }, modal) {
     _analysis('quick_edit_save');
     progress(_msg('editor-title-saving'));
     options.jsonPost = {
       action: 'edit',
-      basetimestamp: $content.data('basetimestamp'),
+      basetimestamp: $modalContent.data('basetimestamp'),
       starttimestamp: now,
-      text: pValue.text,
-      title: pValue.page,
-      minor: pValue.minor,
-      summary: pValue.summary,
+      text,
+      title: page,
+      minor,
+      summary,
       errorformat: 'plaintext'
     }
-    if (pValue.section !== undefined && pValue.section !== '' && pValue.section !== null) {
-      options.jsonPost.section = pValue.section;
+    if (section !== undefined && section !== '' && section !== null) {
+      options.jsonPost.section = section;
       delete options.jsonPost.basetimestamp;
     }
 
@@ -3030,13 +2775,13 @@ var quickEdit = function (options) {
       if (data.edit.result === 'Success') {
         progress(true);
         // 是否重载页面
-        if ($content.find('.reloadPage').prop('checked')) {
+        if ($optionsLabel.find('.reloadPage').prop('checked')) {
           var content;
           $(window).unbind('beforeunload');
           content = _msg('notify-save-success');
           setTimeout(function () {
-            if (pValue.page === config.wgPageName) {
-              window.location = mw.util.getUrl(pValue.page) + options.jumpTo;
+            if (page === config.wgPageName) {
+              window.location = mw.util.getUrl(page) + options.jumpTo;
               window.location.reload();
             } else {
               window.location.reload();
@@ -3047,7 +2792,7 @@ var quickEdit = function (options) {
           content = _msg('notify-save-success-noreload');
           setTimeout(function () {
             progress(false);
-            $content.find('.editArea').attr('data-confirmclose', 'true');
+            $editArea.attr('data-confirmclose', 'true');
             modal.close();
           }, 1500);
         }
@@ -3056,7 +2801,7 @@ var quickEdit = function (options) {
           className: 'in-page-edit',
           position: 'right top',
           title: _msg('notify-success'),
-          content: content
+          content
         });
       } else {
         saveError(data, feedback, errorThrown)
