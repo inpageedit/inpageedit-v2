@@ -232,7 +232,7 @@ var quickEdit = function (options) {
     beforeShow() {
       // 设置样式
       $modalContent.find('.hideBeforeLoaded').hide();
-      $optionsLabel.find('.hideBeforeLoaded').hide();
+      $optionsLabel.hide();
       $modalContent.find('.ipe-progress').css('margin', Number($(window).height() / 3 - 50) + 'px 0');
       $editArea.css('height', $(window).height() / 3 * 2 - 100);
       $('.ipe-editor.timestamp-' + timestamp + ' .ssi-buttons').prepend($optionsLabel);
@@ -366,7 +366,7 @@ var quickEdit = function (options) {
         // 设定一堆子样式
         $modalContent.find('.ipe-progress').hide();
         $modalContent.find('.hideBeforeLoaded').fadeIn(500);
-        $optionsLabel.find('.hideBeforeLoaded').fadeIn(500);
+        $optionsLabel.show();
         $editArea.val(options.editText + '\n');
 
         var summaryVal;
