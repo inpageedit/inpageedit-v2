@@ -235,7 +235,7 @@ var quickEdit = function (options) {
       $optionsLabel.find('.hideBeforeLoaded').hide();
       $modalContent.find('.ipe-progress').css('margin', Number($(window).height() / 3 - 50) + 'px 0');
       $editArea.css('height', $(window).height() / 3 * 2 - 100);
-      $('.ipe-editor.timestamp-' + timestamp + ' .ssi-buttons').append($optionsLabel);
+      $('.ipe-editor.timestamp-' + timestamp + ' .ssi-buttons').prepend($optionsLabel);
       $('.ipe-editor.timestamp-' + timestamp + ' .leftBtn').appendTo('.ipe-editor.timestamp-' + timestamp + ' .ssi-leftButtons');
       $('.ipe-editor.timestamp-' + timestamp + ' .ssi-modalTitle').append(
         $('<a>', {
