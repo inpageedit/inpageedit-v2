@@ -640,7 +640,6 @@ module.exports = {
 const funcName = 'InPageEdit';
 const userlang = mw.config.get('wgUserLanguage');
 const i18nCache = localStorage.getItem('i18n-cache-' + funcName + '-content') || '{}';
-const overrides = window.InPageEdit && window.InPageEdit.i18n;
 const fallbacks = {
   'ab': 'ru',
   'ace': 'id',
@@ -1015,23 +1014,44 @@ var _msg = function (msgKey, ...args) {
     }
     return `(${funcName.toLowerCase()}-${msgKey})${after}`;
   }
+
   // 获取 i18n 
   var messages = toObject(i18nCache);
+
   // 转换语言
   var lang;
-  if (fallbacks[userlang]) lang = fallbacks[userlang];
-  if (!(messages[lang] && messages[lang][msgKey])) lang = 'en';
-  // 解析信息
-  var msg;
-  if (messages[lang][msgKey]) msg = messages[lang][msgKey];
-  if (overrides[lang] && overrides[lang][msgKey]) msg = overrides[lang][msgKey];
-  if (msg) {
-    msg = handleArgs(msg, ...args);
-    msg = parse(msg);
-    return msg;
+  if (messages[userlang] && messages[userlang][msgKey]) {
+    // 用户语言的信息存在
+    lang = userlang;
+  } else if (fallbacks[userlang] && messages[fallbacks[userlang]]) {
+    // 用户语言的转换语言的信息存在 (例如 zh => zh-hans)
+    lang = fallbacks[userlang];
+  } else if (messages.en && messages.en[msgKey]) {
+    // 以上均不存在但英文存在
+    lang = 'en';
   } else {
+    // 英文也莫得
     return `<${funcName.toLowerCase()}-${msgKey}>`;
   }
+
+  // 查找信息
+  var finalMsg;
+  var InPageEdit = window.InPageEdit || {};
+  const overrides = InPageEdit.i18n || {};
+  if (typeof overrides === 'object' && overrides[lang] && overrides[lang][msgKey]) {
+    // 本地存在覆写
+    finalMsg = overrides[lang][msgKey];
+  } else if (messages[lang] && messages[lang][msgKey]) {
+    // 从缓存读取
+    finalMsg = messages[lang][msgKey];
+  } else {
+    // 信息不存在
+    return `<${funcName.toLowerCase()}-${msgKey}>`;
+  }
+  // 解析信息
+  finalMsg = handleArgs(finalMsg, ...args);
+  finalMsg = parse(finalMsg);
+  return finalMsg;
 }
 
 module.exports = {
@@ -3328,7 +3348,7 @@ module.exports = {
 /*! exports provided: name, version, description, main, dependencies, devDependencies, scripts, repository, keywords, author, license, bugs, homepage, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"name\":\"mediawiki-inpageedit\",\"version\":\"14.0.0-pre.0\",\"description\":\"A useful MediaWiki JavaScript Plugin written with jQuery\",\"main\":\"index.js\",\"dependencies\":{\"jquery\":\">1.9.x\",\"ssi-modal\":\"1.0.28\"},\"devDependencies\":{\"eslint\":\"^7.7.0\",\"webpack\":\"^4.44.1\",\"webpack-cli\":\"^3.3.12\"},\"scripts\":{\"test\":\"eslint ./index.js ./module/*.js ./method/*.js\",\"dev\":\"webpack --watch --output-filename [name].test.js\",\"build:linux\":\"webpack && MINIFY=1 webpack\",\"build:windows\":\"webpack && set MINIFY=1 && webpack\",\"publish:stable\":\"npm publish --tag stable\",\"publish:canary\":\"npm publish --tag canary\"},\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/Dragon-Fish/InPageEdit-v2.git\"},\"keywords\":[\"mediawiki\",\"mediawiki-gadget\",\"inpageedit\"],\"author\":\"Dragon-Fish\",\"license\":\"GPL-3.0-or-later\",\"bugs\":{\"url\":\"https://github.com/Dragon-Fish/InPageEdit-v2/issues\"},\"homepage\":\"https://ipe.netlify.com/\"}");
+module.exports = JSON.parse("{\"name\":\"mediawiki-inpageedit\",\"version\":\"14.0.0-pre.2\",\"description\":\"A useful MediaWiki JavaScript Plugin written with jQuery\",\"main\":\"index.js\",\"dependencies\":{},\"devDependencies\":{\"eslint\":\"^7.7.0\",\"webpack\":\"^4.44.1\",\"webpack-cli\":\"^3.3.12\"},\"scripts\":{\"test\":\"eslint ./index.js ./module/*.js ./method/*.js\",\"dev\":\"webpack --watch --output-filename [name].test.js\",\"build:linux\":\"webpack && MINIFY=1 webpack\",\"build:windows\":\"webpack && set MINIFY=1 && webpack\",\"publish:stable\":\"npm publish --tag latest\",\"publish:canary\":\"npm publish --tag canary\"},\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/Dragon-Fish/InPageEdit-v2.git\"},\"keywords\":[\"mediawiki\",\"mediawiki-gadget\",\"inpageedit\"],\"author\":\"Dragon-Fish\",\"license\":\"GPL-3.0-or-later\",\"bugs\":{\"url\":\"https://github.com/Dragon-Fish/InPageEdit-v2/issues\"},\"homepage\":\"https://ipe.netlify.com/\"}");
 
 /***/ }),
 
