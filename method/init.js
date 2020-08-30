@@ -6,26 +6,7 @@ const { loadStyles } = require('./loadStyles');
 const { updateNotice } = require('./updateNotice');
 const { syncI18nData } = require('./syncI18nData');
 
-// 导入全部模块
-const { _analysis } = require('../module/_analysis');
-const { _msg } = require('../module/_msg');
-const { about } = require('../module/about');
-const api = require('../module/api.json');
-const { articleLink } = require('../module/articleLink');
-const { findAndReplace } = require('../module/findAndReplace');
-const { loadQuickDiff } = require('../module/loadQuickDiff');
-const { preference } = require('../module/preference');
-const { pluginStore } = require('../module/pluginStore');
-const { progress } = require('../module/progress');
-const { quickDelete } = require('../module/quickDelete');
-const { quickDiff } = require('../module/quickDiff');
-const { quickEdit } = require('../module/quickEdit');
-const { quickPreview } = require('../module/quickPreview');
-const { quickRedirect } = require('../module/quickRedirect');
-const { quickRename } = require('../module/quickRename');
-const { specialNotice } = require('../module/specialNotice');
 const version = require('../module/version');
-const { versionInfo } = require('../module/versionInfo');
 
 
 /**
@@ -36,6 +17,7 @@ module.exports = async function init() {
 
   // 加载样式表
   loadStyles();
+
   // 等待 i18n 缓存
   await syncI18nData(
     Boolean(
@@ -43,8 +25,30 @@ module.exports = async function init() {
       version !== localStorage.getItem('InPageEditVersion')
     )
   );
+
   // 等待前置插件
   await loadScript(_dir + '/src/ssi_modal/ssi-modal.min.js');
+
+  // 导入全部模块
+  const { _analysis } = require('../module/_analysis');
+  const { _msg } = require('../module/_msg');
+  const { about } = require('../module/about');
+  const api = require('../module/api.json');
+  const { articleLink } = require('../module/articleLink');
+  const { findAndReplace } = require('../module/findAndReplace');
+  const { loadQuickDiff } = require('../module/loadQuickDiff');
+  const { preference } = require('../module/preference');
+  const { pluginStore } = require('../module/pluginStore');
+  const { progress } = require('../module/progress');
+  const { quickDelete } = require('../module/quickDelete');
+  const { quickDiff } = require('../module/quickDiff');
+  const { quickEdit } = require('../module/quickEdit');
+  const { quickPreview } = require('../module/quickPreview');
+  const { quickRedirect } = require('../module/quickRedirect');
+  const { quickRename } = require('../module/quickRename');
+  const { specialNotice } = require('../module/specialNotice');
+  const { versionInfo } = require('../module/versionInfo');
+
   // 初始化前置模块
   preference.set();
   getUserInfo();
@@ -87,6 +91,7 @@ module.exports = async function init() {
 
   // 锁定重要变量
   var importantVariables = [
+    '_dir',
     'api',
     'version',
   ];

@@ -216,26 +216,7 @@ const { loadStyles } = __webpack_require__(/*! ./loadStyles */ "./method/loadSty
 const { updateNotice } = __webpack_require__(/*! ./updateNotice */ "./method/updateNotice.js");
 const { syncI18nData } = __webpack_require__(/*! ./syncI18nData */ "./method/syncI18nData.js");
 
-// 导入全部模块
-const { _analysis } = __webpack_require__(/*! ../module/_analysis */ "./module/_analysis.js");
-const { _msg } = __webpack_require__(/*! ../module/_msg */ "./module/_msg.js");
-const { about } = __webpack_require__(/*! ../module/about */ "./module/about.js");
-const api = __webpack_require__(/*! ../module/api.json */ "./module/api.json");
-const { articleLink } = __webpack_require__(/*! ../module/articleLink */ "./module/articleLink.js");
-const { findAndReplace } = __webpack_require__(/*! ../module/findAndReplace */ "./module/findAndReplace.js");
-const { loadQuickDiff } = __webpack_require__(/*! ../module/loadQuickDiff */ "./module/loadQuickDiff.js");
-const { preference } = __webpack_require__(/*! ../module/preference */ "./module/preference.js");
-const { pluginStore } = __webpack_require__(/*! ../module/pluginStore */ "./module/pluginStore.js");
-const { progress } = __webpack_require__(/*! ../module/progress */ "./module/progress.js");
-const { quickDelete } = __webpack_require__(/*! ../module/quickDelete */ "./module/quickDelete.js");
-const { quickDiff } = __webpack_require__(/*! ../module/quickDiff */ "./module/quickDiff.js");
-const { quickEdit } = __webpack_require__(/*! ../module/quickEdit */ "./module/quickEdit.js");
-const { quickPreview } = __webpack_require__(/*! ../module/quickPreview */ "./module/quickPreview.js");
-const { quickRedirect } = __webpack_require__(/*! ../module/quickRedirect */ "./module/quickRedirect.js");
-const { quickRename } = __webpack_require__(/*! ../module/quickRename */ "./module/quickRename.js");
-const { specialNotice } = __webpack_require__(/*! ../module/specialNotice */ "./module/specialNotice.js");
 const version = __webpack_require__(/*! ../module/version */ "./module/version.js");
-const { versionInfo } = __webpack_require__(/*! ../module/versionInfo */ "./module/versionInfo.js");
 
 
 /**
@@ -246,6 +227,7 @@ module.exports = async function init() {
 
   // 加载样式表
   loadStyles();
+
   // 等待 i18n 缓存
   await syncI18nData(
     Boolean(
@@ -253,8 +235,30 @@ module.exports = async function init() {
       version !== localStorage.getItem('InPageEditVersion')
     )
   );
+
   // 等待前置插件
   await loadScript(_dir + '/src/ssi_modal/ssi-modal.min.js');
+
+  // 导入全部模块
+  const { _analysis } = __webpack_require__(/*! ../module/_analysis */ "./module/_analysis.js");
+  const { _msg } = __webpack_require__(/*! ../module/_msg */ "./module/_msg.js");
+  const { about } = __webpack_require__(/*! ../module/about */ "./module/about.js");
+  const api = __webpack_require__(/*! ../module/api.json */ "./module/api.json");
+  const { articleLink } = __webpack_require__(/*! ../module/articleLink */ "./module/articleLink.js");
+  const { findAndReplace } = __webpack_require__(/*! ../module/findAndReplace */ "./module/findAndReplace.js");
+  const { loadQuickDiff } = __webpack_require__(/*! ../module/loadQuickDiff */ "./module/loadQuickDiff.js");
+  const { preference } = __webpack_require__(/*! ../module/preference */ "./module/preference.js");
+  const { pluginStore } = __webpack_require__(/*! ../module/pluginStore */ "./module/pluginStore.js");
+  const { progress } = __webpack_require__(/*! ../module/progress */ "./module/progress.js");
+  const { quickDelete } = __webpack_require__(/*! ../module/quickDelete */ "./module/quickDelete.js");
+  const { quickDiff } = __webpack_require__(/*! ../module/quickDiff */ "./module/quickDiff.js");
+  const { quickEdit } = __webpack_require__(/*! ../module/quickEdit */ "./module/quickEdit.js");
+  const { quickPreview } = __webpack_require__(/*! ../module/quickPreview */ "./module/quickPreview.js");
+  const { quickRedirect } = __webpack_require__(/*! ../module/quickRedirect */ "./module/quickRedirect.js");
+  const { quickRename } = __webpack_require__(/*! ../module/quickRename */ "./module/quickRename.js");
+  const { specialNotice } = __webpack_require__(/*! ../module/specialNotice */ "./module/specialNotice.js");
+  const { versionInfo } = __webpack_require__(/*! ../module/versionInfo */ "./module/versionInfo.js");
+
   // 初始化前置模块
   preference.set();
   getUserInfo();
@@ -297,6 +301,7 @@ module.exports = async function init() {
 
   // 锁定重要变量
   var importantVariables = [
+    '_dir',
     'api',
     'version',
   ];
@@ -1181,13 +1186,13 @@ var articleLink = function (element) {
       element = $('#mw-content-text a:not(.new)');
     }
   }
-  element.each(() => {
+  element.each(function () {
     if ($(this).attr('href') === undefined)
       return;
     var url = $(this).attr('href'),
       action = mw.util.getParamValue('action', url) || mw.util.getParamValue('veaction', url),
       title = mw.util.getParamValue('title', url),
-      section = mw.util.getParamValue('section', url).replace(/(T-)/ig, ''),
+      section = mw.util.getParamValue('section', url) ? mw.util.getParamValue('section', url).replace(/T-/, '') : null,
       revision = mw.util.getParamValue('oldid', url);
 
     // 不是本地编辑链接
@@ -3323,7 +3328,7 @@ module.exports = {
 /*! exports provided: name, version, description, main, dependencies, devDependencies, scripts, repository, keywords, author, license, bugs, homepage, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"name\":\"inpageedit-v2\",\"version\":\"14.0.0\",\"description\":\"A useful MediaWiki JavaScript Plugin written with jQuery\",\"main\":\"index.js\",\"dependencies\":{\"jquery\":\">1.9.x\",\"ssi-modal\":\"1.0.28\"},\"devDependencies\":{\"css-loader\":\"^4.2.2\",\"eslint\":\"^7.7.0\",\"file-loader\":\"^6.0.0\",\"style-loader\":\"^1.2.1\",\"webpack\":\"^4.44.1\",\"webpack-cli\":\"^3.3.12\"},\"scripts\":{\"build\":\"webpack && set MINIFY=1 && webpack\",\"dev\":\"webpack --watch --output-filename [name].test.js\",\"test\":\"eslint ./index.js ./module/*.js ./method/*.js\"},\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/Dragon-Fish/InPageEdit-v2.git\"},\"keywords\":[\"mediawiki\",\"mediawiki-gadget\",\"inpageedit\"],\"author\":\"Dragon Fish\",\"license\":\"GPL-3.0-or-later\",\"bugs\":{\"url\":\"https://github.com/Dragon-Fish/InPageEdit-v2/issues\"},\"homepage\":\"https://github.com/Dragon-Fish/InPageEdit-v2#readme\"}");
+module.exports = JSON.parse("{\"name\":\"mediawiki-inpageedit\",\"version\":\"14.0.0-pre.0\",\"description\":\"A useful MediaWiki JavaScript Plugin written with jQuery\",\"main\":\"index.js\",\"dependencies\":{\"jquery\":\">1.9.x\",\"ssi-modal\":\"1.0.28\"},\"devDependencies\":{\"eslint\":\"^7.7.0\",\"webpack\":\"^4.44.1\",\"webpack-cli\":\"^3.3.12\"},\"scripts\":{\"test\":\"eslint ./index.js ./module/*.js ./method/*.js\",\"dev\":\"webpack --watch --output-filename [name].test.js\",\"build:linux\":\"webpack && MINIFY=1 webpack\",\"build:windows\":\"webpack && set MINIFY=1 && webpack\",\"publish:stable\":\"npm publish --tag stable\",\"publish:canary\":\"npm publish --tag canary\"},\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/Dragon-Fish/InPageEdit-v2.git\"},\"keywords\":[\"mediawiki\",\"mediawiki-gadget\",\"inpageedit\"],\"author\":\"Dragon-Fish\",\"license\":\"GPL-3.0-or-later\",\"bugs\":{\"url\":\"https://github.com/Dragon-Fish/InPageEdit-v2/issues\"},\"homepage\":\"https://ipe.netlify.com/\"}");
 
 /***/ }),
 

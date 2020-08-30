@@ -16,13 +16,13 @@ var articleLink = function (element) {
       element = $('#mw-content-text a:not(.new)');
     }
   }
-  element.each(() => {
+  element.each(function () {
     if ($(this).attr('href') === undefined)
       return;
     var url = $(this).attr('href'),
       action = mw.util.getParamValue('action', url) || mw.util.getParamValue('veaction', url),
       title = mw.util.getParamValue('title', url),
-      section = mw.util.getParamValue('section', url).replace(/(T-)/ig, ''),
+      section = mw.util.getParamValue('section', url) ? mw.util.getParamValue('section', url).replace(/T-/, '') : null,
       revision = mw.util.getParamValue('oldid', url);
 
     // 不是本地编辑链接

@@ -1,6 +1,6 @@
 {
-  "name": "inpageedit-v2",
-  "version": "14.0.0",
+  "name": "mediawiki-inpageedit",
+  "version": "14.0.0-pre.1",
   "description": "A useful MediaWiki JavaScript Plugin written with jQuery",
   "main": "index.js",
   "dependencies": {
@@ -8,17 +8,17 @@
     "ssi-modal": "1.0.28"
   },
   "devDependencies": {
-    "css-loader": "^4.2.2",
     "eslint": "^7.7.0",
-    "file-loader": "^6.0.0",
-    "style-loader": "^1.2.1",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   },
   "scripts": {
-    "build": "webpack && set MINIFY=1 && webpack",
+    "test": "eslint ./index.js ./module/*.js ./method/*.js",
     "dev": "webpack --watch --output-filename [name].test.js",
-    "test": "eslint ./index.js ./module/*.js ./method/*.js"
+    "build:linux": "webpack && MINIFY=1 webpack",
+    "build:windows": "webpack && set MINIFY=1 && webpack",
+    "publish:stable": "npm publish --tag latest",
+    "publish:canary": "npm publish --tag canary"
   },
   "repository": {
     "type": "git",
@@ -29,10 +29,10 @@
     "mediawiki-gadget",
     "inpageedit"
   ],
-  "author": "Dragon Fish",
+  "author": "Dragon-Fish",
   "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/Dragon-Fish/InPageEdit-v2/issues"
   },
-  "homepage": "https://github.com/Dragon-Fish/InPageEdit-v2#readme"
+  "homepage": "https://ipe.netlify.com/"
 }
