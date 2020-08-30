@@ -4,8 +4,8 @@
  * InPageEdit自定义小addon
  * 在toolbox添加一个可以编辑任何指定页面的按钮
  */
-mw.hook('InPageEdit.toolbox').add(function () {
-  $('#ipe-edit-toolbox .btn-group.group1').append(
+mw.hook('InPageEdit.toolbox').add(({ $toolbox }) => {
+  $toolbox.find('.btn-group.group1').append(
     $('<li>', { class: 'btn-tip-group' }).append(
       $('<div>', { class: 'btn-tip', text: '编辑指定页面' }),
       $('<button>', { class: 'ipe-toolbox-btn fa fa-edit' }).click(function () {

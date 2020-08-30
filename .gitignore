@@ -8,7 +8,5 @@ public/
 .deploy*/
 
 # This part is for development, ignore
-/dev
-
-# Hidden routing rules for Wjghj Server
-# \@*
+dev/
+dist/*.test.*

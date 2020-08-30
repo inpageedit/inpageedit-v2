@@ -1,10 +1,8 @@
 (function (root, factory) {
   //@author http://ifandelse.com/its-not-hard-making-your-library-support-amd-and-commonjs/
-  if (typeof module === "object" && module.exports) {
-    module.exports = factory(require("jquery"));
-  } else {
-    root.ssi_modal = factory(root.jQuery);
-  }
+
+  root.ssi_modal = factory(root.jQuery);
+
 }(this, function ($) {
   var animationSupport = checkAnimationSupport();
   var openedModals = 0;
