@@ -61,7 +61,7 @@
 
 在*个人JS页*添加以下代码：
 ```javascript
-mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/script.min.js');
+mw.loader.load('https://cdn.jsdelivr.net/npm/mediawiki-inpageedit@latest/dist/InPageEdit.min.js');
 ```
 
 **注意**：在保存之后，您可能需要清除浏览器缓存才能看到所作出的变更的影响。
