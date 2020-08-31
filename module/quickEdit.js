@@ -384,7 +384,7 @@ var quickEdit = function (options) {
         }
         if (options.revision !== null && options.revision !== '' && options.revision !== config.wgCurRevisionId) {
           $modalTitle.find('.editPage').after('<span class="editRevision">(' + _msg('editor-title-editRevision') + '：' + options.revision + ')</span>');
-          $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').click(() => {
+          $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').click(function () {
             _analysis('quick_diff_edit');
             var text = $editArea.val();
             var diffJson = {

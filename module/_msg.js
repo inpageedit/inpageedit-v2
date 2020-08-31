@@ -1,6 +1,5 @@
 const funcName = 'InPageEdit';
 const userlang = mw.config.get('wgUserLanguage');
-const i18nCache = localStorage.getItem('i18n-cache-' + funcName + '-content') || '{}';
 const fallbacks = {
   'ab': 'ru',
   'ace': 'id',
@@ -367,13 +366,15 @@ function parse(message) {
  * @param  {String} args 替代占位符($1, $2...)的内容，可以解析简单的wikitext
  */
 var _msg = function (msgKey, ...args) {
+  const i18nCache = localStorage.getItem('i18n-cache-' + funcName + '-content') || '{}';
+
   // qqx
   if (userlang === 'qqx') {
     var after = '';
     if (args.length > 0) {
       after = ': ' + args.join(', ');
     }
-    return `(${funcName.toLowerCase()}-${msgKey})${after}`;
+    return `(${funcName.toLowerCase()}-${msgKey}${after})`;
   }
 
   // 获取 i18n 

@@ -44,24 +44,25 @@
           ‪中文(简体)‬ (zh-hans)<br>
           ‪中文(繁體)‬ (zh-hant)<br>
           <a target="_blank"
-            href="https://github.com/Dragon-Fish/InPageEdit-v2/blob/master/i18n/i18n.json">翻译</a>
+            href="https://ipe.miraheze.org/wiki/Special:BlankPage/I18nEdit/InPageEdit-v2">翻译</a>
         </div>
       </td>
     </tr>
   </tbody>
 </table>
 
-**InPageEdit**是由机智的小鱼君使用JavaScript编写的MediaWiki插件。具有较好的移动设备支持以及~~毫无卵用~~的五彩斑斓设计。主要功能旨在使许多MediaWiki的功能在不打开新标签页的情况下完成(包括但不限于编辑)，极大加快维护wiki的速度。另外插件采用模块化设计，提供许多API可以自由调用，详见 [API - InPageEdit Documentations](https://ipe.netlyfi.app/)
+**InPageEdit**是由机智的小鱼君使用JavaScript编写的MediaWiki插件。具有较好的移动设备支持以及~~毫无卵用~~的五彩斑斓设计。主要功能旨在使许多MediaWiki的功能在不打开新标签页的情况下完成(包括但不限于编辑)，极大加快维护wiki的速度。另外插件采用模块化设计，提供许多API可以自由调用，详见 [API - InPageEdit Documentations](https://ipe.netlyfi.app/develop/api.html)
 
 ## 特色功能
 > 详见 [InPageEdit Documentations](https://ipe.netlyfi.app/)
 
 ## 快速上手
 [![](https://data.jsdelivr.com/v1/package/gh/dragon-fish/inpageedit-v2/badge)](https://www.jsdelivr.com/package/gh/dragon-fish/inpageedit-v2)
+[![](https://data.jsdelivr.com/v1/package/npm/mediawiki-inpageedit/badge)](https://www.jsdelivr.com/package/npm/mediawiki-inpageedit)
 
 在*个人JS页*添加以下代码：
 ```javascript
-mw.loader.load('https://cdn.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/script.min.js');
+mw.loader.load('https://cdn.jsdelivr.net/npm/mediawiki-inpageedit@latest/dist/InPageEdit.min.js');
 ```
 
 **注意**：在保存之后，您可能需要清除浏览器缓存才能看到所作出的变更的影响。
