@@ -42,10 +42,7 @@ var quickDiff = function (param) {
       content: $('<div>').append($loading, $diffArea),
       buttons: [{
         label: _msg('diff-button-todiffpage'),
-        className: 'btn btn-secondary toDiffPage',
-        method: function () {
-          // ...
-        }
+        className: 'btn btn-secondary toDiffPage'
       }]
     });
   }
@@ -59,7 +56,7 @@ var quickDiff = function (param) {
   } else if (param.fromtext) {
     param.frompst = true;
   }
-  mwApi.post(param).then(function (data) {
+  mwApi.post(param).done(function (data) {
     var diffTable = data.compare['*'];
     var toTitle;
     $loading.hide();
@@ -175,10 +172,14 @@ var quickDiff = function (param) {
       console.warn('[InPageEdit] 快速差异获取时系统告知出现问题');
       $diffArea.html(_msg('diff-error') + ': ' + data.error.info + '(<code>' + data.error.code + '</code>)');
     }
-  }).fail(function (errorCode, feedback, errorThrown) {
+  }).fail(function (errorCode, errorThrown) {
     console.warn('[InPageEdit] 快速差异获取失败');
     $loading.hide();
-    $diffArea.show().html(_msg('diff-error') + ': ' + errorThrown.error['info'] + '(<code>' + errorThrown.error['code'] + '</code>)');
+    if (errorThrown.error && errorThrown.error.info && errorThrown.error.code) {
+      $diffArea.show().html(_msg('diff-error') + ': ' + errorThrown.error.info + '(<code>' + errorThrown.error.code + '</code>)');
+    } else {
+      $diffArea.show().html(_msg('diff-error'));
+    }
   });
 }
 
