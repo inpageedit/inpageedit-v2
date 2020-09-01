@@ -12,6 +12,7 @@
   "scripts": {
     "test": "eslint ./index.js ./module/*.js ./method/*.js",
     "dev": "webpack --watch --o ./dev/[name].test.js",
+    "clear": "rm ./dist/*",
     "build:linux": "webpack && MINIFY=1 webpack",
     "build:windows": "webpack && set MINIFY=1 && webpack",
     "publish:stable": "npm publish --tag latest",
