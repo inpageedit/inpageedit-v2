@@ -26,6 +26,5 @@ jobs:
       # Runs a single command using the runners shell
       - name: Send purge requests
         run: |
-          curl https://purge.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/
-          curl https://purge.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/dist/
-          curl https://purge.jsdelivr.net/gh/dragon-fish/inpageedit-v2@master/i18n/
+          curl https://purge.jsdelivr.net/npm/mediawiki-inpageedit@latest/
+          curl https://purge.jsdelivr.net/npm/mediawiki-inpageedit@latest/dist/

@@ -3,10 +3,8 @@
  */
 !(function () {
   // Get script URL
-  var fileName = document.currentScript.src;
-  var main = fileName.split('/');
-  main.pop();
-  main = main.join('/') + '/dist/InPageEdit.min.js';
+  var fileName = document.currentScript.src,
+    main = 'https://cdn.jsdelivr.net/npm/mediawiki-inpageedit@latest/dist/InPageEdit.min.js';
   // Load main
   mw.loader.load(main);
   // Send notify
