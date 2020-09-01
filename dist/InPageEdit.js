@@ -638,8 +638,7 @@ module.exports = {
 /***/ (function(module, exports) {
 
 const funcName = 'InPageEdit';
-const userlang = mw.config.get('wgUserLanguage');
-const i18nCache = localStorage.getItem('i18n-cache-' + funcName + '-content') || '{}';
+const userLang = mw.config.get('wgUserLanguage');
 const fallbacks = {
   'ab': 'ru',
   'ace': 'id',
@@ -963,7 +962,7 @@ function sanitiseHtml(html) {
  *
  * @return The resulting string.
  */
-function parse(message) {
+function parseWikitext(message) {
   // [url text] -> [$1 $2]
   var urlRgx = /\[((?:https?:)?\/\/.+?) (.+?)\]/g,
     // [[pagename]] -> [[$1]]
@@ -1001,57 +1000,69 @@ function parse(message) {
 }
 
 /**
+ * @function parseMessage
+ * @param {String} msg 
+ * @param  {...Sting} args 
+ */
+function parseMessage(msg, ...args) {
+  msg = handleArgs(msg, ...args);
+  msg = parseWikitext(msg);
+  return msg;
+}
+
+/**
+ * @function rawMessage
+ */
+function getMessage(lang, msgKey, ...args) {
+  const i18nCache = localStorage.getItem('i18n-cache-' + funcName + '-content') || '{}';
+
+  // qqx
+  if (lang === 'qqx') {
+    var after = '';
+    if (args.length > 0) {
+      after = ': ' + args.join(', ');
+    }
+    return `(${funcName.toLowerCase()}-${msgKey}${after})`;
+  }
+
+  // 获取 i18n 
+  var cacheMessages = toObject(i18nCache);
+
+  // 查询本地覆写
+  var ipe = window.InPageEdit || {};
+  var overrides = ipe.i18n || {};
+  // InPageEdit.i18n.msgKey
+  if (overrides[msgKey]) {
+    return parseMessage(overrides[msgKey], ...args);
+  }
+  // InPageEdit.i18n.lang.msgKey
+  if (overrides[lang] && overrides[lang][msgKey]) {
+    return parseMessage(overrides[lang][msgKey], ...args);
+  }
+
+  // 查询用户语言
+  if (cacheMessages[lang] && cacheMessages[lang][msgKey]) {
+    return parseMessage(cacheMessages[lang][msgKey], ...args);
+  }
+
+  // 如果到了这一步，意味着消息不存在
+  if (lang === 'en') {
+    return `<${funcName}-${msgKey}>`;
+  }
+
+  // 转换用户语言后再试，例如 zh => zh-hans, zh-tw => zh-hant
+  lang = fallbacks[lang] || 'en';
+  return getMessage(lang, msgKey, ...args);
+
+}
+
+/**
  * @module _msg
  * @param {String} msgKey 消息的键
  * @param  {String} args 替代占位符($1, $2...)的内容，可以解析简单的wikitext
  */
 var _msg = function (msgKey, ...args) {
-  // qqx
-  if (userlang === 'qqx') {
-    var after = '';
-    if (args.length > 0) {
-      after = ': ' + args.join(', ');
-    }
-    return `(${funcName.toLowerCase()}-${msgKey})${after}`;
-  }
-
-  // 获取 i18n 
-  var messages = toObject(i18nCache);
-
-  // 转换语言
-  var lang;
-  if (messages[userlang] && messages[userlang][msgKey]) {
-    // 用户语言的信息存在
-    lang = userlang;
-  } else if (fallbacks[userlang] && messages[fallbacks[userlang]]) {
-    // 用户语言的转换语言的信息存在 (例如 zh => zh-hans)
-    lang = fallbacks[userlang];
-  } else if (messages.en && messages.en[msgKey]) {
-    // 以上均不存在但英文存在
-    lang = 'en';
-  } else {
-    // 英文也莫得
-    return `<${funcName.toLowerCase()}-${msgKey}>`;
-  }
-
-  // 查找信息
-  var finalMsg;
-  var InPageEdit = window.InPageEdit || {};
-  const overrides = InPageEdit.i18n || {};
-  if (typeof overrides === 'object' && overrides[lang] && overrides[lang][msgKey]) {
-    // 本地存在覆写
-    finalMsg = overrides[lang][msgKey];
-  } else if (messages[lang] && messages[lang][msgKey]) {
-    // 从缓存读取
-    finalMsg = messages[lang][msgKey];
-  } else {
-    // 信息不存在
-    return `<${funcName.toLowerCase()}-${msgKey}>`;
-  }
-  // 解析信息
-  finalMsg = handleArgs(finalMsg, ...args);
-  finalMsg = parse(finalMsg);
-  return finalMsg;
+  return getMessage(userLang, msgKey, ...args);
 }
 
 module.exports = {
@@ -1942,10 +1953,7 @@ var quickDiff = function (param) {
       content: $('<div>').append($loading, $diffArea),
       buttons: [{
         label: _msg('diff-button-todiffpage'),
-        className: 'btn btn-secondary toDiffPage',
-        method: function () {
-          // ...
-        }
+        className: 'btn btn-secondary toDiffPage'
       }]
     });
   }
@@ -1959,7 +1967,7 @@ var quickDiff = function (param) {
   } else if (param.fromtext) {
     param.frompst = true;
   }
-  mwApi.post(param).then(function (data) {
+  mwApi.post(param).done(function (data) {
     var diffTable = data.compare['*'];
     var toTitle;
     $loading.hide();
@@ -2075,10 +2083,14 @@ var quickDiff = function (param) {
       console.warn('[InPageEdit] 快速差异获取时系统告知出现问题');
       $diffArea.html(_msg('diff-error') + ': ' + data.error.info + '(<code>' + data.error.code + '</code>)');
     }
-  }).fail(function (errorCode, feedback, errorThrown) {
+  }).fail(function (errorCode, errorThrown) {
     console.warn('[InPageEdit] 快速差异获取失败');
     $loading.hide();
-    $diffArea.show().html(_msg('diff-error') + ': ' + errorThrown.error['info'] + '(<code>' + errorThrown.error['code'] + '</code>)');
+    if (errorThrown.error && errorThrown.error.info && errorThrown.error.code) {
+      $diffArea.show().html(_msg('diff-error') + ': ' + errorThrown.error.info + '(<code>' + errorThrown.error.code + '</code>)');
+    } else {
+      $diffArea.show().html(_msg('diff-error'));
+    }
   });
 }
 
@@ -2481,7 +2493,7 @@ var quickEdit = function (options) {
         }
         if (options.revision !== null && options.revision !== '' && options.revision !== config.wgCurRevisionId) {
           $modalTitle.find('.editPage').after('<span class="editRevision">(' + _msg('editor-title-editRevision') + '：' + options.revision + ')</span>');
-          $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').click(() => {
+          $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').click(function () {
             _analysis('quick_diff_edit');
             var text = $editArea.val();
             var diffJson = {
@@ -3348,7 +3360,7 @@ module.exports = {
 /*! exports provided: name, version, description, main, dependencies, devDependencies, scripts, repository, keywords, author, license, bugs, homepage, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"name\":\"mediawiki-inpageedit\",\"version\":\"14.0.1\",\"description\":\"A useful MediaWiki JavaScript Plugin written with jQuery\",\"main\":\"index.js\",\"dependencies\":{},\"devDependencies\":{\"eslint\":\"^7.7.0\",\"webpack\":\"^4.44.1\",\"webpack-cli\":\"^3.3.12\"},\"scripts\":{\"test\":\"eslint ./index.js ./module/*.js ./method/*.js\",\"dev\":\"webpack --watch --output-filename [name].test.js\",\"build:linux\":\"webpack && MINIFY=1 webpack\",\"build:windows\":\"webpack && set MINIFY=1 && webpack\",\"publish:stable\":\"npm publish --tag latest\",\"publish:canary\":\"npm publish --tag canary\"},\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/Dragon-Fish/InPageEdit-v2.git\"},\"keywords\":[\"mediawiki\",\"mediawiki-gadget\",\"inpageedit\"],\"author\":\"Dragon-Fish\",\"license\":\"GPL-3.0-or-later\",\"bugs\":{\"url\":\"https://github.com/Dragon-Fish/InPageEdit-v2/issues\"},\"homepage\":\"https://ipe.netlify.com/\"}");
+module.exports = JSON.parse("{\"name\":\"mediawiki-inpageedit\",\"version\":\"14.0.3\",\"description\":\"A useful MediaWiki JavaScript Plugin written with jQuery\",\"main\":\"index.js\",\"dependencies\":{},\"devDependencies\":{\"eslint\":\"^7.7.0\",\"webpack\":\"^4.44.1\",\"webpack-cli\":\"^3.3.12\"},\"scripts\":{\"test\":\"eslint ./index.js ./module/*.js ./method/*.js\",\"dev\":\"webpack --watch --o ./dev/[name].test.js\",\"clear\":\"rm ./dist/*\",\"build:linux\":\"webpack && MINIFY=1 webpack\",\"build:windows\":\"webpack && set MINIFY=1 && webpack\",\"publish:stable\":\"npm publish --tag latest\",\"publish:canary\":\"npm publish --tag canary\"},\"repository\":{\"type\":\"git\",\"url\":\"git+https://github.com/Dragon-Fish/InPageEdit-v2.git\"},\"keywords\":[\"mediawiki\",\"mediawiki-gadget\",\"inpageedit\"],\"author\":\"Dragon-Fish\",\"license\":\"GPL-3.0-or-later\",\"bugs\":{\"url\":\"https://github.com/Dragon-Fish/InPageEdit-v2/issues\"},\"homepage\":\"https://ipe.netlify.com/\"}");
 
 /***/ }),
 
