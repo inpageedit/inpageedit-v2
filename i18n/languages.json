@@ -162,7 +162,16 @@
         "preference-tab-plugin": "plugin",
         "preference-tab-analysis": "analysis",
         "preference-tab-about": "about",
-        "preference-tab-another": "another"
+        "preference-tab-another": "another",
+        "preference-editor-title": "Editor settins",
+        "preference-plugin-title": "Plugin store",
+        "preference-analysis-title": "Analysis data",
+        "preference-another-title": "Another settins",
+        "preference-editHobits-label": "Edit hobits",
+        "preference-watchList": "Watch by default",
+        "preference-redLinkQuickEdit": "Add quick edit buttons after red links",
+        "preference-plugin-footer": "You can choose the official plugins here. And welcome to [$1 InPageEdit-Plugins] to contribute your code!",
+        "preference-analysis-totaluse": "<strong>Total use</strong>: $1 {{PLURAL:$1|time|times}}"
     },
     "ar": {
         "version-notice-title": "نجاح التثبيت",
@@ -782,7 +791,16 @@
         "preference-tab-plugin": "插件",
         "preference-tab-analysis": "数据分析",
         "preference-tab-about": "关于",
-        "preference-tab-another": "其他"
+        "preference-tab-another": "其他",
+        "preference-editor-title": "编辑器设定",
+        "preference-plugin-title": "插件商店",
+        "preference-analysis-title": "数据分析",
+        "preference-another-title": "其他设定",
+        "preference-editHobits-label": "编辑习惯",
+        "preference-watchList": "预设进行监视",
+        "preference-redLinkQuickEdit": "在红链后添加快速编辑按钮",
+        "preference-plugin-footer": "你可以在这里选用官方插件，欢迎前往[$1 InPageEdit-Plugins]贡献你的代码！",
+        "preference-analysis-totaluse": "<strong>使用总次数</strong>：$1 次"
     },
     "zh-hant": {
         "quick-edit": "快速編輯",

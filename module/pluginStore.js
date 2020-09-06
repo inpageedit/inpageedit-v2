@@ -1,10 +1,6 @@
-/********************************
- ********** 未完工的模块 **********
- ********************************/
-
 // const _dir = require('../method/_dir');
 // const { _msg } = require('./_msg');
-const pluginCDN = 'https://cdn.jsdelivr.net/gh/wjghj-project/inpageedit-plugins@master';
+const pluginCDN = require('./api.json').pluginCDN;
 
 /**
  * @module pluginStore 加载InPageEdit插件
