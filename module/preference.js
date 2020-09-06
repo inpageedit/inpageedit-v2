@@ -1,8 +1,9 @@
 var InPageEdit = window.InPageEdit || {};
+var config = mw.config.get();
 
 const { _analysis } = require('./_analysis');
 const { _msg } = require('./_msg');
-const { $br,/* $hr,*/ $progress } = require('./_elements');
+const { $br, $hr, $progress } = require('./_elements');
 
 // const api = require('./api.json')
 const version = require('./version');
@@ -125,14 +126,30 @@ var preference = {
         $('<div>', { id: 'plugin-container', html: $($progress).css({ width: '96%', position: 'absolute', top: '50%', transform: 'translateY(-50%)' }) })
       ),
       $('<section>', { id: 'analysis' }).append(
-        $('<h3>', { text: 'analysis settings' })
+        $('<h3>', { text: 'Analysis data' }),
+        $('<div>', { id: 'analysis-container', html: $($progress).css({ width: '96%', position: 'absolute', top: '50%', transform: 'translateY(-50%)' }) })
       ),
       $('<section>', { id: 'another' }).append(
         $('<h3>', { text: 'another settings' })
       ),
       $('<section>', { id: 'about' }).append(
-        $('<h3>', { text: 'about settings' })
-      ),
+        $('<h3>', { text: _msg('preference-about-label') }),
+        $('<button>', { class: 'btn btn-secondary', onclick: "InPageEdit.about()", text: _msg('preference-aboutAndHelp') }),
+        $('<button>', { class: 'btn btn-secondary', style: 'margin-left: 1em;', onclick: "InPageEdit.versionInfo()", text: _msg('preference-updatelog') }),
+        $('<a>', { href: 'https://ipe.miraheze.org/wiki/', target: '_blank', style: 'margin-left: 1em;' }).append(
+          $('<button>', { class: 'btn btn-secondary', text: _msg('preference-translate') })
+        ),
+        $('<a>', { href: 'https://discord.gg/VUVAh8w', target: '_blank', style: 'margin-left: 1em;' }).append(
+          $('<button>', { class: 'btn btn-secondary', text: _msg('preference-discord') })
+        ),
+        $hr,
+        $('<p>', { text: 'InPageEdit is a useful MediaWiki JavaScript Plugin written with jQuery' }),
+        $('<p>').append(
+          '© Original by Wjghj Project (机智的小鱼君), ',
+          $('<a>', { href: 'https://www.gnu.org/licenses/gpl-3.0-standalone.html', text: 'GNU General Public License 3.0' }),
+          '(2019 - ' + new Date().getFullYear() + ')'
+        )
+      )
     )
 
     var $modalContent = $('<div>', { class: 'preference-tabber' }).append(
@@ -216,11 +233,13 @@ var preference = {
         }
       ],
       onShow($modal) {
+
         var $modalWindow = $('#' + $modal.modalId)
         mw.hook('InPageEdit.preference.modal').fire({
           $modal,
           $modalWindow
         })
+
         // 如果在本地有设定存档，disable掉全部input
         if (typeof InPageEdit.myPreference !== 'undefined') {
           $modalWindow.find('.ssi-modalBtn.btn').attr({ 'disabled': true })
@@ -229,6 +248,7 @@ var preference = {
             $('<div>', { class: 'has-local-warn', style: 'padding-left: 8px; border-left: 6px solid orange; font-size: small;', html: _msg('preference-savelocal-popup-haslocal') })
           );
         }
+
         // 将现有设定反映到选项中
         $.each(local, (key, val) => {
           if (key === 'plugins') return
@@ -243,6 +263,7 @@ var preference = {
             }
           }
         })
+
         // 获取插件列表
         var pluginCache = pluginStore.loadCache()
         if (pluginCache) {
@@ -270,6 +291,38 @@ var preference = {
             )
           })
         }
+
+        // 获取Analysis数据
+        var userName = config.wgUserName
+        $.get('https://api.wjghj.cn/inpageedit/query/wiki', {
+          url: config.wgServer + config.wgArticlePath.replace('$1', ''),
+          prop: 'users.' + userName + '._total|users.' + userName + '.functions'
+        }).then(ret => {
+          $tabContent.find('#analysis-container').html('')
+          var data = ret.query[0].users[userName]
+          var total = data._total
+          var functionData = data.functions
+          var functionList = $('<ul>')
+          $.each(functionData, (key, val) => {
+            functionList.append(
+              $('<li>').append(
+                $('<strong>', { text: key }),
+                ': ',
+                val
+              )
+            )
+          })
+          $tabContent.find('#analysis-container').append(
+            $('h4', { text: userName + ' at ' + config.wgSiteNae }),
+            $('<p>').append(
+              $('<strong>', { text: 'Total use' }),
+              ': ',
+              total
+            ),
+            functionList
+          )
+        })
+
       }
     });
 

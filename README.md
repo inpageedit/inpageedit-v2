@@ -73,7 +73,7 @@ mw.loader.load('https://cdn.jsdelivr.net/npm/mediawiki-inpageedit@latest/dist/In
 
 <hr/>
 
-InPageEdit is a JavaScript-based MediaWiki plug-in, written by [机智的小鱼君](https://wjghj.cn/wiki/机智的小鱼君)
+InPageEdit is a useful MediaWiki JavaScript Plugin written with jQuery, written by [机智的小鱼君](https://wjghj.cn/wiki/机智的小鱼君)
 
 © Original by Wjghj Project, [GNU General Public License 3.0](https://www.gnu.org/licenses/gpl-3.0-standalone.html) (2019- )<br/>
 See more: [GitHub](https://github.com/Dragon-Fish/InPageEdit-v2) | [Update logs](https://ipe.netlify.app/update/) | [File issues](https://github.com/Dragon-Fish/InPageEdit-v2/issues)

@@ -437,6 +437,10 @@
   display: block;
 }
 
+.preference-tabber .tab-content section label {
+  display: block;
+}
+
 /** 进度条 **/
 .ipe-progress {
   height: 1em;
