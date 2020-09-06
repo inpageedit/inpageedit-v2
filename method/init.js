@@ -62,7 +62,7 @@ module.exports = async function init() {
   articleLink();
   updateNotice();
 
-  // !暂定，触发工具盒插件
+  // !暂定，触发用户插件
   pluginStore.initUserPlugin();
 
   // 写入模块

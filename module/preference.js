@@ -36,7 +36,6 @@ var preference = {
    * @return {object|string}
    */
   get(setting) {
-    setting = setting || undefined;
     var local = localStorage.getItem('InPageEditPreference') || '{}';
     try {
       local = JSON.parse(local);

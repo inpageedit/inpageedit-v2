@@ -5,7 +5,6 @@
 // const _dir = require('../method/_dir');
 const { _loadScript } = require('../method/loadScript');
 // const { _msg } = require('./_msg');
-const { preference } = require('./preference');
 const pluginCDN = 'https://cdn.jsdelivr.net/gh/wjghj-project/inpageedit-plugins@master';
 
 /**
@@ -49,9 +48,10 @@ var pluginStore = {
    * @module pluginStore.initUserPlugin 初始化用户插件
    */
   initUserPlugin() {
-    var plugins = preference.get('plugins')
-    if (typeof plugins === 'object' && plugins.length > 0) {
-      $.each(plugins, (key, val) => {
+    const getPref = require('./preference').preference.get;
+    var userPlugins = getPref('plugins')
+    if (typeof userPlugins === 'object' && userPlugins.length > 0) {
+      $.each(userPlugins, (key, val) => {
         pluginStore.load(val)
       })
     }
