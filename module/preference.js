@@ -313,7 +313,7 @@ var preference = {
             )
           })
           $tabContent.find('#analysis-container').append(
-            $('h4', { text: userName + ' at ' + config.wgSiteNae }),
+            $('<h4>', { text: userName + ' at ' + config.wgSiteNae }),
             $('<p>').append(
               $('<strong>', { text: 'Total use' }),
               ': ',

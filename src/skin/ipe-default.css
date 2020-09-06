@@ -425,7 +425,7 @@
 }
 
 .preference-tabber .tab-content {
-  height: 65vh;
+  height: 60vh;
   overflow-y: auto;
 }
 
