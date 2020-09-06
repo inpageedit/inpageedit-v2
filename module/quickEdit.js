@@ -67,7 +67,7 @@ var quickEdit = function (options) {
 
   _analysis('quick_edit');
 
-  if (options.revision !== null && options.revision !== '' && options.revision !== config.wgCurRevisionId) {
+  if (options.revision && options.revision !== config.wgCurRevisionId) {
     ssi_modal.notify('warning', {
       className: 'in-page-edit',
       content: _msg('notify-editing-history'),
@@ -76,10 +76,9 @@ var quickEdit = function (options) {
     delete options.jsonGet.page;
     options.jsonGet.oldid = options.revision;
     options.summaryRevision = '(' + _msg('editor-summary-rivision') + '[[Special:Diff/' + options.revision + ']])';
-  } else {
-    if (options.section !== null && options.section !== '') {
-      options.jsonGet.section = options.section;
-    }
+  }
+  if (options.section) {
+    options.jsonGet.section = options.section;
   }
 
   // 模态框内部
@@ -118,7 +117,7 @@ var quickEdit = function (options) {
     ),
     $('<div>', { class: 'btnGroup special-tools', style: 'float: right' }).append(
       $('<button>', { class: 'btn fa fa-search' }).click(function () {
-        findAndReplace($('.ipe-editor.timestamp-' + timestamp + ' .editArea'));
+        findAndReplace($editArea);
       })
     )
   );
@@ -163,7 +162,7 @@ var quickEdit = function (options) {
   console.table(options);
 
   // 显示主窗口
-  ssi_modal.show({
+  var $modal = ssi_modal.show({
     title: $modalTitle,
     content: $modalContent,
     outSideClose: options.outSideClose,
@@ -172,6 +171,7 @@ var quickEdit = function (options) {
 
     /* 按钮 */
     buttons: [{
+      side: 'left',
       label: _msg('editor-button-save'),
       className: 'btn btn-primary leftBtn hideBeforeLoaded save-btn',
       method(e, modal) {
@@ -205,6 +205,7 @@ var quickEdit = function (options) {
           });
       }
     }, {
+      side: 'left',
       label: _msg('editor-button-preview'),
       className: 'btn btn-secondary leftBtn hideBeforeLoaded',
       method() {
@@ -217,6 +218,7 @@ var quickEdit = function (options) {
         });
       }
     }, {
+      side: 'left',
       label: _msg('editor-button-diff'),
       className: 'btn btn-secondary leftBtn hideBeforeLoaded diff-btn'
     }, {
@@ -230,14 +232,14 @@ var quickEdit = function (options) {
 
     /* 预加载 */
     beforeShow() {
+      var $modalWindow = $('#' + $modal.modalId);
       // 设置样式
-      $modalContent.find('.hideBeforeLoaded').hide();
+      $modalWindow.find('.hideBeforeLoaded').hide();
       $optionsLabel.hide();
       $modalContent.find('.ipe-progress').css('margin', Number($(window).height() / 3 - 50) + 'px 0');
       $editArea.css('height', $(window).height() / 3 * 2 - 100);
-      $('.ipe-editor.timestamp-' + timestamp + ' .ssi-buttons').prepend($optionsLabel);
-      $('.ipe-editor.timestamp-' + timestamp + ' .leftBtn').appendTo('.ipe-editor.timestamp-' + timestamp + ' .ssi-leftButtons');
-      $('.ipe-editor.timestamp-' + timestamp + ' .ssi-modalTitle').append(
+      $modalWindow.find('.ssi-buttons').prepend($optionsLabel);
+      $modalWindow.find('.ssi-modalTitle').append(
         $('<a>', {
           class: 'showEditNotice',
           href: 'javascript:void(0);',
@@ -307,7 +309,9 @@ var quickEdit = function (options) {
   * @description 模态框显示后
   */
     onShow() {
+      var $modalWindow = $('#' + $modal.modalId);
       mw.hook('InPageEdit.quickEdit').fire({
+        $modal,
         $modalTitle,
         $modalContent,
         $editArea,
@@ -315,7 +319,7 @@ var quickEdit = function (options) {
         $optionsLabel
       });
       // 绑定事件，在尝试离开页面时提示
-      $('.ipe-editor.timestamp-' + timestamp + ' .editArea').change(function () {
+      $editArea.change(function () {
         $(this).attr('data-modifiled', 'true');
         $(window).bind('beforeunload', function () {
           return _msg('window-leave-confirm');
@@ -336,7 +340,7 @@ var quickEdit = function (options) {
             }
           }
         });
-        $('.ipe-editor.timestamp-' + timestamp + ' .save-btn').addClass('btn-danger');
+        $modalWindow.find('.save-btn').addClass('btn-danger');
       }
 
       // 解析页面内容
@@ -384,7 +388,7 @@ var quickEdit = function (options) {
         }
         if (options.revision !== null && options.revision !== '' && options.revision !== config.wgCurRevisionId) {
           $modalTitle.find('.editPage').after('<span class="editRevision">(' + _msg('editor-title-editRevision') + '：' + options.revision + ')</span>');
-          $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').click(function () {
+          $modalWindow.find('.diff-btn').click(function () {
             _analysis('quick_diff_edit');
             var text = $editArea.val();
             var diffJson = {
@@ -400,7 +404,7 @@ var quickEdit = function (options) {
             quickDiff(diffJson);
           });
         } else {
-          $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').attr('disabled', true);
+          $modalWindow.find('.diff-btn').attr('disabled', true);
         }
 
         // 获取页面基础信息
@@ -443,7 +447,7 @@ var quickEdit = function (options) {
           $modalTitle.find('.editPage').text(options.page);
 
           if (options.revision) {
-            $('.ipe-editor.timestamp-' + timestamp + ' .diff-btn').attr('disabled', false).click(function () {
+            $modalWindow.find('.diff-btn').attr('disabled', false).click(function () {
               _analysis('quick_diff_edit');
               var text = $editArea.val();
               var diffJson = {
@@ -482,7 +486,7 @@ var quickEdit = function (options) {
                       }
                     }
                   });
-                  $('.ipe-editor.timestamp-' + timestamp + ' .save-btn').addClass('btn-danger');
+                  $modalWindow.find('.save-btn').addClass('btn-danger');
                 }
               }
             }

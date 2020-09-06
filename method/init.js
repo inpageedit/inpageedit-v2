@@ -15,6 +15,8 @@ const version = require('../module/version');
  */
 module.exports = async function init() {
 
+  mw.hook('InPageEdit.init.before').fire();
+
   // 加载样式表
   loadStyles();
 
@@ -26,8 +28,12 @@ module.exports = async function init() {
     )
   );
 
+  mw.hook('InPageEdit.init.i18n').fire({ _msg: require('../module/_msg')._msg })
+
   // 等待前置插件
   await loadScript(_dir + '/src/ssi_modal/ssi-modal.min.js');
+
+  mw.hook('InPageEdit.init.modal').fire({ ssi_modal: window.ssi_modal });
 
   // 导入全部模块
   const { _analysis } = require('../module/_analysis');
@@ -111,7 +117,7 @@ module.exports = async function init() {
   });
 
   // 花里胡哨的加载提示
-  console.info('    ____      ____                   ______    ___ __              _    _____ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_            | |  / /__ \\\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/  ______    | | / /__/ /\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_   /_____/    | |/ // __/ \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/              |___//____/ \n                      /____/');
+  console.info('    ____      ____                   ______    ___ __ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_  \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/  \n                      /____/                v' + version);
 
   // 传回InPageEdit
   return InPageEdit;

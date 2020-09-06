@@ -381,10 +381,6 @@
   display: none;
 }
 
-.in-page-edit .detailArea {
-  /* padding: 8px 0 0 4px; */
-}
-
 .in-page-edit .detailArea .detailBtnGroup {
   margin-left: 1.25em;
 }
@@ -393,6 +389,52 @@
 .quick-diff .diff-hidden-history {
   color: #a8a8a8;
   text-decoration: line-through;
+}
+
+/** 个人设置 **/
+.preference-tabber .tab-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+.preference-tabber .tab-list li {
+  flex: auto;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.preference-tabber .tab-list li a {
+  display: block;
+  padding: 4px 8px;
+  color: #08d;
+  text-decoration: none;
+}
+
+.preference-tabber .tab-list li:hover a {
+  box-shadow: 0 -2px 0 rgba(0, 136, 221, 0.25) inset;
+}
+
+.preference-tabber .tab-list li a.active {
+  box-shadow: 0 -2px 0 #08d inset;
+}
+
+.preference-tabber .tab-content {
+  height: 65vh;
+  overflow-y: auto;
+}
+
+.preference-tabber .tab-content section {
+  display: none;
+}
+
+.preference-tabber .tab-content section.active {
+  display: block;
 }
 
 /** 进度条 **/

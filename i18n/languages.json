@@ -157,7 +157,12 @@
         "preference-reset-confirm": "Are you sure you want to restore your preferences to default?",
         "target-exists-title": "Target page exists",
         "target-exists-no-delete": "Page [[$1]] already exists. Do you want to view this page?",
-        "target-exists-can-delete": "Page [[$1]] already exists. Do you want to view this page or just delete it?"
+        "target-exists-can-delete": "Page [[$1]] already exists. Do you want to view this page or just delete it?",
+        "preference-tab-editor": "editor",
+        "preference-tab-plugin": "plugin",
+        "preference-tab-analysis": "analysis",
+        "preference-tab-about": "about",
+        "preference-tab-another": "another"
     },
     "ar": {
         "version-notice-title": "نجاح التثبيت",
@@ -772,7 +777,12 @@
         "preference-reset-confirm": "确定要将您的偏好设置还原为默认状态吗？",
         "target-exists-title": "目标页面已存在",
         "target-exists-no-delete": "页面 [[$1]] 已存在，你想查看此页面吗？",
-        "target-exists-can-delete": "页面 [[$1]] 已存在，您可以查看或者删除该页面"
+        "target-exists-can-delete": "页面 [[$1]] 已存在，您可以查看或者删除该页面",
+        "preference-tab-editor": "编辑器",
+        "preference-tab-plugin": "插件",
+        "preference-tab-analysis": "数据分析",
+        "preference-tab-about": "关于",
+        "preference-tab-another": "其他"
     },
     "zh-hant": {
         "quick-edit": "快速編輯",
