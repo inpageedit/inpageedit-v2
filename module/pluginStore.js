@@ -5,7 +5,7 @@
 // const _dir = require('../method/_dir');
 const { _loadScript } = require('../method/loadScript');
 // const { _msg } = require('./_msg');
-const preference = require('./preference');
+const { preference } = require('./preference');
 const pluginCDN = 'https://cdn.jsdelivr.net/gh/wjghj-project/inpageedit-plugins@master';
 
 /**

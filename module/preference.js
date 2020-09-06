@@ -6,7 +6,7 @@ const { $br,/* $hr,*/ $progress } = require('./_elements');
 
 // const api = require('./api.json')
 const version = require('./version');
-const pluginStore = require('./pluginStore');
+const { pluginStore } = require('./pluginStore');
 
 /**
  * @module preference 个人设置模块
@@ -35,7 +35,7 @@ var preference = {
    * @param {string} setting 返回相应的设置，为空时返回全部设置
    * @return {object|string}
    */
-  get: function (setting) {
+  get(setting) {
     setting = setting || undefined;
     var local = localStorage.getItem('InPageEditPreference') || '{}';
     try {
@@ -59,7 +59,7 @@ var preference = {
    * @param {any} settingValue
    * @example 可以这样 preference.set({ key: 'value' }) 也可以 preference.set('key', 'value')
    */
-  set: function (settingKey = {}, settingValue = undefined) {
+  set(settingKey = {}, settingValue = undefined) {
     var options = {};
     if (typeof settingKey === 'string' && settingValue !== undefined) {
       options[settingKey] = settingValue;
@@ -76,7 +76,7 @@ var preference = {
    * @name 用户图形界面
    * @description 打开可视化设置窗口
    */
-  modal: function () {
+  modal() {
     // 防止多开设置页面
     if ($('#ipe-preference-form').length > 0) return;
 
@@ -245,8 +245,7 @@ var preference = {
           }
         })
         // 获取插件列表
-        var pluginCache = {}
-        pluginCache = pluginStore.loadCache()
+        var pluginCache = pluginStore.loadCache()
         if (pluginCache) {
           showPluginList(pluginCache)
         } else {
