@@ -265,6 +265,7 @@ var preference = {
         })
 
         // 获取插件列表
+        var usedPlugin = preference.get('plugins')
         var pluginCache = pluginStore.loadCache()
         if (pluginCache) {
           showPluginList(pluginCache)
@@ -282,11 +283,27 @@ var preference = {
             var author = val.author ? $('<a>', { href: 'https://gtihub.com/' + val.author, target: '_balnk', text: '@' + val.author }) : '-'
             $tabContent.find('#plugin-container > ul').append(
               $('<li>', { 'data-pluginKey': key }).append(
-                $('<strong>', { text: name }),
-                ' ',
-                author,
-                ' ',
-                $('<span>', { text: description, style: 'font-style: italic' })
+                $('<label>').append(
+                  $('<input>', { class: 'plugin-checkbox', id: key, checked: Boolean(usedPlugin.indexOf(key) > -1) }).change(function () {
+                    var $this = $(this)
+                    var checked = $this.prop('checked')
+                    var key = $this.attr('id')
+                    var index = usedPlugin.indexOf(key)
+                    var original = preference.get('plugins')
+                    if (checked && index < 0) {
+                      original.push(key)
+                    } else if (!checked && index > -1) {
+                      original.splice(index, 1)
+                    } else {
+                      return
+                    }
+                    preference.set('plugins', original)
+                  }),
+                  $('<span>'), // checkbox
+                  $('<div>', { class: 'plugin-name', text: name }),
+                  $('<div>', { class: 'plugin-author', html: author }),
+                  $('<div>', { class: 'plugin-description', text: description })
+                )
               )
             )
           })
@@ -306,9 +323,10 @@ var preference = {
           $.each(functionData, (key, val) => {
             functionList.append(
               $('<li>').append(
-                $('<strong>', { text: key }),
-                ': ',
-                val
+                $('<div>', { title: (total / val * 100) + '%' }).css('width', (total / val * 100) + '%').append(
+                  $('<div>', { text: key }),
+                  $('<div>', { text: val })
+                )
               )
             )
           })

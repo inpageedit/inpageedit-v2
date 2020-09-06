@@ -392,7 +392,7 @@
 }
 
 /** 个人设置 **/
-.preference-tabber .tab-list {
+.ipe-preference .preference-tabber .tab-list {
   display: flex;
   list-style: none;
   margin: 0;
@@ -400,7 +400,7 @@
   overflow-x: auto;
 }
 
-.preference-tabber .tab-list li {
+.ipe-preference .preference-tabber .tab-list li {
   flex: auto;
   padding: 0;
   margin: 0;
@@ -409,36 +409,95 @@
   text-transform: uppercase;
 }
 
-.preference-tabber .tab-list li a {
+.ipe-preference .preference-tabber .tab-list li a {
   display: block;
   padding: 4px 8px;
   color: #08d;
   text-decoration: none;
 }
 
-.preference-tabber .tab-list li:hover a {
+.ipe-preference .preference-tabber .tab-list li:hover a {
   box-shadow: 0 -2px 0 rgba(0, 136, 221, 0.25) inset;
 }
 
-.preference-tabber .tab-list li a.active {
+.ipe-preference .preference-tabber .tab-list li a.active {
   box-shadow: 0 -2px 0 #08d inset;
 }
 
-.preference-tabber .tab-content {
+.ipe-preference .preference-tabber .tab-content {
   height: 60vh;
   overflow-y: auto;
 }
 
-.preference-tabber .tab-content section {
+.ipe-preference .preference-tabber .tab-content section {
   display: none;
 }
 
-.preference-tabber .tab-content section.active {
+.ipe-preference .preference-tabber .tab-content section.active {
   display: block;
 }
 
-.preference-tabber .tab-content section label {
+.ipe-preference .preference-tabber .tab-content section label {
   display: block;
+}
+
+.ipe-preference #plugin-container ul {
+  margin: 0;
+  list-style: none;
+  border: 1px solid #ccc;
+}
+
+.ipe-preference #plugin-container li:not(:last-of-type) {
+  border-bottom: 1px solid #ccc;
+}
+
+.ipe-preference #plugin-container li {
+  padding: 4px 30px 4px 8px;
+}
+
+.ipe-preference #plugin-container li:hover {
+  background-color: #efefef;
+}
+
+.ipe-preference #plugin-container li label {
+  padding: 0;
+}
+
+.ipe-preference #plugin-container li label input + span {
+  position: absolute;
+  right: 0;
+}
+
+.ipe-preference #plugin-container li .plugin-name {
+  display: block;
+}
+
+.ipe-preference #plugin-container li .plugin-author {
+  display: block;
+}
+
+.ipe-preference #analysis-container ul {
+  list-style: none;
+  margin: 0;
+}
+
+.ipe-preference #analysis-container li > div {
+  position: relative;
+  color: #ffffff;
+  background-color: #c23531;
+  height: 100%;
+}
+
+.ipe-preference #analysis-container li > div > div:first-of-type {
+  padding-left: 2px;
+  font-weight: bold;
+}
+
+.ipe-preference #analysis-container li > div > div:last-of-type {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding-right: 2px;
 }
 
 /** 进度条 **/
