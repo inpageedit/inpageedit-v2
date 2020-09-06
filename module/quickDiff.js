@@ -4,7 +4,6 @@ var config = mw.config.get();
 const { _analysis } = require('./_analysis');
 const { _msg } = require('./_msg');
 
-const { articleLink } = require('./articleLink');
 const { $br, $progress } = require('./_elements');
 
 /**
@@ -65,7 +64,7 @@ var quickDiff = function (param) {
     } else {
       toTitle = param.pageName;
     }
-    var userLink = function (user) {
+    function userLink(user) {
       return '<a class="diff-user" href="' + mw.util.getUrl('User:' + user) + '">' + user + '</a> (<a href="' + mw.util.getUrl('User_talk:' + user) + '">' + _msg('diff-usertalk') + '</a> | <a href="' + mw.util.getUrl('Special:Contributions/' + user) + '">' + _msg('diff-usercontrib') + '</a> | <a href="' + mw.util.getUrl('Special:Block/' + user) + '">' + _msg('diff-userblock') + '</a>)';
     }
     $modalTitle.html(_msg('diff-title') + ': <u>' + toTitle + '</u>');
@@ -134,7 +133,7 @@ var quickDiff = function (param) {
     $('.quick-diff button.toDiffPage').click(function () {
       location.href = config.wgScript + '?oldid=' + data.compare.fromrevid + '&diff=' + data.compare.torevid;
     });
-    articleLink($('.quick-diff .editLink'));
+    require('./articleLink').articleLink($('.quick-diff .editLink'));
     if (param.isPreview === true) {
       $('.quick-diff button.toDiffPage').hide();
       $diffArea.find('.diff-otitle').html('<b>' + _msg('diff-title-original-content') + '</b>');

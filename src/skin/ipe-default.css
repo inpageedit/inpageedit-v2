@@ -461,6 +461,7 @@
 
 .ipe-preference #plugin-container li label {
   padding: 0;
+  cursor: pointer;
 }
 
 .ipe-preference #plugin-container li label input + span {
@@ -470,12 +471,16 @@
 
 .ipe-preference #plugin-container li .plugin-name {
   display: block;
+  font-weight: bold;
 }
 
 .ipe-preference #plugin-container li .plugin-author {
   display: block;
+  font-style: italic;
+  font-size: 12px;
 }
 
+/* 
 .ipe-preference #analysis-container ul {
   list-style: none;
   margin: 0;
@@ -500,8 +505,9 @@
   top: 0;
   padding-right: 2px;
 }
+ */
 
-.ipe-preference #analysis-container .plugin-footer {
+.ipe-preference .plugin-footer {
   font-size: 12px;
   font-style: italic;
   margin-top: 1rem;

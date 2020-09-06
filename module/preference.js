@@ -142,8 +142,8 @@ var preference = {
         $('<div>').append(
           $('<strong>', { text: 'Custom skin (Not available yet)' }),
           $('<label>', { class: 'choose-skin' }).append(
-            $('<span>'),
             $('<input>', { type: 'checkbox', id: 'useCustomSkin', disabled: true }),
+            $('<span>'),
             $('<input>', { id: 'skinUrl', disabled: true, style: 'width: calc(96% - 30px)', value: _dir + '/src/skin/ipe-default.css' })
           )
         ),
@@ -175,6 +175,7 @@ var preference = {
       ),
       $('<section>', { id: 'about' }).append(
         $('<h3>', { text: _msg('preference-about-label') }),
+        $('<span>', { text: 'v' + version, style: 'font-size: 12px; font-style: italic;' }),
         $('<button>', { class: 'btn btn-secondary btn-single', onclick: "InPageEdit.about()", text: _msg('preference-aboutAndHelp') }),
         $('<button>', { class: 'btn btn-secondary btn-single', style: 'margin-top: .5em;', onclick: "InPageEdit.versionInfo()", text: _msg('preference-updatelog') }),
         $('<a>', { href: 'https://ipe.miraheze.org/wiki/', target: '_blank', style: 'margin-top: .5em; display: block;' }).append(
@@ -195,7 +196,6 @@ var preference = {
     )
 
     var $modalContent = $('<div>', { class: 'preference-tabber' }).append(
-      $('<div>', { text: 'WARNING: IN PROGRESS', style: 'padding-left: 8px; border-left: 6px solid orange; font-weight: bold;' }),
       $tabList,
       $tabContent
     )
@@ -369,18 +369,19 @@ var preference = {
           var data = ret.query[0].users[userName]
           var total = data._total
           var functionData = data.functions
-          var functionList = $('<ul>')
-          var maximum = 0
-          $.each(functionData, (key, val) => {
-            if (val > maximum) maximum = val
-          })
+          var functionList = $('<table>', { class: 'wikitable', style: 'width: 96%' }).append(
+            $('<tr>').append(
+              $('<th>', { text: 'ID' }),
+              $('<th>', { text: 'Times' }),
+              $('<th>', { text: 'Percents' })
+            )
+          )
           $.each(functionData, (key, val) => {
             functionList.append(
-              $('<li>').append(
-                $('<div>', { title: (val / total * 100) + '%' }).css('width', (val / maximum * 100) + '%').append(
-                  $('<div>', { text: key }),
-                  $('<div>', { text: val })
-                )
+              $('<tr>').append(
+                $('<th>', { text: key }),
+                $('<td>', { text: val }),
+                $('<td>', { text: (val / total * 100).toFixed(2) + '%' })
               )
             )
           })
@@ -391,13 +392,6 @@ var preference = {
             ),
             functionList
           )
-          // 如果柱状图太短了，调整文字的位置
-          $tabContent.find('#analysis-container li').each(function () {
-            var $this = $(this)
-            if ($this.width() < 140) {
-              $this.find('div:last').css({ right: '', left: $this.width() + 4 })
-            }
-          })
         })
 
       }
