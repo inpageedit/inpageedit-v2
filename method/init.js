@@ -63,7 +63,7 @@ module.exports = async function init() {
   updateNotice();
 
   // !暂定，触发工具盒插件
-  pluginStore.load('toolbox.js');
+  pluginStore.initUserPlugin();
 
   // 写入模块
   var InPageEdit = {

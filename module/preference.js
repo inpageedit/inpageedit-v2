@@ -2,10 +2,11 @@ var InPageEdit = window.InPageEdit || {};
 
 const { _analysis } = require('./_analysis');
 const { _msg } = require('./_msg');
-const { /* $br, $hr,*/ $progress } = require('./_elements');
+const { $br,/* $hr,*/ $progress } = require('./_elements');
 
 // const api = require('./api.json')
 const version = require('./version');
+const pluginStore = require('./pluginStore');
 
 /**
  * @module preference 个人设置模块
@@ -23,7 +24,10 @@ var preference = {
     lockToolBox: false,
     redLinkQuickEdit: true,
     outSideClose: true,
-    watchList: Boolean(mw.user.options.get('watchdefault'))
+    watchList: Boolean(mw.user.options.get('watchdefault')),
+    plugins: [
+      'toolbox.js'
+    ]
   },
   /**
    * @name 获取设置 
@@ -100,17 +104,26 @@ var preference = {
       )
     )
 
-    var $tabContent = $('<div>', { class: 'tab-content' }).append(
+    var $tabContent = $('<div>', { class: 'tab-content', style: 'position: relative;' }).append(
       $('<section>', { id: 'editor' }).append(
-        $('<h3>', { text: 'editor settings' }),
+        $('<h3>', { text: _msg('preference-editor-title') }),
+        $('<h4>', { text: _msg('preference-editHobits-label') }),
         $('<label>').append(
           $('<input>', { type: 'checkbox', id: 'editMinor' }),
           $('<span>', { text: _msg('preference-setMinor') })
-        )
+        ),
+        $('<label>').append(
+          $('<input>', { type: 'checkbox', id: 'watchList' }),
+          $('<span>', { text: _msg('preference-watchList') })
+        ),
+        $('<h4>', { text: _msg('preference-summary-label') }),
+        $('<label>', { for: 'editSummary', style: 'padding-left: 0; font-size: small', html: _msg('preference-editSummary') }),
+        $br,
+        $('<input>', { id: 'editSummary', style: 'width: 96%', placeholder: 'Edit via InPageEdit, yeah~' })
       ),
       $('<section>', { id: 'plugin' }).append(
         $('<h3>', { text: 'plugin settings' }),
-        $('<div>', { id: 'plugin-container', html: $progress })
+        $('<div>', { id: 'plugin-container', html: $($progress).css({ width: '96%', position: 'absolute', top: '50%', transform: 'translateY(-50%)' }) })
       ),
       $('<section>', { id: 'analysis' }).append(
         $('<h3>', { text: 'analysis settings' })
@@ -203,24 +216,62 @@ var preference = {
           }
         }
       ],
-      onShow() {
+      onShow($modal) {
+        var $modalWindow = $('#' + $modal.modalId)
+        mw.hook('InPageEdit.preference.modal').fire({
+          $modal,
+          $modalWindow
+        })
+        // 如果在本地有设定存档，disable掉全部input
         if (typeof InPageEdit.myPreference !== 'undefined') {
-          $tabContent.find('input').attr({ 'disabled': 'disabled' });
+          $modalWindow.find('.ssi-modalBtn.btn').attr({ 'disabled': true })
+          $tabContent.find('input').attr({ 'disabled': true })
           $tabList.before(
             $('<div>', { class: 'has-local-warn', style: 'padding-left: 8px; border-left: 6px solid orange; font-size: small;', html: _msg('preference-savelocal-popup-haslocal') })
           );
         }
+        // 将现有设定反映到选项中
         $.each(local, (key, val) => {
+          if (key === 'plugins') return
           var $input = $tabContent.find('#' + key)
           if ($input.length > 0) {
-            if (typeof key === 'string') {
+            $modalContent.data(key, val)
+            if (typeof val === 'string') {
               $input.val(val)
             }
-            if (typeof key === 'boolean') {
+            if (typeof val === 'boolean') {
               $input.prop('checked', val)
             }
           }
         })
+        // 获取插件列表
+        var pluginCache = {}
+        pluginCache = pluginStore.loadCache()
+        if (pluginCache) {
+          showPluginList(pluginCache)
+        } else {
+          pluginStore.get().then(list => {
+            pluginStore.saveCache(list)
+            showPluginList(list)
+          })
+        }
+        function showPluginList(list) {
+          $tabContent.find('#plugin-container').html('<ul></ul>')
+          $.each(list, (key, val) => {
+            var name = val.name || 'Unknown'
+            var description = val.description || ''
+            var author = val.author ? $('<a>', { href: 'https://gtihub.com/' + val.author, target: '_balnk', text: '@' + val.author }) : '-'
+            $tabContent.find('#plugin-container > ul').append(
+              $('<li>', { 'data-pluginKey': key }).append(
+                $('<strong>', { text: name }),
+                ' ',
+                author,
+                ' ',
+                $('<span>', { text: description, style: 'font-style: italic' })
+              )
+            )
+          })
+        }
       }
     });
 
