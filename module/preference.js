@@ -118,7 +118,6 @@ var preference = {
         ),
         $('<h4>', { text: _msg('preference-summary-label') }),
         $('<label>', { for: 'editSummary', style: 'padding-left: 0; font-size: small', html: _msg('preference-editSummary') }),
-        $br,
         $('<input>', { id: 'editSummary', style: 'width: 96%', placeholder: 'Edit via InPageEdit, yeah~' })
       ),
       $('<section>', { id: 'plugin' }).append(
@@ -130,7 +129,29 @@ var preference = {
         $('<div>', { id: 'analysis-container', html: $($progress).css({ width: '96%', position: 'absolute', top: '50%', transform: 'translateY(-50%)' }) })
       ),
       $('<section>', { id: 'another' }).append(
-        $('<h3>', { text: 'another settings' })
+        $('<h3>', { text: 'another settings' }),
+        $('<button>', { class: 'btn btn-primary', id: 'ipeSaveLocalShow', text: _msg('preference-savelocal-btn') }).click(function () {
+          // 永久保存（本地用户页）
+          var $saveLocalModal = $('<section>').append(
+            _msg('preference-savelocal-popup'),
+            $br,
+            $('<textarea>', { style: 'font-size: 12px; resize: none; width: 100%; height: 10em;', readonly: true })
+              .click(function () { this.select() })
+              .val(
+                '/** InPageEdit Preferences **/\nwindow.InPageEdit = window.InPageEdit || {}; // Keep this line\nInPageEdit.myPreference = ' + JSON.stringify($modalContent.data(), null, 2)
+              )
+          )
+          ssi_modal.dialog({
+            className: 'in-page-edit',
+            center: true,
+            title: _msg('preference-savelocal-popup-title'),
+            content: $saveLocalModal,
+            okBtn: {
+              className: 'btn btn-primary btn-single',
+              label: _msg('ok')
+            }
+          });
+        })
       ),
       $('<section>', { id: 'about' }).append(
         $('<h3>', { text: _msg('preference-about-label') }),
@@ -178,7 +199,12 @@ var preference = {
     $tabContent.find('input').change(function () {
       var $this = $(this)
       var key = $this.attr('id')
-      var val = $this.val()
+      var val
+      if ($this.prop('type') === 'checkbox') {
+        val = $this.prop('checked')
+      } else {
+        val = $this.val()
+      }
       $modalContent.data(key, val)
       console.log('[InPageEdit] Preset preference', $modalContent.data())
     })
@@ -226,8 +252,8 @@ var preference = {
           label: _msg('preference-save'),
           className: 'btn btn-primary',
           method: function (a, modal) {
-            // preference.set($modalContent.data());
-            console.info('[InPageEdit] Set preference', $modalContent.data())
+            preference.set($modalContent.data());
+            // console.info('[InPageEdit] Set preference', $modalContent.data())
             modal.close();
           }
         }
@@ -323,7 +349,7 @@ var preference = {
           $.each(functionData, (key, val) => {
             functionList.append(
               $('<li>').append(
-                $('<div>', { title: (total / val) + '%' }).css('width', (total / val) + '%').append(
+                $('<div>', { title: (val / total * 100) + '%' }).css('width', (val / total * 100) + '%').append(
                   $('<div>', { text: key }),
                   $('<div>', { text: val })
                 )
