@@ -3,7 +3,8 @@
  ********************************/
 
 // const _dir = require('../method/_dir');
-const { _loadScript } = require('../method/loadScript');
+const { loadScript } = require('../method/loadScript');
+const getPref = require('./preference').preference.get;
 // const { _msg } = require('./_msg');
 const pluginCDN = 'https://cdn.jsdelivr.net/gh/wjghj-project/inpageedit-plugins@master';
 
@@ -37,7 +38,7 @@ var pluginStore = {
       mw.loader.load(name);
       console.info('[InPageEdit] 从远程加载非官方插件', name)
     } else {
-      _loadScript(pluginCDN + '/plugins/' + name).then(
+      loadScript(pluginCDN + '/plugins/' + name).then(
         () => console.info('[InPageEdit] 插件 ' + name + '加载成功'),
         err => console.warn('[InPageEdit] 插件 ' + name + '加载失败', err)
       )
@@ -48,7 +49,6 @@ var pluginStore = {
    * @module pluginStore.initUserPlugin 初始化用户插件
    */
   initUserPlugin() {
-    const getPref = require('./preference').preference.get;
     var userPlugins = getPref('plugins')
     if (typeof userPlugins === 'object' && userPlugins.length > 0) {
       $.each(userPlugins, (key, val) => {
