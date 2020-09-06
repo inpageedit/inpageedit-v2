@@ -162,7 +162,7 @@ var quickEdit = function (options) {
   console.table(options);
 
   // 显示主窗口
-  var $modal = ssi_modal.show({
+  ssi_modal.show({
     title: $modalTitle,
     content: $modalContent,
     outSideClose: options.outSideClose,
@@ -231,7 +231,7 @@ var quickEdit = function (options) {
     ],
 
     /* 预加载 */
-    beforeShow() {
+    beforeShow($modal) {
       var $modalWindow = $('#' + $modal.modalId);
       // 设置样式
       $modalWindow.find('.hideBeforeLoaded').hide();
@@ -308,7 +308,7 @@ var quickEdit = function (options) {
   * @event onShow
   * @description 模态框显示后
   */
-    onShow() {
+    onShow($modal) {
       var $modalWindow = $('#' + $modal.modalId);
       mw.hook('InPageEdit.quickEdit').fire({
         $modal,
