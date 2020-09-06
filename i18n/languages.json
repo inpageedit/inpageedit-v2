@@ -171,7 +171,8 @@
         "preference-watchList": "Watch by default",
         "preference-redLinkQuickEdit": "Add quick edit buttons after red links",
         "preference-plugin-footer": "You can choose the official plugins here. And welcome to [$1 InPageEdit-Plugins] to contribute your code!",
-        "preference-analysis-totaluse": "<strong>Total use</strong>: $1 {{PLURAL:$1|time|times}}"
+        "preference-analysis-totaluse": "<strong>Total use</strong>: $1 {{PLURAL:$1|time|times}}",
+        "preference-display-label": "Display settings"
     },
     "ar": {
         "version-notice-title": "نجاح التثبيت",
@@ -800,7 +801,8 @@
         "preference-watchList": "预设进行监视",
         "preference-redLinkQuickEdit": "在红链后添加快速编辑按钮",
         "preference-plugin-footer": "你可以在这里选用官方插件，欢迎前往[$1 InPageEdit-Plugins]贡献你的代码！",
-        "preference-analysis-totaluse": "<strong>使用总次数</strong>：$1 次"
+        "preference-analysis-totaluse": "<strong>使用总次数</strong>：$1 次",
+        "preference-display-label": "显示设置"
     },
     "zh-hant": {
         "quick-edit": "快速編輯",

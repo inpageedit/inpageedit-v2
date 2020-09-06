@@ -484,6 +484,7 @@
 .ipe-preference #analysis-container li > div {
   position: relative;
   color: #ffffff;
+  text-shadow: 0 0 2px #222;
   background-color: #c23531;
   height: 100%;
 }
@@ -498,6 +499,12 @@
   right: 0;
   top: 0;
   padding-right: 2px;
+}
+
+.ipe-preference #analysis-container .plugin-footer {
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 1rem;
 }
 
 /** 进度条 **/

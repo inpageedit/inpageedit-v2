@@ -8,6 +8,7 @@ const { $br, $hr, $progress } = require('./_elements');
 const api = require('./api.json')
 const version = require('./version');
 const { pluginStore } = require('./pluginStore');
+const _dir = require('../method/_dir');
 
 /**
  * @module preference 个人设置模块
@@ -123,7 +124,7 @@ var preference = {
       $('<section>', { id: 'plugin' }).append(
         $('<h3>', { text: _msg('preference-plugin-title') }),
         $('<div>', { id: 'plugin-container', html: $($progress).css({ width: '96%', position: 'absolute', top: '50%', transform: 'translateY(-50%)' }) }),
-        $('<div>').html(
+        $('<div>', { class: 'plugin-footer' }).html(
           _msg('preference-plugin-footer', api.pluginGithub)
         ),
       ),
@@ -133,7 +134,21 @@ var preference = {
       ),
       $('<section>', { id: 'another' }).append(
         $('<h3>', { text: _msg('preference-another-title') }),
-        $('<button>', { class: 'btn btn-primary btn-single', id: 'ipeSaveLocalShow', text: _msg('preference-savelocal-btn') }).click(function () {
+        $('<h4>', { text: _msg('preference-display-label') }),
+        $('<label>').append(
+          $('<input>', { type: 'checkbox', id: 'redLinkQuickEdit' }),
+          $('<span>', { text: _msg('preference-redLinkQuickEdit') })
+        ),
+        $('<div>').append(
+          $('<strong>', { text: 'Custom skin (Not available yet)' }),
+          $('<label>', { class: 'choose-skin' }).append(
+            $('<span>'),
+            $('<input>', { type: 'checkbox', id: 'useCustomSkin', disabled: true }),
+            $('<input>', { id: 'skinUrl', disabled: true, style: 'width: calc(96% - 30px)', value: _dir + '/src/skin/ipe-default.css' })
+          )
+        ),
+        $('<h4>', { text: _msg('preference-savelocal-popup-title') }),
+        $('<button>', { class: 'btn btn-secondary', id: 'ipeSaveLocalShow', text: _msg('preference-savelocal-btn') }).click(function () {
           // 永久保存（本地用户页）
           var $saveLocalModal = $('<section>').append(
             _msg('preference-savelocal-popup'),
@@ -161,11 +176,11 @@ var preference = {
       $('<section>', { id: 'about' }).append(
         $('<h3>', { text: _msg('preference-about-label') }),
         $('<button>', { class: 'btn btn-secondary btn-single', onclick: "InPageEdit.about()", text: _msg('preference-aboutAndHelp') }),
-        $('<button>', { class: 'btn btn-secondary btn-single', style: 'margin-top: 1em;', onclick: "InPageEdit.versionInfo()", text: _msg('preference-updatelog') }),
-        $('<a>', { href: 'https://ipe.miraheze.org/wiki/', target: '_blank', style: 'margin-top: 1em;' }).append(
+        $('<button>', { class: 'btn btn-secondary btn-single', style: 'margin-top: .5em;', onclick: "InPageEdit.versionInfo()", text: _msg('preference-updatelog') }),
+        $('<a>', { href: 'https://ipe.miraheze.org/wiki/', target: '_blank', style: 'margin-top: .5em; display: block;' }).append(
           $('<button>', { class: 'btn btn-secondary btn-single', text: _msg('preference-translate') })
         ),
-        $('<a>', { href: 'https://discord.gg/VUVAh8w', target: '_blank', style: 'margin-top: 1em;' }).append(
+        $('<a>', { href: 'https://discord.gg/VUVAh8w', target: '_blank', style: 'margin-top: .5em; display: block;' }).append(
           $('<button>', { class: 'btn btn-secondary btn-single', text: _msg('preference-discord') })
         ),
         $hr,
@@ -323,7 +338,7 @@ var preference = {
                     var $this = $(this)
                     var checked = $this.prop('checked')
                     var key = $this.attr('id')
-                    var index = usedPlugin.indexOf(key)
+                    var index = $modalContent.data('plugins').indexOf(key)
                     var original = preference.get('plugins')
                     if (checked && index < 0) {
                       original.push(key)
@@ -360,17 +375,12 @@ var preference = {
             if (val > maximum) maximum = val
           })
           $.each(functionData, (key, val) => {
-            var item = $('<div>', { title: (val / total * 100) + '%' }).css('width', (val / maximum * 100) + '%').append(
-              $('<div>', { text: key }),
-              $('<div>', { text: val })
-            )
-            // 如果柱状图太短了，调整文字的位置
-            if (item.width() < 60) {
-              item.find('div:last').css({ right: '', left: item.width() + 4, color: '#222' })
-            }
             functionList.append(
               $('<li>').append(
-                item
+                $('<div>', { title: (val / total * 100) + '%' }).css('width', (val / maximum * 100) + '%').append(
+                  $('<div>', { text: key }),
+                  $('<div>', { text: val })
+                )
               )
             )
           })
@@ -381,117 +391,18 @@ var preference = {
             ),
             functionList
           )
+          // 如果柱状图太短了，调整文字的位置
+          $tabContent.find('#analysis-container li').each(function () {
+            var $this = $(this)
+            if ($this.width() < 140) {
+              $this.find('div:last').css({ right: '', left: $this.width() + 4 })
+            }
+          })
         })
 
       }
     });
 
-    // ssi_modal.show({
-    //   sizeClass: 'dialog',
-    //   className: 'in-page-edit ipe-preference',
-    //   outSideClose: false,
-    //   title: _msg('preference-title') + ' - ' + version,
-    //   content:
-    //     $('<section>', { id: 'ipe-preference-form', class: 'ipe-preference-form' }).append(
-    //       $('<h4>', { text: _msg('preference-editor-label') }),
-    //       $('<label>').append(
-    //         $('<input>', { id: 'outSideClose', type: 'checkbox' }).prop('checked', local.outSideClose),
-    //         $('<span>', { text: _msg('preference-outSideClose') })
-    //       ),
-    //       $br,
-    //       $('<label>').append(
-    //         $('<input>', { id: 'editMinor', type: 'checkbox' }).prop('checked', local.editMinor),
-    //         $('<span>', { text: _msg('preference-setMinor') })
-    //       ),
-    //       $br,
-    //       $('<h4>', { text: _msg('preference-summary-label') }),
-    //       $('<label>', { for: 'editSummary', style: 'padding-left: 0; font-size: small', html: _msg('preference-editSummary') }),
-    //       $br,
-    //       $('<input>', { id: 'editSummary', style: 'width: 96%', value: local.editSummary, placeholder: 'Edit via InPageEdit, yeah~' }),
-    //       $('<h4>', { text: _msg('preference-analysis-label') }),
-    //       $('<span>', { style: 'font-size: small; line-height: 0.9em', html: _msg('preference-analysis-view', `[${api.analysisUrl} ${api.analysisUrl}]`) }),
-    //       $('<h4>', { text: _msg('preference-about-label') }),
-    //       $('<button>', { class: 'btn btn-secondary', onclick: "InPageEdit.about()", text: _msg('preference-aboutAndHelp') }),
-    //       $('<button>', { class: 'btn btn-secondary', style: 'margin-left: 1em;', onclick: "InPageEdit.versionInfo()", text: _msg('preference-updatelog') }),
-    //       $('<a>', { href: 'https://ipe.miraheze.org/wiki/', target: '_blank', style: 'margin-left: 1em;' }).append(
-    //         $('<button>', { class: 'btn btn-secondary', text: _msg('preference-translate') })
-    //       ),
-    //       $('<a>', { href: 'https://discord.gg/VUVAh8w', target: '_blank', style: 'margin-left: 1em;' }).append(
-    //         $('<button>', { class: 'btn btn-secondary', text: _msg('preference-discord') })
-    //       ),
-    //       $hr,
-    //       $('<strong>', { style: 'font-size: small; line-height: 0.9em', text: _msg('preference-savelocal-label') }),
-    //       $br,
-    //       $('<span>', { style: 'font-size: small; line-height: 0.9em', text: _msg('preference-savelocal') }).append(
-    //         $('<a>', { href: 'javascript:;', id: 'ipeSaveLocalShow', text: _msg('preference-savelocal-btn') }).click(function () {
-    //           // 永久保存（本地用户页）
-    //           ssi_modal.dialog({
-    //             className: 'in-page-edit',
-    //             center: true,
-    //             title: _msg('preference-savelocal-popup-title'),
-    //             content: '<section id="ipeSaveLocal">' + _msg('preference-savelocal-popup') + '<br/><textarea style="font-size: 12px; resize: none; width: 100%; height: 10em;" readonly></textarea><br/>' + _msg('preference-savelocal-popup-notice') + '</section>',
-    //             okBtn: {
-    //               className: 'btn btn-primary btn-single',
-    //               label: _msg('ok')
-    //             }
-    //           });
-    //           $('#ipeSaveLocal textarea').val('/** InPageEdit Preferences **/\nwindow.InPageEdit = window.InPageEdit || {}; // Keep this line\nInPageEdit.myPreference = ' + JSON.stringify($.extend({}, preference.get(), $('#ipe-preference-form').data()), null, 2));
-    //         })
-    //       )
-    //     ),
-    //   buttons: [{
-    //     label: _msg('preference-reset'),
-    //     className: 'btn btn-danger',
-    //     method: function (a, modal) {
-    //       ssi_modal.confirm({
-    //         title: _msg('preference-reset-confirm-title'),
-    //         content: _msg('preference-reset-confirm'),
-    //         className: 'in-page-edit',
-    //         center: true,
-    //         okBtn: {
-    //           label: _msg('ok'),
-    //           className: 'btn btn-danger'
-    //         },
-    //         cancelBtn: {
-    //           label: _msg('cancel'),
-    //           className: 'btn'
-    //         }
-    //       }, (res) => {
-    //         if (res) {
-    //           preference.set(preference.default);
-    //           modal.close();
-    //         } else {
-    //           return false;
-    //         }
-    //       });
-    //     }
-    //   }, {
-    //     label: _msg('preference-save'),
-    //     className: 'btn btn-primary',
-    //     method: function (a, modal) {
-    //       preference.set($('#ipe-preference-form').data());
-    //       modal.close();
-    //     }
-    //   }
-    //   ],
-    //   onShow: function () {
-    //     function setData() {
-    //       if (this.type === 'checkbox') {
-    //         $('#ipe-preference-form').data(this.id, this.checked);
-    //       } else if (this.type === 'text') {
-    //         $('#ipe-preference-form').data(this.id, this.value);
-    //       }
-    //     }
-    //     $('#ipe-preference-form input').each(setData).change(setData);
-
-    //     if (typeof (InPageEdit.myPreference) !== 'undefined') {
-    //       $('#ipe-preference-form input, .ipe-preference .ssi-modalBtn').attr({ 'disabled': 'disabled' });
-    //       $('#ipe-preference-form').prepend(
-    //         $('<p>', { class: 'has-local-warn', style: 'padding-left: 8px; border-left: 6px solid orange; font-size: small;', html: _msg('preference-savelocal-popup-haslocal') })
-    //       );
-    //     }
-    //   }
-    // });
   }
 }
 
