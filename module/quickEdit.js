@@ -235,7 +235,6 @@ var quickEdit = function (options) {
       var $modalWindow = $('#' + $modal.modalId);
       // 设置样式
       $modalWindow.find('.hideBeforeLoaded').hide();
-      $optionsLabel.hide();
       $modalContent.find('.ipe-progress').css('margin', Number($(window).height() / 3 - 50) + 'px 0');
       $editArea.css('height', $(window).height() / 3 * 2 - 100);
       $modalWindow.find('.ssi-buttons').prepend($optionsLabel);
@@ -312,6 +311,7 @@ var quickEdit = function (options) {
       var $modalWindow = $('#' + $modal.modalId);
       mw.hook('InPageEdit.quickEdit').fire({
         $modal,
+        $modalWindow,
         $modalTitle,
         $modalContent,
         $editArea,
@@ -369,8 +369,7 @@ var quickEdit = function (options) {
         }
         // 设定一堆子样式
         $modalContent.find('.ipe-progress').hide();
-        $modalContent.find('.hideBeforeLoaded').fadeIn(500);
-        $optionsLabel.show();
+        $modalWindow.find('.hideBeforeLoaded').fadeIn(500);
         $editArea.val(options.editText + '\n');
 
         var summaryVal;
