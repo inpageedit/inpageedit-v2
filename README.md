@@ -54,7 +54,7 @@
 **InPageEdit**是由机智的小鱼君使用JavaScript编写的MediaWiki插件。具有较好的移动设备支持以及~~毫无卵用~~的五彩斑斓设计。主要功能旨在使许多MediaWiki的功能在不打开新标签页的情况下完成(包括但不限于编辑)，极大加快维护wiki的速度。另外插件采用模块化设计，提供许多API可以自由调用，详见 [API - InPageEdit Documentations](https://ipe.netlyfi.app/develop/api.html)
 
 ## 特色功能
-> 详见 [InPageEdit Documentations](https://ipe.netlyfi.app/)
+> 详见 [InPageEdit Documentations](https://ipe.netlify.app/)
 
 ## 快速上手
 [![](https://data.jsdelivr.com/v1/package/gh/dragon-fish/inpageedit-v2/badge)](https://www.jsdelivr.com/package/gh/dragon-fish/inpageedit-v2)
