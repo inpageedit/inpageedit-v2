@@ -392,13 +392,13 @@ function getMessage(lang, msgKey, ...args) {
   // 查询本地覆写
   var ipe = window.InPageEdit || {};
   var overrides = ipe.i18n || {};
-  // InPageEdit.i18n.msgKey
-  if (overrides[msgKey]) {
-    return parseMessage(overrides[msgKey], ...args);
-  }
   // InPageEdit.i18n.lang.msgKey
   if (overrides[lang] && overrides[lang][msgKey]) {
     return parseMessage(overrides[lang][msgKey], ...args);
+  }
+  // InPageEdit.i18n.msgKey
+  if (overrides[msgKey]) {
+    return parseMessage(overrides[msgKey], ...args);
   }
 
   // 查询用户语言

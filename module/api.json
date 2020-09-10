@@ -3,6 +3,8 @@
   "analysis": "https://doc.wjghj.cn/inpageedit-v2/analysis/api/index.php",
   "analysisUrl": "https://dragon-fish.github.io/inpageedit-v2/analysis/",
   "githubLink": "https://github.com/Dragon-Fish/InPageEdit-v2",
+  "pluginCDN": "https://cdn.jsdelivr.net/gh/wjghj-project/inpageedit-plugins@master",
+  "pluginGithub": "https://github.com/Wjghj-Project/InPageEdit-Plugins",
   "specialNotice": "https://wjghj.fast.io/InPageEdit/specialNotice.json",
   "updatelogsUrl": "https://ipe.netlify.app/update/"
 }

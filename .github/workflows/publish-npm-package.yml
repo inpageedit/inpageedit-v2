@@ -47,3 +47,8 @@ jobs:
           npm run publish:stable
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+      - name: 刷新 jsDelivr 缓存
+        run: |
+          curl https://purge.jsdelivr.net/npm/mediawiki-inpageedit@latest/
+          curl https://purge.jsdelivr.net/npm/mediawiki-inpageedit@latest/dist/

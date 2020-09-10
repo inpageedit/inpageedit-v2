@@ -381,10 +381,6 @@
   display: none;
 }
 
-.in-page-edit .detailArea {
-  /* padding: 8px 0 0 4px; */
-}
-
 .in-page-edit .detailArea .detailBtnGroup {
   margin-left: 1.25em;
 }
@@ -393,6 +389,128 @@
 .quick-diff .diff-hidden-history {
   color: #a8a8a8;
   text-decoration: line-through;
+}
+
+/** 个人设置 **/
+.ipe-preference .preference-tabber .tab-list {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+.ipe-preference .preference-tabber .tab-list li {
+  flex: auto;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.ipe-preference .preference-tabber .tab-list li a {
+  display: block;
+  padding: 4px 8px;
+  color: #08d;
+  text-decoration: none;
+}
+
+.ipe-preference .preference-tabber .tab-list li:hover a {
+  box-shadow: 0 -2px 0 rgba(0, 136, 221, 0.25) inset;
+}
+
+.ipe-preference .preference-tabber .tab-list li a.active {
+  box-shadow: 0 -2px 0 #08d inset;
+}
+
+.ipe-preference .preference-tabber .tab-content {
+  height: 60vh;
+  overflow-y: auto;
+}
+
+.ipe-preference .preference-tabber .tab-content section {
+  display: none;
+}
+
+.ipe-preference .preference-tabber .tab-content section.active {
+  display: block;
+}
+
+.ipe-preference .preference-tabber .tab-content section label {
+  display: block;
+}
+
+.ipe-preference #plugin-container ul {
+  margin: 0;
+  list-style: none;
+  border: 1px solid #ccc;
+}
+
+.ipe-preference #plugin-container li:not(:last-of-type) {
+  border-bottom: 1px solid #ccc;
+}
+
+.ipe-preference #plugin-container li {
+  padding: 4px 30px 4px 8px;
+}
+
+.ipe-preference #plugin-container li:hover {
+  background-color: #efefef;
+}
+
+.ipe-preference #plugin-container li label {
+  padding: 0;
+  cursor: pointer;
+}
+
+.ipe-preference #plugin-container li label input + span {
+  position: absolute;
+  right: 0;
+}
+
+.ipe-preference #plugin-container li .plugin-name {
+  display: block;
+  font-weight: bold;
+}
+
+.ipe-preference #plugin-container li .plugin-author {
+  display: block;
+  font-style: italic;
+  font-size: 12px;
+}
+
+/* 
+.ipe-preference #analysis-container ul {
+  list-style: none;
+  margin: 0;
+}
+
+.ipe-preference #analysis-container li > div {
+  position: relative;
+  color: #ffffff;
+  text-shadow: 0 0 2px #222;
+  background-color: #c23531;
+  height: 100%;
+}
+
+.ipe-preference #analysis-container li > div > div:first-of-type {
+  padding-left: 2px;
+  font-weight: bold;
+}
+
+.ipe-preference #analysis-container li > div > div:last-of-type {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding-right: 2px;
+}
+ */
+
+.ipe-preference .plugin-footer {
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 1rem;
 }
 
 /** 进度条 **/
