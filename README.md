@@ -14,9 +14,7 @@
 在*个人 JS 页*添加以下代码：
 
 ```javascript
-mw.loader.load(
-  "https://cdn.jsdelivr.net/npm/mediawiki-inpageedit@latest/dist/InPageEdit.min.js"
-);
+mw.loader.load("https://cdn.jsdelivr.net/npm/mediawiki-inpageedit@latest/dist/InPageEdit.min.js");
 ```
 
 **注意**：在保存之后，您可能需要清除浏览器缓存才能看到所作出的变更的影响。

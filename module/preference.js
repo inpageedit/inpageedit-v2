@@ -332,24 +332,32 @@ var preference = {
             var description = val.description || ''
             var author = val.author ? $('<a>', { href: 'https://gtihub.com/' + val.author, target: '_balnk', text: '@' + val.author }) : '-'
             $tabContent.find('#plugin-container > ul').append(
-              $('<li>', { 'data-pluginKey': key }).append(
+              $('<li>').append(
                 $('<label>').append(
-                  $('<input>', { class: 'plugin-checkbox', type: 'checkbox', id: key, checked: Boolean(usedPlugin.indexOf(key) > -1), disabled: (typeof InPageEdit.myPreference !== 'undefined' || val._force) }).change(function () {
+                  $('<input>', {
+                    class: 'plugin-checkbox', type: 'checkbox',
+                    id: key, 'data-pluginKey': key,
+                    checked: Boolean(usedPlugin.indexOf(key) >= 0 || val._force === true), // 勾选当前正在使用以及强制启用的插件
+                    disabled: (typeof InPageEdit.myPreference !== 'undefined' || val._force === true) // 强制启用或者本地保存设定时禁止改变
+                  }).change(function () {
+                    // 当插件选择框变化时，暂存设定档
                     var $this = $(this)
                     var checked = $this.prop('checked')
                     var key = $this.attr('id')
-                    var index = $modalContent.data('plugins').indexOf(key)
-                    var original = preference.get('plugins')
+                    var original = $modalContent.data('plugins')
+                    var index = original.indexOf(key)
+                    // 勾选且暂未启用
                     if (checked && index < 0) {
                       original.push(key)
-                    } else if (!checked && index > -1) {
-                      original.splice(index, 1)
-                    } else {
-                      return
                     }
+                    // 取消勾选且已启用
+                    if (!checked && index >= 0) {
+                      original.splice(index, 1)
+                    }
+                    // 暂存
                     $modalContent.data('plugins', original)
                   }),
-                  $('<span>'), // checkbox
+                  $('<span>'), // checkbox框框
                   $('<div>', { class: 'plugin-name', text: name }),
                   $('<div>', { class: 'plugin-author', html: author }),
                   $('<div>', { class: 'plugin-description', text: description })
