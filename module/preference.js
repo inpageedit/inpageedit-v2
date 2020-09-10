@@ -140,7 +140,7 @@ var preference = {
           $('<span>', { text: _msg('preference-redLinkQuickEdit') })
         ),
         $('<div>').append(
-          $('<strong>', { text: 'Custom skin (Not available yet)' }),
+          $('<h4>', { text: 'Custom skin (Not available yet)' }),
           $('<label>', { class: 'choose-skin' }).append(
             $('<input>', { type: 'checkbox', id: 'useCustomSkin', disabled: true }),
             $('<span>'),
@@ -175,7 +175,12 @@ var preference = {
       ),
       $('<section>', { id: 'about' }).append(
         $('<h3>', { text: _msg('preference-about-label') }),
-        $('<span>', { text: 'v' + version, style: 'font-size: 12px; font-style: italic;' }),
+        $('<span>', { style: 'font-size: 12px; font-style: italic;' }).text(function () {
+          var isCanary = /(alpha|beta|pre)/i.test(version)
+          var text = 'v' + version
+          text += isCanary ? ' - You are running the Canary version of InPageEdit' : ''
+          return text
+        }),
         $('<button>', { class: 'btn btn-secondary btn-single', onclick: "InPageEdit.about()", text: _msg('preference-aboutAndHelp') }),
         $('<button>', { class: 'btn btn-secondary btn-single', style: 'margin-top: .5em;', onclick: "InPageEdit.versionInfo()", text: _msg('preference-updatelog') }),
         $('<a>', { href: 'https://ipe.miraheze.org/wiki/', target: '_blank', style: 'margin-top: .5em; display: block;' }).append(
@@ -335,15 +340,13 @@ var preference = {
               $('<li>').append(
                 $('<label>').append(
                   $('<input>', {
-                    class: 'plugin-checkbox', type: 'checkbox',
-                    id: key, 'data-pluginKey': key,
+                    class: 'plugin-checkbox', id: key, type: 'checkbox',
                     checked: Boolean(usedPlugin.indexOf(key) >= 0 || val._force === true), // 勾选当前正在使用以及强制启用的插件
                     disabled: (typeof InPageEdit.myPreference !== 'undefined' || val._force === true) // 强制启用或者本地保存设定时禁止改变
                   }).change(function () {
                     // 当插件选择框变化时，暂存设定档
                     var $this = $(this)
                     var checked = $this.prop('checked')
-                    var key = $this.attr('id')
                     var original = $modalContent.data('plugins')
                     var index = original.indexOf(key)
                     // 勾选且暂未启用
