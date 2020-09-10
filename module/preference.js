@@ -175,11 +175,11 @@ var preference = {
       ),
       $('<section>', { id: 'about' }).append(
         $('<h3>', { text: _msg('preference-about-label') }),
-        $('<span>', { style: 'font-size: 12px; font-style: italic;' }).text(function () {
+        $('<span>', { style: 'font-size: 12px; font-style: italic;' }).html(function () {
           var isCanary = /(alpha|beta|pre)/i.test(version)
-          var text = 'v' + version
-          text += isCanary ? ' - You are running the Canary version of InPageEdit' : ''
-          return text
+          var html = 'v' + version
+          html += isCanary ? ' - You are running the Canary version of InPageEdit<br>' + _msg('version-notice-canary') : ''
+          return html
         }),
         $('<button>', { class: 'btn btn-secondary btn-single', onclick: "InPageEdit.about()", text: _msg('preference-aboutAndHelp') }),
         $('<button>', { class: 'btn btn-secondary btn-single', style: 'margin-top: .5em;', onclick: "InPageEdit.versionInfo()", text: _msg('preference-updatelog') }),
