@@ -50,5 +50,6 @@ jobs:
 
       - name: 刷新 jsDelivr 缓存
         run: |
-          curl https://purge.jsdelivr.net/npm/mediawiki-inpageedit@latest/
-          curl https://purge.jsdelivr.net/npm/mediawiki-inpageedit@latest/dist/
+          curl -v "https://purge.jsdelivr.net/npm/mediawiki-inpageedit@latest/"
+          curl -v "https://purge.jsdelivr.net/npm/mediawiki-inpageedit@latest/d
+ist/"
