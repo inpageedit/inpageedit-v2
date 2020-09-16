@@ -1,9 +1,9 @@
-var loadScript = function (src) {
+var loadScript = function (src, noCache) {
   return $.ajax({
     url: src,
     dataType: 'script',
     crossDomain: true,
-    cache: true
+    cache: !noCache
   });
 }
 

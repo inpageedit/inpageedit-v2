@@ -17,16 +17,17 @@ module.exports = async function init() {
 
   mw.hook('InPageEdit.init.before').fire();
 
+  // 是否需要刷新缓存
+  const purgeCache = Boolean(
+    mw.util.getParamValue('ipe', location.href) === 'nocache' ||
+    version !== localStorage.getItem('InPageEditVersion')
+  )
+
   // 加载样式表
-  loadStyles();
+  loadStyles(purgeCache);
 
   // 等待 i18n 缓存
-  await syncI18nData(
-    Boolean(
-      mw.util.getParamValue('i18n', location.href) === 'nocache' ||
-      version !== localStorage.getItem('InPageEditVersion')
-    )
-  );
+  await syncI18nData(purgeCache);
 
   mw.hook('InPageEdit.init.i18n').fire({ _msg: require('../module/_msg')._msg })
 

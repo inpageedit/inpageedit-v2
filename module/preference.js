@@ -116,6 +116,9 @@ var preference = {
         $('<label>').append(
           $('<input>', { type: 'checkbox', id: 'watchList' }),
           $('<span>', { text: _msg('preference-watchList') })
+        ), $('<label>').append(
+          $('<input>', { type: 'checkbox', id: 'outSideClose' }),
+          $('<span>', { text: _msg('preference-outSideClose') })
         ),
         $('<h4>', { text: _msg('preference-summary-label') }),
         $('<label>', { for: 'editSummary', style: 'padding-left: 0; font-size: small', html: _msg('preference-editSummary') }),

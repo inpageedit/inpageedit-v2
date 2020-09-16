@@ -38,7 +38,7 @@ mw.loader.load("https://cdn.jsdelivr.net/npm/mediawiki-inpageedit@latest/dist/In
 - ‪**中文(简体)‬ (zh-hans)**
 - 中文(繁體)‬ (zh-hant)
 
-Help us to translate InPageEdit: [Fandom Developer Wiki](https://dev.fandom.com/wiki/Special:BlankPage/I18nEdit/InPageEdit-v2) [Miraheze Wiki](https://ipe.miraheze.org/wiki/Special:BlankPage/I18nEdit/InPageEdit-v2)
+Help us to translate InPageEdit: [Fandom Developer Wiki](https://dev.fandom.com/wiki/Special:BlankPage/I18nEdit/InPageEdit-v2), [Miraheze Wiki](https://ipe.miraheze.org/wiki/Special:BlankPage/I18nEdit/InPageEdit-v2)
 
 <hr/>
 

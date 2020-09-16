@@ -10,7 +10,12 @@ var pluginStore = {
    * @module pluginStore.get 获取官方插件
    */
   get() {
-    return $.getJSON(pluginCDN + '/index.json')
+    return $.ajax({
+      url: pluginCDN + '/index.json',
+      dataType: 'json',
+      crossDomain: true,
+      cache: false
+    })
   },
   saveCache(data) {
     var ipe = window.InPageEdit || {}
