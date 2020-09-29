@@ -578,7 +578,7 @@
         "preference-plugin-footer": "आप यहाँ आधिकारिक प्लग-इन चुन सकते हैं। और [$1 InPageEdit-Plugins] अपने कोड से योगदान देने के लिए हम आपका स्वागत करते हैं! कुछ प्लग-इनों को प्रभाव दिखाने के लिए पृष्ठ को रीलोड करना पड़ता है।",
         "preference-analysis-totaluse": "<strong>पूरा इस्तेमाल</strong>: $1 {{PLURAL:$1|बार|बार}}",
         "preference-display-label": "डिस्प्ले सेटिंग्स"
-}
+    },
     "ja": {
         "noticeid": "build_2311_notify",
         "noticeid-canary": "canary",
