@@ -4,13 +4,16 @@ var getUserInfo = function () {
   /**
  * @description 获取用户权限信息
  */
-  mw.user.getRights().then(rights => {
-    console.info('[InPageEdit] 成功获取用户权限信息');
-    mw.config.set('wgUserRights', rights);
-  }).fail(function () {
-    console.warn('[InPageEdit] 警告：无法获取用户权限信息');
-    mw.config.set('wgUserRights', []);
-  });
+  mwApi.getUserInfo().then(
+    data => {
+      console.info('[InPageEdit] 成功获取用户权限信息');
+      mw.config.set('wgUserRights', data.rights);
+    },
+    error => {
+      console.warn('[InPageEdit] 警告：无法获取用户权限信息', error);
+      mw.config.set('wgUserRights', []);
+    }
+  );
 
   /**
    * @description 获取封禁状态
