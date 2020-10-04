@@ -7,7 +7,7 @@
  * @url https://github.com/Dragon-Fish/InPageEdit-v2
  */
 
-!(async function () {
+$(async function () {
   'use strict';
 
   // 创建 InPageEdit 变量
@@ -26,4 +26,4 @@
   // 合并入全局变量
   window.InPageEdit = $.extend({}, window.InPageEdit, mainFunctions);
 
-})();
+});
