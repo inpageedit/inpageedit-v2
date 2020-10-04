@@ -4,6 +4,19 @@ const { _msg } = require('./_msg');
 const { preference } = require('./preference');
 const { quickEdit } = require('./quickEdit');
 
+function escapeRegExp(str) {
+  return str.replace(/([\\{}()|.?*+\-^$[\]])/g, '\\$1');
+}
+
+function getParamValue(param, url) {
+  var re = new RegExp('^[^#]*[&?]' + escapeRegExp(param) + '=([^&#]*)'),
+    m = re.exec(url !== undefined ? url : location.href);
+  if (m) {
+    return decodeURIComponent(m[1].replace(/\+/g, '%20'));
+  }
+  return null;
+}
+
 /**
  * @module articleLink 获取段落编辑以及编辑链接
  * @param {Element} element jQuery element to find edit links
@@ -20,10 +33,10 @@ var articleLink = function (element) {
     if ($(this).attr('href') === undefined)
       return;
     var url = $(this).attr('href'),
-      action = mw.util.getParamValue('action', url) || mw.util.getParamValue('veaction', url),
-      title = mw.util.getParamValue('title', url),
-      section = mw.util.getParamValue('section', url) ? mw.util.getParamValue('section', url).replace(/T-/, '') : null,
-      revision = mw.util.getParamValue('oldid', url);
+      action = getParamValue('action', url) || getParamValue('veaction', url),
+      title = getParamValue('title', url),
+      section = getParamValue('section', url) ? getParamValue('section', url).replace(/T-/, '') : null,
+      revision = getParamValue('oldid', url);
 
     // 不是本地编辑链接
     if (url.split('/')['2'] !== location.href.split('/')['2'] && url.substr(0, 1) !== '/')

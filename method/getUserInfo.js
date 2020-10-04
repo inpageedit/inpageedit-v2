@@ -18,12 +18,12 @@ var getUserInfo = function () {
   /**
    * @description 获取封禁状态
    */
-  if (mw.user.getName() !== null) {
+  if (mw.config.get('wgUserName') !== null) {
     mwApi.get({
       action: 'query',
       list: 'users',
       usprop: 'blockinfo',
-      ususers: mw.user.getName()
+      ususers: mw.config.get('wgUserName')
     }).then(data => {
       if (data.query.users[0].blockid) {
         mw.config.set('wgUserIsBlocked', true);
