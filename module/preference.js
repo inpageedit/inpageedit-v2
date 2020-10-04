@@ -178,7 +178,7 @@ var preference = {
       ),
       $('<section>', { id: 'about' }).append(
         $('<h3>', { text: _msg('preference-about-label') }),
-        $('<span>', { style: 'font-size: 12px; font-style: italic;' }).html(function () {
+        $('<div>', { style: 'font-size: 12px; font-style: italic;' }).html(function () {
           var isCanary = /(alpha|beta|pre)/i.test(version)
           var html = 'v' + version
           html += isCanary ? ' - You are running the Canary version of InPageEdit<br>' + _msg('version-notice-canary') : ''
