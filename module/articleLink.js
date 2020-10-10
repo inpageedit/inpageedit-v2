@@ -29,8 +29,7 @@ var articleLink = function (el) {
       revision = getParamValue('oldid', url);
 
     // 不是本地编辑链接
-    if (url.split('/')['2'] !== location.href.split('/')['2'] && url.substr(0, 1) !== '/')
-      return;
+    if (!RegExp('^' + config.wgServer).test(url) && !RegExp('^/').test(url)) return;
 
     // 不是 index.php?title=FOO 形式的url
     if (title === null) {

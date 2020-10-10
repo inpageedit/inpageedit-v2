@@ -17,7 +17,7 @@ module.exports = async function init() {
 
   mw.hook('InPageEdit.init.before').fire();
 
-  // Await mediawiki
+  // Await MediaWiki
   await mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user']);
 
   // 是否需要刷新缓存
