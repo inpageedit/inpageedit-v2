@@ -4,35 +4,25 @@ const { _msg } = require('./_msg');
 const { preference } = require('./preference');
 const { quickEdit } = require('./quickEdit');
 
-function escapeRegExp(str) {
-  return str.replace(/([\\{}()|.?*+\-^$[\]])/g, '\\$1');
-}
-
-function getParamValue(param, url) {
-  var re = new RegExp('^[^#]*[&?]' + escapeRegExp(param) + '=([^&#]*)'),
-    m = re.exec(url !== undefined ? url : location.href);
-  if (m) {
-    return decodeURIComponent(m[1].replace(/\+/g, '%20'));
-  }
-  return null;
-}
+const { getParamValue } = mw.util;
 
 /**
  * @module articleLink 获取段落编辑以及编辑链接
- * @param {Element} element jQuery element to find edit links
+ * @param {Sting|Element} el jQuery element to find edit links
  */
-var articleLink = function (element) {
-  if (element === undefined) {
+var articleLink = function (el) {
+  if (el === undefined) {
     if (preference.get('redLinkQuickEdit') === true) {
-      element = $('#mw-content-text a');
+      el = $('#mw-content-text a');
     } else {
-      element = $('#mw-content-text a:not(.new)');
+      el = $('#mw-content-text a:not(.new)');
     }
   }
-  element.each(function () {
-    if ($(this).attr('href') === undefined)
-      return;
-    var url = $(this).attr('href'),
+  el = $(el);
+  $.each(el, function (_, item) {
+    var $this = $(item);
+    if ($this.attr('href') === undefined) return;
+    var url = $this.attr('href'),
       action = getParamValue('action', url) || getParamValue('veaction', url),
       title = getParamValue('title', url),
       section = getParamValue('section', url) ? getParamValue('section', url).replace(/T-/, '') : null,
@@ -44,15 +34,12 @@ var articleLink = function (element) {
 
     // 不是 index.php?title=FOO 形式的url
     if (title === null) {
-      var splitStr = config.wgArticlePath.replace('$1', '');
-      if (splitStr === '/') {
-        splitStr = config.wgServer.substring(config.wgServer.length - 4) + '/';
-      }
-      title = url.split(splitStr).pop().split('?')['0'];
+      var articlePath = config.wgArticlePath.replace('$1', '');
+      title = url.split('?')[0].replace(articlePath, '')
     }
 
     if (action === 'edit' && title !== undefined) {
-      $(this).after(
+      $this.addClass('ipe-articleLink-resolved').after(
         $('<span>', {
           'class': 'in-page-edit-article-link-group'
         }).append(
@@ -62,7 +49,7 @@ var articleLink = function (element) {
             text: _msg('quick-edit')
           }).click(function () {
             var options = {};
-            options.page = title;
+            options.page = decodeURI(title);
             if (revision !== null) {
               options.revision = revision;
             } else if (section !== null) {

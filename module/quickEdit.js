@@ -27,7 +27,7 @@ var quickEdit = function (options) {
   options = options || {};
   if (typeof options === 'string') {
     options = {
-      page: options
+      page: options || config.wgPageName
     }
   }
   var defaultOptions = {
@@ -63,7 +63,7 @@ var quickEdit = function (options) {
 
   /** 将选项合并并标准化 **/
   options = $.extend({}, defaultOptions, options, userPreference);
-  options.page = decodeURIComponent(options.page); // 解码网址 Unicode
+  options.page = decodeURI(options.page); // 解码网址 Unicode
 
   _analysis('quick_edit');
 
@@ -304,9 +304,9 @@ var quickEdit = function (options) {
       });
     },
     /**
-  * @event onShow
-  * @description 模态框显示后
-  */
+     * @event onShow
+     * @description 模态框显示后
+     */
     onShow($modal) {
       var $modalWindow = $('#' + $modal.modalId);
       mw.hook('InPageEdit.quickEdit').fire({
