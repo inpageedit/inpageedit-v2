@@ -34,8 +34,9 @@ var articleLink = function (el) {
 
     // 不是 index.php?title=FOO 形式的url
     if (title === null) {
-      var articlePath = config.wgArticlePath.replace('$1', '');
-      title = url.split('?')[0].replace(articlePath, '')
+      title = url.replace(config.wgServer, '');
+      title = title.split('?')[0];
+      title = title.replace(config.wgArticlePath.replace('$1', ''), '');
     }
 
     if (action === 'edit' && title !== undefined) {
