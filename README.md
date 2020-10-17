@@ -31,6 +31,7 @@ mw.loader.load("https://cdn.jsdelivr.net/npm/mediawiki-inpageedit@latest/dist/In
 - **English (en)**
 - العربية (ar)
 - Français (fr)
+- Hindī (hi)
 - 日本語 (ja)
 - Nederlands (nl)
 - Polski (pl)
