@@ -8,22 +8,21 @@
  */
 
 !(async function () {
-  'use strict';
+  'use strict'
 
   // 创建 InPageEdit 变量
-  var InPageEdit = window.InPageEdit || {};
+  var InPageEdit = window.InPageEdit || {}
 
   // 防止多次运行
   if (typeof InPageEdit.version !== 'undefined') {
-    throw '[InPageEdit] InPageEdit 已经在运行了';
+    throw '[InPageEdit] InPageEdit 已经在运行了'
   }
 
   // 初始化插件
-  var init = require('./method/init');
+  var init = require('./method/init')
 
-  var mainFunctions = await init();
+  var mainFunctions = await init()
 
   // 合并入全局变量
-  window.InPageEdit = $.extend({}, window.InPageEdit, mainFunctions);
-
-})();
+  window.InPageEdit = $.extend({}, window.InPageEdit, mainFunctions)
+})()

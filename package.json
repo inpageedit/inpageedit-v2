@@ -16,6 +16,7 @@
     "dev": "webpack --watch --o ./dev/[name].test.js",
     "clear": "rd /s /q dist",
     "style": "stylus ./style/index.styl -o ./style/",
+    "prettier": "prettier --write ./index.js ./module/*.js ./method/*.js",
     "build:linux": "webpack && MINIFY=1 webpack",
     "build:windows": "webpack && set MINIFY=1 && webpack",
     "publish:stable": "npm publish --tag latest",

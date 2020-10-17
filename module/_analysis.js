@@ -1,5 +1,5 @@
-var config = mw.config.get();
-var api = require('./api.json');
+var config = mw.config.get()
+var api = require('./api.json')
 
 /**
  * @module _analysis 提交统计信息模块
@@ -11,22 +11,27 @@ const _analysis = function (functionID) {
     // return;
   }
   var submitdata = {
-    'action': 'submit',
-    'url': config.wgServer + config.wgArticlePath.replace('$1', ''),
-    'sitename': config.wgSiteName,
-    'username': config.wgUserName,
-    'function': functionID
+    action: 'submit',
+    url: config.wgServer + config.wgArticlePath.replace('$1', ''),
+    sitename: config.wgSiteName,
+    username: config.wgUserName,
+    function: functionID,
   }
   $.ajax({
     url: api.analysis,
     data: submitdata,
     type: 'post',
-    dataType: 'json'
+    dataType: 'json',
   }).done(function (data) {
-    console.log('[InPageEdit] Analysis response\nStatus: ' + data.status + '\nMessage: ' + data.msg);
-  });
+    console.log(
+      '[InPageEdit] Analysis response\nStatus: ' +
+        data.status +
+        '\nMessage: ' +
+        data.msg
+    )
+  })
 }
 
 module.exports = {
-  _analysis
+  _analysis,
 }
