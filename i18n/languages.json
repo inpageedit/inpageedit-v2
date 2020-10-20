@@ -108,6 +108,7 @@
         "preference-editSummary": "<code>$section</code> - will be replaced by <code>/<!-- -->* Section header */</code><br><code>$oldid</code> - will be replaced by <code>Edit from [<!-- -->[Special:Diff/oldid]]</code>",
         "preference-analysis-label": "Analysis",
         "preference-analysis-view": "We will collect some of your non-sensitive information to record the usage of the plugin. Information will be used to improve the experience. You can find the information we collected at $1.",
+        "preference-analysis-shareMyInfo": "Share my info ([https://ipe.js.org/about/analysis.html What's this?])",
         "preference-about-label": "About InPageEdit",
         "preference-aboutAndHelp": "About&Help",
         "preference-updatelog": "Update Log",

@@ -1,0 +1,8 @@
+[
+  {
+    "id": "install_seccessful_202010201600",
+    "level": "normal",
+    "title": "Install seccessful",
+    "message": "Hello, thanks for using InPageEdit~ For feedback, please file issues in <a href=\"httsps://github.com/Wjghj-Project/InPageEdit\">GitHub</a>. We hope to improve the plugin by collecting your usage information. We will not collect any of your personal cookies and privacy information, and the information will not be used for business purposes. If you are willing to, please click here: <a href=\"InPageEdit.preference.set('shareMyInfo', true)\" class=\"btn btn-secondary\">share my usage data</a>. You can always modify the settings for sharing information in the <a href=\"javascript:InPageEdit.preference.modal()\" class=\"btn btn-secondary\">preference window</a>."
+  }
+]

@@ -19,12 +19,11 @@ var preference = {
    * @return {object}
    */
   default: {
-    doNotCollectMyInfo: false,
-    doNotShowLocalWarn: false,
     editMinor: false,
     editSummary: _msg('preference-summary-default'),
     lockToolBox: false,
     redLinkQuickEdit: true,
+    shareMyInfo: false,
     outSideClose: true,
     watchList: Boolean(mw.user.options.get('watchdefault')),
     plugins: ['toolbox.js'],
@@ -152,14 +151,19 @@ var preference = {
       $('<section>', { id: 'analysis' }).append(
         $('<h3>', { text: _msg('preference-analysis-title') }),
         $('<div>', {
-          id: 'analysis-container',
-          html: $($progress).css({
+          id: 'analysis-container'
+        }).append(
+          $('<label>').append(
+            $('<input>', { type: 'checkbox', id: 'shareMyInfo' }),
+            $('<span>', { text: _msg('preference-analysis-shareMyInfo') })
+          ),
+          $($progress).attr('id', 'analysis-loading').css({
             width: '96%',
             position: 'absolute',
             top: '50%',
             transform: 'translateY(-50%)',
-          }),
-        })
+          })
+        )
       ),
       $('<section>', { id: 'another' }).append(
         $('<h3>', { text: _msg('preference-another-title') }),
@@ -205,9 +209,9 @@ var preference = {
               })
               .val(
                 '/** InPageEdit Preferences **/\n' +
-                  'window.InPageEdit = window.InPageEdit || {}; // Keep this line\n' +
-                  'InPageEdit.myPreference = ' +
-                  JSON.stringify($modalContent.data(), null, 2)
+                'window.InPageEdit = window.InPageEdit || {}; // Keep this line\n' +
+                'InPageEdit.myPreference = ' +
+                JSON.stringify($modalContent.data(), null, 2)
               )
           )
           ssi_modal.dialog({
@@ -230,7 +234,7 @@ var preference = {
             var html = 'v' + version
             html += isCanary
               ? ' - You are running the Canary version of InPageEdit<br>' +
-                _msg('version-notice-canary')
+              _msg('version-notice-canary')
               : ''
             return html
           }
@@ -427,10 +431,10 @@ var preference = {
             var description = val.description || ''
             var author = val.author
               ? $('<a>', {
-                  href: 'https://gtihub.com/' + val.author,
-                  target: '_balnk',
-                  text: '@' + val.author,
-                })
+                href: 'https://gtihub.com/' + val.author,
+                target: '_balnk',
+                text: '@' + val.author,
+              })
               : '-'
             $tabContent.find('#plugin-container > ul').append(
               $('<li>').append(
@@ -479,7 +483,7 @@ var preference = {
           prop:
             'users.' + userName + '._total|users.' + userName + '.functions',
         }).then(ret => {
-          $tabContent.find('#analysis-container').html('')
+          $tabContent.find('#analysis-container #analysis-loading').hide()
           var data = ret.query[0].users[userName]
           var total = data._total
           var functionData = data.functions
@@ -502,15 +506,13 @@ var preference = {
               )
             )
           })
-          $tabContent
-            .find('#analysis-container')
-            .append(
-              $('<h4>', {
-                text: config.wgUserName + ' - ' + config.wgSiteName,
-              }),
-              $('<p>').append(_msg('preference-analysis-totaluse', total)),
-              functionList
-            )
+          $tabContent.find('#analysis-container').append(
+            $('<h4>', {
+              text: config.wgUserName + ' - ' + config.wgSiteName,
+            }),
+            $('<p>').append(_msg('preference-analysis-totaluse', total)),
+            functionList
+          )
         })
       },
     })

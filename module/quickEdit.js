@@ -410,17 +410,15 @@ var quickEdit = function (options) {
         middle = middle || ''
         close = close || ''
         icon = 'fa-' + icon || 'fa-wrench'
-        $modalContent
-          .find('.btnGroup.extra')
-          .append(
-            $('<button>', {
-              class: 'editToolBtn btn',
-              'data-open': open,
-              'data-middle': middle,
-              'data-close': close,
-              html: `<i class="fa ${icon}"></i>`,
-            })
-          )
+        $modalContent.find('.btnGroup.extra').append(
+          $('<button>', {
+            class: 'editToolBtn btn',
+            'data-open': open,
+            'data-middle': middle,
+            'data-close': close,
+            html: `<i class="fa ${icon}"></i>`,
+          })
+        )
       }
       // 用户自定义按钮
       if (InPageEdit.buttons) {
