@@ -63,6 +63,7 @@ module.exports = async function init() {
   loadQuickDiff()
   articleLink()
   updateNotice()
+  specialNotice()
 
   // !暂定，触发用户插件
   pluginStore.initUserPlugin()

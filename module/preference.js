@@ -74,7 +74,7 @@ var preference = {
    * @name 用户图形界面
    * @description 打开可视化设置窗口
    */
-  modal() {
+  modal: function () {
     // 防止多开设置页面
     if ($('#ipe-preference-form').length > 0) return
 
@@ -151,7 +151,7 @@ var preference = {
       $('<section>', { id: 'analysis' }).append(
         $('<h3>', { text: _msg('preference-analysis-title') }),
         $('<div>', {
-          id: 'analysis-container'
+          id: 'analysis-container',
         }).append(
           $('<label>').append(
             $('<input>', { type: 'checkbox', id: 'shareMyInfo' }),
@@ -209,9 +209,9 @@ var preference = {
               })
               .val(
                 '/** InPageEdit Preferences **/\n' +
-                'window.InPageEdit = window.InPageEdit || {}; // Keep this line\n' +
-                'InPageEdit.myPreference = ' +
-                JSON.stringify($modalContent.data(), null, 2)
+                  'window.InPageEdit = window.InPageEdit || {}; // Keep this line\n' +
+                  'InPageEdit.myPreference = ' +
+                  JSON.stringify($modalContent.data(), null, 2)
               )
           )
           ssi_modal.dialog({
@@ -234,7 +234,7 @@ var preference = {
             var html = 'v' + version
             html += isCanary
               ? ' - You are running the Canary version of InPageEdit<br>' +
-              _msg('version-notice-canary')
+                _msg('version-notice-canary')
               : ''
             return html
           }
@@ -431,10 +431,10 @@ var preference = {
             var description = val.description || ''
             var author = val.author
               ? $('<a>', {
-                href: 'https://gtihub.com/' + val.author,
-                target: '_balnk',
-                text: '@' + val.author,
-              })
+                  href: 'https://gtihub.com/' + val.author,
+                  target: '_balnk',
+                  text: '@' + val.author,
+                })
               : '-'
             $tabContent.find('#plugin-container > ul').append(
               $('<li>').append(

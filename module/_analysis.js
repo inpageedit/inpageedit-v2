@@ -26,9 +26,9 @@ const _analysis = function (functionID) {
   }).done(function (data) {
     console.log(
       '[InPageEdit] Analysis response\nStatus: ' +
-      data.status +
-      '\nMessage: ' +
-      data.msg
+        data.status +
+        '\nMessage: ' +
+        data.msg
     )
   })
 }
