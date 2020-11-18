@@ -6,8 +6,7 @@ const { $br } = require('./_elements')
  * @param {element} element Textarea
  */
 function findAndReplace(element) {
-  if (element === undefined)
-    element = $('.in-page-edit.ipe-editor:last .editArea')
+  if (element === undefined) element = $('.in-page-edit.ipe-editor:last .editArea')
   var origin = element.val()
 
   ssi_modal.show({

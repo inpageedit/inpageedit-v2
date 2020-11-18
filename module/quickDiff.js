@@ -15,8 +15,7 @@ var quickDiff = function (param) {
   _analysis('quick_diff')
   if ($('[href*="mediawiki.diff.styles"]').length < 1) {
     mw.loader.load(
-      mw.util.wikiScript('load') +
-        '?modules=mediawiki.legacy.shared|mediawiki.diff.styles&only=styles',
+      mw.util.wikiScript('load') + '?modules=mediawiki.legacy.shared|mediawiki.diff.styles&only=styles',
       'text/css'
     )
   }
@@ -49,9 +48,7 @@ var quickDiff = function (param) {
       ],
     })
   }
-  $loading
-    .show()
-    .css('margin-top', $('.quick-diff .ssi-modalContent').height() / 2)
+  $loading.show().css('margin-top', $('.quick-diff .ssi-modalContent').height() / 2)
   $('.quick-diff .toDiffPage').unbind()
   param.action = 'compare'
   param.prop = 'diff|diffsize|rel|ids|title|user|comment|parsedcomment|size'
@@ -164,11 +161,7 @@ var quickDiff = function (param) {
                   $('<a>', {
                     class: 'editLink',
                     href:
-                      config.wgScript +
-                      '?action=edit&title=' +
-                      data.compare.totitle +
-                      '&oldid=' +
-                      data.compare.torevid,
+                      config.wgScript + '?action=edit&title=' + data.compare.totitle + '&oldid=' + data.compare.torevid,
                     text: _msg('diff-edit'),
                   }),
                   ')',
@@ -213,109 +206,54 @@ var quickDiff = function (param) {
           )
         )
       $('.quick-diff button.toDiffPage').click(function () {
-        location.href =
-          config.wgScript +
-          '?oldid=' +
-          data.compare.fromrevid +
-          '&diff=' +
-          data.compare.torevid
+        location.href = config.wgScript + '?oldid=' + data.compare.fromrevid + '&diff=' + data.compare.torevid
       })
       require('./articleLink').articleLink($('.quick-diff .editLink'))
       if (param.isPreview === true) {
         $('.quick-diff button.toDiffPage').hide()
-        $diffArea
-          .find('.diff-otitle')
-          .html('<b>' + _msg('diff-title-original-content') + '</b>')
-        $diffArea
-          .find('.diff-ntitle')
-          .html('<b>' + _msg('diff-title-your-content') + '</b>')
+        $diffArea.find('.diff-otitle').html('<b>' + _msg('diff-title-original-content') + '</b>')
+        $diffArea.find('.diff-ntitle').html('<b>' + _msg('diff-title-your-content') + '</b>')
       }
-      if (
-        data.compare.fromsize === undefined ||
-        data.compare.tosize === undefined
-      ) {
+      if (data.compare.fromsize === undefined || data.compare.tosize === undefined) {
         $diffArea.find('.diffSize').hide()
       }
       // 无上一版本或下一版本
       if (data.compare.fromrevid === undefined && param.isPreview !== true) {
-        $diffArea
-          .find('.diff-otitle')
-          .html(
-            '<span class="noPrevVerson">' +
-              data.warnings.compare['*'] +
-              '</span>'
-          )
-      } else if (
-        data.compare.torevid === undefined &&
-        param.isPreview !== true
-      ) {
-        $diffArea
-          .find('.diff-ntitle')
-          .html(
-            '<span class="noNextVerson">' +
-              data.warnings.compare['*'] +
-              '</span>'
-          )
+        $diffArea.find('.diff-otitle').html('<span class="noPrevVerson">' + data.warnings.compare['*'] + '</span>')
+      } else if (data.compare.torevid === undefined && param.isPreview !== true) {
+        $diffArea.find('.diff-ntitle').html('<span class="noNextVerson">' + data.warnings.compare['*'] + '</span>')
       }
       // GitHub@issue#5 修复被隐藏版本的问题
       if (data.compare.fromtexthidden !== undefined) {
-        $diffArea
-          .find('.diff-otitle .diff-version')
-          .addClass('diff-hidden-history')
+        $diffArea.find('.diff-otitle .diff-version').addClass('diff-hidden-history')
       }
       if (data.compare.totexthidden !== undefined) {
-        $diffArea
-          .find('.diff-ntitle .diff-version')
-          .addClass('diff-hidden-history')
+        $diffArea.find('.diff-ntitle .diff-version').addClass('diff-hidden-history')
       }
       if (data.compare.fromuserhidden !== undefined) {
-        $diffArea
-          .find('.diff-otitle .diff-user')
-          .addClass('diff-hidden-history')
+        $diffArea.find('.diff-otitle .diff-user').addClass('diff-hidden-history')
       }
       if (data.compare.touserhidden !== undefined) {
-        $diffArea
-          .find('.diff-ntitle .diff-user')
-          .addClass('diff-hidden-history')
+        $diffArea.find('.diff-ntitle .diff-user').addClass('diff-hidden-history')
       }
       if (data.compare.fromcommenthidden !== undefined) {
         $diffArea.find('.diff-comment').addClass('diff-hidden-history')
       }
       if (data.compare.tocommenthidden !== undefined) {
-        $diffArea
-          .find('.diff-ntitle .diff-comment')
-          .addClass('diff-hidden-history')
+        $diffArea.find('.diff-ntitle .diff-comment').addClass('diff-hidden-history')
       }
       if (data.error) {
         console.warn('[InPageEdit] 快速差异获取时系统告知出现问题')
-        $diffArea.html(
-          _msg('diff-error') +
-            ': ' +
-            data.error.info +
-            '(<code>' +
-            data.error.code +
-            '</code>)'
-        )
+        $diffArea.html(_msg('diff-error') + ': ' + data.error.info + '(<code>' + data.error.code + '</code>)')
       }
     })
     .fail(function (errorCode, errorThrown) {
       console.warn('[InPageEdit] 快速差异获取失败')
       $loading.hide()
-      if (
-        errorThrown.error &&
-        errorThrown.error.info &&
-        errorThrown.error.code
-      ) {
+      if (errorThrown.error && errorThrown.error.info && errorThrown.error.code) {
         $diffArea
           .show()
-          .html(
-            _msg('diff-error') +
-              ': ' +
-              errorThrown.error.info +
-              '(<code>' +
-              errorThrown.error.code +
-              '</code>)'
-          )
+          .html(_msg('diff-error') + ': ' + errorThrown.error.info + '(<code>' + errorThrown.error.code + '</code>)')
       } else {
         $diffArea.show().html(_msg('diff-error'))
       }

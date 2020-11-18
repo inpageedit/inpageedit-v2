@@ -219,9 +219,7 @@ function makeLink(href, text, hasProtocol, blank) {
 
   blank = blank ? 'target="_blank"' : ''
 
-  return (
-    '<a href="' + href + '" title="' + text + '"' + blank + '>' + text + '</a>'
-  )
+  return '<a href="' + href + '" title="' + text + '"' + blank + '>' + text + '</a>'
 }
 
 /*
@@ -271,12 +269,7 @@ function sanitiseHtml(html) {
 
     array.forEach(function (attr) {
       if (whitelistAttrs.indexOf(attr.name) === -1) {
-        mw.log(
-          '[I18n-js] Disallowed attribute in message: ' +
-            attr.name +
-            ', tag: ' +
-            tagname
-        )
+        mw.log('[I18n-js] Disallowed attribute in message: ' + attr.name + ', tag: ' + tagname)
         $this.removeAttr(attr.name)
         return
       }
@@ -370,8 +363,7 @@ function parseMessage(msg, ...args) {
  * @function rawMessage
  */
 function getMessage(lang, msgKey, ...args) {
-  const i18nCache =
-    localStorage.getItem('i18n-cache-' + funcName + '-content') || '{}'
+  const i18nCache = localStorage.getItem('i18n-cache-' + funcName + '-content') || '{}'
 
   // qqx
   if (lang === 'qqx') {

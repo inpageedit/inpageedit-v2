@@ -64,10 +64,7 @@ var quickDelete = function (page, givenReason = '') {
         method: function (e, modal) {
           reason = $('#InPageEditDeletepage #delete-reason').val()
           if (reason === '') {
-            $('#InPageEditDeletepage #delete-reason').css(
-              'box-shadow',
-              '0 0 4px #f00'
-            )
+            $('#InPageEditDeletepage #delete-reason').css('box-shadow', '0 0 4px #f00')
             return
           }
           _analysis('quick_delete')

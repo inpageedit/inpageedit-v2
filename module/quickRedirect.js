@@ -28,15 +28,9 @@ var quickRedirect = function (type = 'to') {
 
   if (type === 'to') {
     json.title = config.wgPageName
-    question = _msg(
-      'redirect-question-to',
-      '<b>' + config.wgPageName.replace(/_/g, ' ') + '</b>'
-    )
+    question = _msg('redirect-question-to', '<b>' + config.wgPageName.replace(/_/g, ' ') + '</b>')
   } else if (type === 'from') {
-    question = _msg(
-      'redirect-question-from',
-      '<b>' + config.wgPageName.replace(/_/g, ' ') + '</b>'
-    )
+    question = _msg('redirect-question-from', '<b>' + config.wgPageName.replace(/_/g, ' ') + '</b>')
     summary = _msg('redirect-summary') + ' → [[:' + config.wgPageName + ']]'
     json.text = text.replace('$1', config.wgPageName)
   } else {
@@ -54,11 +48,9 @@ var quickRedirect = function (type = 'to') {
       $('<section>').append(
         $('<span>', { html: question }),
         $br,
-        $('<input>', { id: 'redirect-page', style: 'width:96%' }).click(
-          function () {
-            $(this).css('box-shadow', '')
-          }
-        ),
+        $('<input>', { id: 'redirect-page', style: 'width:96%' }).click(function () {
+          $(this).css('box-shadow', '')
+        }),
         $br,
         $('<label>', { for: 'redirect-reason', text: _msg('editSummary') }),
         $('<input>', { id: 'redirect-reason', style: 'width:96%' })
@@ -71,14 +63,8 @@ var quickRedirect = function (type = 'to') {
         className: 'btn btn-primary btn-single okBtn',
         method: function (a, modal) {
           target = $('.in-page-edit.quick-redirect #redirect-page').val()
-          if (
-            target === '' ||
-            target.replace(/_/g, ' ') === config.wgPageName.replace(/_/g, ' ')
-          ) {
-            $('.in-page-edit.quick-redirect #redirect-page').css(
-              'box-shadow',
-              '0 0 4px #f00'
-            )
+          if (target === '' || target.replace(/_/g, ' ') === config.wgPageName.replace(/_/g, ' ')) {
+            $('.in-page-edit.quick-redirect #redirect-page').css('box-shadow', '0 0 4px #f00')
             return
           }
 
@@ -91,11 +77,7 @@ var quickRedirect = function (type = 'to') {
             json.title = target
           }
           if ($('.in-page-edit.quick-redirect #redirect-reason').val() !== '') {
-            summary =
-              summary +
-              ' (' +
-              $('.in-page-edit.quick-redirect #redirect-reason').val() +
-              ')'
+            summary = summary + ' (' + $('.in-page-edit.quick-redirect #redirect-reason').val() + ')'
           }
           json.summary = summary
 

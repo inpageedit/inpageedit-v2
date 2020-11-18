@@ -18,9 +18,7 @@ function loadStyles(purge) {
     if (purge) {
       link += '?timestamp' + new Date().getTime()
     }
-    $('head').prepend(
-      $('<link>', { href: link, rel: 'stylesheet', 'data-ipe': 'style' })
-    )
+    $('head').prepend($('<link>', { href: link, rel: 'stylesheet', 'data-ipe': 'style' }))
   })
 }
 

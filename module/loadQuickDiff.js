@@ -10,9 +10,10 @@ const { quickDiff } = require('./quickDiff')
 var loadQuickDiff = function () {
   // 最近更改
   function addLink() {
-    $(
-      '.mw-changeslist-groupdiff, .mw-changeslist-diff, .mw-changeslist-diff-cur, .mw-history-histlinks a'
-    ).unbind('click', ipeDiffLink)
+    $('.mw-changeslist-groupdiff, .mw-changeslist-diff, .mw-changeslist-diff-cur, .mw-history-histlinks a').unbind(
+      'click',
+      ipeDiffLink
+    )
     var ipeDiffLink = $(
       '.mw-changeslist-groupdiff, .mw-changeslist-diff, .mw-changeslist-diff-cur, .mw-history-histlinks a'
     ).click(function (e) {

@@ -20,9 +20,7 @@ var quickPreview = function (params, modalSize = 'large', center = false) {
   var timestamp = new Date().getTime()
   console.time('[InPageEdit] Request preview')
   ssi_modal.show({
-    sizeClass: new RegExp(
-      /dialog|small|smallToMedium|medium|mediumToLarge|large|full|auto/
-    ).test(modalSize)
+    sizeClass: new RegExp(/dialog|small|smallToMedium|medium|mediumToLarge|large|full|auto/).test(modalSize)
       ? modalSize
       : 'large',
     center: Boolean(center),
@@ -41,10 +39,7 @@ var quickPreview = function (params, modalSize = 'large', center = false) {
     fitScreen: true,
     buttons: [{ label: '', className: 'hideThisBtn' }],
     onShow() {
-      $('.previewbox .ipe-progress').css(
-        'margin-top',
-        $('.previewbox .ipe-progress').parent().height() / 2
-      )
+      $('.previewbox .ipe-progress').css('margin-top', $('.previewbox .ipe-progress').parent().height() / 2)
       $('.previewbox .hideThisBtn').hide()
       mwApi
         .post(options)

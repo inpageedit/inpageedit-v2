@@ -75,15 +75,8 @@ var quickRename = function (from, to) {
         className: 'btn btn-primary',
         method: function () {
           to = $('.in-page-edit.quick-rename #move-to').val()
-          if (
-            to === '' ||
-            to === config.wgPageName ||
-            to === config.wgPageName.replace(/_/g, ' ')
-          ) {
-            $('.in-page-edit.quick-rename #move-to').css(
-              'box-shadow',
-              '0 0 4px #f00'
-            )
+          if (to === '' || to === config.wgPageName || to === config.wgPageName.replace(/_/g, ' ')) {
+            $('.in-page-edit.quick-rename #move-to').css('box-shadow', '0 0 4px #f00')
             return
           }
 
@@ -91,19 +84,14 @@ var quickRename = function (from, to) {
 
           progress(_msg('editor-title-saving'))
           movetalk = $('.in-page-edit.quick-rename #movetalk').prop('checked')
-          movesubpages = $('.in-page-edit.quick-rename #movesubpages').prop(
-            'checked'
-          )
-          noredirect = $('.in-page-edit.quick-rename #noredirect').prop(
-            'checked'
-          )
+          movesubpages = $('.in-page-edit.quick-rename #movesubpages').prop('checked')
+          noredirect = $('.in-page-edit.quick-rename #noredirect').prop('checked')
           reason = $('.in-page-edit.quick-rename #move-reason').val()
 
           if (reason === '') {
             reason = _msg('rename-summary') + ' → [[:' + to + ']]'
           } else {
-            reason =
-              _msg('rename-summary') + ' → [[:' + to + ']] (' + reason + ')'
+            reason = _msg('rename-summary') + ' → [[:' + to + ']] (' + reason + ')'
           }
           mwApi
             .postWithToken('csrf', {
