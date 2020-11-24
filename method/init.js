@@ -16,30 +16,24 @@ const { beforeInstall } = require('./beforeInstall')
 module.exports = async function init() {
   mw.hook('InPageEdit.init.before').fire()
 
-  // Await Install steps
-  var installOpt = await beforeInstall().options
-  console.info('[InPageEdit]', 'Install options', installOpt)
-
-  // Await MediaWiki
-  await mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user'])
-
   // 是否需要刷新缓存
   const purgeCache = Boolean(
     mw.util.getParamValue('ipe', location.href) === 'nocache' || version !== localStorage.getItem('InPageEditVersion')
   )
+
+  // Await MediaWiki
+  await mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user'])
+
+  // 等待前置插件
+  await loadScript(_dir + '/src/ssi_modal/ssi-modal.min.js')
+  mw.hook('InPageEdit.init.modal').fire({ ssi_modal: window.ssi_modal })
 
   // 加载样式表
   loadStyles(purgeCache)
 
   // 等待 i18n 缓存
   await syncI18nData(purgeCache)
-
   mw.hook('InPageEdit.init.i18n').fire({ _msg: require('../module/_msg')._msg })
-
-  // 等待前置插件
-  await loadScript(_dir + '/src/ssi_modal/ssi-modal.min.js')
-
-  mw.hook('InPageEdit.init.modal').fire({ ssi_modal: window.ssi_modal })
 
   // 导入全部模块
   const { _analysis } = require('../module/_analysis')
@@ -60,6 +54,10 @@ module.exports = async function init() {
   const { quickRename } = require('../module/quickRename')
   const { specialNotice } = require('../module/specialNotice')
   const { versionInfo } = require('../module/versionInfo')
+
+  // 等待安装前置步骤
+  var installOpt = await beforeInstall()
+  console.info('[InPageEdit]', 'Install options', installOpt.options)
 
   // 初始化前置模块
   preference.set()

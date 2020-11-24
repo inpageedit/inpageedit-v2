@@ -5,7 +5,7 @@ const { $checkbox } = require("../module/_elements")
  * @returns {Object} options
  * @returns {Promise}
  */
-const beforeInstall = () => {
+const beforeInstall = async () => {
   var $def = $.Deferred()
 
   var options = {}
@@ -16,8 +16,8 @@ const beforeInstall = () => {
     var id = $(el).find('input').attr('id')
     if (!id) return
     var val
-    if ($(el).attr('type') === 'checkbox') {
-      val = $(el).find('input[type="checkbox"]').prop('checked')
+    if ($(el).find('input').attr('type') === 'checkbox') {
+      val = $(el).find('input').prop('checked')
     } else {
       val = $(el).find('input').val()
     }
@@ -26,13 +26,12 @@ const beforeInstall = () => {
 
   if (skip) {
     console.info('skip InPageEdit Install guide')
-    $def.resolve()
+    $def.resolve(options)
   } else {
     stepModal({
       title: 'Installing InPageEdit',
       doneBtn: 'start using~',
       contents: [{
-        // content: '<label><input type="chechbox"></input><span></span>I am willing to share my non-private data.</label>'
         content: $('<div>').append(
           $('<h3>', { text: 'Data privacy' }),
           $('<p>').append(
@@ -54,7 +53,9 @@ const beforeInstall = () => {
       }, {
         content: 'Install finished! Thank you for using InPageEdit. Enjoy~'
       }]
-    }).then(() => $def.resolve(options))
+    }).then(() => {
+      $def.resolve(options)
+    })
   }
   return $def
 }

@@ -81,7 +81,7 @@ var preference = {
     mw.hook('pluginPreference').fire()
     preference.set()
     var local = preference.get()
-    require('./_analysis')('plugin_setting')
+    require('./_analysis')._analysis('plugin_setting')
 
     /** 定义模态框内部结构 */
     var $tabList = $('<ul>', { class: 'tab-list' }).append(
