@@ -7,6 +7,7 @@ const { updateNotice } = require('./updateNotice')
 const { syncI18nData } = require('./syncI18nData')
 
 const version = require('../module/version')
+const { beforeInstall } = require('./beforeInstall')
 
 /**
  * @method initMain
@@ -14,6 +15,10 @@ const version = require('../module/version')
  */
 module.exports = async function init() {
   mw.hook('InPageEdit.init.before').fire()
+
+  // Await Install steps
+  var installOpt = await beforeInstall().options
+  console.info('[InPageEdit]', 'Install options', installOpt)
 
   // Await MediaWiki
   await mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user'])
@@ -62,7 +67,7 @@ module.exports = async function init() {
   loadQuickDiff()
   articleLink()
   updateNotice()
-  specialNotice()
+  // specialNotice()
 
   // !暂定，触发用户插件
   pluginStore.initUserPlugin()
@@ -117,7 +122,7 @@ module.exports = async function init() {
   // 花里胡哨的加载提示
   console.info(
     '    ____      ____                   ______    ___ __ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_  \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/  \n                      /____/                v' +
-      version
+    version
   )
 
   // 传回InPageEdit

@@ -1,7 +1,7 @@
 var InPageEdit = window.InPageEdit || {}
 var config = mw.config.get()
 
-const { _analysis } = require('./_analysis')
+// const { _analysis } = require('./_analysis')
 const { _msg } = require('./_msg')
 const { $br, $hr, $progress } = require('./_elements')
 
@@ -81,7 +81,7 @@ var preference = {
     mw.hook('pluginPreference').fire()
     preference.set()
     var local = preference.get()
-    _analysis('plugin_setting')
+    require('./_analysis')('plugin_setting')
 
     /** 定义模态框内部结构 */
     var $tabList = $('<ul>', { class: 'tab-list' }).append(
