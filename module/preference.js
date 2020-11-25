@@ -143,7 +143,7 @@ var preference = {
         }).append(
           $('<label>').append(
             $('<input>', { type: 'checkbox', id: 'shareMyInfo' }),
-            $('<span>', { text: _msg('preference-analysis-shareMyInfo') })
+            $('<span>', { html: _msg('preference-analysis-shareMyInfo') })
           ),
           $($progress).attr('id', 'analysis-loading').css({
             width: '96%',

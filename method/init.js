@@ -57,7 +57,7 @@ module.exports = async function init() {
 
   // 等待安装前置步骤
   var installOpt = await beforeInstall()
-  console.info('[InPageEdit]', 'Install options', installOpt.options)
+  console.info('[InPageEdit]', 'Install options', installOpt)
 
   // 初始化前置模块
   preference.set()
