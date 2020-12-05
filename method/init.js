@@ -18,7 +18,8 @@ module.exports = async function init() {
 
   // 是否需要刷新缓存
   const purgeCache = Boolean(
-    mw.util.getParamValue('ipe', location.href) === 'nocache' || version !== localStorage.getItem('InPageEditVersion')
+    mw.util.getParamValue('ipe', location.href) === 'nocache' ||
+      version !== localStorage.getItem('InPageEditVersion')
   )
 
   // Await MediaWiki
@@ -76,6 +77,7 @@ module.exports = async function init() {
     about,
     api,
     articleLink,
+    beforeInstall,
     findAndReplace,
     loadQuickDiff,
     preference,

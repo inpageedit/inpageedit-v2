@@ -19,7 +19,7 @@ const beforeInstall = async (force = false) => {
   // 选项为强制显示
   if (force) skip = false
   // 从未显示过
-  if (localStorage.getItem('InPageEditInstallGuide') === null) skip = false
+  if (!localStorage.getItem('InPageEditInstallGuide')) skip = false
 
   /**
    * @function setOption
@@ -48,7 +48,10 @@ const beforeInstall = async (force = false) => {
 
     // 欢迎辞
     contents.push({
-      content: $('<div>').append($('<h3>', { text: _msg('preference-about-label') })),
+      content: $('<div>').append(
+        $('<h3>', { text: _msg('preference-about-label') }),
+        $('<div>', { text: _msg('beforeInstall-greeting-description') })
+      ),
     })
     // 隐私政策
     contents.push({
@@ -56,7 +59,10 @@ const beforeInstall = async (force = false) => {
         $('<h3>', { text: _msg('beforeInstall-privacy-policy-title') }),
         $('<div>').append(
           $('div', { html: _msg('beforeInstall-privacy-policy-description') }),
-          $checkbox({ id: 'shareMyInfo', label: _msg('beforeInstall-privacy-policy-label') })
+          $checkbox({
+            id: 'shareMyInfo',
+            label: _msg('beforeInstall-privacy-policy-label'),
+          })
         )
       ),
     })
@@ -65,21 +71,33 @@ const beforeInstall = async (force = false) => {
       content: $('<div>').append(
         $('<h3>', { text: _msg('preference-title') }),
         $('<div>').append(
-          $('<div>', { text: _msg('beforeInstall-preference-description') }).css({ 'font-size': '0.8em' }),
+          $('<div>', {
+            text: _msg('beforeInstall-preference-description'),
+          }).css({ 'font-size': '0.8em' }),
           $('<h4>', { text: _msg('preference-editHobits-label') }),
           $checkbox({ id: 'editMinor', label: _msg('preference-setMinor') }),
           $checkbox({ id: 'watchList', label: _msg('preference-watchList') }),
-          $checkbox({ id: 'watchoutSideCloseList', label: _msg('preference-outSideClose') }),
+          $checkbox({
+            id: 'watchoutSideCloseList',
+            label: _msg('preference-outSideClose'),
+          }),
           $('<h4>', { text: _msg('preference-summary-label') }),
           $('<label>').append(
             $('<span>', { html: _msg('preference-editSummary') }),
-            $('<input>', { id: 'editSummary', value: _msg('preference-summary-default') })
+            $('<input>', {
+              id: 'editSummary',
+              value: _msg('preference-summary-default'),
+            })
           )
         )
       ),
     })
     // 打赏
-    if (config.wgUserLanguage === 'zh' || config.wgUserLanguage === 'zh-hans' || config.wgUserLanguage === 'zh-cn') {
+    if (
+      config.wgUserLanguage === 'zh' ||
+      config.wgUserLanguage === 'zh-hans' ||
+      config.wgUserLanguage === 'zh-cn'
+    ) {
       contents.push({
         content: $('<div>').append(
           $('<h3>', { text: '支持作者' }),

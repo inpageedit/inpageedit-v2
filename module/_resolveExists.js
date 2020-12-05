@@ -27,7 +27,10 @@ var _resolveExists = function (page, reason = {}) {
     center: true,
     outSideClose: false,
     title: _msg('target-exists-title'),
-    content: _msg(canDelete ? 'target-exists-can-delete' : 'target-exists-no-delete', page),
+    content: _msg(
+      canDelete ? 'target-exists-can-delete' : 'target-exists-no-delete',
+      page
+    ),
     buttons: [
       {
         className: 'btn btn-danger btn-exists-delete-target',

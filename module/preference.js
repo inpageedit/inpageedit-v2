@@ -88,11 +88,21 @@ var modal = () => {
 
   /** 定义模态框内部结构 */
   var $tabList = $('<ul>', { class: 'tab-list' }).append(
-    $('<li>').append($('<a>', { text: _msg('preference-tab-editor'), href: '#editor' })),
-    $('<li>').append($('<a>', { text: _msg('preference-tab-plugin'), href: '#plugin' })),
-    $('<li>').append($('<a>', { text: _msg('preference-tab-analysis'), href: '#analysis' })),
-    $('<li>').append($('<a>', { text: _msg('preference-tab-another'), href: '#another' })),
-    $('<li>').append($('<a>', { text: _msg('preference-tab-about'), href: '#about' }))
+    $('<li>').append(
+      $('<a>', { text: _msg('preference-tab-editor'), href: '#editor' })
+    ),
+    $('<li>').append(
+      $('<a>', { text: _msg('preference-tab-plugin'), href: '#plugin' })
+    ),
+    $('<li>').append(
+      $('<a>', { text: _msg('preference-tab-analysis'), href: '#analysis' })
+    ),
+    $('<li>').append(
+      $('<a>', { text: _msg('preference-tab-another'), href: '#another' })
+    ),
+    $('<li>').append(
+      $('<a>', { text: _msg('preference-tab-about'), href: '#about' })
+    )
   )
 
   var $tabContent = $('<div>', {
@@ -104,7 +114,10 @@ var modal = () => {
       $('<h4>', { text: _msg('preference-editHobits-label') }),
       $checkbox({ id: 'editMinor', label: _msg('preference-setMinor') }),
       $checkbox({ id: 'watchList', label: _msg('preference-watchList') }),
-      $checkbox({ id: 'watchoutSideCloseList', label: _msg('preference-outSideClose') }),
+      $checkbox({
+        id: 'watchoutSideCloseList',
+        label: _msg('preference-outSideClose'),
+      }),
       $('<h4>', { text: _msg('preference-summary-label') }),
       $('<label>', {
         for: 'editSummary',
@@ -128,7 +141,9 @@ var modal = () => {
           transform: 'translateY(-50%)',
         }),
       }),
-      $('<div>', { class: 'plugin-footer' }).html(_msg('preference-plugin-footer', api.pluginGithub))
+      $('<div>', { class: 'plugin-footer' }).html(
+        _msg('preference-plugin-footer', api.pluginGithub)
+      )
     ),
     $('<section>', { id: 'analysis' }).append(
       $('<h3>', { text: _msg('preference-analysis-title') }),
@@ -209,14 +224,17 @@ var modal = () => {
     ),
     $('<section>', { id: 'about' }).append(
       $('<h3>', { text: _msg('preference-about-label') }),
-      $('<div>', { style: 'font-size: 12px; font-style: italic;' }).html(function () {
-        var isCanary = /(alpha|beta|pre)/i.test(version)
-        var html = 'v' + version
-        html += isCanary
-          ? ' - You are running the Canary version of InPageEdit<br>' + _msg('version-notice-canary')
-          : ''
-        return html
-      }),
+      $('<div>', { style: 'font-size: 12px; font-style: italic;' }).html(
+        function () {
+          var isCanary = /(alpha|beta|pre)/i.test(version)
+          var html = 'v' + version
+          html += isCanary
+            ? ' - You are running the Canary version of InPageEdit<br>' +
+              _msg('version-notice-canary')
+            : ''
+          return html
+        }
+      ),
       $('<button>', {
         class: 'btn btn-secondary btn-single',
         onclick: 'InPageEdit.about()',
@@ -250,7 +268,8 @@ var modal = () => {
       ),
       $hr,
       $('<p>', {
-        text: 'InPageEdit is a useful MediaWiki JavaScript Plugin written with jQuery',
+        text:
+          'InPageEdit is a useful MediaWiki JavaScript Plugin written with jQuery',
       }),
       $('<p>').append(
         '© InPageEdit Copyright (C)',
@@ -264,7 +283,10 @@ var modal = () => {
     )
   )
 
-  var $modalContent = $('<div>', { class: 'preference-tabber' }).append($tabList, $tabContent)
+  var $modalContent = $('<div>', { class: 'preference-tabber' }).append(
+    $tabList,
+    $tabContent
+  )
 
   // 绑定tab-list按钮事件
   $tabList.find('a').click(function (e) {
@@ -362,7 +384,8 @@ var modal = () => {
         $tabList.before(
           $('<div>', {
             class: 'has-local-warn',
-            style: 'padding-left: 8px; border-left: 6px solid orange; font-size: small;',
+            style:
+              'padding-left: 8px; border-left: 6px solid orange; font-size: small;',
             html: _msg('preference-savelocal-popup-haslocal'),
           })
         )
@@ -416,8 +439,12 @@ var modal = () => {
                   class: 'plugin-checkbox',
                   id: key,
                   type: 'checkbox',
-                  checked: Boolean(usedPlugin.indexOf(key) >= 0 || val._force === true), // 勾选当前正在使用以及强制启用的插件
-                  disabled: typeof InPageEdit.myPreference !== 'undefined' || val._force === true, // 强制启用或者本地保存设定时禁止改变
+                  checked: Boolean(
+                    usedPlugin.indexOf(key) >= 0 || val._force === true
+                  ), // 勾选当前正在使用以及强制启用的插件
+                  disabled:
+                    typeof InPageEdit.myPreference !== 'undefined' ||
+                    val._force === true, // 强制启用或者本地保存设定时禁止改变
                 }).change(function () {
                   // 当插件选择框变化时，暂存设定档
                   var $this = $(this)
@@ -459,7 +486,11 @@ var modal = () => {
           class: 'wikitable',
           style: 'width: 96%',
         }).append(
-          $('<tr>').append($('<th>', { text: 'ID' }), $('<th>', { text: 'Times' }), $('<th>', { text: 'Percents' }))
+          $('<tr>').append(
+            $('<th>', { text: 'ID' }),
+            $('<th>', { text: 'Times' }),
+            $('<th>', { text: 'Percents' })
+          )
         )
         $.each(functionData, (key, val) => {
           functionList.append(

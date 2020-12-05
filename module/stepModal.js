@@ -21,11 +21,22 @@
  */
 var stepModal = params => {
   var $def = $.Deferred()
-  var { title, content, contents, step, btnBefore, btnAfter, btnDone, afterDone, onShow } = params
+  var {
+    title,
+    content,
+    contents,
+    step,
+    btnBefore,
+    btnAfter,
+    btnDone,
+    afterDone,
+    onShow,
+  } = params
 
   // 规范变量
   contents = contents || content
-  if (typeof contents !== 'object') throw 'stepModal contents type error: Unexpected type ' + typeof contents
+  if (typeof contents !== 'object')
+    throw 'stepModal contents type error: Unexpected type ' + typeof contents
   if (contents.length < 1) throw 'stepModal missing contents'
   $.each(contents, (key, val) => {
     if (typeof val === 'string') val = { content: val }
@@ -50,7 +61,9 @@ var stepModal = params => {
   var $modal = ssi_modal
     .createObject({
       center: 1,
-      className: 'in-page-edit ipe-stepModal ' + (params.className ? params.className : ''),
+      className:
+        'in-page-edit ipe-stepModal ' +
+        (params.className ? params.className : ''),
       sizeClass: params.sizeClass || 'small',
       outSideClose: 0,
       onShow(modal) {
@@ -103,7 +116,8 @@ var stepModal = params => {
   function setStep(step) {
     $modal.setTitle(`${contents[step].title} (${step}/${allSteps})`)
     $modal.setContent(contents[step].content)
-    if (contents[step].method && typeof contents[step].method === 'function') contents[step].method($modal)
+    if (contents[step].method && typeof contents[step].method === 'function')
+      contents[step].method($modal)
   }
 
   /**

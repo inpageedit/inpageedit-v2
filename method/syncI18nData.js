@@ -21,7 +21,11 @@ async function syncI18nData(noCache) {
     return true
   }
   // 缓存存在且缓存未过期
-  if (localStorage.getItem(localCacheName) && now - localStorage.getItem(localCacheTime) < cacheTime && !noCache) {
+  if (
+    localStorage.getItem(localCacheName) &&
+    now - localStorage.getItem(localCacheTime) < cacheTime &&
+    !noCache
+  ) {
     var json = {}
     try {
       json = JSON.parse(localStorage.getItem(localCacheName))

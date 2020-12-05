@@ -3,7 +3,8 @@
  */
 var $br = '<br>'
 var $hr = '<hr>'
-var $progress = '<div class="ipe-progress" style="width: 100%"><div class="ipe-progress-bar"></div></div>'
+var $progress =
+  '<div class="ipe-progress" style="width: 100%"><div class="ipe-progress-bar"></div></div>'
 var $checkbox = ({ label, checked, id, className }) => {
   return $('<label>', { class: className })
     .append(
