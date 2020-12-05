@@ -1,26 +1,27 @@
 /**
  * @module stepModal 分步走模态框
- * 
- * @param {Object} params 
+ *
+ * @param {Object} params
  * @param {Array} params.contents Modal contents { title: String, content: String, method: Function }
  * @param {Number} params.step From step, 1 means first one
  * @param {String} params.btnBefore
  * @param {String} params.btnAfter
  * @param {String} param.btnDone
  * @param {Function} param.afterDone
- * 
+ * @param {Function} param.onShow
+ *
  * @return {Promise} After done
  * @return {Object} $modal Modal Obj
- * 
+ *
  * @example stepModal([{
  *   title: 'step 1 title',
  *   content: 'step 1 content',
  *   method(modal) {}
  * }]).then(()=>console.log('done'))
  */
-var stepModal = (params) => {
+var stepModal = params => {
   var $def = $.Deferred()
-  var { title, content, contents, step, btnBefore, btnAfter, btnDone, afterDone } = params
+  var { title, content, contents, step, btnBefore, btnAfter, btnDone, afterDone, onShow } = params
 
   // 规范变量
   contents = contents || content
@@ -46,12 +47,17 @@ var stepModal = (params) => {
   }
   var allSteps = contents.length - 1
 
-  var $modal = ssi_modal.createObject({
-    center: 1,
-    className: 'in-page-edit ipe-stepModal ' + (params.className ? params.className : ''),
-    sizeClass: params.sizeClass || 'small',
-    outSideClose: 0
-  }).init()
+  var $modal = ssi_modal
+    .createObject({
+      center: 1,
+      className: 'in-page-edit ipe-stepModal ' + (params.className ? params.className : ''),
+      sizeClass: params.sizeClass || 'small',
+      outSideClose: 0,
+      onShow(modal) {
+        onShow && onShow(modal)
+      },
+    })
+    .init()
   var $modalObj = $(document.getElementById($modal.modalId))
 
   $modal.setButtons([
@@ -59,20 +65,22 @@ var stepModal = (params) => {
       label: btnBefore ? btnBefore : '← before',
       className: 'btn btn-secondary btn-before',
       side: 'left',
-      method: before
-    }, {
+      method: before,
+    },
+    {
       label: btnAfter ? btnAfter : 'after →',
       className: 'btn btn-secondary btn-after',
-      method: after
-    }, {
+      method: after,
+    },
+    {
       label: btnDone ? btnDone : 'done √',
       className: 'btn btn-primary btn-done',
       method(e, modal) {
         modal.close()
         $def.resolve()
         afterDone && afterDone()
-      }
-    }
+      },
+    },
   ])
 
   var $btnBefore = $modalObj.find('.btn-before'),
@@ -90,7 +98,7 @@ var stepModal = (params) => {
 
   /**
    * @function setStep
-   * @param {Number} step 
+   * @param {Number} step
    */
   function setStep(step) {
     $modal.setTitle(`${contents[step].title} (${step}/${allSteps})`)
@@ -103,7 +111,7 @@ var stepModal = (params) => {
    */
   function before(modal) {
     var $btn = $(modal.target)
-    if (step <= 1) return step = 1
+    if (step <= 1) return (step = 1)
 
     $btnAfter.show()
     $btnDone.hide()
@@ -119,7 +127,7 @@ var stepModal = (params) => {
    */
   function after(modal) {
     var $btn = $(modal.target)
-    if (step >= allSteps) return step = allSteps
+    if (step >= allSteps) return (step = allSteps)
 
     $btnBefore.show()
 
@@ -141,5 +149,5 @@ var stepModal = (params) => {
 }
 
 module.exports = {
-  stepModal
+  stepModal,
 }

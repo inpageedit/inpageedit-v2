@@ -18,6 +18,7 @@
 .in-page-edit .ssi-modalWindow {
   padding: 0;
   border-radius: 0;
+  min-height: 40px;
 }
 
 .in-page-edit .ssi-overflow {
