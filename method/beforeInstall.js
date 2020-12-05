@@ -58,7 +58,9 @@ const beforeInstall = async (force = false) => {
       content: $('<div>').append(
         $('<h3>', { text: _msg('beforeInstall-privacy-policy-title') }),
         $('<div>').append(
-          $('div', { html: _msg('beforeInstall-privacy-policy-description') }),
+          $('<div>', {
+            html: _msg('beforeInstall-privacy-policy-description'),
+          }),
           $checkbox({
             id: 'shareMyInfo',
             label: _msg('beforeInstall-privacy-policy-label'),
@@ -87,7 +89,7 @@ const beforeInstall = async (force = false) => {
             $('<input>', {
               id: 'editSummary',
               value: _msg('preference-summary-default'),
-            })
+            }).css({})
           )
         )
       ),
@@ -102,7 +104,7 @@ const beforeInstall = async (force = false) => {
         content: $('<div>').append(
           $('<h3>', { text: '支持作者' }),
           $('<div>').append(
-            '该步骤拟定推送给简体中文使用者，并附上作者的收款码。但经过与部分用户的交流后，认为接受打赏可能会导致冲塔，故暂时省略了此步骤。您可以直接点击下一步按钮'
+            '该步骤拟定推送给简体中文使用者，并附上作者的收款码。但经过与部分用户的交流后，作者意识到接受打赏可能会导致冲塔，故暂时省略了此步骤。您可以直接点击下一步按钮忽略这一步。'
           )
         ),
       })
@@ -124,7 +126,9 @@ const beforeInstall = async (force = false) => {
         var $modal = $('#' + modal.modalId)
         function addEvent() {
           $modal.find('input').unbind()
-          $modal.find('input').change(setOption)
+          $modal.find('input').change(function () {
+            setOption(this)
+          })
         }
         addEvent()
         $modal.find('.ssi-modalBtn.btn').click(addEvent)
