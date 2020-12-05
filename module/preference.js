@@ -7,12 +7,13 @@ var config = mw.config.get()
 
 // const { _analysis } = require('./_analysis')
 const { _msg } = require('./_msg')
-const { $br, $hr, $progress, $checkbox } = require('./_elements')
+const { $br, $hr, $progress, $checkbox, $button } = require('./_elements')
 
 const api = require('./api.json')
 const version = require('./version')
 const { pluginStore } = require('./pluginStore')
 const _dir = require('../method/_dir')
+const beforeInstall = require('../method/beforeInstall')
 
 /**
  * @name 预设值
@@ -170,6 +171,11 @@ var modal = () => {
         $('<span>', { text: _msg('preference-redLinkQuickEdit') })
       ),
       $('<div>').append(
+        $button({ text: _msg('beforeInstall-title') }).css({ display: 'block' }).click(function () {
+          beforeInstall(true).then(opt => {
+            set(opt)
+          })
+        }),
         $('<h4>', { text: 'Custom skin (Not available yet)' }),
         $('<label>', { class: 'choose-skin' }).append(
           $('<input>', {
@@ -205,9 +211,9 @@ var modal = () => {
             })
             .val(
               '/** InPageEdit Preferences **/\n' +
-                'window.InPageEdit = window.InPageEdit || {}; // Keep this line\n' +
-                'InPageEdit.myPreference = ' +
-                JSON.stringify($modalContent.data(), null, 2)
+              'window.InPageEdit = window.InPageEdit || {}; // Keep this line\n' +
+              'InPageEdit.myPreference = ' +
+              JSON.stringify($modalContent.data(), null, 2)
             )
         )
         ssi_modal.dialog({
@@ -230,7 +236,7 @@ var modal = () => {
           var html = 'v' + version
           html += isCanary
             ? ' - You are running the Canary version of InPageEdit<br>' +
-              _msg('version-notice-canary')
+            _msg('version-notice-canary')
             : ''
           return html
         }
@@ -378,9 +384,20 @@ var modal = () => {
       })
 
       // 如果在本地有设定存档，disable掉全部input
+      function setDisabled(obj, isArr) {
+        $.each(obj, (key, val) => {
+          if (typeof val === 'object') {
+            setDisabled(val, true)
+          } else if (isArr) {
+            $modalWindow.find('#' + val).attr('disabled', true)
+          } else {
+            $modalWindow.find('#' + key).attr('disabled', true)
+          }
+        })
+      }
       if (typeof InPageEdit.myPreference !== 'undefined') {
-        $modalWindow.find('.ssi-modalBtn.btn').attr({ disabled: true })
-        $tabContent.find('input').attr({ disabled: true })
+        // $modalWindow.find('.ssi-modalBtn.btn').attr({ disabled: true })
+        setDisabled(InPageEdit.myPreference)
         $tabList.before(
           $('<div>', {
             class: 'has-local-warn',
@@ -427,10 +444,10 @@ var modal = () => {
           var description = val.description || ''
           var author = val.author
             ? $('<a>', {
-                href: 'https://gtihub.com/' + val.author,
-                target: '_balnk',
-                text: '@' + val.author,
-              })
+              href: 'https://gtihub.com/' + val.author,
+              target: '_balnk',
+              text: '@' + val.author,
+            })
             : '-'
           $tabContent.find('#plugin-container > ul').append(
             $('<li>').append(

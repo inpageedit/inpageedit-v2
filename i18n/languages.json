@@ -169,7 +169,7 @@
         "preference-editHobits-label": "Edit hobits",
         "preference-watchList": "Watch by default",
         "preference-redLinkQuickEdit": "Add quick edit buttons after red links",
-        "preference-plugin-footer": "You can choose the official plugins here. And welcome to [$1 InPageEdit-Plugins] to contribute your code! Some plugins need to reload the page to take effect.",
+        "preference-plugin-footer": "You can choose the official plugins here. And welcome to [$1 InPageEdit/Plugins] to contribute your code! Some plugins need to reload the page to take effect.",
         "preference-analysis-totaluse": "<strong>Total use</strong>: $1 {{PLURAL:$1|time|times}}",
         "preference-display-label": "Display settings",
         "beforeInstall-greeting-title": "Start installation",
@@ -179,7 +179,11 @@
         "beforeInstall-privacy-policy-label": "I am willing to share my non private information",
         "beforeInstall-success-title": "Install successful",
         "beforeInstall-success-description": "Any of the options you just configured can be modified at any time later. You can open the preferences window by clicking on the gear symbol in the lower right corner of the screen.",
-        "beforeInstall-preference-description": "Configure your preferences~"
+        "beforeInstall-preference-description": "Configure your preferences~",
+        "beforeInstall-title": "InPageEdit Install Guide",
+        "beforeInstall-before-btn": "Prev step",
+        "beforeInstall-after-btn": "Next step",
+        "beforeInstall-done-btn": "So, let's start the game"
     },
     "ar": {
         "beforeInstall-success-title": "نجاح التثبيت",
@@ -579,7 +583,7 @@
         "preference-editHobits-label": "हॉबिट को सम्पादित करें",
         "preference-watchList": "डिफ़ॉल्ट से वाच करें",
         "preference-redLinkQuickEdit": "रेड-लिंकों के बाद एक क्विक-बटन लगा दें",
-        "preference-plugin-footer": "आप यहाँ आधिकारिक प्लग-इन चुन सकते हैं। और [$1 InPageEdit-Plugins] अपने कोड से योगदान देने के लिए हम आपका स्वागत करते हैं! कुछ प्लग-इनों को प्रभाव दिखाने के लिए पृष्ठ को रीलोड करना पड़ता है।",
+        "preference-plugin-footer": "आप यहाँ आधिकारिक प्लग-इन चुन सकते हैं। और [$1 InPageEdit/Plugins] अपने कोड से योगदान देने के लिए हम आपका स्वागत करते हैं! कुछ प्लग-इनों को प्रभाव दिखाने के लिए पृष्ठ को रीलोड करना पड़ता है।",
         "preference-analysis-totaluse": "<strong>पूरा इस्तेमाल</strong>: $1 {{PLURAL:$1|बार|बार}}",
         "preference-display-label": "डिस्प्ले सेटिंग्स"
     },
@@ -747,7 +751,7 @@
         "preference-editHobits-label": "Edit hobits",
         "preference-watchList": "Watch by default",
         "preference-redLinkQuickEdit": "Add quick edit buttons after red links",
-        "preference-plugin-footer": "You can choose the official plugins here. And welcome to [$1 InPageEdit-Plugins] to contribute your code!",
+        "preference-plugin-footer": "You can choose the official plugins here. And welcome to [$1 InPageEdit/Plugins] to contribute your code!",
         "preference-analysis-totaluse": "<strong>総使用回数</strong>: $1回",
         "preference-display-label": "表示設定"
     },
@@ -1141,7 +1145,7 @@
         "preference-editHobits-label": "Editar hobits",
         "preference-watchList": "Vigiar por padrão",
         "preference-redLinkQuickEdit": "Adicionar botões de edição rápida após links vermelhos",
-        "preference-plugin-footer": "Você pode escolher os plug-ins oficiais aqui. E bem vindo no [$1 InPageEdit-Plugins] para contribuir com seu código! Alguns plug-ins precisam recarregar a página para fazer efeito.",
+        "preference-plugin-footer": "Você pode escolher os plug-ins oficiais aqui. E bem vindo no [$1 InPageEdit/Plugins] para contribuir com seu código! Alguns plug-ins precisam recarregar a página para fazer efeito.",
         "preference-analysis-totaluse": "<strong>Total use</strong>: $1 {{PLURAL:$1|veze|vezes}}",
         "preference-display-label": "Configurações do visor"
     },
@@ -1306,7 +1310,7 @@
         "preference-editHobits-label": "编辑习惯",
         "preference-watchList": "预设进行监视",
         "preference-redLinkQuickEdit": "在红链后添加快速编辑按钮",
-        "preference-plugin-footer": "你可以在这里选用官方插件，欢迎前往[$1 InPageEdit-Plugins]贡献你的代码！一些插件需要重新加载页面才能生效。",
+        "preference-plugin-footer": "你可以在这里选用官方插件，欢迎前往[$1 InPageEdit/Plugins]贡献你的代码！一些插件需要重新加载页面才能生效。",
         "preference-analysis-totaluse": "<strong>使用总次数</strong>：$1 次",
         "preference-display-label": "显示设置",
         "beforeInstall-greeting-title": "让我们开始吧",
@@ -1315,7 +1319,12 @@
         "beforeInstall-privacy-policy-description": "InPageEdit 可能会在特定的时候（例如提交编辑时）收集<b>您的用户名</b>以及<b>您编辑的 wiki 的名称</b>。<hr>我们保证：<br>1) 我们不会收集您的隐私信息，例如个人Cookies。<br>2) 我们不会将收集到的资料用于任何商业目的。<hr>如果您不勾选，则使用时不会收集您的任何信息。不过我们衷心希望您愿意分享您的资料帮助我们改善用户体验，您随时可以在设置里开启或关闭数据收集的功能。[https://ipe.js.org/about/privacy-policy.html 查看更多……]",
         "beforeInstall-privacy-policy-label": "我愿意分享我的非隐私信息",
         "beforeInstall-success-title": "安装成功",
-        "beforeInstall-success-description": "您刚才配置的任何选项在之后都可以随时修改，您可以点击屏幕右下角的齿轮标志打开首选项窗口找到它们。"
+        "beforeInstall-success-description": "您刚才配置的任何选项在之后都可以随时修改，您可以点击屏幕右下角的齿轮标志打开首选项窗口找到它们。",
+        "beforeInstall-preference-description": "调整你的偏好设置~",
+        "beforeInstall-title": "InPageEdit 安装助手",
+        "beforeInstall-before-btn": "上一步",
+        "beforeInstall-after-btn": "下一步",
+        "beforeInstall-done-btn": "那么，开始游戏吧"
     },
     "zh-hant": {
         "quick-edit": "快速編輯",

@@ -1,6 +1,6 @@
 var config = mw.config.get()
 const { stepModal } = require('../module/stepModal')
-const { $checkbox } = require('../module/_elements')
+const { $checkbox, $hr } = require('../module/_elements')
 const { _msg } = require('../module/_msg')
 
 /**
@@ -27,13 +27,13 @@ const beforeInstall = async (force = false) => {
    */
   function setOption(el) {
     var $el = $(el)
-    var id = $el.find('input').attr('id')
+    var id = $el.attr('id')
     if (!id) return
     var val
-    if ($el.find('input').attr('type') === 'checkbox') {
-      val = $el.find('input').prop('checked')
+    if ($el.attr('type') === 'checkbox') {
+      val = $el.prop('checked')
     } else {
-      val = $el.find('input').val()
+      val = $el.val()
     }
     options[id] = val
     console.info('[InPageEdit] beforeInstall setOption', `${id}: ${val}`)
@@ -50,7 +50,21 @@ const beforeInstall = async (force = false) => {
     contents.push({
       content: $('<div>').append(
         $('<h3>', { text: _msg('preference-about-label') }),
-        $('<div>', { text: _msg('beforeInstall-greeting-description') })
+        $('<div>', { text: _msg('beforeInstall-greeting-description') }),
+        $hr,
+        $('<p>', {
+          text:
+            'InPageEdit is a useful MediaWiki JavaScript Plugin written with jQuery',
+        }),
+        $('<p>').append(
+          '© InPageEdit Copyright (C)',
+          ' 2019 - ' + new Date().getFullYear(),
+          ' Wjghj Project (机智的小鱼君), ',
+          $('<a>', {
+            href: 'https://www.gnu.org/licenses/gpl-3.0-standalone.html',
+            text: 'GNU General Public License 3.0',
+          })
+        )
       ),
     })
     // 隐私政策
@@ -61,6 +75,7 @@ const beforeInstall = async (force = false) => {
           $('<div>', {
             html: _msg('beforeInstall-privacy-policy-description'),
           }),
+          $hr,
           $checkbox({
             id: 'shareMyInfo',
             label: _msg('beforeInstall-privacy-policy-label'),
@@ -78,10 +93,11 @@ const beforeInstall = async (force = false) => {
           }).css({ 'font-size': '0.8em' }),
           $('<h4>', { text: _msg('preference-editHobits-label') }),
           $checkbox({ id: 'editMinor', label: _msg('preference-setMinor') }),
-          $checkbox({ id: 'watchList', label: _msg('preference-watchList') }),
+          $checkbox({ id: 'watchList', label: _msg('preference-watchList'), checked: true }),
           $checkbox({
             id: 'watchoutSideCloseList',
             label: _msg('preference-outSideClose'),
+            checked: true
           }),
           $('<h4>', { text: _msg('preference-summary-label') }),
           $('<label>').append(
@@ -89,7 +105,10 @@ const beforeInstall = async (force = false) => {
             $('<input>', {
               id: 'editSummary',
               value: _msg('preference-summary-default'),
-            }).css({})
+            }).css({
+              display: 'block',
+              width: '96%'
+            })
           )
         )
       ),
@@ -119,8 +138,10 @@ const beforeInstall = async (force = false) => {
 
     // 显示模态框
     stepModal({
-      title: 'Installing InPageEdit',
-      doneBtn: _msg('beforeInstall-done'),
+      title: _msg('beforeInstall-title'),
+      btnBefore: _msg('beforeInstall-before-btn'),
+      btnAfter: _msg('beforeInstall-after-btn'),
+      btnDone: _msg('beforeInstall-done-btn'),
       contents,
       onShow(modal) {
         var $modal = $('#' + modal.modalId)
