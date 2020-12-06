@@ -108,23 +108,21 @@ async function linksHere(title = config.wgPageName) {
   var $content = $('<div>').append($progressBar)
 
   // 构建模态框
-  var modal = ssi_modal.createObject({}).init()
+  var modal = ssi_modal.createObject({
+    className: 'in-page-edit ipe-links-here',
+    center: true,
+    sizeClass: 'dialog',
+    onShow(modal) {
+      mw.hook('InPageEdit.linksHere').fire({
+        modal,
+        $modal: $('#' + modal.modalId),
+      })
+    },
+  }).init()
 
   // 设定模态框
   modal.setTitle(_msg('links-here-title', title, 2))
   modal.setContent($content)
-
-  modal.setOptions({
-    className: 'in-page-edit ipe-links-here',
-    center: true,
-    sizeClass: 'dialog',
-    onShow(e) {
-      mw.hook('InPageEdit.linksHere').fire({
-        modal,
-        $modal: $('#' + e.modalId),
-      })
-    },
-  })
 
   // 显示模态框
   modal.show()
@@ -132,7 +130,8 @@ async function linksHere(title = config.wgPageName) {
   // 异步操作
   try {
     console.info('[InPageEdit] linksHere', '开始获取页面信息')
-    const { pages } = await getList(title).query
+    const data = await getList(title)
+    const { pages } = data.query
     console.info('[InPageEdit] linksHere', '成功获取页面信息')
     var pageId = Object.keys(pages)[0]
     var pageList = pages[pageId].linkshere || []
