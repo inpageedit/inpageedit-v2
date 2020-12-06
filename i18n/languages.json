@@ -185,9 +185,10 @@
         "beforeInstall-after-btn": "Next step",
         "beforeInstall-done-btn": "So, let's start the game",
         "links-here": "Links here",
-        "links-here-title": "{{PLURAL:$2|Page|Pages}} that link to <strong>$1</strong>",
+        "links-here-title": "{{PLURAL:$2|Page|Pages}} that link to \"<strong>$1</strong>\"",
         "links-here-isRedirect": "redirect page",
-        "links-here-no-page": "No page links to <strong>$1</strong> :("
+        "links-here-no-page": "No page links to \"<strong>$1</strong>\" :(",
+        "links-here-not-exist": "Attention: Page \"<strong>$1</strong>\" seems not exist"
     },
     "ar": {
         "beforeInstall-success-title": "نجاح التثبيت",
@@ -1330,9 +1331,10 @@
         "beforeInstall-after-btn": "下一步",
         "beforeInstall-done-btn": "那么，开始游戏吧",
         "links-here": "链入页面",
-        "links-here-title": "链接至<strong>$1</strong>的页面",
+        "links-here-title": "链接至“<strong>$1</strong>”的页面",
         "links-here-isRedirect": "重定向页面",
-        "links-here-no-page": "没有页面链接到<strong>$1</strong> QAQ"
+        "links-here-no-page": "没有页面链接到“<strong>$1</strong>” QAQ",
+        "links-here-not-exist": "注意：页面“<strong>$1</strong>”似乎不存在"
     },
     "zh-hant": {
         "quick-edit": "快速編輯",

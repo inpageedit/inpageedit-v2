@@ -11,6 +11,15 @@ var mwApi = new mw.Api()
 var config = mw.config.get()
 
 /**
+ * @function isFile
+ * @returns {Boolean} Is file page?
+ */
+var isFile = title => {
+  var fileReg = new RegExp(`^(File|${config.wgFormattedNamespaces[6]}):`)
+  return fileReg.test(title)
+}
+
+/**
  * @function getList
  * @param {Sting} title
  */
@@ -56,7 +65,7 @@ var getList = title => {
   return mwApi.get({
     format: 'json',
     action: 'query',
-    prop: 'linkshere',
+    prop: isFile(title) ? 'fileusage' : 'linkshere',
     titles: title,
     lhlimit: 'max',
   })
@@ -64,16 +73,14 @@ var getList = title => {
 
 /**
  * @function makeList
- * @param {Object} obj
+ * @param {Object} list
  */
 var makeList = list => {
-  var $list = $('<ol>', { class: 'ipe-linksHere-list' }).css({
-    display: 'none',
-  })
+  var $list = $('<ol>', { class: 'ipe-links-here-list' })
   $.each(list, (index, { title, redirect }) => {
     $list.append(
       $('<li>').append(
-        $link({ page: title }),
+        $link({ page: title }).attr('target', '_blank'),
         redirect !== undefined
           ? ' (<i>' + _msg('links-here-isRedirect') + '</i>)'
           : '',
@@ -85,6 +92,7 @@ var makeList = list => {
         $link({ text: _msg('quick-edit') }).click(function () {
           quickEdit({
             page: title,
+            require: false,
           })
         }),
         ')'
@@ -108,17 +116,19 @@ async function linksHere(title = config.wgPageName) {
   var $content = $('<div>').append($progressBar)
 
   // 构建模态框
-  var modal = ssi_modal.createObject({
-    className: 'in-page-edit ipe-links-here',
-    center: true,
-    sizeClass: 'dialog',
-    onShow(modal) {
-      mw.hook('InPageEdit.linksHere').fire({
-        modal,
-        $modal: $('#' + modal.modalId),
-      })
-    },
-  }).init()
+  var modal = ssi_modal
+    .createObject({
+      className: 'in-page-edit ipe-links-here',
+      center: true,
+      sizeClass: 'dialog',
+      onShow(modal) {
+        mw.hook('InPageEdit.linksHere').fire({
+          modal,
+          $modal: $('#' + modal.modalId),
+        })
+      },
+    })
+    .init()
 
   // 设定模态框
   modal.setTitle(_msg('links-here-title', title, 2))
@@ -134,7 +144,13 @@ async function linksHere(title = config.wgPageName) {
     const { pages } = data.query
     console.info('[InPageEdit] linksHere', '成功获取页面信息')
     var pageId = Object.keys(pages)[0]
-    var pageList = pages[pageId].linkshere || []
+    var pageList = []
+    // 判定为文件还是一般页面
+    if (isFile(title)) {
+      pageList = pages[pageId].fileusage
+    } else {
+      pageList = pages[pageId].linkshere
+    }
     $progressBar.hide()
     // 如果存在页面，则插入列表，否则显示提示
     if (pageList.length > 0) {
@@ -152,11 +168,20 @@ async function linksHere(title = config.wgPageName) {
     if (pageList.length < 2) {
       modal.setTitle(_msg('links-here-title', title, 1))
     }
+    // 请求的页面似乎不存在，但这不意味着没有链入页面
+    if (pageId === -1) {
+      $content.append(
+        $('<div>', {
+          html: _msg('links-here-not-exist', title),
+          class: 'ipe-links-here-not-exist',
+        })
+      )
+    }
     // 发射钩子
     mw.hook('InPageEdit.linksHere.pageList').fire(pageList)
   } catch (err) {
     $progressBar.hide()
-    $content.append($('<p>', { class: 'error', text: err }))
+    $content.append($('<p>', { class: 'error', html: err }))
     console.error('[InPageEdit] linksHere', '获取页面信息时出现问题', err)
   }
 }

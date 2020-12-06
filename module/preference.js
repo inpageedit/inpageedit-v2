@@ -213,9 +213,9 @@ var modal = () => {
             })
             .val(
               '/** InPageEdit Preferences **/\n' +
-              'window.InPageEdit = window.InPageEdit || {}; // Keep this line\n' +
-              'InPageEdit.myPreference = ' +
-              JSON.stringify($modalContent.data(), null, 2)
+                'window.InPageEdit = window.InPageEdit || {}; // Keep this line\n' +
+                'InPageEdit.myPreference = ' +
+                JSON.stringify($modalContent.data(), null, 2)
             )
         )
         ssi_modal.dialog({
@@ -238,7 +238,7 @@ var modal = () => {
           var html = 'v' + version
           html += isCanary
             ? ' - You are running the Canary version of InPageEdit<br>' +
-            _msg('version-notice-canary')
+              _msg('version-notice-canary')
             : ''
           return html
         }
@@ -448,10 +448,10 @@ var modal = () => {
           var description = val.description || ''
           var author = val.author
             ? $('<a>', {
-              href: 'https://gtihub.com/' + val.author,
-              target: '_balnk',
-              text: '@' + val.author,
-            })
+                href: 'https://gtihub.com/' + val.author,
+                target: '_balnk',
+                text: '@' + val.author,
+              })
             : '-'
           $tabContent.find('#plugin-container > ul').append(
             $('<li>').append(
