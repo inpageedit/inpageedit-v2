@@ -1,6 +1,6 @@
 {
   "name": "mediawiki-inpageedit",
-  "version": "14.1.6-alpha.15",
+  "version": "14.1.6-alpha.16",
   "description": "A useful MediaWiki JavaScript Plugin written with jQuery",
   "main": "index.js",
   "dependencies": {},
@@ -12,15 +12,15 @@
     "webpack-cli": "^3.3.12"
   },
   "scripts": {
-    "test": "eslint ./index.js ./module/*.js ./method/*.js",
-    "dev": "webpack --watch --o ./dev/[name].test.js",
-    "clear": "rd /s /q dist",
-    "style": "stylus ./style/index.styl -o ./style/",
-    "prettier": "prettier --write ./index.js ./module/*.js ./method/*.js",
     "build:linux": "webpack && MINIFY=1 webpack",
     "build:windows": "webpack && set MINIFY=1 && webpack",
+    "clear": "rd /s /q dist",
+    "dev": "webpack --watch --o ./dev/[name].test.js",
+    "lint": "eslint ./index.js ./module/*.js ./method/*.js",
+    "prettier": "prettier --write ./index.js ./module/*.js ./method/*.js",
     "publish:stable": "npm publish --tag latest",
-    "publish:canary": "npm run build:windows && npm publish --tag canary && yarn clear"
+    "publish:canary": "npm run build:windows && npm publish --tag canary && yarn clear",
+    "style": "stylus ./style/index.styl -o ./style/"
   },
   "repository": {
     "type": "git",

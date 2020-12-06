@@ -23,44 +23,6 @@ var isFile = title => {
  * @function getList
  * @param {Sting} title
  */
-// 成功返回样例
-// {
-//   "batchcomplete": "",
-//   "query": {
-//     "pages": {
-//       "208519": {
-//         "pageid": 208519,
-//         "ns": 0,
-//         "title": "Main Page",
-//         "linkshere": [
-//           {
-//             "pageid": 204731,
-//             "ns": 12,
-//             "title": "Help:\u9b54\u672f\u5b57/\u89e3\u6790\u5668\u51fd\u6570"
-//           },
-//           {
-//             "pageid": 212703,
-//             "ns": 2,
-//             "title": "User:Cotangent"
-//           }
-//         ]
-//       }
-//     }
-//   }
-// }
-// 失败返回样例
-// {
-//   "batchcomplete": "",
-//   "query": {
-//     "pages": {
-//       "-1": {
-//         "ns": 0,
-//         "title": "No such page",
-//         "missing": ""
-//       }
-//     }
-//   }
-// }
 var getList = title => {
   return mwApi.get({
     format: 'json',
@@ -68,6 +30,7 @@ var getList = title => {
     prop: isFile(title) ? 'fileusage' : 'linkshere',
     titles: title,
     lhlimit: 'max',
+    fulimit: 'max',
   })
 }
 
@@ -147,9 +110,9 @@ async function linksHere(title = config.wgPageName) {
     var pageList = []
     // 判定为文件还是一般页面
     if (isFile(title)) {
-      pageList = pages[pageId].fileusage
+      pageList = pages[pageId].fileusage || []
     } else {
-      pageList = pages[pageId].linkshere
+      pageList = pages[pageId].linkshere || []
     }
     $progressBar.hide()
     // 如果存在页面，则插入列表，否则显示提示
@@ -179,10 +142,12 @@ async function linksHere(title = config.wgPageName) {
     }
     // 发射钩子
     mw.hook('InPageEdit.linksHere.pageList').fire(pageList)
+    return pageList
   } catch (err) {
     $progressBar.hide()
     $content.append($('<p>', { class: 'error', html: err }))
     console.error('[InPageEdit] linksHere', '获取页面信息时出现问题', err)
+    return err
   }
 }
 
