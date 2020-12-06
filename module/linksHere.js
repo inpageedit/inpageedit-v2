@@ -24,14 +24,18 @@ var isFile = title => {
  * @param {Sting} title
  */
 var getList = title => {
-  return mwApi.get({
+  var opt = {
     format: 'json',
     action: 'query',
     prop: isFile(title) ? 'fileusage' : 'linkshere',
     titles: title,
-    lhlimit: 'max',
-    fulimit: 'max',
-  })
+  }
+  if (isFile(title)) {
+    opt.fulimit = 'max'
+  } else {
+    opt.lhlimit = 'max'
+  }
+  return mwApi.get(opt)
 }
 
 /**
@@ -123,7 +127,7 @@ async function linksHere(title = config.wgPageName) {
       $content.append(
         $('<div>', {
           class: 'ipe-links-here-no-page',
-          text: _msg('links-here-no-page', title),
+          html: _msg('links-here-no-page', title),
         })
       )
     }
@@ -131,8 +135,10 @@ async function linksHere(title = config.wgPageName) {
     if (pageList.length < 2) {
       modal.setTitle(_msg('links-here-title', title, 1))
     }
-    // 请求的页面似乎不存在，但这不意味着没有链入页面
-    if (pageId === -1) {
+    // pageId 是一个字符串，MediaWiki NM$L
+    // pageId 为 "-1" 则意味着请求的页面似乎不存在
+    // 但这不意味着不会有链入页面
+    if (pageId === '-1') {
       $content.append(
         $('<div>', {
           html: _msg('links-here-not-exist', title),
