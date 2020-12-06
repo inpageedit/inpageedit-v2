@@ -98,7 +98,7 @@ var makeList = list => {
  * @module linksHere
  * @param {String} title
  */
-var linksHere = async title => {
+async function linksHere(title = config.wgPageName) {
   _analysis('linkshere')
 
   if (!title || typeof title !== 'string') title = config.wgPageName
