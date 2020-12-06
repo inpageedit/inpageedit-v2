@@ -185,7 +185,9 @@
         "beforeInstall-after-btn": "Next step",
         "beforeInstall-done-btn": "So, let's start the game",
         "links-here": "Links here",
-        "links-here-title": "What links to: <strong>$1</strong>"
+        "links-here-title": "{{PLURAL:$2|Page|Pages}} that link to <strong>$1</strong>",
+        "links-here-isRedirect": "redirect page",
+        "links-here-no-page": "No page links to <strong>$1</strong> :("
     },
     "ar": {
         "beforeInstall-success-title": "نجاح التثبيت",
@@ -1326,7 +1328,11 @@
         "beforeInstall-title": "InPageEdit 安装助手",
         "beforeInstall-before-btn": "上一步",
         "beforeInstall-after-btn": "下一步",
-        "beforeInstall-done-btn": "那么，开始游戏吧"
+        "beforeInstall-done-btn": "那么，开始游戏吧",
+        "links-here": "链入页面",
+        "links-here-title": "链接至<strong>$1</strong>的页面",
+        "links-here-isRedirect": "重定向页面",
+        "links-here-no-page": "没有页面链接到<strong>$1</strong> QAQ"
     },
     "zh-hant": {
         "quick-edit": "快速編輯",

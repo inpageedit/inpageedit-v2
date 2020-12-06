@@ -7,7 +7,7 @@ const _analysis = require('./_analysis')
 const { $progress, $link } = require('./_elements')
 const _msg = require('./_msg')
 
-var mwApi = new mwApi.Api()
+var mwApi = new mw.Api()
 var config = mw.config.get()
 
 /**
@@ -70,11 +70,18 @@ var makeList = list => {
   var $list = $('<ol>', { class: 'ipe-linksHere-list' }).css({
     display: 'none',
   })
-  $.each(list, (index, { title }) => {
+  $.each(list, (index, { title, redirect }) => {
     $list.append(
       $('<li>').append(
         $link({ page: title }),
+        redirect !== undefined
+          ? ' (<i>' + _msg('links-here-isRedirect') + '</i>)'
+          : '',
         ' (',
+        $link({ text: '← ' + _msg('links-here') }).click(function () {
+          linksHere(title)
+        }),
+        ' | ',
         $link({ text: _msg('quick-edit') }).click(function () {
           quickEdit({
             page: title,
@@ -104,11 +111,11 @@ var linksHere = async title => {
   var modal = ssi_modal.createObject({}).init()
 
   // 设定模态框
-  modal.setTitle(_msg('links-here-title', title))
+  modal.setTitle(_msg('links-here-title', title, 2))
   modal.setContent($content)
 
   modal.setOptions({
-    className: 'in-page-edit ipe-linksHere',
+    className: 'in-page-edit ipe-links-here',
     center: true,
     sizeClass: 'dialog',
     onShow(e) {
@@ -129,9 +136,24 @@ var linksHere = async title => {
     console.info('[InPageEdit] linksHere', '成功获取页面信息')
     var pageId = Object.keys(pages)[0]
     var pageList = pages[pageId].linkshere || []
-    var $list = makeList(pageList)
-    $content.append($list)
     $progressBar.hide()
+    // 如果存在页面，则插入列表，否则显示提示
+    if (pageList.length > 0) {
+      var $list = makeList(pageList)
+      $content.append($list)
+    } else {
+      $content.append(
+        $('<div>', {
+          class: 'ipe-links-here-no-page',
+          text: _msg('links-here-no-page', title),
+        })
+      )
+    }
+    // 配置西文单数名词
+    if (pageList.length < 2) {
+      modal.setTitle(_msg('links-here-title', title, 1))
+    }
+    // 发射钩子
     mw.hook('InPageEdit.linksHere.pageList').fire(pageList)
   } catch (err) {
     $progressBar.hide()
