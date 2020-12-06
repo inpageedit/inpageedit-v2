@@ -2,10 +2,10 @@
  * @module linksHere
  */
 
-const quickEdit = require('./quickEdit')
-const _analysis = require('./_analysis')
+const { quickEdit } = require('./quickEdit')
+const { _analysis } = require('./_analysis')
 const { $progress, $link } = require('./_elements')
-const _msg = require('./_msg')
+const { _msg } = require('./_msg')
 
 var mwApi = new mw.Api()
 var config = mw.config.get()

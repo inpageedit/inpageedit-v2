@@ -63,6 +63,7 @@ module.exports = async function init() {
 
   // 初始化前置模块
   preference.set()
+  preference.set(installOpt)
   getUserInfo()
   loadQuickDiff()
   articleLink()

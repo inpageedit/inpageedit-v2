@@ -391,11 +391,11 @@ var modal = () => {
           if (typeof val === 'object') {
             setDisabled(val, true)
           } else if (isArr) {
-            document.getElementById(val).disabled = true
-            // $modalWindow.find('#' + val).attr('disabled', true)
+            // document.getElementById(val).disabled = true
+            $modalWindow.find(`[id="${val}]`).attr('disabled', true)
           } else {
-            document.getElementById(key).disabled = true
-            // $modalWindow.find('#' + key).attr('disabled', true)
+            // document.getElementById(key).disabled = true
+            $modalWindow.find(`[id="${key}]`).attr('disabled', true)
           }
         })
       }
