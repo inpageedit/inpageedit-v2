@@ -183,7 +183,9 @@
         "beforeInstall-title": "InPageEdit Install Guide",
         "beforeInstall-before-btn": "Prev step",
         "beforeInstall-after-btn": "Next step",
-        "beforeInstall-done-btn": "So, let's start the game"
+        "beforeInstall-done-btn": "So, let's start the game",
+        "links-here": "Links here",
+        "links-here-title": "What links to: <strong>$1</strong>"
     },
     "ar": {
         "beforeInstall-success-title": "نجاح التثبيت",

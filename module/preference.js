@@ -165,17 +165,19 @@ var modal = () => {
     ),
     $('<section>', { id: 'another' }).append(
       $('<h3>', { text: _msg('preference-another-title') }),
+      $button({ type: 'secondary', text: _msg('beforeInstall-title') })
+        .css({ display: 'block' })
+        .click(function () {
+          beforeInstall(true).then(opt => {
+            set(opt)
+          })
+        }),
       $('<h4>', { text: _msg('preference-display-label') }),
       $('<label>').append(
         $('<input>', { type: 'checkbox', id: 'redLinkQuickEdit' }),
         $('<span>', { text: _msg('preference-redLinkQuickEdit') })
       ),
       $('<div>').append(
-        $button({ text: _msg('beforeInstall-title') }).css({ display: 'block' }).click(function () {
-          beforeInstall(true).then(opt => {
-            set(opt)
-          })
-        }),
         $('<h4>', { text: 'Custom skin (Not available yet)' }),
         $('<label>', { class: 'choose-skin' }).append(
           $('<input>', {
@@ -211,9 +213,9 @@ var modal = () => {
             })
             .val(
               '/** InPageEdit Preferences **/\n' +
-              'window.InPageEdit = window.InPageEdit || {}; // Keep this line\n' +
-              'InPageEdit.myPreference = ' +
-              JSON.stringify($modalContent.data(), null, 2)
+                'window.InPageEdit = window.InPageEdit || {}; // Keep this line\n' +
+                'InPageEdit.myPreference = ' +
+                JSON.stringify($modalContent.data(), null, 2)
             )
         )
         ssi_modal.dialog({
@@ -236,7 +238,7 @@ var modal = () => {
           var html = 'v' + version
           html += isCanary
             ? ' - You are running the Canary version of InPageEdit<br>' +
-            _msg('version-notice-canary')
+              _msg('version-notice-canary')
             : ''
           return html
         }
@@ -389,9 +391,11 @@ var modal = () => {
           if (typeof val === 'object') {
             setDisabled(val, true)
           } else if (isArr) {
-            $modalWindow.find('#' + val).attr('disabled', true)
+            document.getElementById(val).disabled = true
+            // $modalWindow.find('#' + val).attr('disabled', true)
           } else {
-            $modalWindow.find('#' + key).attr('disabled', true)
+            document.getElementById(key).disabled = true
+            // $modalWindow.find('#' + key).attr('disabled', true)
           }
         })
       }
@@ -444,10 +448,10 @@ var modal = () => {
           var description = val.description || ''
           var author = val.author
             ? $('<a>', {
-              href: 'https://gtihub.com/' + val.author,
-              target: '_balnk',
-              text: '@' + val.author,
-            })
+                href: 'https://gtihub.com/' + val.author,
+                target: '_balnk',
+                text: '@' + val.author,
+              })
             : '-'
           $tabContent.find('#plugin-container > ul').append(
             $('<li>').append(

@@ -93,11 +93,15 @@ const beforeInstall = async (force = false) => {
           }).css({ 'font-size': '0.8em' }),
           $('<h4>', { text: _msg('preference-editHobits-label') }),
           $checkbox({ id: 'editMinor', label: _msg('preference-setMinor') }),
-          $checkbox({ id: 'watchList', label: _msg('preference-watchList'), checked: true }),
+          $checkbox({
+            id: 'watchList',
+            label: _msg('preference-watchList'),
+            checked: true,
+          }),
           $checkbox({
             id: 'watchoutSideCloseList',
             label: _msg('preference-outSideClose'),
-            checked: true
+            checked: true,
           }),
           $('<h4>', { text: _msg('preference-summary-label') }),
           $('<label>').append(
@@ -107,7 +111,7 @@ const beforeInstall = async (force = false) => {
               value: _msg('preference-summary-default'),
             }).css({
               display: 'block',
-              width: '96%'
+              width: '96%',
             })
           )
         )

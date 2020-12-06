@@ -43,6 +43,7 @@ module.exports = async function init() {
   const api = require('../module/api.json')
   const { articleLink } = require('../module/articleLink')
   const { findAndReplace } = require('../module/findAndReplace')
+  const { linksHere } = require('../module/linksHere')
   const { loadQuickDiff } = require('../module/loadQuickDiff')
   const { preference } = require('../module/preference')
   const { pluginStore } = require('../module/pluginStore')
@@ -79,6 +80,7 @@ module.exports = async function init() {
     articleLink,
     beforeInstall,
     findAndReplace,
+    linksHere,
     loadQuickDiff,
     preference,
     progress,
