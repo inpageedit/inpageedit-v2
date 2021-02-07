@@ -1,5 +1,5 @@
 var config = mw.config.get()
-var api = require('./api.json')
+var api = require('../util/api')
 
 const { preference } = require('./preference.js')
 

@@ -1,4 +1,4 @@
-const api = require('./api.json')
+const api = require('../util/api')
 const { _msg } = require('./_msg')
 
 function getNotice(cb) {

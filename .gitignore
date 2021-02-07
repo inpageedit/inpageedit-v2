@@ -9,4 +9,4 @@ public/
 
 # This part is for development, ignore
 dev/
-dist/*.test.*
+dist/

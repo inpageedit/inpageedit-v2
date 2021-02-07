@@ -1,6 +1,6 @@
 // const _dir = require('../method/_dir');
 // const { _msg } = require('./_msg');
-const pluginCDN = require('./api.json').pluginCDN
+const pluginCDN = require('../util/api').pluginCDN
 
 /**
  * @module pluginStore 加载InPageEdit插件

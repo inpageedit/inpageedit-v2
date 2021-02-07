@@ -26,7 +26,7 @@ module.exports = async function init() {
   await mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user'])
 
   // 等待前置插件
-  await loadScript(_dir + '/src/ssi_modal/ssi-modal.min.js')
+  await loadScript('https://cdn.jsdelivr.net/npm/ssi-modal@1.0.28')
   mw.hook('InPageEdit.init.modal').fire({ ssi_modal: window.ssi_modal })
 
   // 加载样式表
@@ -40,7 +40,7 @@ module.exports = async function init() {
   const { _analysis } = require('../module/_analysis')
   const { _msg } = require('../module/_msg')
   const { about } = require('../module/about')
-  const api = require('../module/api.json')
+  const api = require('../util/api')
   const { articleLink } = require('../module/articleLink')
   const { findAndReplace } = require('../module/findAndReplace')
   const { linksHere } = require('../module/linksHere')

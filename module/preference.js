@@ -9,7 +9,7 @@ var config = mw.config.get()
 const { _msg } = require('./_msg')
 const { $br, $hr, $progress, $checkbox, $button } = require('./_elements')
 
-const api = require('./api.json')
+const api = require('../util/api')
 const version = require('./version')
 const { pluginStore } = require('./pluginStore')
 const _dir = require('../method/_dir')

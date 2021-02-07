@@ -1,6 +1,6 @@
 const { _msg } = require('./_msg')
 
-const api = require('./api.json')
+const api = require('../util/api')
 
 /**
  * @module about 关于插件模块

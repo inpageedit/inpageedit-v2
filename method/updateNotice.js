@@ -1,7 +1,7 @@
 const version = require('../module/version')
 
 const { _msg } = require('../module/_msg')
-// const api = require('../module/api.json');
+// const api = require('../module/api');
 const { versionInfo } = require('../module/versionInfo')
 const { specialNotice } = require('../module/specialNotice')
 
