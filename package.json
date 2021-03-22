@@ -3,13 +3,14 @@
   "version": "14.1.6-alpha.17",
   "description": "A useful MediaWiki JavaScript Plugin written with jQuery",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "@dragon-fish/bump": "^0.0.13"
+  },
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-es2015": "^7.0.0-beta.53",
     "babel-loader": "^8.2.2",
-    "commander": "^7.0.0",
     "css-loader": "^5.0.1",
     "eslint": "^7.7.0",
     "file-loader": "^6.2.0",
@@ -23,7 +24,7 @@
   },
   "scripts": {
     "build": "yarn clear && webpack && MINIFY=1 webpack",
-    "bump": "node ./maintain/bump.js",
+    "bump": "bump",
     "clear": "rm -rf ./dist ./**/dist ./dev",
     "dev": "yarn clear && webpack --watch -o ./dev",
     "lint": "eslint ./index.js ./module/*.js ./method/*.js",

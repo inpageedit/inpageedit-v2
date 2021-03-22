@@ -15,6 +15,11 @@ function apiPost(opt) {
   return ajax('post', opt)
 }
 
+function apiPostWithToken(token, opt = {}) {
+  opt.token = mw.user.tokens.get(token)
+  return ajax('post', opt)
+}
+
 function ajax(method, opt) {
   return new Promise((resolve, reject) => {
     opt = $.extend(_options(), { method }, opt)
@@ -25,4 +30,5 @@ function ajax(method, opt) {
 module.exports = {
   apiGet,
   apiPost,
+  apiPostWithToken,
 }
