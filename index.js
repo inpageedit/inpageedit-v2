@@ -11,7 +11,7 @@
   'use strict'
 
   // 创建 InPageEdit 变量
-  var InPageEdit = window.InPageEdit || {}
+  const InPageEdit = window.InPageEdit || {}
 
   // 防止多次运行
   if (InPageEdit.loaded) {
@@ -21,10 +21,8 @@
   }
 
   // 初始化插件
-  var init = require('./method/init')
-
-  var mainFunctions = await init()
+  const init = require('./method/init')
 
   // 合并入全局变量
-  window.InPageEdit = $.extend({}, window.InPageEdit, mainFunctions)
+  window.InPageEdit = $.extend({}, window.InPageEdit, await init())
 })()
