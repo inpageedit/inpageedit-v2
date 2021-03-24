@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "classic",
+    "strictBindCallApply": true
+  },
+  "include": ["src"]
+}

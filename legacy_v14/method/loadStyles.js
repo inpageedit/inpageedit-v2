@@ -1,7 +1,7 @@
 const _dir = require('./_dir')
 
 function loadStyles(purge) {
-  require('../src/ssi_modal/ssi-modal.css')
+  require('../assets/ssi_modal/ssi-modal.css')
   require('../static/styles/skin-default.css')
   // 放在越上面优先级越高
   const styleFiles = [

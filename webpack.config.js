@@ -24,10 +24,10 @@ const BannerPlugin = new webpack.BannerPlugin({
 
 module.exports = {
   entry: {
-    InPageEdit: './index.js',
+    InPageEdit: './src/index.ts',
   },
   target: ['web', 'es5'],
-  context: path.resolve(__dirname),
+  // context: path.resolve(__dirname),
   watchOptions: {
     ignored: /(node_modules|dist)/,
   },
@@ -37,13 +37,21 @@ module.exports = {
     filename: isMinify ? '[name].min.js' : '[name].js',
     // publicPath: 'pathOrUrlWhenProductionBuild'
   },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+  },
   module: {
     rules: [
       {
-        test: /\.js$/,
-        use: {
-          loader: 'babel-loader',
-        },
+        test: /\.tsx?$/,
+        use: [
+          {
+            loader: 'babel-loader',
+          },
+          {
+            loader: 'ts-loader',
+          },
+        ],
         exclude: '/node_modules/',
       },
       {
@@ -81,7 +89,6 @@ module.exports = {
       },
     ],
   },
-  resolve: {},
   devtool: 'source-map',
   plugins: [BannerPlugin],
   optimization: {
@@ -90,7 +97,7 @@ module.exports = {
       new TerserPlugin({
         terserOptions: {
           compress: {
-            drop_console: true,
+            drop_console: isMinify ? true : false,
           },
         },
       }),
