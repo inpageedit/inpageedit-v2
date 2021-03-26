@@ -1,42 +1,67 @@
-const { _msg } = require('./_msg')
-
-const { $progress } = require('./_elements.js')
-
 /**
- * @module progress 载入中模块
- * @param {Boolean|String} title
- * @default "Loading..."
- * @returns
- * - true: Mark top progress box as done
- * - false: Close top progress box
- * - String: Show new progress box with title
+ * @module Progress 载入中模块
+ * @method this.setTitle
+ * @method this.setStatus
+ * @method this.done
+ * @method this.close
  */
-var progress = function (title) {
-  if (title === true) {
-    $('.in-page-edit.loadingbox .ssi-modalTitle').html(_msg('done'))
-    $('.in-page-edit.loadingbox .ipe-progress').addClass('done')
-  } else if (title === false) {
-    if ($('.in-page-edit.loadingbox').length > 0) {
-      $('.in-page-edit.loadingbox').appendTo('body')
-      ssi_modal.close()
+
+const { _msg } = require('./_msg')
+const { $progress } = require('./_elements.js')
+const sleep = require('../util/sleep')
+
+class Progress {
+  /**
+   * @constructor
+   * @param {String} title
+   */
+  constructor(title) {
+    this.title = title || 'Loading...'
+    this.getThis = () => this
+
+    // 处理模态框
+    this.modal = ssi_modal.createObject({})
+
+    // 选项
+    this.modal.setOptions('center', true)
+    this.modal.setOptions('className', 'in-page-edit ipe-progress')
+    this.modal.setOptions('outSideClose', false)
+    // this.modal.setOptions()
+    this.modal.init()
+
+    // 内容
+    this.$progress = $($progress)
+    this.modal.setTitle(title)
+    this.modal.setContent($progress)
+
+    this.modal.show()
+  }
+
+  setTitle(title) {
+    this.modal.setTitle(title)
+  }
+  setStatus(status) {
+    const self = this.getThis()
+    if (status) {
+      self.$progress.addClass('done')
+    } else {
+      self.$progress.removeClass('done')
     }
-  } else {
-    if ($('.in-page-edit.loadingbox').length > 0) return
-    if (typeof title === 'undefined') {
-      title = 'Loading...'
+  }
+  async done(msg, delay) {
+    const self = this.getThis()
+    this.setStatus(true)
+    this.setTitle(msg || _msg('done'))
+    if (delay) {
+      await sleep(delay)
+      self.close()
     }
-    ssi_modal.show({
-      title: title,
-      content: $progress,
-      className: 'in-page-edit loadingbox',
-      center: true,
-      sizeClass: 'dialog',
-      closeIcon: false,
-      outSideClose: false,
-    })
+  }
+  close() {
+    this.modal.close()
   }
 }
 
 module.exports = {
-  progress,
+  Progress,
 }
