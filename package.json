@@ -24,6 +24,7 @@
   },
   "scripts": {
     "build": "yarn clear && webpack && MINIFY=1 webpack",
+    "build:windows": "wsl yarn clear && wsl webpack && wsl MINIFY=1 webpack",
     "bump": "bump",
     "clear": "rm -rf ./dist ./**/dist ./dev",
     "dev": "yarn clear && webpack --watch -o ./dev",
