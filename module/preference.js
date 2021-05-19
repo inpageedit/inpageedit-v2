@@ -448,7 +448,7 @@ var modal = () => {
           var description = val.description || ''
           var author = val.author
             ? $('<a>', {
-                href: 'https://gtihub.com/' + val.author,
+                href: 'https://github.com/' + val.author,
                 target: '_balnk',
                 text: '@' + val.author,
               })

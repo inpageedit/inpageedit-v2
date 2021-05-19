@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 'use strict'
 
 const path = require('path')
@@ -30,6 +31,21 @@ module.exports = {
   context: path.resolve(__dirname),
   watchOptions: {
     ignored: /(node_modules|dist)/,
+=======
+'use strict';
+
+const path = require('path');
+
+const isMinify = process.env.MINIFY
+
+module.exports = {
+  entry: {
+    'InPageEdit': './index.js'
+  },
+  context: path.resolve(__dirname),
+  watchOptions: {
+    ignored: /(node_modules|dist)/
+>>>>>>> master
   },
   mode: isMinify ? 'production' : 'development',
   output: {
@@ -40,6 +56,7 @@ module.exports = {
   module: {
     rules: [
       {
+<<<<<<< HEAD
         test: /\.js$/,
         use: {
           loader: 'babel-loader',
@@ -72,12 +89,18 @@ module.exports = {
         ],
       },
       {
+=======
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      }, {
+>>>>>>> master
         test: /\.(png|jpe?g|gif)$/i,
         use: [
           {
             loader: 'file-loader',
           },
         ],
+<<<<<<< HEAD
       },
     ],
   },
@@ -97,3 +120,17 @@ module.exports = {
     ],
   },
 }
+=======
+      }
+    ]
+  },
+  resolve: {
+  },
+  devtool: 'source-map',
+  plugins: [
+  ],
+  optimization: {
+    minimize: isMinify ? true : false
+  }
+};
+>>>>>>> master
