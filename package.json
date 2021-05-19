@@ -1,10 +1,11 @@
 {
   "name": "mediawiki-inpageedit",
-  "version": "14.1.5",
+  "version": "14.1.6-alpha.17",
   "description": "A useful MediaWiki JavaScript Plugin written with jQuery",
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
+    "@dragon-fish/bump": "^0.0.15",
     "eslint": "^7.7.0",
     "stylus": "^0.54.8",
     "webpack": "^4.44.1",
@@ -12,17 +13,14 @@
   },
   "scripts": {
     "test": "eslint ./index.js ./module/*.js ./method/*.js",
-    "dev": "webpack --watch --o ./dev/[name].test.js",
-    "clear": "rd /s /q dist",
-    "style": "stylus ./style/index.styl -o ./style/",
-    "build:linux": "webpack && MINIFY=1 webpack",
-    "build:windows": "webpack && set MINIFY=1 && webpack",
-    "publish:stable": "npm publish --tag latest",
-    "publish:canary": "npm run build:windows && npm publish --tag canary && yarn clear"
+    "dev": "webpack --watch --o ./dev/[name].js",
+    "clear": "rm -rf ./dist",
+    "build": "webpack && MINIFY=1 webpack",
+    "bump": "yarn clear && yarn build && bump"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Wjghj-Project/InPageEdit.git"
+    "url": "git+https://github.com/InPageEdit/InPageEdit.git"
   },
   "keywords": [
     "mediawiki",
@@ -32,7 +30,7 @@
   "author": "Dragon-Fish",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/Wjghj-Project/InPageEdit/issues"
+    "url": "https://github.com/InPageEdit/InPageEdit/issues"
   },
-  "homepage": "https://ipe.netlify.com/"
+  "homepage": "https://ipe.js.org/"
 }

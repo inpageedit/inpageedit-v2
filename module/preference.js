@@ -338,7 +338,7 @@ var preference = {
           $.each(list, (key, val) => {
             var name = val.name || 'Unknown'
             var description = val.description || ''
-            var author = val.author ? $('<a>', { href: 'https://gtihub.com/' + val.author, target: '_balnk', text: '@' + val.author }) : '-'
+            var author = val.author ? $('<a>', { href: 'https://github.com/' + val.author, target: '_balnk', text: '@' + val.author }) : '-'
             $tabContent.find('#plugin-container > ul').append(
               $('<li>').append(
                 $('<label>').append(
