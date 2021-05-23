@@ -6,7 +6,7 @@ const isMinify = process.env.MINIFY
 
 module.exports = {
   entry: {
-    'InPageEdit': './index.js'
+    'InPageEdit': './src/index.js'
   },
   context: path.resolve(__dirname),
   watchOptions: {
