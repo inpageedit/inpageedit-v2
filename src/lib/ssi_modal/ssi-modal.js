@@ -162,7 +162,7 @@
       setAnimations(this);
     } else {
       this.options[options] = value;
-      if (options === 'animation' || 'modalAnimation' || 'backdropAnimation') {
+      if (options === ('animation' || 'modalAnimation' || 'backdropAnimation')) {
         setAnimations(this);
       }
     }
@@ -714,6 +714,7 @@
         if (positionedElement[0]) {//check if this element with this position exists to the dom.
           positionedElement
             .find('#ssi-modalWrapper')//if exists append the window to the dom.
+          // eslint-disable-next-line no-unexpected-multiline
           [appendAction]($modalWindow);
         }
         this.$modal = $modalWindow;
@@ -828,7 +829,6 @@
    * @return {Ssi_modal}
    */
   Ssi_modal.prototype.showBackdrop = function () {
-    var modalObj = this;
     var $backdrop = this.get$backdrop().addClass('ssi-openedDialog');
 
     $backdrop.addAnimation(this.options.backdropAnimation.show).removeClass('ssi-hidden');
@@ -1253,7 +1253,7 @@
     return !!s.match(isDataURL.regex);
   }
 
-  isDataURL.regex = /^\s*data:([a-z]+\/[a-z0-9\-\+]+(;[a-z\-]+\=[a-z0-9\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i;
+  isDataURL.regex = /^\s*data:([a-z]+\/[a-z0-9\-+]+(;[a-z-]+=[a-z0-9-]+)?)?(;base64)?,[a-z0-9!$&',()*+,;=\-._~:@/?%\s]*\s*$/i;
 
   var imgBoxOptions = { 'ssi-mainOption': {} };//this will hold the imgbox options when will call ssi_modal.imgBox function
   ssi_modal.imgBox = function (options, group) {//set options for the image box
@@ -1557,7 +1557,7 @@
         resetOnHover: true
       }
     };
-    if (type === 'confirm' || 'dialog') {
+    if (type === ('confirm' || 'dialog')) {
       options.okBtn = $.extend({}, defaults.okBtn, options.okBtn);
       options.cancelBtn = $.extend({}, defaults.cancelBtn, options.cancelBtn);
     }
@@ -1709,10 +1709,7 @@
   //@author https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Animations/Detecting_CSS_animation_support
   function checkAnimationSupport() {
     var animation = false,
-      animationstring = 'animation',
-      keyframeprefix = '',
       domPrefixes = 'Webkit Moz O ms Khtml'.split(' '),
-      pfx = '',
       elm = document.createElement('div');
 
     if (elm.style.animationName !== undefined) {
@@ -1722,9 +1719,6 @@
     if (animation === false) {
       for (var i = 0; i < domPrefixes.length; i++) {
         if (elm.style[domPrefixes[i] + 'AnimationName'] !== undefined) {
-          pfx = domPrefixes[i];
-          animationstring = pfx + 'Animation';
-          keyframeprefix = '-' + pfx.toLowerCase() + '-';
           animation = true;
           break;
         }
@@ -1769,7 +1763,7 @@
    * Fire MediaWiki Hook
    */
   if (typeof mw === 'object') {
-    if (mw.hasOwnProperty('hook')) {
+    if (Object.prototype.hasOwnProperty.call(mw, 'hook')) {
       mw.hook('ssi_modal').fire();
     }
   }
