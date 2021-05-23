@@ -17,7 +17,7 @@ const _analysis = function(functionID) {
     function: functionID,
   }
   $.ajax({
-    url: api.analysis,
+    url: `${api.analysisApi}/submit`,
     data: submitdata,
     type: 'post',
     dataType: 'json',

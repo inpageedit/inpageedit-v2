@@ -1,6 +1,6 @@
 {
   "name": "mediawiki-inpageedit",
-  "version": "14.1.7",
+  "version": "14.1.8",
   "description": "A useful MediaWiki JavaScript Plugin written with jQuery",
   "main": "index.js",
   "dependencies": {},
@@ -16,7 +16,7 @@
     "lint": "eslint ./index.js ./module/*.js ./method/*.js",
     "dev": "webpack --watch --o ./dev/[name].js",
     "clear": "wsl rm -rf ./dist",
-    "bump": "yarn lint && yarn clear && yarn build && bump --nopkg"
+    "bump": "yarn lint && yarn clear && bump --nopublish && yarn build && yarn publish"
   },
   "repository": {
     "type": "git",

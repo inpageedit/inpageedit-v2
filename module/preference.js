@@ -375,8 +375,8 @@ var preference = {
 
         // 获取Analysis数据
         var userName = config.wgUserName
-        $.get('https://api.wjghj.cn/inpageedit/query/wiki', {
-          url: config.wgServer + config.wgArticlePath.replace('$1', ''),
+        $.get(`${api.analysisApi}/query/wiki`, {
+          siteurl: config.wgServer + config.wgArticlePath.replace('$1', ''),
           prop: 'users.' + userName + '._total|users.' + userName + '.functions'
         }).then(ret => {
           $tabContent.find('#analysis-container').html('')
