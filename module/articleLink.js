@@ -35,7 +35,7 @@ function articleLink(el) {
     if (section === 'new') return;
 
     // 暂时屏蔽 undo
-    if (getParamValue('undo')) return;
+    if (getParamValue('undo', url)) return;
 
     // 不是 index.php?title=FOO 形式的url
     if (title === null) {
