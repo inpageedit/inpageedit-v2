@@ -10,7 +10,7 @@ const { getParamValue } = mw.util;
  * @module articleLink 获取段落编辑以及编辑链接
  * @param {Sting|Element} el jQuery element to find edit links
  */
-var articleLink = function (el) {
+function articleLink(el) {
   if (el === undefined) {
     if (preference.get('redLinkQuickEdit') === true) {
       el = $('#mw-content-text a');
@@ -22,7 +22,7 @@ var articleLink = function (el) {
   $.each(el, function (_, item) {
     var $this = $(item);
     if ($this.attr('href') === undefined) return;
-    var url = $this.attr('href'),
+    let url = $this.attr('href'),
       action = getParamValue('action', url) || getParamValue('veaction', url),
       title = getParamValue('title', url),
       section = getParamValue('section', url) ? getParamValue('section', url).replace(/T-/, '') : null,
@@ -30,6 +30,9 @@ var articleLink = function (el) {
 
     // 不是本地编辑链接
     if (!RegExp('^' + config.wgServer).test(url) && !RegExp('^/').test(url)) return;
+
+    // 暂时屏蔽 section=new #137
+    if (section === 'new') return;
 
     // 不是 index.php?title=FOO 形式的url
     if (title === null) {
