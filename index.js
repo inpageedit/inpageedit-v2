@@ -7,23 +7,24 @@
  * @url https://github.com/Dragon-Fish/InPageEdit-v2
  */
 
-!(async function () {
+!(async function (InPageEdit) {
   'use strict';
 
   // 创建 InPageEdit 变量
-  var InPageEdit = window.InPageEdit || {};
+ InPageEdit = InPageEdit || {};
 
   // 防止多次运行
-  if (typeof InPageEdit.version !== 'undefined') {
+  if (InPageEdit?.version) {
     throw '[InPageEdit] InPageEdit 已经在运行了';
   }
 
   // 初始化插件
-  var init = require('./method/init');
-
-  var mainFunctions = await init();
+  const init = require('./method/init');
 
   // 合并入全局变量
-  window.InPageEdit = $.extend({}, window.InPageEdit, mainFunctions);
+  InPageEdit = {
+    ...InPageEdit,
+    ...init(),
+  }
 
-})();
+})(window.InPageEdit);
