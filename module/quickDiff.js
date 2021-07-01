@@ -143,10 +143,27 @@ var quickDiff = function (param) {
       $diffArea.find('.diffSize').hide();
     }
     // 无上一版本或下一版本
-    if (data.compare.fromrevid === undefined && param.isPreview !== true) {
-      $diffArea.find('.diff-otitle').html('<span class="noPrevVerson">' + data.warnings.compare['*'] + '</span>');
-    } else if (data.compare.torevid === undefined && param.isPreview !== true) {
-      $diffArea.find('.diff-ntitle').html('<span class="noNextVerson">' + data.warnings.compare['*'] + '</span>');
+    if (!data.compare?.fromrevid && !param.isPreview) {
+      $diffArea
+        .find('.diff-otitle')
+        .html('')
+        .append(
+          $('<span>', {
+            class: 'noPrevVerson',
+            text: data?.warnings?.compare?.['*'] || 'Previous version not exist',
+          })
+        );
+    } 
+    if (!data.compare?.torevid && !param.isPreview) {
+      $diffArea
+      .find('.diff-otitle')
+      .html('')
+      .append(
+        $('<span>', {
+          class: 'noNextVerson',
+          text: data?.warnings?.compare?.['*'] || 'Next version not exist',
+        })
+      );
     }
     // GitHub@issue#5 修复被隐藏版本的问题
     if (data.compare.fromtexthidden !== undefined) {
