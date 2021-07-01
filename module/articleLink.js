@@ -34,6 +34,9 @@ function articleLink(el) {
     // 暂时屏蔽 section=new #137
     if (section === 'new') return;
 
+    // 暂时屏蔽 undo
+    if (getParamValue('undo')) return;
+
     // 不是 index.php?title=FOO 形式的url
     if (title === null) {
       title = url.replace(config.wgServer, '');
