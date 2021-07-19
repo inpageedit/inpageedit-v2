@@ -2,7 +2,7 @@
   "name": "mediawiki-inpageedit",
   "version": "14.1.8",
   "description": "A useful MediaWiki JavaScript Plugin written with jQuery",
-  "main": "index.js",
+  "main": "dist/InPageEdit.js",
   "dependencies": {},
   "devDependencies": {
     "@dragon-fish/bump": "^0.0.15",
@@ -13,10 +13,10 @@
     "webpack-cli": "^4.7.2"
   },
   "scripts": {
-    "build": "webpack && set MINIFY=1 webpack",
-    "lint": "eslint ./index.js ./module ./method",
+    "build": "yarn lint && yarn clear && webpack && MINIFY=1 webpack",
+    "lint": "eslint ./src",
     "dev": "webpack --watch --o ./dev/[name].js",
-    "clear": "wsl rm -rf ./dist",
+    "clear": "rm -rf ./dist",
     "pretty": "prettier --write ./index.js ./module ./method",
     "bump": "yarn lint && yarn clear && bump --nopublish && yarn build && yarn publish"
   },
