@@ -1,73 +1,70 @@
 // 导入方法
-const _dir = require('./_dir');
-const { loadScript } = require('./loadScript');
-const { getUserInfo } = require('./getUserInfo');
-const { loadStyles } = require('./loadStyles');
-const { updateNotice } = require('./updateNotice');
-const { syncI18nData } = require('./syncI18nData');
+const _dir = require('./_dir')
+const { loadScript } = require('./loadScript')
+const { getUserInfo } = require('./getUserInfo')
+const { loadStyles } = require('./loadStyles')
+const { updateNotice } = require('./updateNotice')
+const { syncI18nData } = require('./syncI18nData')
 
-const version = require('../module/version');
-
+const version = require('../module/version')
 
 /**
  * @method initMain
  * @return {Object} InPageEdit
  */
 module.exports = async function init() {
-
-  mw.hook('InPageEdit.init.before').fire();
+  mw.hook('InPageEdit.init.before').fire()
 
   // Await MediaWiki
-  await mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user']);
+  await mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user'])
 
   // 是否需要刷新缓存
   const purgeCache = Boolean(
-    mw.util.getParamValue('ipe', location.href) === 'nocache' ||
-    version !== localStorage.getItem('InPageEditVersion')
+    mw.util.getParamValue('ipe', location.href) === 'nocache' || version !== localStorage.getItem('InPageEditVersion')
   )
 
   // 加载样式表
-  loadStyles(purgeCache);
+  loadStyles(purgeCache)
 
   // 等待 i18n 缓存
-  await syncI18nData(purgeCache);
+  await syncI18nData(purgeCache)
 
   mw.hook('InPageEdit.init.i18n').fire({ _msg: require('../module/_msg')._msg })
 
   // 等待前置插件
-  await loadScript(_dir + '/src/ssi_modal/ssi-modal.min.js');
+  await loadScript(_dir + '/src/ssi_modal/ssi-modal.min.js')
 
-  mw.hook('InPageEdit.init.modal').fire({ ssi_modal: window.ssi_modal });
+  mw.hook('InPageEdit.init.modal').fire({ ssi_modal: window.ssi_modal })
 
   // 导入全部模块
-  const { _analysis } = require('../module/_analysis');
-  const { _msg } = require('../module/_msg');
-  const { about } = require('../module/about');
-  const api = require('../module/api.json');
-  const { articleLink } = require('../module/articleLink');
-  const { findAndReplace } = require('../module/findAndReplace');
-  const { loadQuickDiff } = require('../module/loadQuickDiff');
-  const { preference } = require('../module/preference');
-  const { pluginStore } = require('../module/pluginStore');
-  const { progress } = require('../module/progress');
-  const { quickDelete } = require('../module/quickDelete');
-  const { quickDiff } = require('../module/quickDiff');
-  const { quickEdit } = require('../module/quickEdit');
-  const { quickPreview } = require('../module/quickPreview');
-  const { quickRedirect } = require('../module/quickRedirect');
-  const { quickRename } = require('../module/quickRename');
-  const { specialNotice } = require('../module/specialNotice');
-  const { versionInfo } = require('../module/versionInfo');
+  const { _analysis } = require('../module/_analysis')
+  const { _msg } = require('../module/_msg')
+  const { about } = require('../module/about')
+  const api = require('../module/api.json')
+  const { articleLink } = require('../module/articleLink')
+  const { findAndReplace } = require('../module/findAndReplace')
+  const { loadQuickDiff } = require('../module/loadQuickDiff')
+  const { preference } = require('../module/preference')
+  const { pluginStore } = require('../module/pluginStore')
+  const { progress } = require('../module/progress')
+  const { quickDelete } = require('../module/quickDelete')
+  const { quickDiff } = require('../module/quickDiff')
+  const { quickEdit } = require('../module/quickEdit')
+  const { quickPreview } = require('../module/quickPreview')
+  const { quickRedirect } = require('../module/quickRedirect')
+  const { quickRename } = require('../module/quickRename')
+  const { specialNotice } = require('../module/specialNotice')
+  const { versionInfo } = require('../module/versionInfo')
 
   // 初始化前置模块
-  preference.set();
-  getUserInfo();
-  loadQuickDiff();
-  articleLink();
-  updateNotice();
+  preference.set()
+  getUserInfo()
+  loadQuickDiff()
+  articleLink()
+  updateNotice()
 
   // !暂定，触发用户插件
-  pluginStore.initUserPlugin();
+  pluginStore.initUserPlugin()
 
   // 写入模块
   var InPageEdit = {
@@ -100,29 +97,28 @@ module.exports = async function init() {
   }
 
   // 锁定重要变量
-  var importantVariables = [
-    '_dir',
-    'api',
-    'version',
-  ];
-  importantVariables.forEach(key => {
+  var importantVariables = ['_dir', 'api', 'version']
+  importantVariables.forEach((key) => {
     try {
-      Object.freeze(InPageEdit[key]);
+      Object.freeze(InPageEdit[key])
     } catch (e) {
       // Do nothing
     }
-  });
+  })
 
   // 触发钩子，传入上下文
   mw.hook('InPageEdit').fire({
     _analysis,
     _msg,
-    InPageEdit
-  });
+    InPageEdit,
+  })
 
   // 花里胡哨的加载提示
-  console.info('    ____      ____                   ______    ___ __ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_  \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/  \n                      /____/                v' + version);
+  console.info(
+    '    ____      ____                   ______    ___ __ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_  \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/  \n                      /____/                v' +
+      version
+  )
 
   // 传回InPageEdit
-  return InPageEdit;
+  return InPageEdit
 }

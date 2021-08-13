@@ -1,6 +1,6 @@
-const { _msg } = require('./_msg');
+const { _msg } = require('./_msg')
 
-const api = require('./api.json');
+const api = require('./api.json')
 
 /**
  * @module about 关于插件模块
@@ -12,10 +12,10 @@ var about = function () {
     className: 'in-page-edit in-page-edit-about',
     content: $('<section>').append(
       $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: api.aboutUrl })
-    )
-  });
+    ),
+  })
 }
 
 module.exports = {
-  about
+  about,
 }

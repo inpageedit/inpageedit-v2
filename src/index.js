@@ -8,23 +8,22 @@
  */
 
 !(async function (InPageEdit) {
-  'use strict';
+  'use strict'
 
   // 创建 InPageEdit 变量
- InPageEdit = InPageEdit || {};
+  InPageEdit = InPageEdit || {}
 
   // 防止多次运行
   if (InPageEdit?.version) {
-    throw '[InPageEdit] InPageEdit 已经在运行了';
+    throw '[InPageEdit] InPageEdit 已经在运行了'
   }
 
   // 初始化插件
-  const init = require('./method/init');
+  const init = require('./method/init')
 
   // 合并入全局变量
   InPageEdit = {
     ...InPageEdit,
     ...init(),
   }
-
-})(window.InPageEdit);
+})(window.InPageEdit)

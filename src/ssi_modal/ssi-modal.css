@@ -1,5 +1,17 @@
-.ssi-modal .icon, .ssi-modalOuter.ssi-fullScreen .ssi-modalWindow .ssi-displayIcon, .ssi-topIcons .ssi-displayIcon, .ssi-topIcons .ssi-closeIcon, .ssi-modalNavigation .ssi-modalPrev span, .ssi-modalNavigation .ssi-modalNext span, .notify.ssi-success .ssi-modalTitle span.success, .notify.ssi-info .ssi-modalTitle span.success, .notify.ssi-warning .ssi-modalTitle span.success, .notify.ssi-error .ssi-modalTitle span.success, .notify.ssi-info .ssi-modalTitle span.info, .notify.ssi-warning .ssi-modalTitle span.warning, .notify.ssi-error .ssi-modalTitle span.error {
-  background-image: url("images/sprite.png");
+.ssi-modal .icon,
+.ssi-modalOuter.ssi-fullScreen .ssi-modalWindow .ssi-displayIcon,
+.ssi-topIcons .ssi-displayIcon,
+.ssi-topIcons .ssi-closeIcon,
+.ssi-modalNavigation .ssi-modalPrev span,
+.ssi-modalNavigation .ssi-modalNext span,
+.notify.ssi-success .ssi-modalTitle span.success,
+.notify.ssi-info .ssi-modalTitle span.success,
+.notify.ssi-warning .ssi-modalTitle span.success,
+.notify.ssi-error .ssi-modalTitle span.success,
+.notify.ssi-info .ssi-modalTitle span.info,
+.notify.ssi-warning .ssi-modalTitle span.warning,
+.notify.ssi-error .ssi-modalTitle span.error {
+  background-image: url('images/sprite.png');
 }
 
 body.ssi-modalOpen {
@@ -94,164 +106,195 @@ body.ssi-modalOpen {
   width: 100%;
 }
 
-.ssi-modalWrapper.auto, .ssi-modalWrapper .ssi-modalWindow.auto {
+.ssi-modalWrapper.auto,
+.ssi-modalWrapper .ssi-modalWindow.auto {
   display: table;
   width: auto;
 }
 
-.ssi-modalWrapper.large, .ssi-modalWrapper .ssi-modalWindow.large {
+.ssi-modalWrapper.large,
+.ssi-modalWrapper .ssi-modalWindow.large {
   width: 80%;
 }
 
 @media only screen and (max-width: 900px) {
-  .ssi-modalWrapper.large, .ssi-modalWrapper .ssi-modalWindow.large {
+  .ssi-modalWrapper.large,
+  .ssi-modalWrapper .ssi-modalWindow.large {
     width: 85%;
   }
 }
 
 @media only screen and (max-width: 600px) {
-  .ssi-modalWrapper.large, .ssi-modalWrapper .ssi-modalWindow.large {
+  .ssi-modalWrapper.large,
+  .ssi-modalWrapper .ssi-modalWindow.large {
     width: 95%;
   }
 }
 
 @media only screen and (max-width: 450px) {
-  .ssi-modalWrapper.large, .ssi-modalWrapper .ssi-modalWindow.large {
+  .ssi-modalWrapper.large,
+  .ssi-modalWrapper .ssi-modalWindow.large {
     width: 98%;
   }
-  .ssi-modalWrapper.large .ssi-modalTitle, .ssi-modalWrapper .ssi-modalWindow.large .ssi-modalTitle {
+  .ssi-modalWrapper.large .ssi-modalTitle,
+  .ssi-modalWrapper .ssi-modalWindow.large .ssi-modalTitle {
     font-size: 18px;
   }
 }
 
-.ssi-modalWrapper.mediumToLarge, .ssi-modalWrapper .ssi-modalWindow.mediumToLarge {
+.ssi-modalWrapper.mediumToLarge,
+.ssi-modalWrapper .ssi-modalWindow.mediumToLarge {
   width: 70%;
 }
 
 @media only screen and (max-width: 900px) {
-  .ssi-modalWrapper.mediumToLarge, .ssi-modalWrapper .ssi-modalWindow.mediumToLarge {
+  .ssi-modalWrapper.mediumToLarge,
+  .ssi-modalWrapper .ssi-modalWindow.mediumToLarge {
     width: 80%;
   }
 }
 
 @media only screen and (max-width: 600px) {
-  .ssi-modalWrapper.mediumToLarge, .ssi-modalWrapper .ssi-modalWindow.mediumToLarge {
+  .ssi-modalWrapper.mediumToLarge,
+  .ssi-modalWrapper .ssi-modalWindow.mediumToLarge {
     width: 90%;
   }
 }
 
 @media only screen and (max-width: 450px) {
-  .ssi-modalWrapper.mediumToLarge, .ssi-modalWrapper .ssi-modalWindow.mediumToLarge {
+  .ssi-modalWrapper.mediumToLarge,
+  .ssi-modalWrapper .ssi-modalWindow.mediumToLarge {
     width: 95%;
   }
-  .ssi-modalWrapper.mediumToLarge .ssi-modalTitle, .ssi-modalWrapper .ssi-modalWindow.mediumToLarge .ssi-modalTitle {
+  .ssi-modalWrapper.mediumToLarge .ssi-modalTitle,
+  .ssi-modalWrapper .ssi-modalWindow.mediumToLarge .ssi-modalTitle {
     font-size: 18px;
   }
 }
 
-.ssi-modalWrapper.medium, .ssi-modalWrapper .ssi-modalWindow.medium {
+.ssi-modalWrapper.medium,
+.ssi-modalWrapper .ssi-modalWindow.medium {
   width: 62%;
 }
 
 @media only screen and (max-width: 900px) {
-  .ssi-modalWrapper.medium, .ssi-modalWrapper .ssi-modalWindow.medium {
+  .ssi-modalWrapper.medium,
+  .ssi-modalWrapper .ssi-modalWindow.medium {
     width: 72%;
   }
 }
 
 @media only screen and (max-width: 600px) {
-  .ssi-modalWrapper.medium, .ssi-modalWrapper .ssi-modalWindow.medium {
+  .ssi-modalWrapper.medium,
+  .ssi-modalWrapper .ssi-modalWindow.medium {
     width: 82%;
   }
 }
 
 @media only screen and (max-width: 450px) {
-  .ssi-modalWrapper.medium, .ssi-modalWrapper .ssi-modalWindow.medium {
+  .ssi-modalWrapper.medium,
+  .ssi-modalWrapper .ssi-modalWindow.medium {
     width: 95%;
   }
-  .ssi-modalWrapper.medium .ssi-modalTitle, .ssi-modalWrapper .ssi-modalWindow.medium .ssi-modalTitle {
+  .ssi-modalWrapper.medium .ssi-modalTitle,
+  .ssi-modalWrapper .ssi-modalWindow.medium .ssi-modalTitle {
     font-size: 18px;
   }
 }
 
-.ssi-modalWrapper.smallToMedium, .ssi-modalWrapper .ssi-modalWindow.smallToMedium {
+.ssi-modalWrapper.smallToMedium,
+.ssi-modalWrapper .ssi-modalWindow.smallToMedium {
   width: 50%;
 }
 
 @media only screen and (max-width: 900px) {
-  .ssi-modalWrapper.smallToMedium, .ssi-modalWrapper .ssi-modalWindow.smallToMedium {
+  .ssi-modalWrapper.smallToMedium,
+  .ssi-modalWrapper .ssi-modalWindow.smallToMedium {
     width: 70%;
   }
 }
 
 @media only screen and (max-width: 600px) {
-  .ssi-modalWrapper.smallToMedium, .ssi-modalWrapper .ssi-modalWindow.smallToMedium {
+  .ssi-modalWrapper.smallToMedium,
+  .ssi-modalWrapper .ssi-modalWindow.smallToMedium {
     width: 80%;
   }
 }
 
 @media only screen and (max-width: 450px) {
-  .ssi-modalWrapper.smallToMedium, .ssi-modalWrapper .ssi-modalWindow.smallToMedium {
+  .ssi-modalWrapper.smallToMedium,
+  .ssi-modalWrapper .ssi-modalWindow.smallToMedium {
     width: 90%;
   }
-  .ssi-modalWrapper.smallToMedium .ssi-modalTitle, .ssi-modalWrapper .ssi-modalWindow.smallToMedium .ssi-modalTitle {
+  .ssi-modalWrapper.smallToMedium .ssi-modalTitle,
+  .ssi-modalWrapper .ssi-modalWindow.smallToMedium .ssi-modalTitle {
     font-size: 18px;
   }
 }
 
-.ssi-modalWrapper.small, .ssi-modalWrapper .ssi-modalWindow.small {
+.ssi-modalWrapper.small,
+.ssi-modalWrapper .ssi-modalWindow.small {
   width: 45%;
 }
 
 @media only screen and (max-width: 900px) {
-  .ssi-modalWrapper.small, .ssi-modalWrapper .ssi-modalWindow.small {
+  .ssi-modalWrapper.small,
+  .ssi-modalWrapper .ssi-modalWindow.small {
     width: 65%;
   }
 }
 
 @media only screen and (max-width: 600px) {
-  .ssi-modalWrapper.small, .ssi-modalWrapper .ssi-modalWindow.small {
+  .ssi-modalWrapper.small,
+  .ssi-modalWrapper .ssi-modalWindow.small {
     width: 75%;
   }
 }
 
 @media only screen and (max-width: 450px) {
-  .ssi-modalWrapper.small, .ssi-modalWrapper .ssi-modalWindow.small {
+  .ssi-modalWrapper.small,
+  .ssi-modalWrapper .ssi-modalWindow.small {
     width: 85%;
   }
-  .ssi-modalWrapper.small .ssi-modalTitle, .ssi-modalWrapper .ssi-modalWindow.small .ssi-modalTitle {
+  .ssi-modalWrapper.small .ssi-modalTitle,
+  .ssi-modalWrapper .ssi-modalWindow.small .ssi-modalTitle {
     font-size: 18px;
   }
 }
 
-.ssi-modalWrapper.dialog, .ssi-modalWrapper .ssi-modalWindow.dialog {
+.ssi-modalWrapper.dialog,
+.ssi-modalWrapper .ssi-modalWindow.dialog {
   width: 30%;
 }
 
 @media only screen and (max-width: 900px) {
-  .ssi-modalWrapper.dialog, .ssi-modalWrapper .ssi-modalWindow.dialog {
+  .ssi-modalWrapper.dialog,
+  .ssi-modalWrapper .ssi-modalWindow.dialog {
     width: 50%;
   }
 }
 
 @media only screen and (max-width: 600px) {
-  .ssi-modalWrapper.dialog, .ssi-modalWrapper .ssi-modalWindow.dialog {
+  .ssi-modalWrapper.dialog,
+  .ssi-modalWrapper .ssi-modalWindow.dialog {
     width: 60%;
   }
 }
 
 @media only screen and (max-width: 450px) {
-  .ssi-modalWrapper.dialog, .ssi-modalWrapper .ssi-modalWindow.dialog {
+  .ssi-modalWrapper.dialog,
+  .ssi-modalWrapper .ssi-modalWindow.dialog {
     width: 80%;
   }
-  .ssi-modalWrapper.dialog .ssi-modalTitle, .ssi-modalWrapper .ssi-modalWindow.dialog .ssi-modalTitle {
+  .ssi-modalWrapper.dialog .ssi-modalTitle,
+  .ssi-modalWrapper .ssi-modalWindow.dialog .ssi-modalTitle {
     font-size: 18px;
   }
 }
 
 .ssi-modalWindow {
   width: 100%;
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid #c3c3c3;
   position: relative;
   border-radius: 8px;
@@ -341,7 +384,7 @@ body.ssi-modalOpen {
 }
 
 .ssi-modalContent:after {
-  content: " ";
+  content: ' ';
   display: table;
   clear: both;
 }
@@ -381,7 +424,7 @@ body.ssi-modalOpen {
 }
 
 .ssi-buttons:after {
-  content: " ";
+  content: ' ';
   display: block;
   height: 0;
   clear: both;
@@ -423,7 +466,7 @@ body.ssi-modalOpen {
 }
 
 .ssi-modalPositioned.left .ssi-modalWrapper:after {
-  content: " ";
+  content: ' ';
   display: block;
   height: 0;
   clear: both;
@@ -791,9 +834,10 @@ body.ssi-modalOpen {
   border: 1px solid white;
 }
 
-.imgBox .ssi-modalWrapper.ssi-overHeight, .imgBox .ssi-modalWrapper.ssi-overHeight .ssi-modalWindow {
-  -webkit-transition: height .6s, width .6s;
-  transition: height .6s, width .6s;
+.imgBox .ssi-modalWrapper.ssi-overHeight,
+.imgBox .ssi-modalWrapper.ssi-overHeight .ssi-modalWindow {
+  -webkit-transition: height 0.6s, width 0.6s;
+  transition: height 0.6s, width 0.6s;
 }
 
 .imgBox .ssi-modalWrapper .ssi-modalWindow {
@@ -835,7 +879,8 @@ body.ssi-modalOpen {
   height: 300px;
 }
 
-.imgBox .ssi-modalWrapper .ssi-modalWindow .ssi-modalContent h3, .imgBox .ssi-modalWrapper .ssi-modalWindow .ssi-modalContent h4 {
+.imgBox .ssi-modalWrapper .ssi-modalWindow .ssi-modalContent h3,
+.imgBox .ssi-modalWrapper .ssi-modalWindow .ssi-modalContent h4 {
   color: #5e5e5e;
 }
 
@@ -873,7 +918,7 @@ body.ssi-modalOpen {
   left: 0;
   height: 300px;
   width: 100%;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=0)';
   filter: alpha(opacity=0);
   opacity: 0;
 }
@@ -895,14 +940,16 @@ body.ssi-modalOpen {
   }
 }
 
-.ssi-modalNavigation .ssi-modalPrev, .ssi-modalNavigation .ssi-modalNext {
+.ssi-modalNavigation .ssi-modalPrev,
+.ssi-modalNavigation .ssi-modalNext {
   top: 0;
   outline: 0;
   height: 100%;
   cursor: pointer;
 }
 
-.ssi-modalNavigation .ssi-modalPrev span, .ssi-modalNavigation .ssi-modalNext span {
+.ssi-modalNavigation .ssi-modalPrev span,
+.ssi-modalNavigation .ssi-modalNext span {
   position: relative;
   top: 40%;
 }
@@ -1110,10 +1157,10 @@ body.ssi-modalOpen {
   margin: auto auto;
   top: 50%;
   -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
+  transform: translateY(-50%);
   width: 32px;
   height: 32px;
-  background: url("images/loader.gif") no-repeat;
+  background: url('images/loader.gif') no-repeat;
 }
 
 .ssi-navFadeOut {
@@ -1121,14 +1168,14 @@ body.ssi-modalOpen {
 }
 
 .ssi-navFadeIn {
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)" !important;
+  -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=100)' !important;
   filter: alpha(opacity=100) !important;
   opacity: 1 !important;
 }
 
 .ssi-navFade {
-  -webkit-transition: opacity .4s;
-  transition: opacity .4s;
+  -webkit-transition: opacity 0.4s;
+  transition: opacity 0.4s;
 }
 
 /*------------------------End of imgBox plugin------------------------------*/
@@ -1166,25 +1213,34 @@ body.ssi-modalOpen {
 }
 
 .notify .ssi-modalTitle:after {
-  content: " ";
+  content: ' ';
   display: block;
   clear: both;
 }
 
-.notify.ssi-success, .notify.ssi-info, .notify.ssi-warning, .notify.ssi-error {
+.notify.ssi-success,
+.notify.ssi-info,
+.notify.ssi-warning,
+.notify.ssi-error {
   padding: 3px 5px;
   margin: 2px 0;
-  font: 500 18px "Times New Roman";
-  color: #FFFFFF;
+  font: 500 18px 'Times New Roman';
+  color: #ffffff;
   background-color: #2ea53a;
 }
 
-.notify.ssi-success .ssi-modalTitle, .notify.ssi-info .ssi-modalTitle, .notify.ssi-warning .ssi-modalTitle, .notify.ssi-error .ssi-modalTitle {
+.notify.ssi-success .ssi-modalTitle,
+.notify.ssi-info .ssi-modalTitle,
+.notify.ssi-warning .ssi-modalTitle,
+.notify.ssi-error .ssi-modalTitle {
   text-transform: capitalize;
   padding-left: 5px;
 }
 
-.notify.ssi-success .ssi-modalTitle span.success, .notify.ssi-info .ssi-modalTitle span.success, .notify.ssi-warning .ssi-modalTitle span.success, .notify.ssi-error .ssi-modalTitle span.success {
+.notify.ssi-success .ssi-modalTitle span.success,
+.notify.ssi-info .ssi-modalTitle span.success,
+.notify.ssi-warning .ssi-modalTitle span.success,
+.notify.ssi-error .ssi-modalTitle span.success {
   background-position: 0px -234px;
   background-repeat: no-repeat;
   overflow: hidden;
@@ -1193,36 +1249,57 @@ body.ssi-modalOpen {
   height: 33px;
 }
 
-.notify.ssi-success .ssi-modalContent::-webkit-scrollbar-thumb, .notify.ssi-info .ssi-modalContent::-webkit-scrollbar-thumb, .notify.ssi-warning .ssi-modalContent::-webkit-scrollbar-thumb, .notify.ssi-error .ssi-modalContent::-webkit-scrollbar-thumb {
+.notify.ssi-success .ssi-modalContent::-webkit-scrollbar-thumb,
+.notify.ssi-info .ssi-modalContent::-webkit-scrollbar-thumb,
+.notify.ssi-warning .ssi-modalContent::-webkit-scrollbar-thumb,
+.notify.ssi-error .ssi-modalContent::-webkit-scrollbar-thumb {
   background-color: #3c7e28;
 }
 
 @media only screen and (max-width: 900px) {
-  .notify.ssi-success, .notify.ssi-info, .notify.ssi-warning, .notify.ssi-error {
+  .notify.ssi-success,
+  .notify.ssi-info,
+  .notify.ssi-warning,
+  .notify.ssi-error {
     font-size: 15px;
   }
-  .notify.ssi-success .ssi-modalTitle, .notify.ssi-info .ssi-modalTitle, .notify.ssi-warning .ssi-modalTitle, .notify.ssi-error .ssi-modalTitle {
+  .notify.ssi-success .ssi-modalTitle,
+  .notify.ssi-info .ssi-modalTitle,
+  .notify.ssi-warning .ssi-modalTitle,
+  .notify.ssi-error .ssi-modalTitle {
     padding-bottom: 1px;
     font-size: 20px;
   }
 }
 
 @media only screen and (max-width: 600px) {
-  .notify.ssi-success, .notify.ssi-info, .notify.ssi-warning, .notify.ssi-error {
+  .notify.ssi-success,
+  .notify.ssi-info,
+  .notify.ssi-warning,
+  .notify.ssi-error {
     width: 45%;
   }
 }
 
 @media only screen and (max-width: 450px) {
-  .notify.ssi-success, .notify.ssi-info, .notify.ssi-warning, .notify.ssi-error {
+  .notify.ssi-success,
+  .notify.ssi-info,
+  .notify.ssi-warning,
+  .notify.ssi-error {
     font-size: 12px;
   }
-  .notify.ssi-success .ssi-modalTitle, .notify.ssi-info .ssi-modalTitle, .notify.ssi-warning .ssi-modalTitle, .notify.ssi-error .ssi-modalTitle {
+  .notify.ssi-success .ssi-modalTitle,
+  .notify.ssi-info .ssi-modalTitle,
+  .notify.ssi-warning .ssi-modalTitle,
+  .notify.ssi-error .ssi-modalTitle {
     font-size: 18px;
   }
 }
 
-.notify.ssi-success:hover, .notify.ssi-info:hover, .notify.ssi-warning:hover, .notify.ssi-error:hover {
+.notify.ssi-success:hover,
+.notify.ssi-info:hover,
+.notify.ssi-warning:hover,
+.notify.ssi-error:hover {
   background-color: #2c9738;
 }
 

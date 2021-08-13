@@ -1,4 +1,4 @@
 module.exports = {
   config: mw.config.get(),
-  mwApi: new mw.Api()
+  mwApi: new mw.Api(),
 }

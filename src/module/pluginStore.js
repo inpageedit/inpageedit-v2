@@ -1,6 +1,6 @@
 // const _dir = require('../method/_dir');
 // const { _msg } = require('./_msg');
-const pluginCDN = require('./api.json').pluginCDN;
+const pluginCDN = require('./api.json').pluginCDN
 
 /**
  * @module pluginStore 加载InPageEdit插件
@@ -14,7 +14,7 @@ var pluginStore = {
       url: pluginCDN + '/index.json',
       dataType: 'json',
       crossDomain: true,
-      cache: false
+      cache: false,
     })
   },
   saveCache(data) {
@@ -30,17 +30,17 @@ var pluginStore = {
   },
   /**
    * @module pluginStore.load 载入插件
-   * @param {String} name 
+   * @param {String} name
    */
   load(name) {
     if (/^https?:\/\//.test(name)) {
-      mw.loader.load(name);
+      mw.loader.load(name)
       console.info('[InPageEdit] 从远程加载非官方插件', name)
     } else {
       const { loadScript } = require('../method/loadScript')
       loadScript(pluginCDN + '/plugins/' + name).then(
         () => console.info('[InPageEdit] 插件 ' + name + ' 加载成功'),
-        err => console.warn('[InPageEdit] 插件 ' + name + ' 加载失败', err)
+        (err) => console.warn('[InPageEdit] 插件 ' + name + ' 加载失败', err)
       )
       console.info('[InPageEdit] 从官方插件商店加载插件', name)
     }
@@ -56,9 +56,9 @@ var pluginStore = {
         pluginStore.load(val)
       })
     }
-  }
+  },
 }
 
 module.exports = {
-  pluginStore
+  pluginStore,
 }

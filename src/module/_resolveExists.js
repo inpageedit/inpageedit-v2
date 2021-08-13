@@ -1,8 +1,8 @@
-const { _msg } = require('./_msg');
-const { _hasRight } = require('./_hasRight');
+const { _msg } = require('./_msg')
+const { _hasRight } = require('./_hasRight')
 
-const { quickDelete } = require('./quickDelete');
-const { quickEdit } = require('./quickEdit');
+const { quickDelete } = require('./quickDelete')
+const { quickEdit } = require('./quickEdit')
 
 /**
  * @module _resolveExists 解决目标页面已存在的问题
@@ -12,12 +12,12 @@ const { quickEdit } = require('./quickEdit');
  * @param {String} reason.edit 编辑原因
  */
 var _resolveExists = function (page, reason = {}) {
-  var canDelete = _hasRight('delete');
+  var canDelete = _hasRight('delete')
 
   if (typeof reason === 'string') {
     reason = {
       delete: reason,
-      edit: reason
+      edit: reason,
     }
   }
 
@@ -27,15 +27,15 @@ var _resolveExists = function (page, reason = {}) {
     center: true,
     outSideClose: false,
     title: _msg('target-exists-title'),
-    content: _msg((canDelete ? 'target-exists-can-delete' : 'target-exists-no-delete'), page),
+    content: _msg(canDelete ? 'target-exists-can-delete' : 'target-exists-no-delete', page),
     buttons: [
       {
         className: 'btn btn-danger btn-exists-delete-target',
         label: _msg('quick-delete'),
         method(a, modal) {
-          modal.close();
-          quickDelete(page, reason.delete || null);
-        }
+          modal.close()
+          quickDelete(page, reason.delete || null)
+        },
       },
       {
         className: 'btn btn-primary',
@@ -43,27 +43,27 @@ var _resolveExists = function (page, reason = {}) {
         method() {
           quickEdit({
             page: page,
-            summary: (reason.edit ? '[InPageEdit] ' + reason : null),
-            reload: false
+            summary: reason.edit ? '[InPageEdit] ' + reason : null,
+            reload: false,
           })
-        }
+        },
       },
       {
         className: 'btn btn-secondary' + (canDelete ? ' btn-single' : ''),
         label: _msg('cancel'),
         method: (a, modal) => {
-          modal.close();
-        }
-      }
+          modal.close()
+        },
+      },
     ],
     onShow: () => {
       if (!canDelete) {
-        $('.btn-exists-delete-target').hide();
+        $('.btn-exists-delete-target').hide()
       }
-    }
-  });
+    },
+  })
 }
 
 module.exports = {
-  _resolveExists
+  _resolveExists,
 }
