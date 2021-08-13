@@ -59,7 +59,7 @@ var quickEdit = function (options) {
   /** 缓存时间戳 **/
   var date = new Date(),
     timestamp = date.getTime(),
-    now = date.toUTCString()
+    now = date.toISOString()
 
   /** 将选项合并并标准化 **/
   options = $.extend({}, defaultOptions, options, userPreference)
@@ -269,8 +269,7 @@ var quickEdit = function (options) {
 
   // Debug
   console.time('[InPageEdit] 获取页面源代码')
-  console.info('[InPageEdit] QuickEdit start with options:')
-  console.table(options)
+  console.info('[InPageEdit] QuickEdit options', options)
 
   // 显示主窗口
   ssi_modal.show({
@@ -368,7 +367,7 @@ var quickEdit = function (options) {
             '<i class="fa fa-info-circle"></i> ' +
             _msg('editor-has-editNotice'),
           style: 'display: none;',
-        }).click(function () {
+        }).on('click', function () {
           ssi_modal.show({
             className: 'in-page-edit',
             center: true,
@@ -426,7 +425,7 @@ var quickEdit = function (options) {
           addBtn(btn.open, btn.middle, btn.close, btn.text)
         }
       }
-      $editTools.find('.editToolBtn').click(function (e) {
+      $editTools.find('.editToolBtn').on('click', function (e) {
         e.preventDefault()
         var $this = $(this),
           $open = $this.attr('data-open') || '',
@@ -550,7 +549,7 @@ var quickEdit = function (options) {
                 options.revision +
                 ')</span>'
             )
-          $modalWindow.find('.diff-btn').click(function () {
+          $modalWindow.find('.diff-btn').on('click', function () {
             _analysis('quick_diff_edit')
             var text = $editArea.val()
             var diffJson = {
@@ -590,11 +589,9 @@ var quickEdit = function (options) {
             // 记录页面最后编辑时间，防止编辑冲突
             $modalContent.data(
               'basetimestamp',
-              data['query']['pages'][options.pageId].revisions
-                ? data['query']['pages'][options.pageId]['revisions'][0][
-                    'timestamp'
-                  ]
-                : now
+              data['query']['pages']?.[options.pageId]?.['revisions']?.[0]?.[
+                'timestamp'
+              ] ?? now
             )
             queryDone(data)
           })
@@ -608,23 +605,20 @@ var quickEdit = function (options) {
 
         /** 页面保护等级和编辑提示等 **/
         function queryDone(data) {
-          options.namespace = data.query.pages[options.pageId].ns // 名字空间ID
-          options.protection =
-            data.query.pages[options.pageId]['protection'] || [] // 保护等级
-          if (data.query.pages[options.pageId].revisions) {
-            options.revision =
-              data.query.pages[options.pageId]['revisions'][0]['revid'] // 版本号
-          }
+          const pageData = data.query.pages[options.pageId]
+          options.namespace = pageData?.ns ?? 0 // 名字空间ID
+          options.protection = pageData?.['protection'] || [] // 保护等级
+          options.revision = pageData?.['revisions']?.[0]?.['revid']
 
           // 使页面名标准化
-          options.page = data.query.pages[options.pageId].title
+          options.page = pageData.title
           $modalTitle.find('.editPage').text(options.page)
 
           if (options.revision) {
             $modalWindow
               .find('.diff-btn')
-              .attr('disabled', false)
-              .click(function () {
+              .removeAttr('disabled')
+              .on('click', function () {
                 _analysis('quick_diff_edit')
                 var text = $editArea.val()
                 var diffJson = {
@@ -767,7 +761,7 @@ var quickEdit = function (options) {
   })
 
   // 页面详情模块
-  $optionsLabel.find('.detailBtnGroup .detailBtn').click(function () {
+  $optionsLabel.find('.detailBtnGroup .detailBtn').on('click', function () {
     _analysis('quick_edit_pagedetail')
     var $this = $(this),
       id = $this.attr('id'),
@@ -844,69 +838,75 @@ var quickEdit = function (options) {
         })
         break
     }
-    $('.in-page-edit.quick-edit-detail .quickEditTemplate').click(function () {
-      _analysis('quick_edit_pagedetail_edit_template')
-      var $this = $(this)
-      var page = $this.attr('data-template-name')
-      quickEdit({
-        page,
-      })
-    })
-    $('.in-page-edit.quick-edit-detail .quickViewImage').click(function () {
-      _analysis('quick_edit_pagedetail_view_image')
-      var $this = $(this)
-      var imageName = $this.attr('data-image-name')
-      ssi_modal.show({
-        className: 'in-page-edit quick-view-image',
-        center: true,
-        title: imageName.replace(/_/g, ' '),
-        content: $('<center>', { id: 'imageLayer' }).append($progress),
-        buttons: [
-          {
-            label: _msg('editor-detail-images-upload'),
-            className: 'btn btn-primary',
-            method() {
-              window.open(
-                config.wgScript +
-                  '?title=Special:Upload&wpDestFile=' +
-                  imageName +
-                  '&wpForReUpload=1'
-              )
+    $('.in-page-edit.quick-edit-detail .quickEditTemplate').on(
+      'click',
+      function () {
+        _analysis('quick_edit_pagedetail_edit_template')
+        var $this = $(this)
+        var page = $this.attr('data-template-name')
+        quickEdit({
+          page,
+        })
+      }
+    )
+    $('.in-page-edit.quick-edit-detail .quickViewImage').on(
+      'click',
+      function () {
+        _analysis('quick_edit_pagedetail_view_image')
+        var $this = $(this)
+        var imageName = $this.attr('data-image-name')
+        ssi_modal.show({
+          className: 'in-page-edit quick-view-image',
+          center: true,
+          title: imageName.replace(/_/g, ' '),
+          content: $('<center>', { id: 'imageLayer' }).append($progress),
+          buttons: [
+            {
+              label: _msg('editor-detail-images-upload'),
+              className: 'btn btn-primary',
+              method() {
+                window.open(
+                  mw.util.getUrl('Special:Upload', {
+                    wpDestFile: imageName,
+                    wpForReUpload: 1,
+                  })
+                )
+              },
             },
-          },
-          {
-            label: _msg('close'),
-            className: 'btn btn-secondary',
-            method(a, modal) {
-              modal.close()
+            {
+              label: _msg('close'),
+              className: 'btn btn-secondary',
+              method(a, modal) {
+                modal.close()
+              },
             },
-          },
-        ],
-        onShow() {
-          mwApi
-            .get({
-              action: 'query',
-              format: 'json',
-              prop: 'imageinfo',
-              titles: 'File:' + imageName.replace(/file:/g, ''),
-              iiprop: 'url',
-            })
-            .done(function (data) {
-              $('.quick-view-image .ipe-progress').hide()
-              $('.quick-view-image #imageLayer').append(
-                $('<img>', {
-                  src: data.query.pages['-1'].imageinfo[0].url,
-                  class: 'loading',
-                  style: 'max-width: 80%; max-height: 60vh',
-                })
-              )
-              $('.quick-view-image #imageLayer img').load(function () {
-                $(this).removeClass('loading')
+          ],
+          onShow() {
+            mwApi
+              .get({
+                action: 'query',
+                format: 'json',
+                prop: 'imageinfo',
+                titles: `File:${imageName.replace(/file:/g, '')}`,
+                iiprop: 'url',
               })
-            })
-        },
-      })
-    })
+              .done(function (data) {
+                $('.quick-view-image .ipe-progress').hide()
+                $('.quick-view-image #imageLayer').append(
+                  $('<img>', {
+                    src: data.query.pages['-1'].imageinfo[0].url,
+                    class: 'loading',
+                    style: 'max-width: 80%; max-height: 60vh',
+                  })
+                )
+                $('.quick-view-image #imageLayer img').load(function () {
+                  $(this).removeClass('loading')
+                })
+              })
+          },
+        })
+      }
+    )
   })
 
   // 发布编辑模块
