@@ -19,15 +19,16 @@ module.exports = async function init() {
   await mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user'])
 
   // 是否需要刷新缓存
-  const purgeCache = Boolean(
-    mw.util.getParamValue('ipe', location.href) === 'nocache' || version !== localStorage.getItem('InPageEditVersion')
+  const noCache = !!(
+    mw.util.getParamValue('ipe', location.href) === 'nocache' ||
+      version !== localStorage.getItem('InPageEditVersion')
   )
 
   // 加载样式表
-  loadStyles(purgeCache)
+  loadStyles(noCache)
 
   // 等待 i18n 缓存
-  await syncI18nData(purgeCache)
+  await syncI18nData(noCache)
 
   mw.hook('InPageEdit.init.i18n').fire({ _msg: require('../module/_msg')._msg })
 

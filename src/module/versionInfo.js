@@ -11,9 +11,16 @@ var versionInfo = function () {
   // 显示模态框
   ssi_modal.show({
     className: 'in-page-edit update-logs-modal',
-    title: _msg('updatelog-title') + ' - <span id="yourVersion">' + version + '</span>',
+    title:
+      _msg('updatelog-title') +
+      ' - <span id="yourVersion">' +
+      version +
+      '</span>',
     content: $('<section>').append(
-      $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: api.updatelogsUrl })
+      $('<iframe>', {
+        style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;',
+        src: api.updatelogsUrl,
+      })
     ),
     buttons: [
       {

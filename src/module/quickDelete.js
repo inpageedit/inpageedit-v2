@@ -23,7 +23,9 @@ var quickDelete = function (page, givenReason = '') {
     title: _msg('delete-title'),
     content: $('<div>').append(
       $('<section>', { id: 'InPageEditDeletepage' }).append(
-        $('<span>', { html: _msg('delete-reason', '<b>' + page.replace(/_/g, ' ') + '</b>') }),
+        $('<span>', {
+          html: _msg('delete-reason', '<b>' + page.replace(/_/g, ' ') + '</b>'),
+        }),
         $br,
         $('<label>', { for: 'delete-reason', text: _msg('editSummary') }),
         $('<input>', {
@@ -62,7 +64,10 @@ var quickDelete = function (page, givenReason = '') {
         method: function (e, modal) {
           reason = $('#InPageEditDeletepage #delete-reason').val()
           if (reason === '') {
-            $('#InPageEditDeletepage #delete-reason').css('box-shadow', '0 0 4px #f00')
+            $('#InPageEditDeletepage #delete-reason').css(
+              'box-shadow',
+              '0 0 4px #f00'
+            )
             return
           }
           _analysis('quick_delete')

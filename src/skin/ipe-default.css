@@ -21,8 +21,16 @@
 }
 
 .in-page-edit .ssi-overflow {
-  background-image: radial-gradient(farthest-side at 50% 0, rgba(26, 26, 26, 0.12), transparent),
-    radial-gradient(farthest-side at 50% 100%, rgba(26, 26, 26, 0.12), transparent);
+  background-image: radial-gradient(
+      farthest-side at 50% 0,
+      rgba(26, 26, 26, 0.12),
+      transparent
+    ),
+    radial-gradient(
+      farthest-side at 50% 100%,
+      rgba(26, 26, 26, 0.12),
+      transparent
+    );
   background-position: 0 0, 0 100%;
   background-repeat: no-repeat;
   background-size: 100% 9px;

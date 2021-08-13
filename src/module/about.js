@@ -11,7 +11,10 @@ var about = function () {
     title: _msg('preference-about-label'),
     className: 'in-page-edit in-page-edit-about',
     content: $('<section>').append(
-      $('<iframe>', { style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;', src: api.aboutUrl })
+      $('<iframe>', {
+        style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;',
+        src: api.aboutUrl,
+      })
     ),
   })
 }

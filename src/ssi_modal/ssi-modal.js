@@ -287,14 +287,16 @@
       $modalOuter.removeClass('ssi-fullScreen') //remove class
       this.options.preview.state = 'normal' //set state to normal
       $modalOuter.find('#ssi-modalContent').css('height', '')
-      if (this.options.fixedHeight || this.options.fitScreen) this.setModalHeight() //set height again
+      if (this.options.fixedHeight || this.options.fitScreen)
+        this.setModalHeight() //set height again
       clearTimeout(time)
       $modalOuter.off('mousemove.ssi-modal')
     } else {
       //if current state is normal
       if (this.options.preview.hideIcons) {
         var $icons = $modalOuter.find('.ssi-topIcons')
-        if (this.options.buttons) var $buttons = $modalOuter.find('#ssi-buttons') //find the buttons area
+        if (this.options.buttons)
+          var $buttons = $modalOuter.find('#ssi-buttons') //find the buttons area
         $modalOuter.on('mousemove.ssi-modal', function () {
           //register mousemove event
           clearTimeout(time)
@@ -355,7 +357,10 @@
           var resume
           if (typeof beforeClose === 'function') resume = beforeClose(modal)
           if (resume !== false) {
-            content.eq(0).after(modal.get$content().contents().unwrap().css('display', '')).remove()
+            content
+              .eq(0)
+              .after(modal.get$content().contents().unwrap().css('display', ''))
+              .remove()
           } else {
             return resume
           }
@@ -442,31 +447,61 @@
    * Helps to define the animations
    */
   var setAnimations = function (modalObj) {
-    var modalAnim = modalObj.options.modalAnimation || modalObj.options.animation || false
-    var backdropAnim = modalObj.options.backdropAnimation || modalObj.options.animation || false
+    var modalAnim =
+      modalObj.options.modalAnimation || modalObj.options.animation || false
+    var backdropAnim =
+      modalObj.options.backdropAnimation || modalObj.options.animation || false
     var inAnim, outAnim
 
-    inAnim = changeAnimations(typeof modalAnim.show !== 'undefined' ? modalAnim.show : modalAnim, 'show')
-    outAnim = changeAnimations(typeof modalAnim.hide !== 'undefined' ? modalAnim.hide : modalAnim, 'hide')
+    inAnim = changeAnimations(
+      typeof modalAnim.show !== 'undefined' ? modalAnim.show : modalAnim,
+      'show'
+    )
+    outAnim = changeAnimations(
+      typeof modalAnim.hide !== 'undefined' ? modalAnim.hide : modalAnim,
+      'hide'
+    )
     modalObj.options.modalAnimation = {
       show: inAnim,
       hide: outAnim,
     }
 
-    inAnim = changeAnimations(typeof backdropAnim.show !== 'undefined' ? backdropAnim.show : backdropAnim, 'show')
-    outAnim = changeAnimations(typeof backdropAnim.hide !== 'undefined' ? backdropAnim.hide : backdropAnim, 'hide')
+    inAnim = changeAnimations(
+      typeof backdropAnim.show !== 'undefined'
+        ? backdropAnim.show
+        : backdropAnim,
+      'show'
+    )
+    outAnim = changeAnimations(
+      typeof backdropAnim.hide !== 'undefined'
+        ? backdropAnim.hide
+        : backdropAnim,
+      'hide'
+    )
     modalObj.options.backdropAnimation = {
       show: inAnim,
       hide: outAnim,
     }
     if (animationSupport === false) {
       modalObj.options.modalAnimation = {
-        show: modalObj.options.modalAnimation.show !== 'ssi-show' ? 'anim ssi-fadeIn' : 'ssi-show',
-        hide: modalObj.options.modalAnimation.hide !== 'ssi-hidden' ? 'anim ssi-fadeOut' : 'ssi-hidden',
+        show:
+          modalObj.options.modalAnimation.show !== 'ssi-show'
+            ? 'anim ssi-fadeIn'
+            : 'ssi-show',
+        hide:
+          modalObj.options.modalAnimation.hide !== 'ssi-hidden'
+            ? 'anim ssi-fadeOut'
+            : 'ssi-hidden',
       }
       modalObj.options.backdropAnimation = {
-        show: modalObj.options.backdropAnimation.show !== 'ssi-show' ? 'anim ssi-fadeIn' : 'ssi-show',
-        hide: modalObj.options.backdropAnimation.hide !== 'ssi-hidden' ? 'anim ssi-fadeOut' : 'ssi-hidden',
+        show:
+          modalObj.options.backdropAnimation.show !== 'ssi-show'
+            ? 'anim ssi-fadeIn'
+            : 'ssi-show',
+        hide:
+          modalObj.options.backdropAnimation.hide !== 'ssi-hidden'
+            ? 'anim ssi-fadeOut'
+            : 'ssi-hidden',
       }
     }
   }
@@ -479,7 +514,9 @@
       modalObj.close()
     }, modalObj.options.closeAfter.time * 1000)
     if (modalObj.options.closeAfter.displayTime && modalObj.options.title) {
-      var $displayTime = $modal.find('span.ssi-displayTime').html(modalObj.options.closeAfter.time)
+      var $displayTime = $modal
+        .find('span.ssi-displayTime')
+        .html(modalObj.options.closeAfter.time)
       updateTime(modalObj, $displayTime, function () {
         modalObj.$displayTime.remove()
       })
@@ -531,10 +568,15 @@
           this.pluginName +
           '"></div>'
       )
-      if (this.options.backdrop === 'shared' || this.options.backdrop === 'byKindShared') {
+      if (
+        this.options.backdrop === 'shared' ||
+        this.options.backdrop === 'byKindShared'
+      ) {
         var $sharedBackdrop
         if (this.options.backdrop === 'byKindShared') {
-          $sharedBackdrop = $('.ssi-backdrop.ssi-openedDialog.' + this.pluginName)
+          $sharedBackdrop = $(
+            '.ssi-backdrop.ssi-openedDialog.' + this.pluginName
+          )
         } else {
           $sharedBackdrop = $('.ssi-backdrop.ssi-openedDialog')
         }
@@ -572,10 +614,14 @@
   var setOuter = function (modalObj) {
     return $(
       '<div class="ssi-modalOuter ' +
-        (modalObj.options.stack ? ' ssi-stack' : '' + modalObj.options.className) +
+        (modalObj.options.stack
+          ? ' ssi-stack'
+          : '' + modalObj.options.className) +
         (modalObj.options.center ? ' ssi-center ' : ' ') +
         ' ' +
-        (modalObj.options.position ? ' ssi-modalPositioned ' + modalObj.options.position : '') +
+        (modalObj.options.position
+          ? ' ssi-modalPositioned ' + modalObj.options.position
+          : '') +
         '"></div>'
     )
   }
@@ -585,7 +631,11 @@
    * @return $backdrop
    */
   var setWrapper = function (modalObj) {
-    return $('<div id="ssi-modalWrapper" class=" ssi-modalWrapper ' + modalObj.options.sizeClass + '"></div>')
+    return $(
+      '<div id="ssi-modalWrapper" class=" ssi-modalWrapper ' +
+        modalObj.options.sizeClass +
+        '"></div>'
+    )
   }
   /**
    * Initialize the icons element if necessary and append the icons to the element.
@@ -628,7 +678,13 @@
     var $modalWindow = $(
         '<div id="ssi-modalWindow" class="ssi-modalWindow ' +
           (modalObj.options.center ? modalObj.options.sizeClass : '') +
-          (modalObj.options.stack ? ' ' + modalObj.options.sizeClass + ' ' + modalObj.options.className + ' ' : '') +
+          (modalObj.options.stack
+            ? ' ' +
+              modalObj.options.sizeClass +
+              ' ' +
+              modalObj.options.className +
+              ' '
+            : '') +
           '"></div>'
       ),
       $modalContent = '',
@@ -651,7 +707,10 @@
       windowContent.push(modalObj.setIcons(modalObj.options.iconButtons, true))
     }
     windowContent.push($modalContent)
-    if (typeof modalObj.options.buttons !== 'undefined' && !$.isEmptyObject(modalObj.options.buttons)) {
+    if (
+      typeof modalObj.options.buttons !== 'undefined' &&
+      !$.isEmptyObject(modalObj.options.buttons)
+    ) {
       windowContent.push(modalObj.setButtons(modalObj.options.buttons, false))
     }
     $modalWindow.append(windowContent)
@@ -702,7 +761,9 @@
         '>'
     )
     if (typeof buttonOptions.enableAfter === 'number') {
-      var $count = $('<span class="ssi-countDown">' + buttonOptions.enableAfter + '</span>')
+      var $count = $(
+        '<span class="ssi-countDown">' + buttonOptions.enableAfter + '</span>'
+      )
       updateTime(modalObj, $count, function () {
         $btn.removeClass('disabled')
         $btn.removeAttr('disabled')
@@ -760,7 +821,9 @@
           appendAction = 'prepend'
         }
         var position = this.options.position.replace(' ', '.') //change the spaces with dot to make it a class selector
-        var positionedElement = $('div.ssi-modalOuter.ssi-stack' + '.' + position)
+        var positionedElement = $(
+          'div.ssi-modalOuter.ssi-stack' + '.' + position
+        )
         if (positionedElement[0]) {
           //check if this element with this position exists to the dom.
           positionedElement
@@ -773,7 +836,9 @@
     if (!this.options.stack || !positionedElement[0]) {
       //if not stack modal or the element with this position dont exist to the dom create and append one.
       var wrapper = setWrapper(this)
-      var $modal = setOuter(this).append(wrapper.append($modalWindow)).appendTo($('body'))
+      var $modal = setOuter(this)
+        .append(wrapper.append($modalWindow))
+        .appendTo($('body'))
       if (!this.options.stack) {
         //if not stack give a unique id to the outer
         this.$modal = $modal
@@ -888,7 +953,9 @@
     var modalObj = this
     var $backdrop = this.get$backdrop().addClass('ssi-openedDialog')
 
-    $backdrop.addAnimation(this.options.backdropAnimation.show).removeClass('ssi-hidden')
+    $backdrop
+      .addAnimation(this.options.backdropAnimation.show)
+      .removeClass('ssi-hidden')
 
     delete this.$backdrop
   }
@@ -903,7 +970,11 @@
 
     this.showModal()
 
-    if (orphanBackdrop === false && this.options.backdrop && this.showbd === true) {
+    if (
+      orphanBackdrop === false &&
+      this.options.backdrop &&
+      this.showbd === true
+    ) {
       this.showBackdrop()
     }
 
@@ -925,9 +996,13 @@
       if (
         thisS.options.backdrop === true ||
         (((thisS.options.backdrop === 'shared' && sharedBackdrop < 1) ||
-          (thisS.options.backdrop === 'byKindShared' && byKindShare[thisS.pluginName] < 1)) &&
+          (thisS.options.backdrop === 'byKindShared' &&
+            byKindShare[thisS.pluginName] < 1)) &&
           (!thisS.get$modal(
-            thisS.modalId.replace(thisS.numberId.toString(), thisS.backdropId.replace('ssi-backdrop', ''))
+            thisS.modalId.replace(
+              thisS.numberId.toString(),
+              thisS.backdropId.replace('ssi-backdrop', '')
+            )
           )[0] ||
             thisS.backdropId.replace('ssi-backdrop', '') == thisS.numberId))
       ) {
@@ -938,7 +1013,10 @@
           $backdrop.trigger('backdropClose.ssi-modal')
           if (modalObj.options.keepContent !== true) $backdrop.remove() //remove backdrop if keepContent option is false
         }
-        $backdrop.addAnimation(thisS.options.backdropAnimation.hide, closeBackdrop)
+        $backdrop.addAnimation(
+          thisS.options.backdropAnimation.hide,
+          closeBackdrop
+        )
       }
       if (orphanBackdrop === thisS.backdropId) {
         orphanBackdrop = false
@@ -983,7 +1061,8 @@
         $modal.trigger('onClose.ssi-modal') //trigger close event
         if (modalObj.options.keepContent !== true) $modal.remove() //will remove modal from DOM if keepContent option is false
       }
-      if (typeof modalObj.options.onClose === 'function') modalObj.options.onClose(modalObj) //execute onClose callback
+      if (typeof modalObj.options.onClose === 'function')
+        modalObj.options.onClose(modalObj) //execute onClose callback
 
       if (modalObj.options.keepContent !== true) {
         $modal.off('.ssi-modal').find('#ssi-modalWrapper').off('.ssi-modal')
@@ -1050,7 +1129,9 @@
     if (!option) {
       if (this.options.fitScreen && this.options.fixedHeight) {
         if (typeof this.options.fitScreen === 'number') {
-          optionsOffset = Math.abs((this.options.fitScreen + this.options.fixedHeight) / 2 - offset)
+          optionsOffset = Math.abs(
+            (this.options.fitScreen + this.options.fixedHeight) / 2 - offset
+          )
         }
         $content.css('height', windowHeight - totalHeight - optionsOffset) //add more margin down
       } else {
@@ -1200,7 +1281,10 @@
       except = toArray(except)
       var $activeModals
       var groupVarType = typeof group
-      if ((groupVarType === 'string' && group !== '') || groupVarType === 'array') {
+      if (
+        (groupVarType === 'string' && group !== '') ||
+        groupVarType === 'array'
+      ) {
         group = toArray(group)
         var groupLength = group.length
         for (var i = 0; i < groupLength; i++) {
@@ -1318,14 +1402,17 @@
     return !!s.match(isDataURL.regex)
   }
 
-  isDataURL.regex =
-    /^\s*data:([a-z]+\/[a-z0-9\-\+]+(;[a-z\-]+\=[a-z0-9\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i
+  isDataURL.regex = /^\s*data:([a-z]+\/[a-z0-9\-\+]+(;[a-z\-]+\=[a-z0-9\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i
 
   var imgBoxOptions = { 'ssi-mainOption': {} } //this will hold the imgbox options when will call ssi_modal.imgBox function
   ssi_modal.imgBox = function (options, group) {
     //set options for the image box
     group = group || 'ssi-mainOption'
-    imgBoxOptions[group] = $.extend({}, imgBoxOptions['ssi-mainOption'], options)
+    imgBoxOptions[group] = $.extend(
+      {},
+      imgBoxOptions['ssi-mainOption'],
+      options
+    )
   }
 
   var currentIndex, $elementsLength, $eventTarget
@@ -1336,10 +1423,15 @@
    * @returns {Ssi_modal}
    */
   ssi_modal.proto.navigate = function (direction) {
-    var $groupElements = $('a[data-ssi_imgGroup="' + $eventTarget.attr('data-ssi_imgGroup') + '"]')
+    var $groupElements = $(
+      'a[data-ssi_imgGroup="' + $eventTarget.attr('data-ssi_imgGroup') + '"]'
+    )
     if (!currentIndex) currentIndex = $groupElements.index($eventTarget)
     if (!$elementsLength) $elementsLength = $groupElements.length
-    if ((direction === 'next' && currentIndex + 1 >= $elementsLength) || (direction === 'prev' && currentIndex < 0)) {
+    if (
+      (direction === 'next' && currentIndex + 1 >= $elementsLength) ||
+      (direction === 'prev' && currentIndex < 0)
+    ) {
       return this
     }
 
@@ -1418,7 +1510,9 @@
       $content = $modalWrapper.find('#ssi-modalContent')
     if (!url || url == '#') {
       var alt = $eventTarget ? $eventTarget.attr('data-alt') : ''
-      $img = '<h3>Image not found</h3><br>' + (typeof alt !== 'undefined' ? '<h4>' + alt + '</h4>' : '')
+      $img =
+        '<h3>Image not found</h3><br>' +
+        (typeof alt !== 'undefined' ? '<h4>' + alt + '</h4>' : '')
       placeImg(true)
       return
     }
@@ -1450,7 +1544,9 @@
         })
         .error(function () {
           var alt = $eventTarget ? $eventTarget.attr('data-alt') : ''
-          $img = '<h3>Image not found</h3><br>' + (typeof alt !== 'undefined' ? '<h4>' + alt + '</h4>' : '')
+          $img =
+            '<h3>Image not found</h3><br>' +
+            (typeof alt !== 'undefined' ? '<h4>' + alt + '</h4>' : '')
           placeImg(true)
         })
       checkSize()
@@ -1486,7 +1582,9 @@
     }
 
     function setImgNavigation() {
-      var $groupElements = $('a[data-ssi_imgGroup="' + $eventTarget.attr('data-ssi_imgGroup') + '"]')
+      var $groupElements = $(
+        'a[data-ssi_imgGroup="' + $eventTarget.attr('data-ssi_imgGroup') + '"]'
+      )
       if (!$groupElements.length) return
       var index = $groupElements.index($eventTarget),
         $elementLength = $groupElements.length
@@ -1499,9 +1597,15 @@
             $nav.removeClass('ssi-navFadeIn')
           }),
         $next = $(
-          '<div class="ssi-modalNext ' + (index + 1 >= $elementLength ? 'ssi-hidden' : '') + '"><span></span></div>'
+          '<div class="ssi-modalNext ' +
+            (index + 1 >= $elementLength ? 'ssi-hidden' : '') +
+            '"><span></span></div>'
         ),
-        $prev = $('<div class="ssi-modalPrev ' + (index < 1 ? 'ssi-hidden' : '') + '"><span></span></div>')
+        $prev = $(
+          '<div class="ssi-modalPrev ' +
+            (index < 1 ? 'ssi-hidden' : '') +
+            '"><span></span></div>'
+        )
       $nav.append($next, $prev)
       imgBox.get$backdrop().one('backdropClose.ssi-modal', function () {
         $elementsLength = ''
@@ -1531,8 +1635,14 @@
     function placeImg(error) {
       $content.find('.ssi-loader').remove()
       var content = []
-      if (!error && imgBox.options.imgButtons !== '' && !$.isEmptyObject(imgBox.options.imgButtons)) {
-        var imgButtons = imgBox.setButtons(imgBox.options.imgButtons, imgBox.get$content()).addClass('ssi-imgButtons')
+      if (
+        !error &&
+        imgBox.options.imgButtons !== '' &&
+        !$.isEmptyObject(imgBox.options.imgButtons)
+      ) {
+        var imgButtons = imgBox
+          .setButtons(imgBox.options.imgButtons, imgBox.get$content())
+          .addClass('ssi-imgButtons')
         if (imgBox.options.hideImgButtons === true) {
           imgButtons.addClass('ssi-navFade ssi-navFadeOut')
           imgBox
@@ -1559,15 +1669,23 @@
 
     function onHasSize(width, height) {
       clearInterval(interval)
-      var naturalWidth = width || (supportsNatural ? $img[0].naturalWidth : $img.width())
-      var naturalHeight = height || (supportsNatural ? $img[0].naturalHeight : $img.height())
+      var naturalWidth =
+        width || (supportsNatural ? $img[0].naturalWidth : $img.width())
+      var naturalHeight =
+        height || (supportsNatural ? $img[0].naturalHeight : $img.height())
 
       var imgHeight = imgBox.setModalHeight(120, true)
       if (
-        (naturalHeight > windowHeight - imgHeight || naturalWidth > windowWidth) &&
+        (naturalHeight > windowHeight - imgHeight ||
+          naturalWidth > windowWidth) &&
         imgBox.options.fixedHeight === true
       ) {
-        var dimensions = AspectRatio(naturalWidth, naturalHeight, windowWidth - 100, windowHeight - imgHeight)
+        var dimensions = AspectRatio(
+          naturalWidth,
+          naturalHeight,
+          windowWidth - 100,
+          windowHeight - imgHeight
+        )
         naturalWidth = dimensions.width
         naturalHeight = dimensions.height
         if (i > 2) {
@@ -1834,8 +1952,12 @@
   }
 
   $.fn.addAnimation = function (animationName, callback) {
-    var animationEnd = 'mozAnimationEnd webkitAnimationEnd  MSAnimationEnd oanimationend animationend'
-    if (animationName.indexOf('ssi-fade') !== -1 && animationSupport === false) {
+    var animationEnd =
+      'mozAnimationEnd webkitAnimationEnd  MSAnimationEnd oanimationend animationend'
+    if (
+      animationName.indexOf('ssi-fade') !== -1 &&
+      animationSupport === false
+    ) {
       return $(this)[animationName.replace('anim ssi-', '')](300, function () {
         if (typeof callback === 'function') {
           callback()
@@ -1851,7 +1973,11 @@
           }
         })
 
-      if (animationName === 'ssi-show' || animationName === 'ssi-hidden' || animationName === '') {
+      if (
+        animationName === 'ssi-show' ||
+        animationName === 'ssi-hidden' ||
+        animationName === ''
+      ) {
         $(this).trigger('animationend')
       }
       return this.each(function () {

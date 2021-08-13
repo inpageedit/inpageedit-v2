@@ -75,7 +75,9 @@ var quickEdit = function (options) {
     })
     delete options.jsonGet.page
     options.jsonGet.oldid = options.revision
-    options.summaryRevision = '(' + _msg('editor-summary-rivision') + '[[Special:Diff/' + options.revision + ']])'
+    options.summaryRevision = `(${_msg(
+      'editor-summary-rivision'
+    )} [[Special:Diff/${options.revision}]])`
   }
   if (options.section) {
     options.jsonGet.section = options.section
@@ -83,7 +85,10 @@ var quickEdit = function (options) {
 
   // 模态框内部
   var $modalTitle = $('<span>').append(
-    _msg('editor-title-editing') + ': <u class="editPage">' + options.page.replace(/_/g, ' ') + '</u>'
+    _msg('editor-title-editing') +
+      ': <u class="editPage">' +
+      options.page.replace(/_/g, ' ') +
+      '</u>'
   )
   var $editTools = $('<div>', { class: 'editTools' }).append(
     $('<div>', { class: 'btnGroup' }).append(
@@ -186,16 +191,27 @@ var quickEdit = function (options) {
     $('<div>', { class: 'btnGroup extra', style: 'display: none' }).append(
       $('<span>', { class: 'label', text: '自定义' })
     ),
-    $('<div>', { class: 'btnGroup special-tools', style: 'float: right' }).append(
+    $('<div>', {
+      class: 'btnGroup special-tools',
+      style: 'float: right',
+    }).append(
       $('<button>', { class: 'btn fa fa-search' }).click(function () {
         findAndReplace($editArea)
       })
     )
   )
-  var $editArea = $('<textarea>', { class: 'editArea', style: 'margin-top: 0;' })
-  var $optionsLabel = $('<div>', { class: 'editOptionsLabel hideBeforeLoaded' }).append(
+  var $editArea = $('<textarea>', {
+    class: 'editArea',
+    style: 'margin-top: 0;',
+  })
+  var $optionsLabel = $('<div>', {
+    class: 'editOptionsLabel hideBeforeLoaded',
+  }).append(
     $('<aside>', { class: 'detailArea' }).append(
-      $('<label>', { class: 'detailToggle', text: _msg('editor-detail-button-toggle') }),
+      $('<label>', {
+        class: 'detailToggle',
+        text: _msg('editor-detail-button-toggle'),
+      }),
       $('<div>', { class: 'detailBtnGroup' }).append(
         $('<a>', {
           href: 'javascript:;',
@@ -223,12 +239,22 @@ var quickEdit = function (options) {
     }),
     $br,
     $('<label>').append(
-      $('<input>', { type: 'checkbox', class: 'editMinor', id: 'editMinor', checked: options.editMinor }),
+      $('<input>', {
+        type: 'checkbox',
+        class: 'editMinor',
+        id: 'editMinor',
+        checked: options.editMinor,
+      }),
       $('<span>', { text: _msg('markAsMinor') })
     ),
     $br,
     $('<label>').append(
-      $('<input>', { type: 'checkbox', class: 'reloadPage', id: 'reloadPage', checked: options.reload }),
+      $('<input>', {
+        type: 'checkbox',
+        class: 'reloadPage',
+        id: 'reloadPage',
+        checked: options.reload,
+      }),
       $('<span>', { text: _msg('editor-reload-page') })
     )
   )
@@ -330,21 +356,28 @@ var quickEdit = function (options) {
       var $modalWindow = $('#' + $modal.modalId)
       // 设置样式
       $modalWindow.find('.hideBeforeLoaded').hide()
-      $modalContent.find('.ipe-progress').css('margin', Number($(window).height() / 3 - 50) + 'px 0')
+      $modalContent
+        .find('.ipe-progress')
+        .css('margin', Number($(window).height() / 3 - 50) + 'px 0')
       $editArea.css('height', ($(window).height() / 3) * 2 - 100)
       $modalWindow.find('.ssi-buttons').prepend($optionsLabel)
       $modalWindow.find('.ssi-modalTitle').append(
         $('<a>', {
           class: 'showEditNotice',
           href: 'javascript:void(0);',
-          html: '<i class="fa fa-info-circle"></i> ' + _msg('editor-has-editNotice'),
+          html:
+            '<i class="fa fa-info-circle"></i> ' +
+            _msg('editor-has-editNotice'),
           style: 'display: none;',
         }).click(function () {
           ssi_modal.show({
             className: 'in-page-edit',
             center: true,
             title: _msg('editor-title-editNotice'),
-            content: '<section class="editNotice">' + $modalContent.data('editNotice') + '</section>',
+            content:
+              '<section class="editNotice">' +
+              $modalContent.data('editNotice') +
+              '</section>',
           })
         })
       )
@@ -362,7 +395,10 @@ var quickEdit = function (options) {
           (strings.close || '') +
           textarea.value.slice(stop)
         var selectStart = start + (strings.open.length || 0)
-        textarea.setSelectionRange(selectStart, selectStart + (selectedText.length || strings.middle.length || 0))
+        textarea.setSelectionRange(
+          selectStart,
+          selectStart + (selectedText.length || strings.middle.length || 0)
+        )
         textarea.focus()
       }
       // 添加按钮
@@ -371,17 +407,15 @@ var quickEdit = function (options) {
         middle = middle || ''
         close = close || ''
         icon = 'fa-' + icon || 'fa-wrench'
-        $modalContent
-          .find('.btnGroup.extra')
-          .append(
-            $('<button>', {
-              class: 'editToolBtn btn',
-              'data-open': open,
-              'data-middle': middle,
-              'data-close': close,
-              html: `<i class="fa ${icon}"></i>`,
-            })
-          )
+        $modalContent.find('.btnGroup.extra').append(
+          $('<button>', {
+            class: 'editToolBtn btn',
+            'data-open': open,
+            'data-middle': middle,
+            'data-close': close,
+            html: `<i class="fa ${icon}"></i>`,
+          })
+        )
       }
       // 用户自定义按钮
       if (InPageEdit.buttons) {
@@ -484,9 +518,18 @@ var quickEdit = function (options) {
         var summaryVal
         if (options.section !== null) {
           summaryVal = $optionsLabel.find('.editSummary').val()
-          summaryVal = summaryVal.replace(/\$section/gi, '/* ' + data.parse.sections[0].line + ' */')
+          summaryVal = summaryVal.replace(
+            /\$section/gi,
+            '/* ' + data.parse.sections[0].line + ' */'
+          )
           $optionsLabel.find('.editSummary').val(summaryVal)
-          $modalTitle.find('.editPage').after('<span class="editSection">→' + data.parse.sections[0].line + '</span>')
+          $modalTitle
+            .find('.editPage')
+            .after(
+              '<span class="editSection">→' +
+                data.parse.sections[0].line +
+                '</span>'
+            )
           options.jumpTo = '#' + data.parse.sections[0].anchor
         } else {
           summaryVal = $optionsLabel.find('.editSummary').val()
@@ -494,11 +537,19 @@ var quickEdit = function (options) {
           $optionsLabel.find('.editSummary').val(summaryVal)
           options.jumpTo = ''
         }
-        if (options.revision !== null && options.revision !== '' && options.revision !== config.wgCurRevisionId) {
+        if (
+          options.revision !== null &&
+          options.revision !== '' &&
+          options.revision !== config.wgCurRevisionId
+        ) {
           $modalTitle
             .find('.editPage')
             .after(
-              '<span class="editRevision">(' + _msg('editor-title-editRevision') + '：' + options.revision + ')</span>'
+              '<span class="editRevision">(' +
+                _msg('editor-title-editRevision') +
+                '：' +
+                options.revision +
+                ')</span>'
             )
           $modalWindow.find('.diff-btn').click(function () {
             _analysis('quick_diff_edit')
@@ -541,7 +592,9 @@ var quickEdit = function (options) {
             $modalContent.data(
               'basetimestamp',
               data['query']['pages'][options.pageId].revisions
-                ? data['query']['pages'][options.pageId]['revisions'][0]['timestamp']
+                ? data['query']['pages'][options.pageId]['revisions'][0][
+                    'timestamp'
+                  ]
                 : now
             )
             queryDone(data)
@@ -557,9 +610,11 @@ var quickEdit = function (options) {
         /** 页面保护等级和编辑提示等 **/
         function queryDone(data) {
           options.namespace = data.query.pages[options.pageId].ns // 名字空间ID
-          options.protection = data.query.pages[options.pageId]['protection'] || [] // 保护等级
+          options.protection =
+            data.query.pages[options.pageId]['protection'] || [] // 保护等级
           if (data.query.pages[options.pageId].revisions) {
-            options.revision = data.query.pages[options.pageId]['revisions'][0]['revid'] // 版本号
+            options.revision =
+              data.query.pages[options.pageId]['revisions'][0]['revid'] // 版本号
           }
 
           // 使页面名标准化
@@ -592,9 +647,12 @@ var quickEdit = function (options) {
             for (var i = 0; i < options.protection.length; i++) {
               if (options.protection[i].type === 'edit') {
                 if (
-                  (options.protection[i].level === 'autoconfirmed' && !_hasRight('autoconfirmed')) ||
-                  (options.protection[i].level === 'sysop' && !_hasRight('editprotected')) ||
-                  (config.wgNamespaceNumber === 8 && !_hasRight('editinterface'))
+                  (options.protection[i].level === 'autoconfirmed' &&
+                    !_hasRight('autoconfirmed')) ||
+                  (options.protection[i].level === 'sysop' &&
+                    !_hasRight('editprotected')) ||
+                  (config.wgNamespaceNumber === 8 &&
+                    !_hasRight('editinterface'))
                 ) {
                   ssi_modal.notify('dialog', {
                     className: 'in-page-edit',
@@ -622,7 +680,10 @@ var quickEdit = function (options) {
               '-' +
               options.page
                 .replace(/_/g, ' ') // 将页面名里的 _ 转换为空格
-                .replace(config.wgFormattedNamespaces[options.namespace] + ':', '') // 去掉名字空间
+                .replace(
+                  config.wgFormattedNamespaces[options.namespace] + ':',
+                  ''
+                ) // 去掉名字空间
 
           mwApi
             .get({
@@ -720,7 +781,11 @@ var quickEdit = function (options) {
           templateName = templates[i]['*']
           $('<li>')
             .append(
-              $('<a>', { href: mw.util.getUrl(templateName), target: '_blank', text: templateName }),
+              $('<a>', {
+                href: mw.util.getUrl(templateName),
+                target: '_blank',
+                text: templateName,
+              }),
               ' (',
               $('<a>', {
                 href: 'javascript:;',
@@ -746,7 +811,11 @@ var quickEdit = function (options) {
           imageName = images[i]
           $('<li>')
             .append(
-              $('<a>', { href: mw.util.getUrl('File:' + imageName), target: '_balnk', text: imageName }),
+              $('<a>', {
+                href: mw.util.getUrl('File:' + imageName),
+                target: '_balnk',
+                text: imageName,
+              }),
               ' (',
               $('<a>', {
                 href: 'javascript:;',
@@ -756,7 +825,11 @@ var quickEdit = function (options) {
               }),
               ' | ',
               $('<a>', {
-                href: config.wgScript + '?title=Special:Upload&wpDestFile=' + imageName + '&wpForReUpload=1',
+                href:
+                  config.wgScript +
+                  '?title=Special:Upload&wpDestFile=' +
+                  imageName +
+                  '&wpForReUpload=1',
                 target: '_balnk',
                 text: _msg('editor-detail-images-upload'),
               }),
@@ -794,7 +867,12 @@ var quickEdit = function (options) {
             label: _msg('editor-detail-images-upload'),
             className: 'btn btn-primary',
             method() {
-              window.open(config.wgScript + '?title=Special:Upload&wpDestFile=' + imageName + '&wpForReUpload=1')
+              window.open(
+                config.wgScript +
+                  '?title=Special:Upload&wpDestFile=' +
+                  imageName +
+                  '&wpForReUpload=1'
+              )
             },
           },
           {
@@ -851,7 +929,10 @@ var quickEdit = function (options) {
       delete options.jsonPost.basetimestamp
     }
 
-    mwApi.postWithToken('csrf', options.jsonPost).done(saveSuccess).fail(saveError)
+    mwApi
+      .postWithToken('csrf', options.jsonPost)
+      .done(saveSuccess)
+      .fail(saveError)
 
     // 保存正常
     function saveSuccess(data, feedback, errorThrown) {

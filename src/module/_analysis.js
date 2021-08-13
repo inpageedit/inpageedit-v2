@@ -22,7 +22,11 @@ const _analysis = function (functionID) {
     type: 'post',
     dataType: 'json',
   }).done(function (data) {
-    console.log('[InPageEdit] Analysis response', 'Status: ' + data.status, data.msg)
+    console.log(
+      '[InPageEdit] Analysis response',
+      'Status: ' + data.status,
+      data.msg
+    )
   })
 }
 

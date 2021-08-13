@@ -536,7 +536,9 @@ body.ssi-modalOpen {
   box-shadow: -1px 1px 28px -2px #a196a1;
 }
 
-.ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.ssi-smoothSlide {
+.ssi-modalPositioned.ssi-stack
+  .ssi-modalWrapper
+  .ssi-modalWindow.ssi-smoothSlide {
   visibility: hidden;
   display: block !important;
 }
@@ -550,7 +552,10 @@ body.ssi-modalOpen {
   .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.full {
     width: 99.5%;
   }
-  .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.full .ssi-modalTitle {
+  .ssi-modalPositioned.ssi-stack
+    .ssi-modalWrapper
+    .ssi-modalWindow.full
+    .ssi-modalTitle {
     font-size: 18px;
   }
 }
@@ -576,32 +581,46 @@ body.ssi-modalOpen {
     width: 99.5%;
     margin: 1px 1px;
   }
-  .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.large .ssi-modalTitle {
+  .ssi-modalPositioned.ssi-stack
+    .ssi-modalWrapper
+    .ssi-modalWindow.large
+    .ssi-modalTitle {
     font-size: 18px;
   }
 }
 
-.ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.mediumToLarge {
+.ssi-modalPositioned.ssi-stack
+  .ssi-modalWrapper
+  .ssi-modalWindow.mediumToLarge {
   width: 700px;
 }
 
 @media only screen and (max-width: 900px) {
-  .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.mediumToLarge {
+  .ssi-modalPositioned.ssi-stack
+    .ssi-modalWrapper
+    .ssi-modalWindow.mediumToLarge {
     width: 85%;
   }
 }
 
 @media only screen and (max-width: 600px) {
-  .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.mediumToLarge {
+  .ssi-modalPositioned.ssi-stack
+    .ssi-modalWrapper
+    .ssi-modalWindow.mediumToLarge {
     width: 75%;
   }
 }
 
 @media only screen and (max-width: 450px) {
-  .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.mediumToLarge {
+  .ssi-modalPositioned.ssi-stack
+    .ssi-modalWrapper
+    .ssi-modalWindow.mediumToLarge {
     width: 80%;
   }
-  .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.mediumToLarge .ssi-modalTitle {
+  .ssi-modalPositioned.ssi-stack
+    .ssi-modalWrapper
+    .ssi-modalWindow.mediumToLarge
+    .ssi-modalTitle {
     font-size: 18px;
   }
 }
@@ -626,26 +645,38 @@ body.ssi-modalOpen {
   .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.medium {
     width: 80%;
   }
-  .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.medium .ssi-modalTitle {
+  .ssi-modalPositioned.ssi-stack
+    .ssi-modalWrapper
+    .ssi-modalWindow.medium
+    .ssi-modalTitle {
     font-size: 18px;
   }
 }
 
-.ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.smallToMedium {
+.ssi-modalPositioned.ssi-stack
+  .ssi-modalWrapper
+  .ssi-modalWindow.smallToMedium {
   width: 500px;
 }
 
 @media only screen and (max-width: 600px) {
-  .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.smallToMedium {
+  .ssi-modalPositioned.ssi-stack
+    .ssi-modalWrapper
+    .ssi-modalWindow.smallToMedium {
     width: 60%;
   }
 }
 
 @media only screen and (max-width: 450px) {
-  .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.smallToMedium {
+  .ssi-modalPositioned.ssi-stack
+    .ssi-modalWrapper
+    .ssi-modalWindow.smallToMedium {
     width: 55%;
   }
-  .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.smallToMedium .ssi-modalTitle {
+  .ssi-modalPositioned.ssi-stack
+    .ssi-modalWrapper
+    .ssi-modalWindow.smallToMedium
+    .ssi-modalTitle {
     font-size: 18px;
   }
 }
@@ -664,7 +695,10 @@ body.ssi-modalOpen {
   .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.small {
     width: 55%;
   }
-  .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.small .ssi-modalTitle {
+  .ssi-modalPositioned.ssi-stack
+    .ssi-modalWrapper
+    .ssi-modalWindow.small
+    .ssi-modalTitle {
     font-size: 18px;
   }
 }
@@ -683,7 +717,10 @@ body.ssi-modalOpen {
   .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.dialog {
     width: 55%;
   }
-  .ssi-modalPositioned.ssi-stack .ssi-modalWrapper .ssi-modalWindow.dialog .ssi-modalTitle {
+  .ssi-modalPositioned.ssi-stack
+    .ssi-modalWrapper
+    .ssi-modalWindow.dialog
+    .ssi-modalTitle {
     font-size: 18px;
   }
 }
@@ -897,15 +934,30 @@ body.ssi-modalOpen {
   padding: 8px;
 }
 
-.imgBox .ssi-modalWrapper .ssi-modalWindow .ssi-modalContent .ssi-imgButtons .ssi-leftButtons {
+.imgBox
+  .ssi-modalWrapper
+  .ssi-modalWindow
+  .ssi-modalContent
+  .ssi-imgButtons
+  .ssi-leftButtons {
   float: left;
 }
 
-.imgBox .ssi-modalWrapper .ssi-modalWindow .ssi-modalContent .ssi-imgButtons .ssi-rightButtons {
+.imgBox
+  .ssi-modalWrapper
+  .ssi-modalWindow
+  .ssi-modalContent
+  .ssi-imgButtons
+  .ssi-rightButtons {
   float: right;
 }
 
-.imgBox .ssi-modalWrapper .ssi-modalWindow .ssi-modalContent .ssi-imgButtons .ssi-imgBtn {
+.imgBox
+  .ssi-modalWrapper
+  .ssi-modalWindow
+  .ssi-modalContent
+  .ssi-imgButtons
+  .ssi-imgBtn {
   margin: 2px;
   padding: 3px;
 }
@@ -1073,16 +1125,36 @@ body.ssi-modalOpen {
   .imgBox .ssi-modalWrapper.ssi-iframe .ssi-modalWindow .ssi-modalTitle {
     font-size: 18px;
   }
-  .imgBox .ssi-modalWrapper.ssi-iframe .ssi-modalWindow .ssi-modalContent .ssi-modalNext span {
+  .imgBox
+    .ssi-modalWrapper.ssi-iframe
+    .ssi-modalWindow
+    .ssi-modalContent
+    .ssi-modalNext
+    span {
     background-position-x: 15px;
   }
-  .imgBox .ssi-modalWrapper.ssi-iframe .ssi-modalWindow .ssi-modalContent .ssi-modalNext:hover span {
+  .imgBox
+    .ssi-modalWrapper.ssi-iframe
+    .ssi-modalWindow
+    .ssi-modalContent
+    .ssi-modalNext:hover
+    span {
     background-position-x: 15px;
   }
-  .imgBox .ssi-modalWrapper.ssi-iframe .ssi-modalWindow .ssi-modalContent .ssi-modalPrev span {
+  .imgBox
+    .ssi-modalWrapper.ssi-iframe
+    .ssi-modalWindow
+    .ssi-modalContent
+    .ssi-modalPrev
+    span {
     background-position-x: -15px;
   }
-  .imgBox .ssi-modalWrapper.ssi-iframe .ssi-modalWindow .ssi-modalContent .ssi-modalPrev:hover span {
+  .imgBox
+    .ssi-modalWrapper.ssi-iframe
+    .ssi-modalWindow
+    .ssi-modalContent
+    .ssi-modalPrev:hover
+    span {
     background-position-x: -15px;
   }
   .imgBox .ssi-modalWrapper.ssi-iframe .ssi-modalWindow .ssi-topIcons {

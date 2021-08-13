@@ -25,11 +25,14 @@ function articleLink(el) {
     let url = $this.attr('href'),
       action = getParamValue('action', url) || getParamValue('veaction', url),
       title = getParamValue('title', url),
-      section = getParamValue('section', url) ? getParamValue('section', url).replace(/T-/, '') : null,
+      section = getParamValue('section', url)
+        ? getParamValue('section', url).replace(/T-/, '')
+        : null,
       revision = getParamValue('oldid', url)
 
     // 不是本地编辑链接
-    if (!RegExp('^' + config.wgServer).test(url) && !RegExp('^/').test(url)) return
+    if (!RegExp('^' + config.wgServer).test(url) && !RegExp('^/').test(url))
+      return
 
     // 暂时屏蔽 section=new #137
     if (section === 'new') return

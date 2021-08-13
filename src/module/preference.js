@@ -86,14 +86,27 @@ var preference = {
 
     /** 定义模态框内部结构 */
     var $tabList = $('<ul>', { class: 'tab-list' }).append(
-      $('<li>').append($('<a>', { text: _msg('preference-tab-editor'), href: '#editor' })),
-      $('<li>').append($('<a>', { text: _msg('preference-tab-plugin'), href: '#plugin' })),
-      $('<li>').append($('<a>', { text: _msg('preference-tab-analysis'), href: '#analysis' })),
-      $('<li>').append($('<a>', { text: _msg('preference-tab-another'), href: '#another' })),
-      $('<li>').append($('<a>', { text: _msg('preference-tab-about'), href: '#about' }))
+      $('<li>').append(
+        $('<a>', { text: _msg('preference-tab-editor'), href: '#editor' })
+      ),
+      $('<li>').append(
+        $('<a>', { text: _msg('preference-tab-plugin'), href: '#plugin' })
+      ),
+      $('<li>').append(
+        $('<a>', { text: _msg('preference-tab-analysis'), href: '#analysis' })
+      ),
+      $('<li>').append(
+        $('<a>', { text: _msg('preference-tab-another'), href: '#another' })
+      ),
+      $('<li>').append(
+        $('<a>', { text: _msg('preference-tab-about'), href: '#about' })
+      )
     )
 
-    var $tabContent = $('<div>', { class: 'tab-content', style: 'position: relative;' }).append(
+    var $tabContent = $('<div>', {
+      class: 'tab-content',
+      style: 'position: relative;',
+    }).append(
       $('<section>', { id: 'editor' }).append(
         $('<h3>', { text: _msg('preference-editor-title') }),
         $('<h4>', { text: _msg('preference-editHobits-label') }),
@@ -115,21 +128,37 @@ var preference = {
           style: 'padding-left: 0; font-size: small',
           html: _msg('preference-editSummary'),
         }),
-        $('<input>', { id: 'editSummary', style: 'width: 96%', placeholder: 'Edit via InPageEdit, yeah~' })
+        $('<input>', {
+          id: 'editSummary',
+          style: 'width: 96%',
+          placeholder: 'Edit via InPageEdit, yeah~',
+        })
       ),
       $('<section>', { id: 'plugin' }).append(
         $('<h3>', { text: _msg('preference-plugin-title') }),
         $('<div>', {
           id: 'plugin-container',
-          html: $($progress).css({ width: '96%', position: 'absolute', top: '50%', transform: 'translateY(-50%)' }),
+          html: $($progress).css({
+            width: '96%',
+            position: 'absolute',
+            top: '50%',
+            transform: 'translateY(-50%)',
+          }),
         }),
-        $('<div>', { class: 'plugin-footer' }).html(_msg('preference-plugin-footer', api.pluginGithub))
+        $('<div>', { class: 'plugin-footer' }).html(
+          _msg('preference-plugin-footer', api.pluginGithub)
+        )
       ),
       $('<section>', { id: 'analysis' }).append(
         $('<h3>', { text: _msg('preference-analysis-title') }),
         $('<div>', {
           id: 'analysis-container',
-          html: $($progress).css({ width: '96%', position: 'absolute', top: '50%', transform: 'translateY(-50%)' }),
+          html: $($progress).css({
+            width: '96%',
+            position: 'absolute',
+            top: '50%',
+            transform: 'translateY(-50%)',
+          }),
         })
       ),
       $('<section>', { id: 'another' }).append(
@@ -142,7 +171,11 @@ var preference = {
         $('<div>').append(
           $('<h4>', { text: 'Custom skin (Not available yet)' }),
           $('<label>', { class: 'choose-skin' }).append(
-            $('<input>', { type: 'checkbox', id: 'useCustomSkin', disabled: true }),
+            $('<input>', {
+              type: 'checkbox',
+              id: 'useCustomSkin',
+              disabled: true,
+            }),
             $('<span>'),
             $('<input>', {
               id: 'skinUrl',
@@ -162,7 +195,11 @@ var preference = {
           var $saveLocalModal = $('<section>').append(
             _msg('preference-savelocal-popup'),
             $br,
-            $('<textarea>', { style: 'font-size: 12px; resize: none; width: 100%; height: 10em;', readonly: true })
+            $('<textarea>', {
+              style:
+                'font-size: 12px; resize: none; width: 100%; height: 10em;',
+              readonly: true,
+            })
               .click(function () {
                 this.select()
               })
@@ -187,14 +224,17 @@ var preference = {
       ),
       $('<section>', { id: 'about' }).append(
         $('<h3>', { text: _msg('preference-about-label') }),
-        $('<div>', { style: 'font-size: 12px; font-style: italic;' }).html(function () {
-          var isCanary = /(alpha|beta|pre)/i.test(version)
-          var html = 'v' + version
-          html += isCanary
-            ? ' - You are running the Canary version of InPageEdit<br>' + _msg('version-notice-canary')
-            : ''
-          return html
-        }),
+        $('<div>', { style: 'font-size: 12px; font-style: italic;' }).html(
+          function () {
+            var isCanary = /(alpha|beta|pre)/i.test(version)
+            var html = 'v' + version
+            html += isCanary
+              ? ' - You are running the Canary version of InPageEdit<br>' +
+                _msg('version-notice-canary')
+              : ''
+            return html
+          }
+        ),
         $('<button>', {
           class: 'btn btn-secondary btn-single',
           onclick: 'InPageEdit.about()',
@@ -210,14 +250,27 @@ var preference = {
           href: 'https://ipe.miraheze.org/wiki/',
           target: '_blank',
           style: 'margin-top: .5em; display: block;',
-        }).append($('<button>', { class: 'btn btn-secondary btn-single', text: _msg('preference-translate') })),
+        }).append(
+          $('<button>', {
+            class: 'btn btn-secondary btn-single',
+            text: _msg('preference-translate'),
+          })
+        ),
         $('<a>', {
           href: 'https://discord.gg/VUVAh8w',
           target: '_blank',
           style: 'margin-top: .5em; display: block;',
-        }).append($('<button>', { class: 'btn btn-secondary btn-single', text: _msg('preference-discord') })),
+        }).append(
+          $('<button>', {
+            class: 'btn btn-secondary btn-single',
+            text: _msg('preference-discord'),
+          })
+        ),
         $hr,
-        $('<p>', { text: 'InPageEdit is a useful MediaWiki JavaScript Plugin written with jQuery' }),
+        $('<p>', {
+          text:
+            'InPageEdit is a useful MediaWiki JavaScript Plugin written with jQuery',
+        }),
         $('<p>').append(
           '© InPageEdit Copyright (C)',
           ' 2019 - ' + new Date().getFullYear(),
@@ -230,7 +283,10 @@ var preference = {
       )
     )
 
-    var $modalContent = $('<div>', { class: 'preference-tabber' }).append($tabList, $tabContent)
+    var $modalContent = $('<div>', { class: 'preference-tabber' }).append(
+      $tabList,
+      $tabContent
+    )
 
     // 绑定tab-list按钮事件
     $tabList.find('a').click(function (e) {
@@ -328,7 +384,8 @@ var preference = {
           $tabList.before(
             $('<div>', {
               class: 'has-local-warn',
-              style: 'padding-left: 8px; border-left: 6px solid orange; font-size: small;',
+              style:
+                'padding-left: 8px; border-left: 6px solid orange; font-size: small;',
               html: _msg('preference-savelocal-popup-haslocal'),
             })
           )
@@ -369,7 +426,11 @@ var preference = {
             var name = val.name || 'Unknown'
             var description = val.description || ''
             var author = val.author
-              ? $('<a>', { href: 'https://github.com/' + val.author, target: '_balnk', text: '@' + val.author })
+              ? $('<a>', {
+                  href: 'https://github.com/' + val.author,
+                  target: '_balnk',
+                  text: '@' + val.author,
+                })
               : '-'
             $tabContent.find('#plugin-container > ul').append(
               $('<li>').append(
@@ -378,8 +439,12 @@ var preference = {
                     class: 'plugin-checkbox',
                     id: key,
                     type: 'checkbox',
-                    checked: Boolean(usedPlugin.indexOf(key) >= 0 || val._force === true), // 勾选当前正在使用以及强制启用的插件
-                    disabled: typeof InPageEdit.myPreference !== 'undefined' || val._force === true, // 强制启用或者本地保存设定时禁止改变
+                    checked: Boolean(
+                      usedPlugin.indexOf(key) >= 0 || val._force === true
+                    ), // 勾选当前正在使用以及强制启用的插件
+                    disabled:
+                      typeof InPageEdit.myPreference !== 'undefined' ||
+                      val._force === true, // 强制启用或者本地保存设定时禁止改变
                   }).change(function () {
                     // 当插件选择框变化时，暂存设定档
                     var $this = $(this)
@@ -411,14 +476,22 @@ var preference = {
         var userName = config.wgUserName
         $.get(`${api.analysisApi}/query/wiki`, {
           siteurl: config.wgServer + config.wgArticlePath.replace('$1', ''),
-          prop: 'users.' + userName + '._total|users.' + userName + '.functions',
+          prop:
+            'users.' + userName + '._total|users.' + userName + '.functions',
         }).then((ret) => {
           $tabContent.find('#analysis-container').html('')
           var data = ret.query[0].users[userName]
           var total = data._total
           var functionData = data.functions
-          var functionList = $('<table>', { class: 'wikitable', style: 'width: 96%' }).append(
-            $('<tr>').append($('<th>', { text: 'ID' }), $('<th>', { text: 'Times' }), $('<th>', { text: 'Percents' }))
+          var functionList = $('<table>', {
+            class: 'wikitable',
+            style: 'width: 96%',
+          }).append(
+            $('<tr>').append(
+              $('<th>', { text: 'ID' }),
+              $('<th>', { text: 'Times' }),
+              $('<th>', { text: 'Percents' })
+            )
           )
           $.each(functionData, (key, val) => {
             functionList.append(
@@ -432,7 +505,9 @@ var preference = {
           $tabContent
             .find('#analysis-container')
             .append(
-              $('<h4>', { text: config.wgUserName + ' - ' + config.wgSiteName }),
+              $('<h4>', {
+                text: config.wgUserName + ' - ' + config.wgSiteName,
+              }),
               $('<p>').append(_msg('preference-analysis-totaluse', total)),
               functionList
             )

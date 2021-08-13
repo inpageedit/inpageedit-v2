@@ -21,7 +21,11 @@ async function syncI18nData(noCache) {
     return true
   }
   // 缓存存在且缓存未过期
-  if (localStorage.getItem(localCacheName) && now - localStorage.getItem(localCacheTime) < cacheTime && !noCache) {
+  if (
+    localStorage.getItem(localCacheName) &&
+    now - localStorage.getItem(localCacheTime) < cacheTime &&
+    !noCache
+  ) {
     var json = {}
     try {
       json = JSON.parse(localStorage.getItem(localCacheName))
@@ -58,7 +62,10 @@ function saveToCache(data) {
  */
 async function getOriginalData() {
   console.time('[InPageEdit] 从远程获取 i18n 数据')
-  var data = await $.getJSON(cacheUrl, { cache: false, timestamp: new Date().getTime() })
+  var data = await $.getJSON(cacheUrl, {
+    cache: false,
+    timestamp: new Date().getTime(),
+  })
   if (typeof data !== 'object') data = {}
   saveToCache(data)
   console.timeEnd('[InPageEdit] 从远程获取 i18n 数据')
