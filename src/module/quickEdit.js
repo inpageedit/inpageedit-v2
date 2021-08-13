@@ -184,8 +184,7 @@ var quickEdit = function (options) {
         'data-open': '\n<' + 'gallery>\n',
         'data-middle': 'Example1.jpg|Description\nExample2.png|Description',
         'data-close': '\n</gallery>\n',
-        html:
-          '<span class="fa-stack"><i class="fa fa-picture-o fa-stack-1x"></i><i class="fa fa-picture-o fa-stack-1x" style="left: 2px;top: 2px;text-shadow: 1px 1px 0 #fff;"></i></span>',
+        html: '<span class="fa-stack"><i class="fa fa-picture-o fa-stack-1x"></i><i class="fa fa-picture-o fa-stack-1x" style="left: 2px;top: 2px;text-shadow: 1px 1px 0 #fff;"></i></span>',
       })
     ),
     $('<div>', { class: 'btnGroup extra', style: 'display: none' }).append(
@@ -195,7 +194,7 @@ var quickEdit = function (options) {
       class: 'btnGroup special-tools',
       style: 'float: right',
     }).append(
-      $('<button>', { class: 'btn fa fa-search' }).click(function () {
+      $('<button>', { class: 'btn fa fa-search' }).on('click', function () {
         findAndReplace($editArea)
       })
     )
@@ -520,7 +519,7 @@ var quickEdit = function (options) {
           summaryVal = $optionsLabel.find('.editSummary').val()
           summaryVal = summaryVal.replace(
             /\$section/gi,
-            '/* ' + data.parse.sections[0].line + ' */'
+            `/* ${$(data.parse.sections[0].line).text()} */`
           )
           $optionsLabel.find('.editSummary').val(summaryVal)
           $modalTitle
