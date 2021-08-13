@@ -7,11 +7,9 @@
  * @url https://github.com/Dragon-Fish/InPageEdit-v2
  */
 
-!(async function (InPageEdit) {
-  'use strict'
-
+!(async function () {
   // 创建 InPageEdit 变量
-  InPageEdit = InPageEdit || {}
+  const InPageEdit = window.InPageEdit || {}
 
   // 防止多次运行
   if (InPageEdit?.version) {
@@ -22,8 +20,8 @@
   const init = require('./method/init')
 
   // 合并入全局变量
-  InPageEdit = {
+  window.InPageEdit = {
     ...InPageEdit,
     ...init(),
   }
-})(window.InPageEdit)
+})()
