@@ -515,10 +515,14 @@ var quickEdit = function (options) {
 
         var summaryVal
         if (options.section !== null) {
+          let sectionTitle = data.parse.sections[0].line
+          sectionTitle = $('<container>')
+            .append(sectionTitle.replace(/<.*>/g, ''))
+            .text()
           summaryVal = $optionsLabel.find('.editSummary').val()
           summaryVal = summaryVal.replace(
             /\$section/gi,
-            `/* ${$(data.parse.sections[0].line).text()} */`
+            `/* ${sectionTitle} */`
           )
           $optionsLabel.find('.editSummary').val(summaryVal)
           $modalTitle
