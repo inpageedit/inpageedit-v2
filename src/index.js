@@ -22,6 +22,6 @@
   // 合并入全局变量
   window.InPageEdit = {
     ...InPageEdit,
-    ...init(),
+    ...(await init()),
   }
 })()
