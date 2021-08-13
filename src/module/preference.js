@@ -235,6 +235,7 @@ var preference = {
             return html
           }
         ),
+        $('<h4>', { text: 'Portal' }),
         $('<button>', {
           class: 'btn btn-secondary btn-single',
           onclick: 'InPageEdit.about()',
@@ -246,30 +247,20 @@ var preference = {
           onclick: 'InPageEdit.versionInfo()',
           text: _msg('preference-updatelog'),
         }),
-        $('<a>', {
-          href: 'https://ipe.miraheze.org/wiki/',
-          target: '_blank',
-          style: 'margin-top: .5em; display: block;',
-        }).append(
-          $('<button>', {
-            class: 'btn btn-secondary btn-single',
-            text: _msg('preference-translate'),
+        $('<h4>', { text: 'Join us' }),
+        $('<p>').append(
+          $('<strong>', { text: 'GitHub' }),
+          ': ',
+          $('<a>', {
+            href: require('./api.json').githubLink,
+            text: require('./api.json').githubLink,
+            target: '_blank',
           })
         ),
-        $('<a>', {
-          href: 'https://discord.gg/VUVAh8w',
-          target: '_blank',
-          style: 'margin-top: .5em; display: block;',
-        }).append(
-          $('<button>', {
-            class: 'btn btn-secondary btn-single',
-            text: _msg('preference-discord'),
-          })
-        ),
+        $('<p>').append($('<strong>', { text: 'QQ' }), ': ', '1026023666'),
         $hr,
         $('<p>', {
-          text:
-            'InPageEdit is a useful MediaWiki JavaScript Plugin written with jQuery',
+          text: 'InPageEdit is a useful MediaWiki JavaScript Plugin written with jQuery',
         }),
         $('<p>').append(
           '© InPageEdit Copyright (C)',
@@ -502,15 +493,13 @@ var preference = {
               )
             )
           })
-          $tabContent
-            .find('#analysis-container')
-            .append(
-              $('<h4>', {
-                text: config.wgUserName + ' - ' + config.wgSiteName,
-              }),
-              $('<p>').append(_msg('preference-analysis-totaluse', total)),
-              functionList
-            )
+          $tabContent.find('#analysis-container').append(
+            $('<h4>', {
+              text: config.wgUserName + ' - ' + config.wgSiteName,
+            }),
+            $('<p>').append(_msg('preference-analysis-totaluse', total)),
+            functionList
+          )
         })
       },
     })
