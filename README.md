@@ -8,7 +8,6 @@
 
 ## 快速上手
 
-[![](https://data.jsdelivr.com/v1/package/gh/dragon-fish/inpageedit-v2/badge)](https://www.jsdelivr.com/package/gh/dragon-fish/inpageedit-v2)
 [![](https://data.jsdelivr.com/v1/package/npm/mediawiki-inpageedit/badge)](https://www.jsdelivr.com/package/npm/mediawiki-inpageedit)
 
 在*个人 JS 页*添加以下代码：
@@ -39,11 +38,11 @@ mw.loader.load("https://cdn.jsdelivr.net/npm/mediawiki-inpageedit@latest/dist/In
 - ‪**中文(简体)‬ (zh-hans)**
 - 中文(繁體)‬ (zh-hant)
 
-Help us to translate InPageEdit: [Fandom Developer Wiki](https://dev.fandom.com/wiki/Special:BlankPage/I18nEdit/InPageEdit-v2), [Miraheze Wiki](https://ipe.miraheze.org/wiki/Special:BlankPage/I18nEdit/InPageEdit-v2)
+Help us to translate InPageEdit~
 
 <hr/>
 
-InPageEdit is a useful MediaWiki JavaScript Plugin written with jQuery, written by [机智的小鱼君/Dragon Fish](https://wjghj.cn/wiki/机智的小鱼君)
+InPageEdit is a useful MediaWiki JavaScript Plugin written with jQuery, written by [机智的小鱼君/Dragon Fish](https://blog.wjghj.cn/author)
 
 © InPageEdit Copyright (C) 2019 - present Wjghj Project, [GNU General Public License 3.0](https://www.gnu.org/licenses/gpl-3.0-standalone.html)<br/>
-See more: [GitHub](https://github.com/Dragon-Fish/InPageEdit-v2) | [Update logs](https://ipe.js.org/update/) | [File issues](https://github.com/Dragon-Fish/InPageEdit-v2/issues)
+See more: [GitHub](https://github.com/inpageedit/inpageedit-v2) | [Update logs](https://ipe.js.org/update/) | [File issues](https://github.com/inpageedit/inpageedit-v2/issues)
