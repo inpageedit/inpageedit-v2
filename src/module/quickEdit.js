@@ -647,7 +647,7 @@ var quickEdit = function (options) {
 
           // 页面是否被保护
           if (options.protection.length > 0) {
-            const canEdit = (level) => {
+            const isEditable = (level) => {
               if (!level) return true
               return _hasRight(
                 level
@@ -659,22 +659,9 @@ var quickEdit = function (options) {
               ({ type }) => type === 'edit'
             )
             if (
-              canEdit(protectionEdit?.level) ||
+              !isEditable(protectionEdit?.level) ||
               (options.namespace === 8 && !_hasRight('editinterface'))
             ) {
-              // ssi_modal.notify('dialog', {
-              //   className: 'in-page-edit',
-              //   position: 'center bottom',
-              //   title: _msg('notify-no-right'),
-              //   content: _msg('editor-no-right'),
-              //   okBtn: {
-              //     label: _msg('ok'),
-              //     className: 'btn btn-primary',
-              //     method(e, modal) {
-              //       modal.close()
-              //     },
-              //   },
-              // })
               $modalWindow
                 .find('.save-btn')
                 .addClass('btn-danger')
