@@ -1,6 +1,6 @@
-const { _msg } = require('./_msg');
+const { _msg } = require('./_msg')
 
-const { $progress } = require('./_elements.js');
+const { $progress } = require('./_elements.js')
 
 /**
  * @module progress 载入中模块
@@ -13,15 +13,15 @@ const { $progress } = require('./_elements.js');
  */
 var progress = function (title) {
   if (title === true) {
-    $('.in-page-edit.loadingbox .ssi-modalTitle').html(_msg('done'));
-    $('.in-page-edit.loadingbox .ipe-progress').addClass('done');
+    $('.in-page-edit.loadingbox .ssi-modalTitle').html(_msg('done'))
+    $('.in-page-edit.loadingbox .ipe-progress').addClass('done')
   } else if (title === false) {
     if ($('.in-page-edit.loadingbox').length > 0) {
-      $('.in-page-edit.loadingbox').appendTo('body');
-      ssi_modal.close();
+      $('.in-page-edit.loadingbox').appendTo('body')
+      ssi_modal.close()
     }
   } else {
-    if ($('.in-page-edit.loadingbox').length > 0) return;
+    if ($('.in-page-edit.loadingbox').length > 0) return
     if (typeof title === 'undefined') {
       title = 'Loading...'
     }
@@ -32,11 +32,11 @@ var progress = function (title) {
       center: true,
       sizeClass: 'dialog',
       closeIcon: false,
-      outSideClose: false
-    });
+      outSideClose: false,
+    })
   }
 }
 
 module.exports = {
-  progress
+  progress,
 }
