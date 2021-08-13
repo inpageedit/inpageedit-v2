@@ -593,6 +593,11 @@ var quickEdit = function (options) {
                 'timestamp'
               ] ?? now
             )
+            $modalContent.data(
+              'starttimestamp',
+              data['query']['pages']?.[options.pageId]?.touched,
+              now
+            )
             queryDone(data)
           })
           .fail(function (a, b, errorThrown) {
@@ -600,6 +605,7 @@ var quickEdit = function (options) {
             console.timeEnd('[InPageEdit] 获取页面基础信息')
             console.warn('[InPageEdit] 获取页面基础信息失败')
             $modalContent.data('basetimestamp', now)
+            $modalContent.data('starttimestamp', now)
             queryDone(data)
           })
 
@@ -745,7 +751,7 @@ var quickEdit = function (options) {
         }
       )
       function close() {
-        $(window).unbind('beforeunload')
+        $(window).off('beforeunload')
         modal.options.keepContent = false
         modal.options.beforeClose = ''
         modal.close()
@@ -757,7 +763,7 @@ var quickEdit = function (options) {
         })
       }
       function closeNoReload() {
-        $(window).unbind('beforeunload')
+        $(window).off('beforeunload')
         modal.options.keepContent = false
         modal.options.beforeClose = ''
         modal.close()
@@ -921,8 +927,8 @@ var quickEdit = function (options) {
     progress(_msg('editor-title-saving'))
     options.jsonPost = {
       action: 'edit',
+      starttimestamp: $modalContent.data('starttimestamp'),
       basetimestamp: $modalContent.data('basetimestamp'),
-      starttimestamp: now,
       text,
       title: page,
       minor,
@@ -931,7 +937,6 @@ var quickEdit = function (options) {
     }
     if (section !== undefined && section !== '' && section !== null) {
       options.jsonPost.section = section
-      delete options.jsonPost.basetimestamp
     }
 
     mwApi
