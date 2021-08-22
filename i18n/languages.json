@@ -172,7 +172,12 @@
         "preference-redLinkQuickEdit": "Add quick edit buttons after red links",
         "preference-plugin-footer": "You can choose the official plugins here. And welcome to [$1 InPageEdit-Plugins] to contribute your code! Some plugins need to reload the page to take effect.",
         "preference-analysis-totaluse": "<strong>Total use</strong>: $1 {{PLURAL:$1|time|times}}",
-        "preference-display-label": "Display settings"
+        "preference-display-label": "Display settings",
+        "links-here": "Links here",
+        "links-here-title": "{{PLURAL:$2|Page|Pages}} that {{PLURAL:$2|links|link}} to \"<u>$1</u>\"",
+        "links-here-isRedirect": "redirect page",
+        "links-here-no-page": "No page links to \"<strong>$1</strong>\" :(",
+        "links-here-not-exist": "Attention: Page \"<strong>$1</strong>\" seems not exist"
     },
     "ar": {
         "version-notice-title": "نجاح التثبيت",
@@ -1309,7 +1314,12 @@
         "preference-redLinkQuickEdit": "在红链后添加快速编辑按钮",
         "preference-plugin-footer": "你可以在这里选用官方插件，欢迎前往[$1 InPageEdit-Plugins]贡献你的代码！一些插件需要重新加载页面才能生效。",
         "preference-analysis-totaluse": "<strong>使用总次数</strong>：$1 次",
-        "preference-display-label": "显示设置"
+        "preference-display-label": "显示设置",
+        "links-here": "链入页面",
+        "links-here-title": "链接至“<u>$1</u>”的页面",
+        "links-here-isRedirect": "重定向页面",
+        "links-here-no-page": "没有页面链接到“<strong>$1</strong>” QAQ",
+        "links-here-not-exist": "注意：页面“<strong>$1</strong>”似乎不存在"
     },
     "zh-hant": {
         "quick-edit": "快速編輯",
