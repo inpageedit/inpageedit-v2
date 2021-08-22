@@ -1,5 +1,4 @@
-var mwApi = new mw.Api()
-var config = mw.config.get()
+const { mwApi, config } = require('./util')
 
 const { _analysis } = require('./_analysis')
 const { _msg } = require('./_msg')
@@ -12,15 +11,11 @@ const { preference } = require('./preference')
 const { progress } = require('./progress')
 const { quickPreview } = require('./quickPreview')
 const { quickDiff } = require('./quickDiff')
+const { linksHere } = require('./linksHere')
 
 /**
  * @module quickEdit 快速编辑模块
- *
- * @param {Object} options
- * @param {String} options.page edit page (default: wgPageName)
- * @param {Number} options.revision page rev ID
- * @param {Number} options.section edit section
- * @param {Boolean} options.reload if reload page after save successful (default: true)
+ * @param {{ page: string; revision?: number; section?: number; reload?: boolean }} options
  */
 var quickEdit = function (options) {
   /** 获取设定信息，设置缺省值 **/
@@ -206,8 +201,8 @@ var quickEdit = function (options) {
   var $optionsLabel = $('<div>', {
     class: 'editOptionsLabel hideBeforeLoaded',
   }).append(
-    $('<aside>', { class: 'detailArea' }).append(
-      $('<label>', {
+    $('<details>', { class: 'detailArea' }).append(
+      $('<summary>', {
         class: 'detailToggle',
         text: _msg('editor-detail-button-toggle'),
       }),
@@ -785,6 +780,14 @@ var quickEdit = function (options) {
                 class: 'quickEditTemplate',
                 'data-template-name': templateName,
               }),
+              '|',
+              $('<a>', {
+                href: 'javascript:;',
+                text: _msg('links-here'),
+                class: 'quickEditLinksHere',
+              }).on('click', function () {
+                linksHere(`Template:${templateName}`)
+              }),
               ')'
             )
             .appendTo(content)
@@ -824,6 +827,14 @@ var quickEdit = function (options) {
                   '&wpForReUpload=1',
                 target: '_balnk',
                 text: _msg('editor-detail-images-upload'),
+              }),
+              '|',
+              $('<a>', {
+                href: 'javascript:;',
+                text: _msg('links-here'),
+                class: 'quickEditLinksHere',
+              }).on('click', function () {
+                linksHere(`File:${imageName}`)
               }),
               ')'
             )

@@ -51,11 +51,11 @@ const makeList = (list) => {
           ? ' (<i>' + _msg('links-here-isRedirect') + '</i>)'
           : '',
         ' (',
-        $link({ text: '← ' + _msg('links-here') }).click(function () {
+        $link({ text: '← ' + _msg('links-here') }).on('click', function () {
           linksHere(title)
         }),
         ' | ',
-        $link({ text: _msg('quick-edit') }).click(function () {
+        $link({ text: _msg('quick-edit') }).on('click', function () {
           quickEdit({
             page: title,
             require: false,

@@ -21,7 +21,7 @@ module.exports = async function init() {
   // 是否需要刷新缓存
   const noCache = !!(
     mw.util.getParamValue('ipe', location.href) === 'nocache' ||
-      version !== localStorage.getItem('InPageEditVersion')
+    version !== localStorage.getItem('InPageEditVersion')
   )
 
   // 加载样式表
@@ -44,6 +44,7 @@ module.exports = async function init() {
   const api = require('../module/api.json')
   const { articleLink } = require('../module/articleLink')
   const { findAndReplace } = require('../module/findAndReplace')
+  const { linksHere } = require('../module/linksHere')
   const { loadQuickDiff } = require('../module/loadQuickDiff')
   const { preference } = require('../module/preference')
   const { pluginStore } = require('../module/pluginStore')
@@ -74,6 +75,7 @@ module.exports = async function init() {
     api,
     articleLink,
     findAndReplace,
+    linksHere,
     loadQuickDiff,
     preference,
     progress,
@@ -98,7 +100,7 @@ module.exports = async function init() {
   }
 
   // 锁定重要变量
-  var importantVariables = ['_dir', 'api', 'version']
+  const importantVariables = ['_dir', 'api', 'version']
   importantVariables.forEach((key) => {
     try {
       Object.freeze(InPageEdit[key])
