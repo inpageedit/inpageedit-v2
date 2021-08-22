@@ -251,7 +251,18 @@ function sanitiseHtml(html) {
     $html = $.parseHTML(html, /* document */ context, /* keepscripts */ false),
     $div = $('<div>', context).append($html),
     whitelistAttrs = ['title', 'style', 'class'],
-    whitelistTags = ['b', 'br', 'code', 'del', 'em', 'i', 's', 'strong', 'span']
+    whitelistTags = [
+      'b',
+      'br',
+      'code',
+      'del',
+      'em',
+      'i',
+      's',
+      'strong',
+      'span',
+      'u',
+    ]
 
   $div.find('*').each(function () {
     var $this = $(this),
