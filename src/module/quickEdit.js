@@ -219,6 +219,16 @@ var quickEdit = function (options) {
           class: 'detailBtn',
           id: 'showImages',
           text: _msg('editor-detail-button-images'),
+        }),
+        ' | ',
+        $('<a>', {
+          href: 'javascript:;',
+          class: 'detailBtn',
+          id: 'linksHereBtn',
+          text: _msg('links-here'),
+          'data-page-name': options.page,
+        }).on('click', function () {
+          linksHere(options.page)
         })
       )
     ),
@@ -761,11 +771,10 @@ var quickEdit = function (options) {
       id = $this.attr('id'),
       content = $('<ul>')
     switch (id) {
-      case 'showTemplates':
-        var templates = options.pageDetail.parse.templates,
-          templateName
+      case 'showTemplates': {
+        const templates = options.pageDetail.parse.templates
         for (let i = 0; i < templates.length; i++) {
-          templateName = templates[i]['*']
+          let templateName = templates[i]['*']
           $('<li>')
             .append(
               $('<a>', {
@@ -780,13 +789,13 @@ var quickEdit = function (options) {
                 class: 'quickEditTemplate',
                 'data-template-name': templateName,
               }),
-              '|',
+              ' | ',
               $('<a>', {
                 href: 'javascript:;',
                 text: _msg('links-here'),
                 class: 'quickEditLinksHere',
               }).on('click', function () {
-                linksHere(`Template:${templateName}`)
+                linksHere(templateName)
               }),
               ')'
             )
@@ -799,11 +808,11 @@ var quickEdit = function (options) {
           content: content,
         })
         break
-      case 'showImages':
-        var images = options.pageDetail.parse.images,
-          imageName
+      }
+      case 'showImages': {
+        const images = options.pageDetail.parse.images
         for (let i = 0; i < images.length; i++) {
-          imageName = images[i]
+          const imageName = images[i]
           $('<li>')
             .append(
               $('<a>', {
@@ -847,6 +856,7 @@ var quickEdit = function (options) {
           content,
         })
         break
+      }
     }
     $('.in-page-edit.quick-edit-detail .quickEditTemplate').on(
       'click',
