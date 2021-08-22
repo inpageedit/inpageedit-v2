@@ -13,8 +13,8 @@ const { mwApi, config } = require('./util')
  * @function isFile
  * @returns {Boolean} Is file page?
  */
-var isFile = (title) => {
-  var fileReg = new RegExp(`^(File|${config.wgFormattedNamespaces[6]}):`)
+const isFile = (title) => {
+  const fileReg = new RegExp(`^(File|${config.wgFormattedNamespaces[6]}):`)
   return fileReg.test(title)
 }
 
@@ -22,7 +22,7 @@ var isFile = (title) => {
  * @function getList
  * @param {Sting} title
  */
-var getList = (title) => {
+const getList = (title) => {
   var opt = {
     format: 'json',
     action: 'query',
@@ -41,7 +41,7 @@ var getList = (title) => {
  * @function makeList
  * @param {Object} list
  */
-var makeList = (list) => {
+const makeList = (list) => {
   var $list = $('<ol>', { class: 'ipe-links-here-list' })
   $.each(list, (index, { title, redirect }) => {
     $list.append(
@@ -70,7 +70,7 @@ var makeList = (list) => {
 
 /**
  * @module linksHere
- * @param {String} title
+ * @param {string} title page title
  */
 async function linksHere(title = config.wgPageName) {
   _analysis('linkshere')
