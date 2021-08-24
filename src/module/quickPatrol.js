@@ -1,5 +1,4 @@
-var mwApi = new mw.Api()
-
+const { mwApi } = require('./util')
 const { _hasRight } = require('./_hasRight')
 
 var checkPatrol = function () {
@@ -8,30 +7,27 @@ var checkPatrol = function () {
 }
 
 var quickPatrol = function (revid, done, fail) {
-  var failFallback = function (errorCode, errorThrown) {
-    console.warn('[InPageEdit] 快速巡查失败: ' + errorCode + " " + errorThrown)
-    fail()
-  }
-  console.log('[InPageEdit] 尝试获取巡查 Token...')
-  mwApi.get({
-    action: 'query',
-    meta: 'tokens',
-    type: 'patrol',
-    format: 'json'
-  }).done(function (data) {
-    console.log('[InPageEdit] 尝试巡查...')
-    mwApi.post({
+  console.log('[InPageEdit] 尝试快速巡查...')
+  mwApi
+    .post({
       action: 'patrol',
       revid: revid,
-      token: data.query.tokens.patroltoken,
-      format: 'json'
-    }).done(function () {
-      console.log('[InPageEdit] 巡查成功')
-      done();
-    }).fail(failFallback)
-  }).fail(failFallback)
+      token: mw.user.tokens.get('patrolToken'),
+      format: 'json',
+    })
+    .done(function () {
+      console.log('[InPageEdit] 快速巡查成功')
+      done()
+    })
+    .fail(function (errorCode) {
+      console.warn(
+        '[InPageEdit] 快速巡查失败: ' + errorCode
+      )
+      fail()
+    })
 }
 
 module.exports = {
-  checkPatrol, quickPatrol
+  checkPatrol,
+  quickPatrol,
 }

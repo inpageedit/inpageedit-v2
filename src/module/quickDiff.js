@@ -17,7 +17,7 @@ var quickDiff = function (param) {
   if ($('[href*="mediawiki.diff.styles"]').length < 1) {
     mw.loader.load(
       mw.util.wikiScript('load') +
-      '?modules=mediawiki.legacy.shared|mediawiki.diff.styles&only=styles',
+        '?modules=mediawiki.legacy.shared|mediawiki.diff.styles&only=styles',
       'text/css'
     )
   }
@@ -96,24 +96,28 @@ var quickDiff = function (param) {
       }
       function patrolLink() {
         return $('<span>', {
-          class: 'patrollink'
+          class: 'patrollink',
         }).append(
           ' [',
           $('<a>', {
             class: 'ipe-patrollink',
             text: _msg('diff-patrol'),
-            href: 'javascript:void(0);'
+            href: 'javascript:void(0);',
           }).click(() => {
             var it = $('.ipe-patrollink')
             if (!it.hasClass('running')) {
               it.addClass('running')
               it.text('...')
-              quickPatrol(data.compare.torevid, function () {
-                it.text(_msg('diff-patrol-succeed')) // succeed
-              }, function () {
-                it.removeClass('running')
-                it.text(_msg('diff-patrol-fail')) // fail
-              })
+              quickPatrol(
+                data.compare.torevid,
+                function () {
+                  it.text(_msg('diff-patrol-succeed')) // succeed
+                },
+                function () {
+                  it.removeClass('running')
+                  it.text(_msg('diff-patrol-fail')) // fail
+                }
+              )
             }
           }),
           ']'
@@ -320,11 +324,11 @@ var quickDiff = function (param) {
         console.warn('[InPageEdit] 快速差异获取时系统告知出现问题')
         $diffArea.html(
           _msg('diff-error') +
-          ': ' +
-          data.error.info +
-          '(<code>' +
-          data.error.code +
-          '</code>)'
+            ': ' +
+            data.error.info +
+            '(<code>' +
+            data.error.code +
+            '</code>)'
         )
       }
     })
@@ -340,11 +344,11 @@ var quickDiff = function (param) {
           .show()
           .html(
             _msg('diff-error') +
-            ': ' +
-            errorThrown.error.info +
-            '(<code>' +
-            errorThrown.error.code +
-            '</code>)'
+              ': ' +
+              errorThrown.error.info +
+              '(<code>' +
+              errorThrown.error.code +
+              '</code>)'
           )
       } else {
         $diffArea.show().html(_msg('diff-error'))
