@@ -3,6 +3,7 @@ var config = mw.config.get()
 
 const { _analysis } = require('./_analysis')
 const { _msg } = require('./_msg')
+const { checkPatrol, quickPatrol } = require('./quickPatrol')
 
 const { $br, $progress } = require('./_elements')
 
@@ -91,6 +92,35 @@ var quickDiff = function (param) {
           '">' +
           _msg('diff-userblock') +
           '</a>)'
+        )
+      }
+      function patrolLink() {
+        return $('<span>', {
+          class: 'patrollink',
+        }).append(
+          ' [',
+          $('<a>', {
+            class: 'ipe-patrollink',
+            text: _msg('diff-patrol'),
+            href: 'javascript:void(0);',
+          }).click(() => {
+            var it = $('.ipe-patrollink')
+            if (!it.hasClass('running')) {
+              it.addClass('running')
+              it.text('...')
+              quickPatrol(
+                data.compare.torevid,
+                function () {
+                  it.text(_msg('diff-patrol-succeed')) // succeed
+                },
+                function () {
+                  it.removeClass('running')
+                  it.text(_msg('diff-patrol-fail')) // fail
+                }
+              )
+            }
+          }),
+          ']'
         )
       }
       $modalTitle.html(_msg('diff-title') + ': <u>' + toTitle + '</u>')
@@ -192,7 +222,8 @@ var quickDiff = function (param) {
                       fromrev: data.compare.torevid,
                       torelative: 'next',
                     })
-                  })
+                  }),
+                  checkPatrol() ? patrolLink() : ''
                 )
               ),
               diffTable,
