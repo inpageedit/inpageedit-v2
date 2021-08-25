@@ -1,6 +1,7 @@
-var api = require('./api.json')
+const api = require('./api.json')
 const { preference } = require('./preference')
-var { config } = require('./util')
+const { config } = require('./util')
+const version = require('./version')
 
 /**
  * @module _analysis 提交统计信息模块
@@ -16,6 +17,7 @@ const _analysis = function (featureID) {
     siteName: config.wgSiteName,
     userName: config.wgUserName,
     featureID,
+    ipeVersion: version,
   }
   $.ajax({
     url: `${api.analysisApi}/submit`,
