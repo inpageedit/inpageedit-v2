@@ -1,6 +1,6 @@
 {
   "aboutUrl": "https://ipe.js.org/",
-  "analysisApi": "https://analysis.ipe.wjghj.cn/api",
+  "analysisApi": "https://analytics-v5.ipe.wjghj.cn/api",
   "analysisUrl": "https://blog.wjghj.cn/inpageedit/",
   "githubLink": "https://github.com/inpageedit/inpageedit-v2",
   "pluginCDN": "https://ipe-plugins.js.org",

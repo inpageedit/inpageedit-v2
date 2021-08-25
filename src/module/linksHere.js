@@ -58,7 +58,7 @@ const makeList = (list) => {
         $link({ text: _msg('quick-edit') }).on('click', function () {
           quickEdit({
             page: title,
-            require: false,
+            reload: false,
           })
         }),
         ')'
