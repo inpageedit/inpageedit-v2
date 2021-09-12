@@ -18,7 +18,7 @@ const _dir = require('../method/_dir')
 /**
  * @module preference 个人设置模块
  */
-var preference = {
+const preference = {
   /**
    * @name 预设值
    * @return {object}
@@ -87,7 +87,7 @@ var preference = {
     mw.hook('pluginPreference').fire()
     preference.set()
     var local = preference.get()
-    _analytics('plugin_setting')
+    require('./_analytics')._analytics('plugin_setting')
 
     /** 定义模态框内部结构 */
     var $tabList = $('<ul>', { class: 'tab-list' }).append(
@@ -195,7 +195,7 @@ var preference = {
           class: 'btn btn-secondary',
           id: 'ipeSaveLocalShow',
           text: _msg('preference-savelocal-btn'),
-        }).click(function () {
+        }).on('click', function () {
           // 永久保存（本地用户页）
           var $saveLocalModal = $('<section>').append(
             _msg('preference-savelocal-popup'),
@@ -205,7 +205,7 @@ var preference = {
                 'font-size: 12px; resize: none; width: 100%; height: 10em;',
               readonly: true,
             })
-              .click(function () {
+              .on('click', function () {
                 this.select()
               })
               .val(
@@ -285,7 +285,7 @@ var preference = {
     )
 
     // 绑定tab-list按钮事件
-    $tabList.find('a').click(function (e) {
+    $tabList.find('a').on('click', function (e) {
       e.preventDefault()
       var $this = $(this)
       var tab = $this.attr('href')
