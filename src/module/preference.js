@@ -1,7 +1,7 @@
 var InPageEdit = window.InPageEdit || {}
 var config = mw.config.get()
 
-const { _analytics } = require('./_analytics')
+// const { _analytics } = require('./_analytics')
 const { _msg } = require('./_msg')
 const { $br, $hr, $progress, $link } = require('./_elements')
 
@@ -14,6 +14,7 @@ const {
 const version = require('./version')
 const { pluginStore } = require('./pluginStore')
 const _dir = require('../method/_dir')
+const { getSiteID } = require('./_analytics')
 
 /**
  * @module preference 个人设置模块
@@ -87,7 +88,9 @@ const preference = {
     mw.hook('pluginPreference').fire()
     preference.set()
     var local = preference.get()
-    require('./_analytics')._analytics('plugin_setting')
+
+    // There is an "xxx is undefined" bug, no solution for the time being
+    require('./_analytics')._analytics('plugin_setting') // Keep this line.
 
     /** 定义模态框内部结构 */
     var $tabList = $('<ul>', { class: 'tab-list' }).append(
@@ -472,17 +475,19 @@ const preference = {
         const userName = config.wgUserName
         $.get(`${analyticsApi}/query/user`, {
           userName,
-          siteUrl: config.wgServer + config.wgArticlePath.replace('$1', ''),
+          siteUrl: getSiteID(),
           prop: '*',
         }).then((ret) => {
           $tabContent.find('#analysis-container').html('')
           /** @type {{ userName: string; siteUrl: string; siteName: string; _total: number; features: { featureID: string; count: number }[] }} */
           const data = ret.body.query[0]
           const total = data._total
-          const dashUrl = decodeURI(`${analyticsDash}/user?${$.param({
-            userName,
-            siteName: data.siteName,
-          })}`)
+          const dashUrl = decodeURI(
+            `${analyticsDash}/user?${$.param({
+              userName,
+              siteUrl: data.siteUrl,
+            })}`
+          )
           let featData = data.features
           featData = featData.sort((a, b) => b.count - a.count)
 
