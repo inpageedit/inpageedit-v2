@@ -6,15 +6,14 @@
   "dependencies": {},
   "devDependencies": {
     "@dragon-fish/bump": "^0.0.15",
-    "eslint": "^7.29.0",
-    "prettier": "^2.3.2",
-    "stylus": "^0.54.8",
+    "eslint": "^7.32.0",
+    "prettier": "^2.4.0",
     "types-mediawiki": "^1.2.0",
-    "webpack": "^5.41.1",
-    "webpack-cli": "^4.7.2"
+    "webpack": "^5.52.1",
+    "webpack-cli": "^4.8.0"
   },
   "scripts": {
-    "build": "yarn clear && webpack && MINIFY=1 webpack",
+    "build": "yarn clear && webpack && wsl MINIFY=1 webpack",
     "lint": "eslint ./src",
     "dev": "webpack --watch --o ./dev/[name].js",
     "clear": "wsl rm -rf ./dist",
