@@ -257,7 +257,7 @@ var preference = {
             target: '_blank',
           })
         ),
-        $('<p>').append($('<strong>', { text: 'QQ' }), ': ', '1026023666'),
+        $('<p>').append($('<strong>', { text: 'QQ Group' }), ': ', '1026023666'),
         $hr,
         $('<p>', {
           text: 'InPageEdit is a useful MediaWiki JavaScript Plugin written with jQuery',
