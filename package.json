@@ -1,6 +1,6 @@
 {
   "name": "mediawiki-inpageedit",
-  "version": "14.2.1",
+  "version": "14.2.2-alpha.0",
   "description": "A useful MediaWiki JavaScript Plugin written with jQuery",
   "main": "dist/InPageEdit.js",
   "dependencies": {},
@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/InPageEdit/InPageEdit.git"
+    "url": "git+https://github.com/inpageedit/inpageedit-v2.git"
   },
   "keywords": [
     "mediawiki",
@@ -32,7 +32,7 @@
   "author": "Dragon-Fish",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/InPageEdit/InPageEdit/issues"
+    "url": "https://github.com/inpageedit/inpageedit-v2/issues"
   },
-  "homepage": "https://ipe.js.org/"
+  "homepage": "https://www.ipe.wiki/"
 }
