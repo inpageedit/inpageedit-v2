@@ -1,6 +1,6 @@
 const { mwApi, config } = require('./util')
 
-const { _analysis } = require('./_analysis')
+const { _analytics: _analysis } = require('./_analytics')
 const { _msg } = require('./_msg')
 const { _hasRight } = require('./_hasRight')
 

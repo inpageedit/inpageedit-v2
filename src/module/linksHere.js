@@ -3,7 +3,7 @@
  */
 
 const { quickEdit } = require('./quickEdit')
-const { _analysis } = require('./_analysis')
+const { _analytics: _analysis } = require('./_analytics')
 const { $progress, $link } = require('./_elements')
 const { _msg } = require('./_msg')
 

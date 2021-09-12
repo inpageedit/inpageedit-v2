@@ -1,13 +1,13 @@
-const api = require('./api.json')
+const { analyticsApi } = require('./api')
 const { preference } = require('./preference')
 const { config } = require('./util')
 const version = require('./version')
 
 /**
- * @module _analysis 提交统计信息模块
+ * @module _analytics 提交统计信息模块
  * @param {string} featureID 模块ID，例如 quick_edit
  */
-const _analysis = function (featureID) {
+const _analytics = function (featureID) {
   if (preference.get('doNotCollectMyInfo') === true) {
     // console.info('[InPageEdit] 我们已不再收集您使用插件的信息。');
     // return;
@@ -20,15 +20,15 @@ const _analysis = function (featureID) {
     ipeVersion: version,
   }
   $.ajax({
-    url: `${api.analysisApi}/submit`,
+    url: `${analyticsApi}/submit`,
     data: submitData,
     type: 'post',
     dataType: 'json',
   }).done(function (data) {
-    console.log('[InPageEdit] Analysis response', data)
+    console.log('[InPageEdit] Analytics response', data)
   })
 }
 
 module.exports = {
-  _analysis,
+  _analytics: _analytics,
 }

@@ -38,10 +38,10 @@ module.exports = async function init() {
   mw.hook('InPageEdit.init.modal').fire({ ssi_modal: window.ssi_modal })
 
   // 导入全部模块
-  const { _analysis } = require('../module/_analysis')
+  const { _analytics: _analysis } = require('../module/_analytics')
   const { _msg } = require('../module/_msg')
   const { about } = require('../module/about')
-  const api = require('../module/api.json')
+  const api = require('../module/api')
   const { articleLink } = require('../module/articleLink')
   const { findAndReplace } = require('../module/findAndReplace')
   const { linksHere } = require('../module/linksHere')

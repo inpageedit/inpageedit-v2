@@ -1,7 +1,7 @@
 const { _msg } = require('./_msg')
 
-const api = require('./api.json')
 const version = require('./version')
+const { updatelogsUrl, githubLink, aboutUrl } = require('./api')
 
 /**
  * @module versionInfo 版本信息模块
@@ -19,7 +19,7 @@ var versionInfo = function () {
     content: $('<section>').append(
       $('<iframe>', {
         style: 'margin: 0;padding: 0;width: 100%;height: 80vh;border: 0;',
-        src: api.updatelogsUrl,
+        src: updatelogsUrl,
       })
     ),
     buttons: [
@@ -27,14 +27,14 @@ var versionInfo = function () {
         label: 'GitHub',
         className: 'btn btn-secondary',
         method: function () {
-          window.open(api.githubLink)
+          window.open(githubLink)
         },
       },
       {
         label: _msg('updatelog-about'),
         className: 'btn btn-secondary',
         method: function () {
-          window.open(api.aboutUrl)
+          window.open(aboutUrl)
         },
       },
       {

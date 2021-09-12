@@ -1,6 +1,6 @@
 var config = mw.config.get()
 const { _msg } = require('./_msg')
-const { _analysis } = require('./_analysis')
+const { _analytics } = require('./_analytics')
 
 const { quickDiff } = require('./quickDiff')
 
@@ -12,12 +12,12 @@ var loadQuickDiff = function () {
   function addLink() {
     $(
       '.mw-changeslist-groupdiff, .mw-changeslist-diff, .mw-changeslist-diff-cur, .mw-history-histlinks a'
-    ).unbind('click', ipeDiffLink)
+    ).off('click', ipeDiffLink)
     var ipeDiffLink = $(
       '.mw-changeslist-groupdiff, .mw-changeslist-diff, .mw-changeslist-diff-cur, .mw-history-histlinks a'
-    ).click(function (e) {
+    ).on('click', function (e) {
       e.preventDefault()
-      _analysis('quick_diff_recentchanges')
+      _analytics('quick_diff_recentchanges')
       var $this = $(this),
         href = $this.attr('href'),
         diff = mw.util.getParamValue('diff', href),
@@ -45,7 +45,7 @@ var loadQuickDiff = function () {
         .text(_msg('quick-diff'))
         .click(function (e) {
           e.preventDefault()
-          _analysis('quick_diff_history_page')
+          _analytics('quick_diff_history_page')
           var before = $('.selected.before').attr('data-mw-revid'),
             after = $('.selected.after').attr('data-mw-revid')
           quickDiff({ fromrev: after, torev: before })
