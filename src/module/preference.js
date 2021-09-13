@@ -265,7 +265,11 @@ const preference = {
             target: '_blank',
           })
         ),
-        $('<p>').append($('<strong>', { text: 'QQ Group' }), ': ', '1026023666'),
+        $('<p>').append(
+          $('<strong>', { text: 'QQ Group' }),
+          ': ',
+          '1026023666'
+        ),
         $hr,
         $('<p>', {
           text: 'InPageEdit is a useful MediaWiki JavaScript Plugin written with jQuery',
@@ -475,19 +479,17 @@ const preference = {
         const userName = config.wgUserName
         $.get(`${analyticsApi}/query/user`, {
           userName,
-          siteUrl: getSiteID(),
+          siteUrl: require('./_analytics').getSiteID(),
           prop: '*',
         }).then((ret) => {
           $tabContent.find('#analysis-container').html('')
           /** @type {{ userName: string; siteUrl: string; siteName: string; _total: number; features: { featureID: string; count: number }[] }} */
           const data = ret.body.query[0]
           const total = data._total
-          const dashUrl = decodeURI(
-            `${analyticsDash}/user?${$.param({
-              userName,
-              siteUrl: data.siteUrl,
-            })}`
-          )
+          const dashUrl = `${analyticsDash}/user?${$.param({
+            userName,
+            siteUrl: data.siteUrl,
+          })}`
           let featData = data.features
           featData = featData.sort((a, b) => b.count - a.count)
 
@@ -514,13 +516,14 @@ const preference = {
             $('<h4>', {
               text: `${data.userName}@${data.siteName}`,
             }),
-            $('<p>').append(_msg('preference-analysis-totaluse', total)),
-            featTable,
             $('<p>').append(
               $link({
                 href: dashUrl,
+                text: 'Analytics Dashboard →',
               })
-            )
+            ),
+            $('<p>').append(_msg('preference-analysis-totaluse', total)),
+            featTable
           )
         })
       },

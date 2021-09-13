@@ -241,7 +241,7 @@ var quickEdit = function (options) {
       placeholder: 'Edit via InPageEdit~',
       value: options.editSummary.replace(/\$oldid/gi, options.summaryRevision),
     }),
-    $br,
+    ' ',
     $('<label>').append(
       $('<input>', {
         type: 'checkbox',
@@ -251,7 +251,17 @@ var quickEdit = function (options) {
       }),
       $('<span>', { text: _msg('markAsMinor') })
     ),
-    $br,
+    ' ',
+    $('<label>').append(
+      $('<input>', {
+        type: 'checkbox',
+        class: 'watchList',
+        id: 'watchList',
+        checked: options.watchList,
+      }),
+      $('<span>', { text: _msg('watchThisPage') })
+    ),
+    ' ',
     $('<label>').append(
       $('<input>', {
         type: 'checkbox',
@@ -321,14 +331,14 @@ var quickEdit = function (options) {
                   minor = $optionsLabel.find('.editMinor').prop('checked'),
                   section = options.section,
                   summary = $optionsLabel.find('.editSummary').val(),
-                  isWatch = $optionsLabel.find('.watchList').val()
+                  isWatch = $optionsLabel.find('.watchList').prop('checked')
                 postArticle(
                   {
-                    text: text,
+                    text,
                     page: options.page,
-                    minor: minor,
-                    section: section,
-                    summary: summary,
+                    minor,
+                    section,
+                    summary,
                     isWatch,
                   },
                   modal
@@ -943,7 +953,7 @@ var quickEdit = function (options) {
 
   // 发布编辑模块
   function postArticle(
-    { text, page, minor, summary, watchList: isWatch, section },
+    { text, page, minor, summary, isWatch, section },
     modal
   ) {
     _analysis('quick_edit_save')
