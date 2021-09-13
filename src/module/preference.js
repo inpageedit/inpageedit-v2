@@ -1,24 +1,30 @@
 var InPageEdit = window.InPageEdit || {}
 var config = mw.config.get()
 
-const { _analysis } = require('./_analysis')
+// const { _analytics } = require('./_analytics')
 const { _msg } = require('./_msg')
-const { $br, $hr, $progress } = require('./_elements')
+const { $br, $hr, $progress, $link } = require('./_elements')
 
-const api = require('./api.json')
+const {
+  githubLink,
+  pluginGithub,
+  analyticsApi,
+  analyticsDash,
+} = require('./api')
 const version = require('./version')
 const { pluginStore } = require('./pluginStore')
 const _dir = require('../method/_dir')
+const { getSiteID } = require('./_analytics')
 
 /**
  * @module preference 个人设置模块
  */
-var preference = {
+const preference = {
   /**
    * @name 预设值
    * @return {object}
    */
-  default: {
+  _defaults: {
     doNotCollectMyInfo: false,
     doNotShowLocalWarn: false,
     editMinor: false,
@@ -26,7 +32,7 @@ var preference = {
     lockToolBox: false,
     redLinkQuickEdit: true,
     outSideClose: true,
-    watchList: Boolean(mw.user.options.get('watchdefault')),
+    watchList: !!mw.user.options.get('watchdefault'),
     plugins: ['toolbox.js'],
   },
   /**
@@ -45,7 +51,7 @@ var preference = {
     if (typeof InPageEdit.myPreference === 'object') {
       local = $.extend({}, local, InPageEdit.myPreference)
     }
-    var json = $.extend({}, preference.default, local)
+    var json = $.extend({}, preference._defaults, local)
     if (typeof setting === 'string' && setting !== '') {
       return json[setting] ? json[setting] : null
     } else {
@@ -82,7 +88,9 @@ var preference = {
     mw.hook('pluginPreference').fire()
     preference.set()
     var local = preference.get()
-    _analysis('plugin_setting')
+
+    // There is an "xxx is undefined" bug, no solution for the time being
+    require('./_analytics')._analytics('plugin_setting') // Keep this line.
 
     /** 定义模态框内部结构 */
     var $tabList = $('<ul>', { class: 'tab-list' }).append(
@@ -146,7 +154,7 @@ var preference = {
           }),
         }),
         $('<div>', { class: 'plugin-footer' }).html(
-          _msg('preference-plugin-footer', api.pluginGithub)
+          _msg('preference-plugin-footer', pluginGithub)
         )
       ),
       $('<section>', { id: 'analysis' }).append(
@@ -190,7 +198,7 @@ var preference = {
           class: 'btn btn-secondary',
           id: 'ipeSaveLocalShow',
           text: _msg('preference-savelocal-btn'),
-        }).click(function () {
+        }).on('click', function () {
           // 永久保存（本地用户页）
           var $saveLocalModal = $('<section>').append(
             _msg('preference-savelocal-popup'),
@@ -200,7 +208,7 @@ var preference = {
                 'font-size: 12px; resize: none; width: 100%; height: 10em;',
               readonly: true,
             })
-              .click(function () {
+              .on('click', function () {
                 this.select()
               })
               .val(
@@ -252,12 +260,12 @@ var preference = {
           $('<strong>', { text: 'GitHub' }),
           ': ',
           $('<a>', {
-            href: require('./api.json').githubLink,
-            text: require('./api.json').githubLink,
+            href: githubLink,
+            text: githubLink,
             target: '_blank',
           })
         ),
-        $('<p>').append($('<strong>', { text: 'QQ' }), ': ', '1026023666'),
+        $('<p>').append($('<strong>', { text: 'QQ Group' }), ': ', '1026023666'),
         $hr,
         $('<p>', {
           text: 'InPageEdit is a useful MediaWiki JavaScript Plugin written with jQuery',
@@ -280,7 +288,7 @@ var preference = {
     )
 
     // 绑定tab-list按钮事件
-    $tabList.find('a').click(function (e) {
+    $tabList.find('a').on('click', function (e) {
       e.preventDefault()
       var $this = $(this)
       var tab = $this.attr('href')
@@ -342,7 +350,7 @@ var preference = {
               },
               (res) => {
                 if (res) {
-                  preference.set(preference.default)
+                  preference.set(preference._defaults)
                   modal.close()
                 } else {
                   return false
@@ -464,41 +472,55 @@ var preference = {
         }
 
         // 获取Analysis数据
-        var userName = config.wgUserName
-        $.get(`${api.analysisApi}/query/wiki`, {
-          siteurl: config.wgServer + config.wgArticlePath.replace('$1', ''),
-          prop:
-            'users.' + userName + '._total|users.' + userName + '.functions',
+        const userName = config.wgUserName
+        $.get(`${analyticsApi}/query/user`, {
+          userName,
+          siteUrl: getSiteID(),
+          prop: '*',
         }).then((ret) => {
           $tabContent.find('#analysis-container').html('')
-          var data = ret.query[0].users[userName]
-          var total = data._total
-          var functionData = data.functions
-          var functionList = $('<table>', {
+          /** @type {{ userName: string; siteUrl: string; siteName: string; _total: number; features: { featureID: string; count: number }[] }} */
+          const data = ret.body.query[0]
+          const total = data._total
+          const dashUrl = decodeURI(
+            `${analyticsDash}/user?${$.param({
+              userName,
+              siteUrl: data.siteUrl,
+            })}`
+          )
+          let featData = data.features
+          featData = featData.sort((a, b) => b.count - a.count)
+
+          const featTable = $('<table>', {
             class: 'wikitable',
             style: 'width: 96%',
           }).append(
             $('<tr>').append(
               $('<th>', { text: 'ID' }),
-              $('<th>', { text: 'Times' }),
-              $('<th>', { text: 'Percents' })
+              $('<th>', { text: 'Count' }),
+              $('<th>', { text: '%' })
             )
           )
-          $.each(functionData, (key, val) => {
-            functionList.append(
+          featData.forEach(({ count, featureID }) => {
+            featTable.append(
               $('<tr>').append(
-                $('<th>', { text: key }),
-                $('<td>', { text: val }),
-                $('<td>', { text: ((val / total) * 100).toFixed(2) + '%' })
+                $('<th>', { text: featureID }),
+                $('<td>', { text: count }),
+                $('<td>', { text: ((count / total) * 100).toFixed(2) + '%' })
               )
             )
           })
           $tabContent.find('#analysis-container').append(
             $('<h4>', {
-              text: config.wgUserName + ' - ' + config.wgSiteName,
+              text: `${data.userName}@${data.siteName}`,
             }),
             $('<p>').append(_msg('preference-analysis-totaluse', total)),
-            functionList
+            featTable,
+            $('<p>').append(
+              $link({
+                href: dashUrl,
+              })
+            )
           )
         })
       },

@@ -2,8 +2,8 @@
  * @module linksHere
  */
 
-const { quickEdit } = require('./quickEdit')
-const { _analysis } = require('./_analysis')
+// const { quickEdit } = require('./quickEdit')
+const { _analytics } = require('./_analytics')
 const { $progress, $link } = require('./_elements')
 const { _msg } = require('./_msg')
 
@@ -56,7 +56,7 @@ const makeList = (list) => {
         }),
         ' | ',
         $link({ text: _msg('quick-edit') }).on('click', function () {
-          quickEdit({
+          require('./quickEdit').quickEdit({
             page: title,
             reload: false,
           })
@@ -73,7 +73,7 @@ const makeList = (list) => {
  * @param {string} title page title
  */
 async function linksHere(title = config.wgPageName) {
-  _analysis('linkshere')
+  _analytics('linkshere')
 
   if (!title || typeof title !== 'string') title = config.wgPageName
 

@@ -1,6 +1,6 @@
 const { mwApi, config } = require('./util')
 
-const { _analysis } = require('./_analysis')
+const { _analytics: _analysis } = require('./_analytics')
 const { _msg } = require('./_msg')
 const { _hasRight } = require('./_hasRight')
 
@@ -201,8 +201,8 @@ var quickEdit = function (options) {
   var $optionsLabel = $('<div>', {
     class: 'editOptionsLabel hideBeforeLoaded',
   }).append(
-    $('<details>', { class: 'detailArea' }).append(
-      $('<summary>', {
+    $('<section>', { class: 'detailArea' }).append(
+      $('<strong>', {
         class: 'detailToggle',
         text: _msg('editor-detail-button-toggle'),
       }),
@@ -248,6 +248,16 @@ var quickEdit = function (options) {
         class: 'editMinor',
         id: 'editMinor',
         checked: options.editMinor,
+      }),
+      $('<span>', { text: _msg('markAsMinor') })
+    ),
+    $br,
+    $('<label>').append(
+      $('<input>', {
+        type: 'checkbox',
+        class: 'watchList',
+        id: 'watchList',
+        checked: options.watchList,
       }),
       $('<span>', { text: _msg('markAsMinor') })
     ),
@@ -307,10 +317,11 @@ var quickEdit = function (options) {
             },
             function (result) {
               if (result) {
-                var text = $editArea.val(),
+                const text = $editArea.val(),
                   minor = $optionsLabel.find('.editMinor').prop('checked'),
                   section = options.section,
-                  summary = $optionsLabel.find('.editSummary').val()
+                  summary = $optionsLabel.find('.editSummary').val(),
+                  isWatch = $optionsLabel.find('.watchList').val()
                 postArticle(
                   {
                     text: text,
@@ -318,6 +329,7 @@ var quickEdit = function (options) {
                     minor: minor,
                     section: section,
                     summary: summary,
+                    isWatch,
                   },
                   modal
                 )
@@ -930,7 +942,10 @@ var quickEdit = function (options) {
   })
 
   // 发布编辑模块
-  function postArticle({ text, page, minor, summary, section }, modal) {
+  function postArticle(
+    { text, page, minor, summary, watchList: isWatch, section },
+    modal
+  ) {
     _analysis('quick_edit_save')
     progress(_msg('editor-title-saving'))
     options.jsonPost = {
@@ -939,6 +954,7 @@ var quickEdit = function (options) {
       basetimestamp: $modalContent.data('basetimestamp'),
       text,
       title: page,
+      watchlist: isWatch ? 'watch' : 'unwatch',
       minor,
       summary,
       errorformat: 'plaintext',

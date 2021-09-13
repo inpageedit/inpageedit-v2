@@ -1,6 +1,6 @@
 var mwApi = new mw.Api()
 var config = mw.config.get()
-const { _analysis } = require('./_analysis')
+const { _analytics: _analysis } = require('./_analytics')
 const { _msg } = require('./_msg')
 const { _hasRight } = require('./_hasRight')
 const { $br } = require('./_elements')
