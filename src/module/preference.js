@@ -14,7 +14,6 @@ const {
 const version = require('./version')
 const { pluginStore } = require('./pluginStore')
 const _dir = require('../method/_dir')
-const { getSiteID } = require('./_analytics')
 
 /**
  * @module preference 个人设置模块

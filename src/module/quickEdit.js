@@ -202,7 +202,7 @@ var quickEdit = function (options) {
     class: 'editOptionsLabel hideBeforeLoaded',
   }).append(
     $('<section>', { class: 'detailArea' }).append(
-      $('<strong>', {
+      $('<label>', {
         class: 'detailToggle',
         text: _msg('editor-detail-button-toggle'),
       }),
@@ -241,7 +241,7 @@ var quickEdit = function (options) {
       placeholder: 'Edit via InPageEdit~',
       value: options.editSummary.replace(/\$oldid/gi, options.summaryRevision),
     }),
-    ' ',
+    $br,
     $('<label>').append(
       $('<input>', {
         type: 'checkbox',
@@ -262,15 +262,6 @@ var quickEdit = function (options) {
       $('<span>', { text: _msg('watchThisPage') })
     ),
     ' ',
-    $('<label>').append(
-      $('<input>', {
-        type: 'checkbox',
-        class: 'watchList',
-        id: 'watchList',
-        checked: options.watchList,
-      }),
-      $('<span>', { text: _msg('markAsMinor') })
-    ),
     $br,
     $('<label>').append(
       $('<input>', {
