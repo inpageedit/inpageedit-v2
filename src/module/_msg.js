@@ -368,8 +368,8 @@ function parseWikitext(message) {
 
 /**
  * @function parseMessage
- * @param {String} msg
- * @param  {...Sting} args
+ * @param {string} msg
+ * @param  {...string} args
  */
 function parseMessage(msg, ...args) {
   msg = handleArgs(msg, ...args)
@@ -415,7 +415,7 @@ function getMessage(lang, msgKey, ...args) {
 
   // 如果到了这一步，意味着消息不存在
   if (lang === 'en') {
-    return `<${funcName}-${msgKey}>`
+    return `(${funcName}-${msgKey})`
   }
 
   // 转换用户语言后再试，例如 zh => zh-hans, zh-tw => zh-hant
