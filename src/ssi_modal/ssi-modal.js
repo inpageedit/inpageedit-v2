@@ -657,7 +657,7 @@
       icon = icons[i]
       ;(function (icon) {
         iconArray.push(
-          $('<a class="' + icon.className + '"></a>').click(function (e) {
+          $('<a class="' + icon.className + '"></a>').on('click', function (e) {
             e.preventDefault()
             if (typeof icon.method === 'function') {
               $.proxy(icon.method, this)(e, modalObj)
@@ -696,7 +696,7 @@
       windowContent.push(modalObj.setTitle(modalObj.options.title))
     }
     if (modalObj.options.onClickClose) {
-      $modalWindow.addClass('ssi-hover').click(function (e) {
+      $modalWindow.addClass('ssi-hover').on('click', function (e) {
         var $eTarget = $(e.target)
         if (!$eTarget.is('a') && !$eTarget.is('button')) {
           modalObj.close()
@@ -784,7 +784,7 @@
         $btn.focus()
       }, 100)
     }
-    return $btn.click(function (e) {
+    return $btn.on('click', function (e) {
       e.preventDefault()
       if (buttonOptions.clearTimeOut) {
         clearTimeOut(modalObj)
@@ -844,13 +844,13 @@
         this.$modal = $modal
         $modal.one('onShow.ssi-modal', function () {
           if (modalObj.options.outSideClose === true) {
-            $modal.click(function (e) {
+            $modal.on('click', function (e) {
               if (e.target === this) {
                 e.preventDefault()
                 modalObj.close()
               }
             })
-            wrapper.click(function (e) {
+            wrapper.on('click', function (e) {
               if (e.target === this) {
                 e.preventDefault()
                 modalObj.close()
@@ -1877,7 +1877,7 @@
         options
       if (opts.content) {
         //that means that we will not use any div element for content
-        element.click(function () {
+        element.on('click', function () {
           switch (
             action //action could be show,dialog or confirm
           ) {
@@ -1894,7 +1894,7 @@
           dataAttr = element.attr('data-ssi_modal')
         if (dataAttr) {
           // that means the content is an element.  data-ssi_modal shows the elements selector
-          element.click(function () {
+          element.on('click', function () {
             //set click event
             content = $(dataAttr)
             def = {

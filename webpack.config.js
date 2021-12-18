@@ -1,16 +1,16 @@
-'use strict';
-
-const path = require('path');
+'use strict'
+const process = require('process')
+const path = require('path')
 
 const isMinify = process.env.MINIFY
 
 module.exports = {
   entry: {
-    'InPageEdit': './src/index.js'
+    InPageEdit: './src/index.js',
   },
   context: path.resolve(__dirname),
   watchOptions: {
-    ignored: /(node_modules|dist)/
+    ignored: /(node_modules|dist)/,
   },
   mode: isMinify ? 'production' : 'development',
   output: {
@@ -22,23 +22,22 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      }, {
+        use: ['style-loader', 'css-loader'],
+      },
+      {
         test: /\.(png|jpe?g|gif)$/i,
         use: [
           {
             loader: 'file-loader',
           },
         ],
-      }
-    ]
+      },
+    ],
   },
-  resolve: {
-  },
+  resolve: {},
   devtool: 'source-map',
-  plugins: [
-  ],
+  plugins: [],
   optimization: {
-    minimize: isMinify ? true : false
-  }
-};
+    minimize: isMinify ? true : false,
+  },
+}

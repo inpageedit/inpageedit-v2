@@ -56,7 +56,7 @@ function articleLink(el) {
             href: 'javascript:void(0)',
             class: 'in-page-edit-article-link',
             text: _msg('quick-edit'),
-          }).click(function () {
+          }).on('click', function () {
             var options = {}
             options.page = decodeURI(title)
             if (revision !== null) {

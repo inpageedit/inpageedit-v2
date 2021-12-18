@@ -15,8 +15,10 @@ var quickDiff = function (param) {
   _analysis('quick_diff')
   if ($('[href*="mediawiki.diff.styles"]').length < 1) {
     mw.loader.load(
-      mw.util.wikiScript('load') +
-        '?modules=mediawiki.legacy.shared|mediawiki.diff.styles&only=styles',
+      `${mw.util.wikiScript('load')}?${new URLSearchParams({
+        modules: 'mediawiki.legacy.shared|mediawiki.diff.styles',
+        only: 'styles',
+      })}`,
       'text/css'
     )
   }
@@ -143,7 +145,7 @@ var quickDiff = function (param) {
                     class: 'prevVersion ipe-analysis-quick_diff_modalclick',
                     href: 'javascript:void(0);',
                     text: '←' + _msg('diff-prev'),
-                  }).click(() => {
+                  }).on('click', () => {
                     quickDiff({
                       fromrev: data.compare.fromrevid,
                       torelative: 'prev',
@@ -186,7 +188,7 @@ var quickDiff = function (param) {
                     class: 'nextVersion ipe-analysis-quick_diff_modalclick',
                     href: 'javascript:void(0);',
                     text: _msg('diff-nextv') + '→',
-                  }).click(() => {
+                  }).on('click', () => {
                     _analysis('quick_diff_modalclick')
                     quickDiff({
                       fromrev: data.compare.torevid,
@@ -212,7 +214,7 @@ var quickDiff = function (param) {
             )
           )
         )
-      $('.quick-diff button.toDiffPage').click(function () {
+      $('.quick-diff button.toDiffPage').on('click', function () {
         location.href =
           config.wgScript +
           '?oldid=' +
