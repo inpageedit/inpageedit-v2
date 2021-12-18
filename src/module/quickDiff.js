@@ -54,7 +54,7 @@ var quickDiff = function (param) {
   $loading
     .show()
     .css('margin-top', $('.quick-diff .ssi-modalContent').height() / 2)
-  $('.quick-diff .toDiffPage').unbind()
+  $('.quick-diff .toDiffPage').off()
   param.action = 'compare'
   param.prop = 'diff|diffsize|rel|ids|title|user|comment|parsedcomment|size'
   param.format = 'json'
@@ -145,12 +145,14 @@ var quickDiff = function (param) {
                     class: 'prevVersion ipe-analysis-quick_diff_modalclick',
                     href: 'javascript:void(0);',
                     text: '←' + _msg('diff-prev'),
-                  }).on('click', () => {
-                    quickDiff({
-                      fromrev: data.compare.fromrevid,
-                      torelative: 'prev',
-                    })
                   })
+                    .toggle(data.compare.prev)
+                    .on('click', () => {
+                      quickDiff({
+                        fromrev: data.compare.prev,
+                        torev: data.compare.fromrevid,
+                      })
+                    })
                 ),
                 $('<td>', { colspan: 2, class: 'diff-ntitle' }).append(
                   $('<a>', {
@@ -188,13 +190,15 @@ var quickDiff = function (param) {
                     class: 'nextVersion ipe-analysis-quick_diff_modalclick',
                     href: 'javascript:void(0);',
                     text: _msg('diff-nextv') + '→',
-                  }).on('click', () => {
-                    _analysis('quick_diff_modalclick')
-                    quickDiff({
-                      fromrev: data.compare.torevid,
-                      torelative: 'next',
-                    })
                   })
+                    .toggle(data.compare.next)
+                    .on('click', () => {
+                      _analysis('quick_diff_modalclick')
+                      quickDiff({
+                        fromrev: data.compare.torevid,
+                        torev: data.compare.next,
+                      })
+                    })
                 )
               ),
               diffTable,
