@@ -1,24 +1,12 @@
 /**
- * @method getDir
- * @return {String} 插件CDN的URL路径，结尾没有/
+ * @type {string}
+ * @desc
+ * - 插件CDN的URL路径，不含尾随 `/`
+ * - 注意，如果您想自己自己托管 InPageEdit，`_dir`可以直接返回您的URL
  *
- * @description 注意，如果您想自己自己托管InPageEdit，_dir可以直接返回您的URL
- *              例如 const _dir = https://yourdomain.com/inpageedit
  */
-function getDir() {
-  var thisScript = document.currentScript.src
-  var thisUrl = thisScript.split('/')
-  // 理论上入口文件位于 /dist/*.js
-  // 因此删掉最后两位路径
-  thisUrl.pop()
-  thisUrl.pop()
-  thisUrl = thisUrl.join('/')
-  return thisUrl
-}
-
-/**
- * @constant {String} _dir CDN URL
- */
-const _dir = getDir()
+ const _dir =
+ document?.currentScript?.src?.split('/').slice(0, -2).join('/') ??
+ 'https://cdn.jsdelivr.net/npm/mediawiki-inpageedit@latest'
 
 module.exports = _dir
