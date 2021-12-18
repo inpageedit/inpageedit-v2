@@ -12,8 +12,10 @@
   const InPageEdit = window.InPageEdit || {}
 
   // 防止多次运行
-  if (InPageEdit?.version) {
-    throw '[InPageEdit] InPageEdit 已经在运行了'
+  if (InPageEdit.loaded) {
+    throw '[InPageEdit] InPageEdit 被多次加载。'
+  } else {
+    InPageEdit.loaded = true
   }
 
   // 初始化插件

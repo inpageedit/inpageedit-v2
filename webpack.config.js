@@ -40,4 +40,7 @@ module.exports = {
   optimization: {
     minimize: isMinify ? true : false,
   },
+  devServer: {
+    port: 1005,
+  },
 }
