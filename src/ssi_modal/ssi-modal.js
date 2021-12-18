@@ -1402,7 +1402,8 @@
     return !!s.match(isDataURL.regex)
   }
 
-  isDataURL.regex = /^\s*data:([a-z]+\/[a-z0-9\-\+]+(;[a-z\-]+\=[a-z0-9\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i
+  isDataURL.regex =
+    /^\s*data:([a-z]+\/[a-z0-9\-\+]+(;[a-z\-]+\=[a-z0-9\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i
 
   var imgBoxOptions = { 'ssi-mainOption': {} } //this will hold the imgbox options when will call ssi_modal.imgBox function
   ssi_modal.imgBox = function (options, group) {

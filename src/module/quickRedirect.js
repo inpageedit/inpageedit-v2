@@ -54,7 +54,8 @@ var quickRedirect = function (type = 'to') {
       $('<section>').append(
         $('<span>', { html: question }),
         $br,
-        $('<input>', { id: 'redirect-page', style: 'width:96%' }).on('click', 
+        $('<input>', { id: 'redirect-page', style: 'width:96%' }).on(
+          'click',
           function () {
             $(this).css('box-shadow', '')
           }

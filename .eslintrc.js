@@ -1,19 +1,18 @@
 module.exports = {
-  "env": {
-    "browser": true,
-    "commonjs": true,
-    "es2020": true
+  env: {
+    browser: true,
+    commonjs: true,
+    es2020: true,
   },
-  "extends": "eslint:recommended",
-  "parserOptions": {
-    "ecmaVersion": 12
+  extends: 'eslint:recommended',
+  parserOptions: {
+    ecmaVersion: 12,
   },
-  "rules": {
+  rules: {},
+  globals: {
+    $: 'writeable',
+    mw: 'writeable',
+    ssi_modal: 'writeable',
+    InPageEdit: 'writeable',
   },
-  "globals": {
-    "$": "writeable",
-    "mw": "writeable",
-    "ssi_modal": "writeable",
-    "InPageEdit": "writeable"
-  }
-};
+}
