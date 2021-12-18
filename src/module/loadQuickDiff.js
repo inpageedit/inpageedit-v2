@@ -1,28 +1,26 @@
 var config = mw.config.get()
 const { _msg } = require('./_msg')
 const { _analytics } = require('./_analytics')
+const { getParamValue } = mw.util
 
 const { quickDiff } = require('./quickDiff')
+const { quickEdit } = require('./quickEdit')
 
-/**
- * @module loadQuickDiff 在特定页面查询差异链接并绑定快速差异
- */
-var loadQuickDiff = function () {
-  // 最近更改
-  function addLink() {
-    $(
-      '.mw-changeslist-groupdiff, .mw-changeslist-diff, .mw-changeslist-diff-cur, .mw-history-histlinks a'
-    ).off('click', ipeDiffLink)
-    var ipeDiffLink = $(
-      '.mw-changeslist-groupdiff, .mw-changeslist-diff, .mw-changeslist-diff-cur, .mw-history-histlinks a'
-    ).on('click', function (e) {
-      e.preventDefault()
-      _analytics('quick_diff_recentchanges')
+function addLink() {
+  $('a[data-ipe-quickdiff]').off('click')
+  $('a[href]')
+    .attr('data-ite-quickdiff', 'true')
+    .on('click', function (e) {
       var $this = $(this),
         href = $this.attr('href'),
-        diff = mw.util.getParamValue('diff', href),
-        curid = mw.util.getParamValue('curid', href),
-        oldid = mw.util.getParamValue('oldid', href)
+        diff = getParamValue('diff', href),
+        curid = getParamValue('curid', href),
+        oldid = getParamValue('oldid', href)
+      if (!diff && !curid && !oldid) {
+        return
+      }
+      e.preventDefault()
+      _analytics('quick_diff_recentchanges')
       if (diff === '0') {
         quickDiff({ fromrev: oldid, toid: curid })
       } else if (diff === 'prev' || diff === 'next' || diff === 'cur') {
@@ -31,22 +29,26 @@ var loadQuickDiff = function () {
         quickDiff({ fromrev: oldid, torev: diff })
       }
     })
-  }
+}
+
+const loadQuickDiff = function () {
+  // 最近更改
   if ($('.mw-rcfilters-enabled').length > 0) {
     setInterval(addLink, 500)
     $('.mw-rcfilters-enabled').addClass('ipe-continuous-active')
   } else {
     addLink()
   }
+
   // 查看历史页面的比较按钮与快速编辑
   if (config.wgAction === 'history') {
     $('.historysubmit.mw-history-compareselectedversions-button').after(
       $('<button>')
         .text(_msg('quick-diff'))
-        .click(function (e) {
+        .on('click', function (e) {
           e.preventDefault()
           _analytics('quick_diff_history_page')
-          var before = $('.selected.before').attr('data-mw-revid'),
+          const before = $('.selected.before').attr('data-mw-revid'),
             after = $('.selected.after').attr('data-mw-revid')
           quickDiff({ fromrev: after, torev: before })
         })
@@ -54,17 +56,21 @@ var loadQuickDiff = function () {
     $('[data-mw-revid]').each(function () {
       var $this = $(this),
         oldid = $this.attr('data-mw-revid')
-      $this
-        .find('.mw-history-undo')
-        .after(
-          $('<span>').html(
-            ' | <a class="in-page-edit-article-link" href="javascript:void(0);" onclick="InPageEdit.quickEdit({page:mw.config.get(\'wgPageName\'),revision:' +
-              oldid +
-              '});">' +
-              _msg('quick-edit') +
-              '</a>'
-          )
+      $this.find('.mw-history-undo').after(
+        $('<span>').append(
+          ' | ',
+          $('<a>', {
+            href: 'javascript:;',
+            class: 'in-page-edit-article-link',
+            text: _msg('quick-edit'),
+          }).on('click', function () {
+            quickEdit({
+              page: config.wgPageName,
+              revision: oldid,
+            })
+          })
         )
+      )
     })
   }
 }
