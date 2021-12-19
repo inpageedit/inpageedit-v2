@@ -7,9 +7,9 @@ const { quickDiff } = require('./quickDiff')
 const { quickEdit } = require('./quickEdit')
 
 function addLink() {
-  $('a[data-ipe-quickdiff]').off('click')
-  $('a[href]')
-    .attr('data-ite-quickdiff', 'true')
+  $('a[data-ipe-quickdiff-loaded]').off('click')
+  $('a[href]:not(.mw-changeslist-date)')
+    .attr('data-ipe-quickdiff-loaded', 'true')
     .on('click', function (e) {
       var $this = $(this),
         href = $this.attr('href'),
@@ -26,7 +26,7 @@ function addLink() {
       } else if (diff === 'prev' || diff === 'next' || diff === 'cur') {
         quickDiff({ fromrev: oldid, torelative: diff })
       } else {
-        quickDiff({ fromrev: oldid, torev: diff })
+        quickDiff({ fromrev: oldid, torev: diff || 'prev' })
       }
     })
 }
