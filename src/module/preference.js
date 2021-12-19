@@ -307,7 +307,7 @@ const preference = {
     // ...
 
     // 绑定input事件
-    $tabContent.find('input').change(function () {
+    $tabContent.find('input').on('change', function () {
       var $this = $(this)
       var key = $this.attr('id')
       var val
@@ -447,7 +447,7 @@ const preference = {
                     disabled:
                       typeof InPageEdit.myPreference !== 'undefined' ||
                       val._force === true, // 强制启用或者本地保存设定时禁止改变
-                  }).change(function () {
+                  }).on('change', function () {
                     // 当插件选择框变化时，暂存设定档
                     var $this = $(this)
                     var checked = $this.prop('checked')

@@ -7,9 +7,9 @@ const { quickDiff } = require('./quickDiff')
 const { quickEdit } = require('./quickEdit')
 
 function addLink() {
-  $('a[data-ipe-quickdiff-loaded]').off('click')
+  $('a[data-ipe-quickdiff-active]').off('click')
   $('a[href]:not(.mw-changeslist-date)')
-    .attr('data-ipe-quickdiff-loaded', 'true')
+    .attr('data-ipe-quickdiff-active', '')
     .on('click', function (e) {
       var $this = $(this),
         href = $this.attr('href'),
