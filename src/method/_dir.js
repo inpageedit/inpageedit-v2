@@ -1,13 +1,22 @@
 /**
- * @type {(base: string) => string}
+ * @type {(src?: string) => string}
  */
-const getDir = (base = '') => {
-  if (base.startsWith('https://cdn.jsdelivr.net')) {
-    return base.split('/').slice(0, -2).join('/')
-  } else if (base.startsWith(location.origin)) {
-    return base.split('/').slice(0, -1).join('/')
-  } else {
-    return 'https://cdn.jsdelivr.net/npm/mediawiki-inpageedit@latest'
+const getDir = (src = '') => {
+  // @example
+  // https://cdn.jsdelivr.net/npm/mediawiki-inpageedit/dist/InPageEdit.js
+  // http://127.0.0.1:1005/InPageEdit.js
+  if (src.endsWith('.js')) {
+    if (src.includes('/dist/')) {
+      return src.split('/dist/')[0]
+    } else {
+      return src.split('/').slice(0, -1).join('/')
+    }
+  }
+  // @example
+  // https://cdn.jsdelivr.net/npm/mediawiki-inpageedit
+  // https://unpkg.com/mediawiki-inpageedit
+  else {
+    return src.replace(/\/$/, '')
   }
 }
 
