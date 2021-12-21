@@ -4,6 +4,7 @@ const path = require('path')
 
 const { MINIFY } = process.env
 
+/** @type {import('webpack').Configuration} */
 module.exports = {
   entry: {
     InPageEdit: './src/index.js',
