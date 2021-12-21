@@ -17,7 +17,7 @@ function addLink(container) {
         diff = getParamValue('diff', href),
         curid = getParamValue('curid', href),
         oldid = getParamValue('oldid', href)
-      if ([diff, curid, oldid].filter((i) => i !== undefined).length < 2) {
+      if ([diff, curid, oldid].filter((i) => i !== null).length < 2) {
         return
       }
       e.preventDefault()
