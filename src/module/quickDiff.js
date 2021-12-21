@@ -146,7 +146,7 @@ var quickDiff = function (param) {
                     href: 'javascript:void(0);',
                     text: '←' + _msg('diff-prev'),
                   })
-                    .toggle(data.compare.prev)
+                    .toggle(!!data.compare.prev)
                     .on('click', () => {
                       quickDiff({
                         fromrev: data.compare.prev,
@@ -191,7 +191,7 @@ var quickDiff = function (param) {
                     href: 'javascript:void(0);',
                     text: _msg('diff-nextv') + '→',
                   })
-                    .toggle(data.compare.next)
+                    .toggle(!!data.compare.next)
                     .on('click', () => {
                       _analysis('quick_diff_modalclick')
                       quickDiff({

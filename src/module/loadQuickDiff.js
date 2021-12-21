@@ -1,4 +1,4 @@
-var config = mw.config.get()
+const config = mw.config.get()
 const { _msg } = require('./_msg')
 const { _analytics } = require('./_analytics')
 const { getParamValue } = mw.util
@@ -6,17 +6,18 @@ const { getParamValue } = mw.util
 const { quickDiff } = require('./quickDiff')
 const { quickEdit } = require('./quickEdit')
 
-function addLink() {
+function addLink(container) {
   $('a[data-ipe-quickdiff-active]').off('click')
-  $('a[href]:not(.mw-changeslist-date)')
+  $(container || '#mw-content-text')
+    .find('a[href]')
     .attr('data-ipe-quickdiff-active', '')
     .on('click', function (e) {
-      var $this = $(this),
+      const $this = $(this),
         href = $this.attr('href'),
         diff = getParamValue('diff', href),
         curid = getParamValue('curid', href),
         oldid = getParamValue('oldid', href)
-      if (!diff && !curid && !oldid) {
+      if ([diff, curid, oldid].filter((i) => i !== undefined).length < 2) {
         return
       }
       e.preventDefault()
@@ -31,13 +32,15 @@ function addLink() {
     })
 }
 
-const loadQuickDiff = function () {
+const loadQuickDiff = function (container) {
   // 最近更改
   if ($('.mw-rcfilters-enabled').length > 0) {
-    setInterval(addLink, 500)
+    setInterval(() => {
+      addLink(container)
+    }, 500)
     $('.mw-rcfilters-enabled').addClass('ipe-continuous-active')
   } else {
-    addLink()
+    addLink(container)
   }
 
   // 查看历史页面的比较按钮与快速编辑

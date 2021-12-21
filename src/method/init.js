@@ -61,7 +61,7 @@ module.exports = async function init() {
   // 初始化前置模块
   preference.set()
   getUserInfo()
-  loadQuickDiff()
+  mw.hook('wikipage.content').add(loadQuickDiff)
   articleLink()
   updateNotice()
 
