@@ -2,7 +2,7 @@
 const process = require('process')
 const path = require('path')
 
-const isMinify = process.env.MINIFY
+const { MINIFY } = process.env
 
 module.exports = {
   entry: {
@@ -12,11 +12,10 @@ module.exports = {
   watchOptions: {
     ignored: /(node_modules|dist)/,
   },
-  mode: isMinify ? 'production' : 'development',
+  mode: MINIFY ? 'production' : 'development',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: isMinify ? '[name].min.js' : '[name].js',
-    // publicPath: 'pathOrUrlWhenProductionBuild'
+    filename: MINIFY ? '[name].min.js' : '[name].js',
   },
   module: {
     rules: [
@@ -38,7 +37,7 @@ module.exports = {
   devtool: 'source-map',
   plugins: [],
   optimization: {
-    minimize: isMinify ? true : false,
+    minimize: MINIFY ? true : false,
   },
   devServer: {
     port: 1005,
