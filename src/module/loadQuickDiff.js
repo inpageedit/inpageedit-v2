@@ -10,18 +10,23 @@ function addLink(container) {
   $('a[data-ipe-quickdiff-active]').off('click')
   $(container || '#mw-content-text')
     .find('a[href]')
-    .attr('data-ipe-quickdiff-active', '')
     .on('click', function (e) {
       const $this = $(this),
-        href = $this.attr('href'),
-        diff = getParamValue('diff', href),
+        href = $this.attr('href')
+      let diff = getParamValue('diff', href),
         curid = getParamValue('curid', href),
         oldid = getParamValue('oldid', href)
       if ([diff, curid, oldid].filter((i) => i !== null).length < 2) {
-        return
+        if (diff) {
+          oldid = diff
+          diff = 'prev'
+        } else {
+          return
+        }
       }
       e.preventDefault()
       _analytics('quick_diff_recentchanges')
+      $this.attr('data-ipe-quickdiff-active', '')
       if (diff === '0') {
         quickDiff({ fromrev: oldid, toid: curid })
       } else if (diff === 'prev' || diff === 'next' || diff === 'cur') {
