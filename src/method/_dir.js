@@ -2,6 +2,7 @@
  * @type {(src?: string) => string}
  */
 const getDir = (src = '') => {
+  src = src.split('?')[0]
   // @example
   // https://cdn.jsdelivr.net/npm/mediawiki-inpageedit/dist/InPageEdit.js
   // http://127.0.0.1:1005/InPageEdit.js
