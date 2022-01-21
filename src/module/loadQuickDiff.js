@@ -29,7 +29,7 @@ function addLink(container) {
       $this.attr('data-ipe-quickdiff-active', '')
       if (diff === '0') {
         quickDiff({ fromrev: oldid, toid: curid })
-      } else if (diff === 'prev' || diff === 'next' || diff === 'cur') {
+      } else if (['prev', 'next', 'cur'].includes(diff)) {
         quickDiff({ fromrev: oldid, torelative: diff })
       } else {
         quickDiff({
