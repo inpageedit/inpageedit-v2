@@ -32,7 +32,11 @@ function addLink(container) {
       } else if (diff === 'prev' || diff === 'next' || diff === 'cur') {
         quickDiff({ fromrev: oldid, torelative: diff })
       } else {
-        quickDiff({ fromrev: oldid, torev: diff || 'prev' })
+        quickDiff({
+          fromrev: oldid,
+          torev: diff || curid || undefined,
+          torelative: !diff && !curid ? 'prev' : undefined,
+        })
       }
     })
 }
