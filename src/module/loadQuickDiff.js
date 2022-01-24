@@ -6,39 +6,57 @@ const { getParamValue } = mw.util
 const { quickDiff } = require('./quickDiff')
 const { quickEdit } = require('./quickEdit')
 
-function addLink(container) {
-  $('a[data-ipe-quickdiff-active]').off('click')
+function injectLinks(container) {
   $(container || '#mw-content-text')
-    .find('a[href]')
-    .each((el) => {
+    .find('a[href]:not(.ipe-diff-mounted)')
+    .toArray()
+    .forEach((el) => {
       const $this = $(el),
         href = $this.attr('href')
+      /** @type {'prev' | 'next' | 'cur' | '0' | `${number}`} */
       let diff = getParamValue('diff', href),
+        /** @type {`${number}` | null} */
         curid = getParamValue('curid', href),
+        /** @type {`${number}` | null} */
         oldid = getParamValue('oldid', href)
-      if ([diff, curid, oldid].filter((i) => i !== null).length < 2) {
-        if (diff) {
-          oldid = diff
-          diff = 'prev'
-        } else {
-          return
-        }
+
+      // 没有 diff 参数那么一般不是比较页面
+      if (diff === null) {
+        return
       }
-      $this.attr('data-ipe-quickdiff-active', '')
+      // 没有 oldid 的情况比较罕见，但这确实是有的
+      if (!oldid) {
+        oldid = diff
+        diff = 'prev'
+      }
+      // 进行状态标记
+      $this.addClass('ipe-diff-mounted')
+
+      // 点击事件
       $this.on('click', function (e) {
         e.preventDefault()
         _analytics('quick_diff_recentchanges')
+
+        // 这种一般是与当前作比较
         if (diff === '0') {
-          quickDiff({ fromrev: oldid, toid: curid })
-        } else if (['prev', 'next', 'cur'].includes(diff)) {
-          quickDiff({ fromrev: oldid, torelative: diff })
-        } else {
-          quickDiff({
+          return quickDiff({
             fromrev: oldid,
-            torev: diff || undefined,
-            torelative: !diff && curid ? 'cur' : undefined,
+            toid: curid || undefined,
+            torelative: !curid ? 'cur' : undefined,
           })
         }
+
+        // 这种是通过关系进行比较
+        if (['prev', 'next', 'cur'].includes(diff)) {
+          return quickDiff({ fromrev: oldid, torelative: diff })
+        }
+
+        // 这种是大多数情况，oldid 和 curid 都是有效的
+        return quickDiff({
+          fromrev: oldid,
+          torev: diff || undefined,
+          torelative: !diff ? 'cur' : undefined,
+        })
       })
     })
 }
@@ -47,11 +65,11 @@ const loadQuickDiff = function (container) {
   // 最近更改
   if ($('.mw-rcfilters-enabled').length > 0) {
     setInterval(() => {
-      addLink(container)
+      injectLinks(container)
     }, 500)
-    $('.mw-rcfilters-enabled').addClass('ipe-continuous-active')
+    $('.mw-rcfilters-enabled').addClass('ipe-quickdiff-active')
   } else {
-    addLink(container)
+    injectLinks(container)
   }
 
   // 查看历史页面的比较按钮与快速编辑
