@@ -10,8 +10,8 @@ function addLink(container) {
   $('a[data-ipe-quickdiff-active]').off('click')
   $(container || '#mw-content-text')
     .find('a[href]')
-    .on('click', function (e) {
-      const $this = $(this),
+    .each((el) => {
+      const $this = $(el),
         href = $this.attr('href')
       let diff = getParamValue('diff', href),
         curid = getParamValue('curid', href),
@@ -24,20 +24,22 @@ function addLink(container) {
           return
         }
       }
-      e.preventDefault()
-      _analytics('quick_diff_recentchanges')
       $this.attr('data-ipe-quickdiff-active', '')
-      if (diff === '0') {
-        quickDiff({ fromrev: oldid, toid: curid })
-      } else if (['prev', 'next', 'cur'].includes(diff)) {
-        quickDiff({ fromrev: oldid, torelative: diff })
-      } else {
-        quickDiff({
-          fromrev: oldid,
-          torev: diff || undefined,
-          torelative: !diff && curid ? 'cur' : undefined,
-        })
-      }
+      $this.on('click', function (e) {
+        e.preventDefault()
+        _analytics('quick_diff_recentchanges')
+        if (diff === '0') {
+          quickDiff({ fromrev: oldid, toid: curid })
+        } else if (['prev', 'next', 'cur'].includes(diff)) {
+          quickDiff({ fromrev: oldid, torelative: diff })
+        } else {
+          quickDiff({
+            fromrev: oldid,
+            torev: diff || undefined,
+            torelative: !diff && curid ? 'cur' : undefined,
+          })
+        }
+      })
     })
 }
 
