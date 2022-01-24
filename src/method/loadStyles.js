@@ -1,12 +1,13 @@
+const { pluginCDN } = require('../module/api')
 const _dir = require('./_dir')
 
 function loadStyles(purge) {
   // 放在越上面优先级越高
   const styleFiles = [
     // Default Skin
-    '/src/skin/ipe-default.min.css',
+    `${pluginCDN}/skins/ipe-default.css`,
     // ssi-modal Style
-    '/src/ssi_modal/ssi-modal.min.css',
+    `${pluginCDN}/lib/ssi-modal/ssi-modal.css`,
     // FontAwesome
     'https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css',
   ]

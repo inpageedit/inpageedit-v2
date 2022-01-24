@@ -7,6 +7,7 @@ const { updateNotice } = require('./updateNotice')
 const { syncI18nData } = require('./syncI18nData')
 
 const version = require('../module/version')
+const { pluginCDN } = require('../module/api')
 
 /**
  * @method initMain
@@ -14,6 +15,9 @@ const version = require('../module/version')
  */
 module.exports = async function init() {
   mw.hook('InPageEdit.init.before').fire()
+
+  // Await jQuery
+  await $.ready
 
   // Await MediaWiki
   await mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user'])
@@ -33,7 +37,7 @@ module.exports = async function init() {
   mw.hook('InPageEdit.init.i18n').fire({ _msg: require('../module/_msg')._msg })
 
   // 等待前置插件
-  await loadScript(_dir + '/src/ssi_modal/ssi-modal.min.js')
+  await loadScript(`${pluginCDN}/lib/ssi-modal/ssi-modal.js`)
 
   mw.hook('InPageEdit.init.modal').fire({ ssi_modal: window.ssi_modal })
 
