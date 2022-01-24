@@ -34,8 +34,8 @@ function addLink(container) {
       } else {
         quickDiff({
           fromrev: oldid,
-          torev: diff || curid || undefined,
-          torelative: !diff && !curid ? 'prev' : undefined,
+          torev: diff || undefined,
+          torelative: !diff && curid ? 'cur' : undefined,
         })
       }
     })
