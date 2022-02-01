@@ -195,7 +195,7 @@
    */
   Ssi_modal.prototype.get$modal = function (id) {
     id = id || this.modalId
-    return this.$modal || $('#' + id)
+    return this.$modal || $(document.getElementById(id))
   }
   /**
    * Returns the title element of the modal.
@@ -270,7 +270,7 @@
    * @returns {JQuery}
    */
   Ssi_modal.prototype.get$backdrop = function () {
-    return this.$backdrop || $('#' + this.backdropId)
+    return this.$backdrop || $(document.getElementById(this.backdropId))
   }
 
   var time = null
@@ -550,7 +550,7 @@
     var $backdrop
     if (typeof orphanBackdrop === 'string') {
       //if an orphan backdrop exists
-      var $orphanBackdrop = $('#' + orphanBackdrop)
+      var $orphanBackdrop = $(document.getElementById(orphanBackdrop))
       this.backdropId = orphanBackdrop //change the id to the same as the new modal
       $backdrop = $orphanBackdrop.attr(
         'class',
@@ -1210,7 +1210,7 @@
       if ($element[0]) {
         var data = $element.data('ssi-modal') //then check if object exists in data-ssi-modal
         if (data) {
-          if (!$('#' + data.modalId)[0]) {
+          if (!document.getElementById(data.modalId)) {
             // if data exists but no modal exists(probably removed by button)
             $element.data('ssi-modal', '') //then remove data-ssi-modal
             return false
