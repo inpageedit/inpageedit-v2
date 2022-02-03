@@ -17,46 +17,42 @@ function injectLinks(container) {
       let diff = getParamValue('diff', href),
         /** @type {`${number}` | null} */
         curid = getParamValue('curid', href),
-        /** @type {`${number}` | null} */
-        oldid = getParamValue('oldid', href)
+        /** @type {'prev' | 'next' | 'cur' | `${number}`} */
+        oldid = getParamValue('oldid', href),
+        timestamp = getParamValue('timestamp', href)
 
-      // 没有 diff 参数那么一般不是比较页面
-      if (diff === null) {
+      // 进行例外排除
+      if (
+        // 没有 diff 参数一般不是比较链接
+        diff === null ||
+        // Special:Undelete 中的比较链接
+        timestamp !== null
+      ) {
         return
-      }
-      // 没有 oldid 的情况比较罕见，但这确实是有的
-      if (!oldid) {
-        oldid = diff
-        diff = 'prev'
       }
       // 进行状态标记
       $this.addClass('ipe-diff-mounted')
+      // 处理请求参数
+      const params = {}
+      const getParamType = (i) => {
+        if (['prev', 'next', 'cur'].includes(i) || i === null) {
+          return 'relative'
+        } else if (i === '0') {
+          return 'id'
+        } else {
+          return 'rev'
+        }
+      }
+      params[`from${getParamType(oldid)}`] = oldid !== null ? oldid : 'prev'
+      params[`to${getParamType(diff)}`] = diff !== '0' ? diff : curid
+      // debug
+      $this.attr('ipe-diff-params', JSON.stringify(params))
 
       // 点击事件
       $this.on('click', function (e) {
         e.preventDefault()
         _analytics('quick_diff_recentchanges')
-
-        // 这种一般是与当前作比较
-        if (diff === '0') {
-          return quickDiff({
-            fromrev: oldid,
-            toid: curid || undefined,
-            torelative: !curid ? 'cur' : undefined,
-          })
-        }
-
-        // 这种是通过关系进行比较
-        if (['prev', 'next', 'cur'].includes(diff)) {
-          return quickDiff({ fromrev: oldid, torelative: diff })
-        }
-
-        // 这种是大多数情况，oldid 和 curid 都是有效的
-        return quickDiff({
-          fromrev: oldid,
-          torev: diff || undefined,
-          torelative: !diff ? 'cur' : undefined,
-        })
+        return quickDiff(params)
       })
     })
 }
