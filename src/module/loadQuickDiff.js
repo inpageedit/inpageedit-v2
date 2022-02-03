@@ -21,6 +21,25 @@ function injectLinks(container) {
         oldid = getParamValue('oldid', href),
         timestamp = getParamValue('timestamp', href)
 
+      // 形如 Special:Diff/[oldid]/[diff]
+      const specialDiffName = mw.config
+        .get('wgSpecialPageAliases', [])
+        .find(({ realname }) => realname === 'Diff')
+        ?.aliases.map((i) => [i, encodeURI(i)])
+        .flat() || ['Diff']
+      const specialDiffReg = new RegExp(
+        `^${config.wgArticlePath.replace('$1', '')}(?:Special|${
+          config.wgFormattedNamespaces[-1]
+        }):(?:${specialDiffName.join(
+          '|'
+        )})/(\\d+|cur|prev|next)/(\\d+|cur|prev|next)$`
+      )
+      const specialDiffMatch = href.match(specialDiffReg)
+      if (specialDiffMatch) {
+        oldid = specialDiffMatch[1]
+        diff = specialDiffMatch[2]
+      }
+
       // 进行例外排除
       if (
         // 没有 diff 参数一般不是比较链接

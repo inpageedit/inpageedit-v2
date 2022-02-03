@@ -1,7 +1,7 @@
 // 导入方法
 const _dir = require('./_dir')
 const { loadScript } = require('./loadScript')
-const { getUserInfo } = require('./getUserInfo')
+const { initQueryData } = require('./initQueryData')
 const { loadStyles } = require('./loadStyles')
 const { updateNotice } = require('./updateNotice')
 const { syncI18nData } = require('./syncI18nData')
@@ -15,29 +15,23 @@ const { pluginCDN } = require('../module/api')
  */
 module.exports = async function init() {
   mw.hook('InPageEdit.init.before').fire()
-
-  // Await jQuery
   await $.ready
-
-  // Await MediaWiki
-  await mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user'])
-
   // 是否需要刷新缓存
   const noCache = !!(
-    mw.util.getParamValue('ipe', location.href) === 'nocache' ||
+    mw.util.getParamValue('ipedev', location.href) ||
     version !== localStorage.getItem('InPageEditVersion')
   )
-
   // 加载样式表
   loadStyles(noCache)
-
-  // 等待 i18n 缓存
-  await syncI18nData(noCache)
+  // 等待前置项目
+  await Promise.all([
+    mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user']),
+    syncI18nData(noCache),
+    loadScript(`${pluginCDN}/lib/ssi-modal/ssi-modal.js`),
+    initQueryData(),
+  ])
 
   mw.hook('InPageEdit.init.i18n').fire({ _msg: require('../module/_msg')._msg })
-
-  // 等待前置插件
-  await loadScript(`${pluginCDN}/lib/ssi-modal/ssi-modal.js`)
 
   mw.hook('InPageEdit.init.modal').fire({ ssi_modal: window.ssi_modal })
 
@@ -64,7 +58,6 @@ module.exports = async function init() {
 
   // 初始化前置模块
   preference.set()
-  getUserInfo()
   mw.hook('wikipage.content').add(loadQuickDiff)
   articleLink()
   updateNotice()
