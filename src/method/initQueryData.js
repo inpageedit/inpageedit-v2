@@ -6,7 +6,6 @@ const mwApi = new mw.Api({
 })
 
 async function initQueryData() {
-  console.info('initQueryData')
   // Init
   mw.config.set('wgUserRights', [])
   mw.config.set('wgUserIsBlocked', false)
@@ -19,7 +18,7 @@ async function initQueryData() {
     ususers: mw.config.get('wgUserName'),
     meta: ['userinfo', 'siteinfo'],
     list: ['users'],
-    uiprop: ['groups'],
+    uiprop: ['rights'],
     siprop: ['specialpagealiases'],
     usprop: ['blockinfo'],
   })
