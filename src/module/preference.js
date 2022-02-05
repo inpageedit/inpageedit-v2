@@ -10,10 +10,10 @@ const {
   pluginGithub,
   analyticsApi,
   analyticsDash,
+  pluginCDN,
 } = require('./api')
 const version = require('./version')
 const { pluginStore } = require('./pluginStore')
-const _dir = require('../method/_dir')
 
 /**
  * @module preference 个人设置模块
@@ -25,14 +25,13 @@ const preference = {
    */
   _defaults: {
     doNotCollectMyInfo: false,
-    doNotShowLocalWarn: false,
     editMinor: false,
     editSummary: _msg('preference-summary-default'),
     lockToolBox: false,
     redLinkQuickEdit: true,
     outSideClose: true,
     watchList: !!mw.user.options.get('watchdefault'),
-    plugins: ['toolbox.js'],
+    plugins: ['toolbox.js', 'wiki-editor.js'],
   },
   /**
    * @name 获取设置
@@ -180,15 +179,15 @@ const preference = {
           $('<label>', { class: 'choose-skin' }).append(
             $('<input>', {
               type: 'checkbox',
-              id: 'useCustomSkin',
+              id: 'customSkinEnable',
               disabled: true,
             }),
             $('<span>'),
             $('<input>', {
-              id: 'skinUrl',
+              id: 'customSkinUrl',
               disabled: true,
               style: 'width: calc(96% - 30px)',
-              value: _dir + '/src/skin/ipe-default.css',
+              value: `${pluginCDN}/skins/ipe-default.css`,
             })
           )
         ),
@@ -211,10 +210,11 @@ const preference = {
                 this.select()
               })
               .val(
-                '/** InPageEdit Preferences **/\n' +
-                  'window.InPageEdit = window.InPageEdit || {}; // Keep this line\n' +
-                  'InPageEdit.myPreference = ' +
-                  JSON.stringify($modalContent.data(), null, 2)
+                `/** InPageEdit Preferences */\n;(window.InPageEdit = window.InPageEdit || {}).myPreference = ${JSON.stringify(
+                  $modalContent.data(),
+                  null,
+                  2
+                )}`
               )
           )
           ssi_modal.dialog({
@@ -233,13 +233,10 @@ const preference = {
         $('<h3>', { text: _msg('preference-about-label') }),
         $('<div>', { style: 'font-size: 12px; font-style: italic;' }).html(
           function () {
-            var isCanary = /(alpha|beta|pre)/i.test(version)
-            var html = 'v' + version
-            html += isCanary
-              ? ' - You are running the Canary version of InPageEdit<br>' +
-                _msg('version-notice-canary')
-              : ''
-            return html
+            const isCanary = version.includes('-')
+            return isCanary
+              ? `v${version} (Canary)<br>${_msg('version-notice-canary')}`
+              : `v${version}`
           }
         ),
         $('<h4>', { text: 'Portal' }),
