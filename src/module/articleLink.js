@@ -58,7 +58,7 @@ function articleLink(el) {
             text: _msg('quick-edit'),
           }).on('click', function () {
             var options = {}
-            options.page = decodeURI(title)
+            options.page = title
             if (revision !== null) {
               options.revision = revision
             } else if (section !== null) {
