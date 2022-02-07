@@ -105,7 +105,7 @@ var quickRedirect = function (type = 'to') {
           $('.in-page-edit.quick-redirect .okBtn').attr('disabled', 'disabled')
 
           let promise = Promise.resolve()
-          if (window.InPageEdit?.noRedirectIfConvertedTitleExists) {
+          if (preference.get('noRedirectIfConvertedTitleExists')) {
             promise = mwApi.get({ titles: json.title, converttitles: 1, formatversion: 2 }).done(data => {
               const convertedTitle = data.query.pages[0]
               if (convertedTitle?.missing !== true) {
