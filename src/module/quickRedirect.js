@@ -106,7 +106,7 @@ var quickRedirect = function (type = 'to') {
 
           let promise = Promise.resolve()
           if (window.InPageEdit?.noRedirectIfConvertedTitleExists) {
-            promise = mwApi.get({ titles: json.title, converttitles: 1 }).done(data => {
+            promise = mwApi.get({ titles: json.title, converttitles: 1, formatversion: 2 }).done(data => {
               const convertedTitle = data.query.pages[0]
               if (convertedTitle?.missing !== true) {
                 failed('articleexists', { fromPage: convertedTitle.title, errors: [{
