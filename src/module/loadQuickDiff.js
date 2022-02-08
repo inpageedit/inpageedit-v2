@@ -56,10 +56,8 @@ function injectLinks(container) {
       const params = {}
       // relative 只能出现在 to 参数中，需要特殊处理
       if (RELATIVE_TYPES.includes(oldid)) {
-        const oldid1 = oldid
-        const diff1 = diff
-        diff = oldid1
-        oldid = diff1
+        // eslint-disable-next-line no-extra-semi
+        ;[diff, oldid] = [oldid, diff]
       }
       const getParamType = (i) => {
         if (RELATIVE_TYPES.includes(i) || i === null) {
