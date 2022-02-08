@@ -45,7 +45,7 @@ function articleLink(el) {
       title = url.slice(location.protocol.length + config.wgServer.length)
       title = title.split('?')[0]
       const escape = mw.util.escapeRegExp ?? mw.RegExp.escape
-      const articlePath = RegExp(mw.util.escapeRegExp(config.wgArticlePath).replace('\\$1', '(.+)'))
+      const articlePath = RegExp(escape(config.wgArticlePath).replace('\\$1', '(.+)'))
       if (title.startsWith(config.wgScript))
         title = decodeURIComponent(title.slice(config.wgScript.length + 1))
       else if (articlePath.test(title))
