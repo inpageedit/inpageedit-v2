@@ -20,6 +20,7 @@ function injectLinks(container) {
         /** @type {'prev' | 'next' | 'cur' | `${number}`} */
         oldid = getParamValue('oldid', href),
         timestamp = getParamValue('timestamp', href)
+      const RELATIVE_TYPES = ['prev', 'next', 'cur']
 
       // 形如 Special:Diff/[oldid]/[diff]
       const specialDiffName = mw.config
@@ -30,9 +31,9 @@ function injectLinks(container) {
       const specialDiffReg = new RegExp(
         `^${config.wgArticlePath.replace('$1', '')}(?:Special|${
           config.wgFormattedNamespaces[-1]
-        }):(?:${specialDiffName.join(
+        }):(?:${specialDiffName.join('|')})/(\\d+|${RELATIVE_TYPES.join(
           '|'
-        )})/(\\d+|cur|prev|next)/(\\d+|cur|prev|next)$`
+        )})/(\\d+|${RELATIVE_TYPES.join('|')})$`
       )
       const specialDiffMatch = href.match(specialDiffReg)
       if (specialDiffMatch) {
@@ -51,10 +52,17 @@ function injectLinks(container) {
       }
       // 进行状态标记
       $this.addClass('ipe-diff-mounted')
-      // 处理请求参数
+      // 缓存请求参数
       const params = {}
+      // relative 只能出现在 to 参数中，需要特殊处理
+      if (RELATIVE_TYPES.includes(oldid)) {
+        const oldid1 = oldid
+        const diff1 = diff
+        diff = oldid1
+        oldid = diff1
+      }
       const getParamType = (i) => {
-        if (['prev', 'next', 'cur'].includes(i) || i === null) {
+        if (RELATIVE_TYPES.includes(i) || i === null) {
           return 'relative'
         } else if (i === '0') {
           return 'id'
@@ -62,9 +70,10 @@ function injectLinks(container) {
           return 'rev'
         }
       }
-      params[`from${getParamType(oldid)}`] = oldid !== null ? oldid : 'prev'
+      params[`from${getParamType(oldid)}`] = oldid
       params[`to${getParamType(diff)}`] = diff !== '0' ? diff : curid
-      // debug
+
+      // Debug
       $this.attr('ipe-diff-params', JSON.stringify(params))
 
       // 点击事件
