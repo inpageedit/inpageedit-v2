@@ -22,7 +22,8 @@ function articleLink(el) {
   $.each(el, function (_, item) {
     var $this = $(item)
     if ($this.attr('href') === undefined) return
-    let url = $this.attr('href'),
+    // element.href必定带protocol
+    let url = $this[0].href,
       action = getParamValue('action', url) || getParamValue('veaction', url),
       title = getParamValue('title', url),
       section = getParamValue('section', url)
@@ -31,8 +32,7 @@ function articleLink(el) {
       revision = getParamValue('oldid', url)
 
     // 不是本地编辑链接
-    if (!RegExp('^' + config.wgServer).test(url) && !RegExp('^/').test(url))
-      return
+    if (!url.startsWith(`${location.protocol}${config.wgServer}/`)) return
 
     // 暂时屏蔽 section=new #137
     if (section === 'new') return
@@ -41,10 +41,16 @@ function articleLink(el) {
     if (getParamValue('undo', url)) return
 
     // 不是 index.php?title=FOO 形式的url
-    if (title === null) {
-      title = url.replace(config.wgServer, '')
+    if (title === null && action === 'edit') {
+      title = url.slice(location.protocol.length + config.wgServer.length)
       title = title.split('?')[0]
-      title = title.replace(config.wgArticlePath.replace('$1', ''), '')
+      const escape = mw.util.escapeRegExp ?? mw.RegExp.escape
+      const articlePath = RegExp(escape(config.wgArticlePath).replace('\\$1', '(.+)'))
+      if (title.startsWith(config.wgScript))
+        title = decodeURIComponent(title.slice(config.wgScript.length + 1))
+      else if (articlePath.test(title))
+        title = decodeURIComponent(title.match(articlePath)[1])
+      else title = undefined
     }
 
     if (action === 'edit' && title !== undefined) {
@@ -58,7 +64,7 @@ function articleLink(el) {
             text: _msg('quick-edit'),
           }).on('click', function () {
             var options = {}
-            options.page = decodeURI(title)
+            options.page = title
             if (revision !== null) {
               options.revision = revision
             } else if (section !== null) {
