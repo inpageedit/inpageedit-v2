@@ -59,7 +59,15 @@ var quickRedirect = function (type = 'to') {
             $(this).css('box-shadow', '')
           }
         ),
-        ...(type === 'from' ? [$br, $('<input>', { id: 'redirect-fragment', style: 'width:96%' })] : []),
+        ...(
+          type === 'from'
+          ? [
+            $br,
+            $('<label>', { for: 'redirect-fragment', text: _msg('redirect-question-fragment') }),
+            $('<input>', { id: 'redirect-fragment', style: 'width:96%' })
+          ]
+          : []
+        ),
         $br,
         $('<label>', { for: 'redirect-reason', text: _msg('editSummary') }),
         $('<input>', { id: 'redirect-reason', style: 'width:96%' })

@@ -79,6 +79,7 @@
         "redirect-summary": "Quick redirect",
         "redirect-question-to": "Which page do you want to redirect $1 to?",
         "redirect-question-from": "Which page do you want to redirect to $1?",
+        "redirect-question-fragment": "Which section of this page do you want to redirect to? You can leave it blank.",
         "redirect-title": "Quick Redirect",
         "notify-redirect-success": "Redirect successful.",
         "notify-redirect-error": "Some error(s) occurred while creating redirect",
