@@ -105,6 +105,7 @@
         "preference-editor-label": "Editor settings",
         "preference-outSideClose": "Click out side to close editor",
         "preference-setMinor": "Minor edit as default",
+        "preference-noConfirmEdit": "No confirmation required before submitting edits",
         "preference-summary-label": "Edit summary",
         "preference-editSummary": "<code>$section</code> - will be replaced by <code>/<!-- -->* Section header */</code><br><code>$oldid</code> - will be replaced by <code>Edit from [<!-- -->[Special:Diff/oldid]]</code>",
         "preference-analysis-label": "Analysis",
