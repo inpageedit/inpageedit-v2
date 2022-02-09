@@ -322,8 +322,9 @@ var quickEdit = function (options) {
               )
             }
           }
-          if (options.noConfirmEdit) confirm(true)
-          else
+          if (options.noConfirmEdit) {
+            confirm(true)
+          } else {
             ssi_modal.confirm(
               {
                 className: 'in-page-edit',
@@ -340,6 +341,7 @@ var quickEdit = function (options) {
               },
               confirm
             )
+          }
         },
       },
       {
