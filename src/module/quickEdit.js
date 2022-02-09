@@ -58,7 +58,6 @@ var quickEdit = function (options) {
 
   /** 将选项合并并标准化 **/
   options = $.extend({}, defaultOptions, options, userPreference)
-  options.page = decodeURI(options.page) // 解码网址 Unicode
 
   _analysis('quick_edit')
 
