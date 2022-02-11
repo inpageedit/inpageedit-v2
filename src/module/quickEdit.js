@@ -343,7 +343,6 @@ var quickEdit = function (options) {
         side: 'left',
         label: _msg('editor-button-preview'),
         className: 'btn btn-secondary leftBtn hideBeforeLoaded',
-        keyPress: 'escape',
         method() {
           _analysis('preview_edit')
           var text = $editArea.val()
@@ -362,6 +361,7 @@ var quickEdit = function (options) {
       {
         label: _msg('cancel'),
         className: 'btn btn-danger',
+        keyPress: 'escape',
         method(e, modal) {
           modal.close()
         },
