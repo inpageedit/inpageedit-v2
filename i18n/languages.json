@@ -43,6 +43,7 @@
         "editSummary": "Summary",
         "markAsMinor": "This is a minor edit",
         "watchThisPage": "Watch this page",
+        "unlockWatchList": "Unlock to manually add or remove the page from my watchlist",
         "editor-button-save": "Save changes",
         "editor-confirm-save": "Are you sure you want to save the changes?",
         "editor-button-preview": "Show preview",

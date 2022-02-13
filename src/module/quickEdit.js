@@ -284,10 +284,11 @@ var quickEdit = function (options) {
     )
   )
   if (customizedWatchList) {
-    $optionsLabel.find('.watchList').one('click', () => {
-      this.disabled = false
+    $optionsLabel.find('.watchList').parent().one('click', function() {
+      $(this).removeAttr('title')
+        .children('input').prop('disabled', false)
       customizedWatchList = false
-    })
+    }).attr('title', _msg('unlockWatchList'))
   }
   var $modalContent = $('<div>').append(
     $progress,
