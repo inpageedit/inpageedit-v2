@@ -34,9 +34,6 @@ function articleLink(el) {
     // 不是本地编辑链接
     if (!url.startsWith(`${location.protocol}${config.wgServer}/`)) return
 
-    // 暂时屏蔽 section=new #137
-    if (section === 'new') return
-
     // 暂时屏蔽 undo
     if (getParamValue('undo', url)) return
 

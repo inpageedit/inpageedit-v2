@@ -73,7 +73,7 @@ var quickEdit = function (options) {
       'editor-summary-rivision'
     )} [[Special:Diff/${options.revision}]])`
   }
-  if (options.section) {
+  if (options.section && options.section !== 'new') {
     options.jsonGet.section = options.section
   }
 
@@ -272,6 +272,12 @@ var quickEdit = function (options) {
       $('<span>', { text: _msg('editor-reload-page') })
     )
   )
+  var $editSection = $('<input>', {
+    type: 'text',
+    class: 'newSectionTitle',
+    id: 'newSectionTitle',
+    placeholder: _msg('editor-new-section')
+  })
   var $modalContent = $('<div>').append(
     $progress,
     $('<section>', { class: 'hideBeforeLoaded' }).append(
@@ -281,6 +287,9 @@ var quickEdit = function (options) {
       $editArea
     )
   )
+  if (options.section === 'new') {
+    $editArea.before($editSection)
+  }
 
   // Debug
   console.time('[InPageEdit] 获取页面源代码')
@@ -301,6 +310,18 @@ var quickEdit = function (options) {
         label: _msg('editor-button-save'),
         className: 'btn btn-primary leftBtn hideBeforeLoaded save-btn',
         method(e, modal) {
+          if (options.section === 'new' && !$editSection.val()) {
+            ssi_modal.notify('error', {
+              className: 'in-page-edit',
+              position: 'right top',
+              closeAfter: {
+                time: 15,
+              },
+              title: _msg('notify-error'),
+              content: _msg('editor-save-new-section'),
+            })
+            return
+          }
           ssi_modal.confirm(
             {
               className: 'in-page-edit',
@@ -320,6 +341,7 @@ var quickEdit = function (options) {
                 const text = $editArea.val(),
                   minor = $optionsLabel.find('.editMinor').prop('checked'),
                   section = options.section,
+                  sectiontitle = options.section === 'new' ? $editSection.val() : undefined,
                   summary = $optionsLabel.find('.editSummary').val(),
                   isWatch = $optionsLabel.find('.watchList').prop('checked')
                 postArticle(
@@ -328,6 +350,7 @@ var quickEdit = function (options) {
                     page: options.page,
                     minor,
                     section,
+                    sectiontitle,
                     summary,
                     isWatch,
                   },
@@ -522,7 +545,7 @@ var quickEdit = function (options) {
           options.pageId = -1
           $optionsLabel.find('.detailArea').hide()
         } else {
-          options.editText = data.parse.wikitext['*']
+          options.editText = options.section === 'new' ? '' : data.parse.wikitext['*']
           options.pageId = data.parse.pageid
         }
         // 设定一堆子样式
@@ -531,7 +554,7 @@ var quickEdit = function (options) {
         $editArea.val(options.editText + '\n')
 
         var summaryVal
-        if (options.section !== null) {
+        if (options.section !== null && options.section !== 'new') {
           summaryVal = $optionsLabel.find('.editSummary').val()
           summaryVal = summaryVal.replace(
             /\$section/gi,
@@ -555,7 +578,8 @@ var quickEdit = function (options) {
         if (
           options.revision !== null &&
           options.revision !== '' &&
-          options.revision !== config.wgCurRevisionId
+          options.revision !== config.wgCurRevisionId &&
+          options.section !== 'new'
         ) {
           $modalTitle
             .find('.editPage')
@@ -637,7 +661,7 @@ var quickEdit = function (options) {
           options.page = pageData.title
           $modalTitle.find('.editPage').text(options.page)
 
-          if (options.revision) {
+          if (options.revision && options.section !== 'new') {
             $modalWindow
               .find('.diff-btn')
               .removeAttr('disabled')
@@ -943,7 +967,7 @@ var quickEdit = function (options) {
 
   // 发布编辑模块
   function postArticle(
-    { text, page, minor, summary, isWatch, section },
+    { text, page, minor, summary, isWatch, section, sectiontitle },
     modal
   ) {
     _analysis('quick_edit_save')
@@ -961,6 +985,10 @@ var quickEdit = function (options) {
     }
     if (section !== undefined && section !== '' && section !== null) {
       options.jsonPost.section = section
+    }
+    if (sectiontitle !== undefined && sectiontitle !== '') {
+      options.jsonPost.sectiontitle = sectiontitle
+      options.jumpTo = '#' + sectiontitle
     }
 
     mwApi
