@@ -608,7 +608,7 @@ var quickEdit = function (options) {
         var queryJson = {
           action: 'query',
           prop: 'revisions|info',
-          inprop: 'protection',
+          inprop: 'protection|watched',
           format: 'json',
         }
         if (options.pageId !== -1) {
