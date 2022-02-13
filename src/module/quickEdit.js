@@ -197,6 +197,15 @@ var quickEdit = function (options) {
     class: 'editArea',
     style: 'margin-top: 0;',
   })
+  var customizedWatchList = false,
+    unsetWatchList = [undefined, 'undefined', null, 'null', ''].includes(options.watchList)
+  if (options.watchList && !['nochange', 'preferences', 'unwatch'].includes(options.watchList)) {
+    options.watchList = true
+  } else if (!options.watchList || options.watchList === 'unwatch') {
+    options.watchList = false
+  } else {
+    customizedWatchList = true
+  }
   var $optionsLabel = $('<div>', {
     class: 'editOptionsLabel hideBeforeLoaded',
   }).append(
@@ -256,7 +265,8 @@ var quickEdit = function (options) {
         type: 'checkbox',
         class: 'watchList',
         id: 'watchList',
-        checked: options.watchList,
+        checked: options.watchList && !customizedWatchList,
+        disabled: customizedWatchList
       }),
       $('<span>', { text: _msg('watchThisPage') })
     ),
@@ -272,6 +282,12 @@ var quickEdit = function (options) {
       $('<span>', { text: _msg('editor-reload-page') })
     )
   )
+  if (customizedWatchList) {
+    $optionsLabel.find('.watchList').one('click', () => {
+      this.disabled = false
+      customizedWatchList = false
+    })
+  }
   var $modalContent = $('<div>').append(
     $progress,
     $('<section>', { class: 'hideBeforeLoaded' }).append(
@@ -321,7 +337,8 @@ var quickEdit = function (options) {
                   minor = $optionsLabel.find('.editMinor').prop('checked'),
                   section = options.section,
                   summary = $optionsLabel.find('.editSummary').val(),
-                  isWatch = $optionsLabel.find('.watchList').prop('checked')
+                  isWatch = $optionsLabel.find('.watchList').prop('checked'),
+                  watchlist = customizedWatchList ? options.watchList : undefined
                 postArticle(
                   {
                     text,
@@ -330,6 +347,7 @@ var quickEdit = function (options) {
                     section,
                     summary,
                     isWatch,
+                    watchlist,
                   },
                   modal
                 )
@@ -637,6 +655,10 @@ var quickEdit = function (options) {
           options.page = pageData.title
           $modalTitle.find('.editPage').text(options.page)
 
+          if (unsetWatchList) {
+            $optionsLabel.find('.watchList').prop('checked', 'watched' in pageData)
+          }
+
           if (options.revision) {
             $modalWindow
               .find('.diff-btn')
@@ -943,7 +965,7 @@ var quickEdit = function (options) {
 
   // 发布编辑模块
   function postArticle(
-    { text, page, minor, summary, isWatch, section },
+    { text, page, minor, summary, isWatch, section, watchlist },
     modal
   ) {
     _analysis('quick_edit_save')
@@ -954,7 +976,7 @@ var quickEdit = function (options) {
       basetimestamp: $modalContent.data('basetimestamp'),
       text,
       title: page,
-      watchlist: isWatch ? 'watch' : 'unwatch',
+      watchlist: watchlist ?? (isWatch ? 'watch' : 'unwatch'),
       minor,
       summary,
       errorformat: 'plaintext',
