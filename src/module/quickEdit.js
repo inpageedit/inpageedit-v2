@@ -199,7 +199,7 @@ var quickEdit = function (options) {
     style: 'margin-top: 0;',
   })
   var customizedWatchList = false,
-    unsetWatchList = [undefined, null, '', 'nochange', 'preferences'].includes(options.watchList)
+    unsetWatchList = [null, '', 'nochange', 'preferences'].includes(options.watchList)
   if (options.watchList && !['nochange', 'preferences', 'unwatch'].includes(options.watchList)) {
     options.watchList = true
   } else if (!options.watchList || options.watchList === 'unwatch') {
