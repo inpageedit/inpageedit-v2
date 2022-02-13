@@ -30,7 +30,6 @@ const preference = {
     lockToolBox: false,
     redLinkQuickEdit: true,
     outSideClose: true,
-    watchList: !!mw.user.options.get('watchdefault'),
     plugins: ['toolbox.js', 'wiki-editor.js'],
   },
   /**

@@ -46,6 +46,7 @@ var quickEdit = function (options) {
     pageDetail: {},
     jumpTo: '',
     reload: true,
+    watchList: 'preferences',
   }
 
   /** 获取用户设置 **/
@@ -198,7 +199,7 @@ var quickEdit = function (options) {
     style: 'margin-top: 0;',
   })
   var customizedWatchList = false,
-    unsetWatchList = [undefined, 'undefined', null, 'null', ''].includes(options.watchList)
+    unsetWatchList = [undefined, null, '', 'nochange', 'preferences'].includes(options.watchList)
   if (options.watchList && !['nochange', 'preferences', 'unwatch'].includes(options.watchList)) {
     options.watchList = true
   } else if (!options.watchList || options.watchList === 'unwatch') {
