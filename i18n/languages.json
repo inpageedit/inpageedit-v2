@@ -40,6 +40,8 @@
         "editor-summary-rivision": "Edit from",
         "editor-title-editSection": "Part $1",
         "editor-title-editing": "Editing",
+        "editor-new-section": "Please type in the title of the new section (required)",
+        "editor-save-new-section": "The new section must have a valid title.",
         "editSummary": "Summary",
         "markAsMinor": "This is a minor edit",
         "watchThisPage": "Watch this page",
