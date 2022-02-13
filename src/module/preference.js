@@ -46,7 +46,7 @@ const preference = {
       local = {}
     }
     if (typeof InPageEdit.myPreference === 'object') {
-      local = $.extend({}, local, InPageEdit.myPreference)
+      local = Object.assign({}, local, InPageEdit.myPreference)
     }
     var json = $.extend({}, preference._defaults, local)
     if (typeof setting === 'string' && setting !== '') {
