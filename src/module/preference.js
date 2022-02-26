@@ -128,6 +128,10 @@ const preference = {
           $('<input>', { type: 'checkbox', id: 'outSideClose' }),
           $('<span>', { text: _msg('preference-outSideClose') })
         ),
+        $('<label>').append(
+          $('<input>', { type: 'checkbox', id: 'noConfirmEdit' }),
+          $('<span>', { text: _msg('preference-noConfirmEdit') })
+        ),
         $('<h4>', { text: _msg('preference-summary-label') }),
         $('<label>', {
           for: 'editSummary',

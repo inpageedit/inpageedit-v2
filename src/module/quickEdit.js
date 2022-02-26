@@ -322,50 +322,55 @@ var quickEdit = function (options) {
             })
             return
           }
-          ssi_modal.confirm(
-            {
-              className: 'in-page-edit',
-              center: true,
-              content: _msg('editor-confirm-save'),
-              okBtn: {
-                className: 'btn btn-primary',
-                label: _msg('confirm'),
-              },
-              cancelBtn: {
-                className: 'btn btn-secondary',
-                label: _msg('cancel'),
-              },
-            },
-            function (result) {
-              if (result) {
-                let summaryVal = $optionsLabel.find('.editSummary').val()
-                const sectiontitle = options.section === 'new' ? $editSection.val() : undefined
-                if (options.section === 'new') {
-                  summaryVal = summaryVal.replace(
-                    /\$section/gi,
-                    `/* ${sectiontitle} */`
-                  )
-                }
-                const text = $editArea.val(),
-                  minor = $optionsLabel.find('.editMinor').prop('checked'),
-                  section = options.section,
-                  summary = summaryVal,
-                  isWatch = $optionsLabel.find('.watchList').prop('checked')
-                postArticle(
-                  {
-                    text,
-                    page: options.page,
-                    minor,
-                    section,
-                    sectiontitle,
-                    summary,
-                    isWatch,
-                  },
-                  modal
+          function confirm(result) {
+            if (result) {
+              let summaryVal = $optionsLabel.find('.editSummary').val()
+              const sectiontitle = options.section === 'new' ? $editSection.val() : undefined
+              if (options.section === 'new') {
+                summaryVal = summaryVal.replace(
+                  /\$section/gi,
+                  `/* ${sectiontitle} */`
                 )
               }
+              const text = $editArea.val(),
+                minor = $optionsLabel.find('.editMinor').prop('checked'),
+                section = options.section,
+                summary = summaryVal,
+                isWatch = $optionsLabel.find('.watchList').prop('checked')
+              postArticle(
+                {
+                  text,
+                  page: options.page,
+                  minor,
+                  section,
+                  sectiontitle,
+                  summary,
+                  isWatch,
+                },
+                modal
+              )
             }
-          )
+          }
+          if (options.noConfirmEdit) {
+            confirm(true)
+          } else {
+            ssi_modal.confirm(
+              {
+                className: 'in-page-edit',
+                center: true,
+                content: _msg('editor-confirm-save'),
+                okBtn: {
+                  className: 'btn btn-primary',
+                  label: _msg('confirm'),
+                },
+                cancelBtn: {
+                  className: 'btn btn-secondary',
+                  label: _msg('cancel'),
+                },
+              },
+              confirm
+            )
+          }
         },
       },
       {
