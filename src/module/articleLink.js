@@ -41,7 +41,7 @@ function articleLink(el) {
     if (getParamValue('undo', url)) return
 
     // 不是 index.php?title=FOO 形式的url
-    if (title === null && action === 'edit') {
+    if (title === null && ['edit', 'editsource'].includes(action)) {
       title = url.slice(location.protocol.length + config.wgServer.length)
       title = title.split('?')[0]
       const escape = mw.util.escapeRegExp ?? mw.RegExp.escape
@@ -53,7 +53,7 @@ function articleLink(el) {
       else title = undefined
     }
 
-    if (action === 'edit' && title !== undefined) {
+    if (['edit', 'editsource'].includes(action) && title !== undefined) {
       $this.addClass('ipe-articleLink-resolved').after(
         $('<span>', {
           class: 'in-page-edit-article-link-group',
