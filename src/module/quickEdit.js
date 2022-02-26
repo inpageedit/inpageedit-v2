@@ -302,41 +302,46 @@ var quickEdit = function (options) {
         className: 'btn btn-primary leftBtn hideBeforeLoaded save-btn',
         keyPress: 'ctrl-s',
         method(e, modal) {
-          ssi_modal.confirm(
-            {
-              className: 'in-page-edit',
-              center: true,
-              content: _msg('editor-confirm-save'),
-              okBtn: {
-                className: 'btn btn-primary',
-                label: _msg('confirm'),
-              },
-              cancelBtn: {
-                className: 'btn btn-secondary',
-                label: _msg('cancel'),
-              },
-            },
-            function (result) {
-              if (result) {
-                const text = $editArea.val(),
-                  minor = $optionsLabel.find('.editMinor').prop('checked'),
-                  section = options.section,
-                  summary = $optionsLabel.find('.editSummary').val(),
-                  isWatch = $optionsLabel.find('.watchList').prop('checked')
-                postArticle(
-                  {
-                    text,
-                    page: options.page,
-                    minor,
-                    section,
-                    summary,
-                    isWatch,
-                  },
-                  modal
-                )
-              }
+          function confirm(result) {
+            if (result) {
+              const text = $editArea.val(),
+                minor = $optionsLabel.find('.editMinor').prop('checked'),
+                section = options.section,
+                summary = $optionsLabel.find('.editSummary').val(),
+                isWatch = $optionsLabel.find('.watchList').prop('checked')
+              postArticle(
+                {
+                  text,
+                  page: options.page,
+                  minor,
+                  section,
+                  summary,
+                  isWatch,
+                },
+                modal
+              )
             }
-          )
+          }
+          if (options.noConfirmEdit) {
+            confirm(true)
+          } else {
+            ssi_modal.confirm(
+              {
+                className: 'in-page-edit',
+                center: true,
+                content: _msg('editor-confirm-save'),
+                okBtn: {
+                  className: 'btn btn-primary',
+                  label: _msg('confirm'),
+                },
+                cancelBtn: {
+                  className: 'btn btn-secondary',
+                  label: _msg('cancel'),
+                },
+              },
+              confirm
+            )
+          }
         },
       },
       {
