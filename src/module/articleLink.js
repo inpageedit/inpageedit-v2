@@ -34,9 +34,6 @@ function articleLink(el) {
     // 不是本地编辑链接
     if (!url.startsWith(`${location.protocol}${config.wgServer}/`)) return
 
-    // 暂时屏蔽 section=new #137
-    if (section === 'new') return
-
     // 暂时屏蔽 undo
     if (getParamValue('undo', url)) return
 
@@ -45,7 +42,9 @@ function articleLink(el) {
       title = url.slice(location.protocol.length + config.wgServer.length)
       title = title.split('?')[0]
       const escape = mw.util.escapeRegExp ?? mw.RegExp.escape
-      const articlePath = RegExp(escape(config.wgArticlePath).replace('\\$1', '(.+)'))
+      const articlePath = RegExp(
+        escape(config.wgArticlePath).replace('\\$1', '(.+)')
+      )
       if (title.startsWith(config.wgScript))
         title = decodeURIComponent(title.slice(config.wgScript.length + 1))
       else if (articlePath.test(title))
