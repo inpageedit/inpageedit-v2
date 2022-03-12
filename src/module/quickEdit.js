@@ -76,6 +76,9 @@ var quickEdit = function (options) {
   if (options.section && options.section !== 'new') {
     options.jsonGet.section = options.section
   }
+  if (options.section === 'new') {
+    delete options.revision
+  }
 
   // 模态框内部
   var $modalTitle = $('<span>').append(
