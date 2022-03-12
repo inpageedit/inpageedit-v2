@@ -208,7 +208,7 @@
   margin-bottom: 0;
 }
 
-.in-page-edit .editSummary {
+.in-page-edit .editSummary, .in-page-edit .newSectionTitle {
   width: 98%;
   margin: 4px auto 8px 0.5em;
 }
