@@ -120,16 +120,29 @@ const preference = {
           $('<span>', { text: _msg('preference-setMinor') })
         ),
         $('<label>').append(
-          $('<input>', { type: 'checkbox', id: 'watchList' }),
-          $('<span>', { text: _msg('preference-watchList') })
-        ),
-        $('<label>').append(
           $('<input>', { type: 'checkbox', id: 'outSideClose' }),
           $('<span>', { text: _msg('preference-outSideClose') })
         ),
         $('<label>').append(
           $('<input>', { type: 'checkbox', id: 'noConfirmEdit' }),
           $('<span>', { text: _msg('preference-noConfirmEdit') })
+        ),
+        $('<h4>', { text: _msg('preference-watchList-label') }),
+        $('<label>').append(
+          $('<input>', { type: 'radio', name: 'watchList', value: 'nochange' }),
+          $('<span>', { text: _msg('preference-watchList-nochange') })
+        ),
+        $('<label>').append(
+          $('<input>', { type: 'radio', name: 'watchList', value: 'preferences' }),
+          $('<span>', { text: _msg('preference-watchList-preferences') })
+        ),
+        $('<label>').append(
+          $('<input>', { type: 'radio', name: 'watchList', value: 'unwatch' }),
+          $('<span>', { text: _msg('preference-watchList-unwatch') })
+        ),
+        $('<label>').append(
+          $('<input>', { type: 'radio', name: 'watchList', value: 'watch' }),
+          $('<span>', { text: _msg('preference-watchList-watch') })
         ),
         $('<h4>', { text: _msg('preference-summary-label') }),
         $('<label>', {
@@ -309,7 +322,7 @@ const preference = {
     // 绑定input事件
     $tabContent.find('input').on('change', function () {
       var $this = $(this)
-      var key = $this.attr('id')
+      var key = $this.attr('id') || $this.prop('name')
       var val
       if ($this.prop('type') === 'checkbox') {
         val = $this.prop('checked')
