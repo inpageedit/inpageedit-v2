@@ -275,12 +275,16 @@ var quickEdit = function (options) {
       $('<span>', { text: _msg('editor-reload-page') })
     )
   )
-  var $editSection = $('<input>', {
-    type: 'text',
-    class: 'newSectionTitle',
-    id: 'newSectionTitle',
-    placeholder: _msg('editor-new-section')
-  })
+  var $editSection = $('<label>').append(
+    _msg('editor-new-section'),
+    '<br>',
+    $('<input>', {
+      type: 'text',
+      class: 'newSectionTitle',
+      id: 'newSectionTitle',
+      placeholder: _msg('editor-new-section'),
+    })
+  )
   var $modalContent = $('<div>').append(
     $progress,
     $('<section>', { class: 'hideBeforeLoaded' }).append(
@@ -328,7 +332,8 @@ var quickEdit = function (options) {
           function confirm(result) {
             if (result) {
               let summaryVal = $optionsLabel.find('.editSummary').val()
-              const sectiontitle = options.section === 'new' ? $editSection.val() : undefined
+              const sectiontitle =
+                options.section === 'new' ? $editSection.val() : undefined
               if (options.section === 'new') {
                 summaryVal = summaryVal.replace(
                   /\$section/gi,
@@ -388,7 +393,8 @@ var quickEdit = function (options) {
             text: text,
             pst: true,
             section: options.section === 'new' ? 'new' : undefined,
-            sectiontitle: options.section === 'new' ? $editSection.val() : undefined,
+            sectiontitle:
+              options.section === 'new' ? $editSection.val() : undefined,
           })
         },
       },
@@ -562,7 +568,8 @@ var quickEdit = function (options) {
           options.pageId = -1
           $optionsLabel.find('.detailArea').hide()
         } else {
-          options.editText = options.section === 'new' ? '' : data.parse.wikitext['*']
+          options.editText =
+            options.section === 'new' ? '' : data.parse.wikitext['*']
           options.pageId = data.parse.pageid
         }
         // 设定一堆子样式
