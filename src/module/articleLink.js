@@ -32,7 +32,14 @@ function articleLink(el) {
       revision = getParamValue('oldid', url)
 
     // 不是本地编辑链接
-    if (!url.startsWith(`${location.protocol}${config.wgServer}/`)) return
+    if (
+      !url.startsWith(
+        `${/^https?:/i.test(config.wgServer) ? '' : location.protocol}${
+          config.wgServer
+        }/`
+      )
+    )
+      return
 
     // 暂时屏蔽 undo
     if (getParamValue('undo', url)) return
