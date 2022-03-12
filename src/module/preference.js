@@ -30,7 +30,8 @@ const preference = {
     lockToolBox: false,
     redLinkQuickEdit: true,
     outSideClose: true,
-    watchList: !!mw.user.options.get('watchdefault'),
+    watchList: 'preferences',
+    noConfirmEdit: false,
     plugins: ['toolbox.js', 'wiki-editor.js'],
   },
   /**
@@ -108,6 +109,38 @@ const preference = {
         $('<a>', { text: _msg('preference-tab-about'), href: '#about' })
       )
     )
+
+    function saveLocal() {
+      // 永久保存（本地用户页）
+      var $saveLocalModal = $('<section>').append(
+        _msg('preference-savelocal-popup'),
+        $br,
+        $('<textarea>', {
+          style: 'font-size: 12px; resize: none; width: 100%; height: 10em;',
+          readonly: true,
+        })
+          .on('click', function () {
+            this.select()
+          })
+          .val(
+            `/** InPageEdit Preferences */\n;(window.InPageEdit = window.InPageEdit || {}).myPreference = ${JSON.stringify(
+              $modalContent.data(),
+              null,
+              2
+            )}`
+          )
+      )
+      ssi_modal.dialog({
+        className: 'in-page-edit',
+        center: true,
+        title: _msg('preference-savelocal-popup-title'),
+        content: $saveLocalModal,
+        okBtn: {
+          className: 'btn btn-primary btn-single',
+          label: _msg('ok'),
+        },
+      })
+    }
 
     var $tabContent = $('<div>', {
       class: 'tab-content',
@@ -200,38 +233,7 @@ const preference = {
           class: 'btn btn-secondary',
           id: 'ipeSaveLocalShow',
           text: _msg('preference-savelocal-btn'),
-        }).on('click', function () {
-          // 永久保存（本地用户页）
-          var $saveLocalModal = $('<section>').append(
-            _msg('preference-savelocal-popup'),
-            $br,
-            $('<textarea>', {
-              style:
-                'font-size: 12px; resize: none; width: 100%; height: 10em;',
-              readonly: true,
-            })
-              .on('click', function () {
-                this.select()
-              })
-              .val(
-                `/** InPageEdit Preferences */\n;(window.InPageEdit = window.InPageEdit || {}).myPreference = ${JSON.stringify(
-                  $modalContent.data(),
-                  null,
-                  2
-                )}`
-              )
-          )
-          ssi_modal.dialog({
-            className: 'in-page-edit',
-            center: true,
-            title: _msg('preference-savelocal-popup-title'),
-            content: $saveLocalModal,
-            okBtn: {
-              className: 'btn btn-primary btn-single',
-              label: _msg('ok'),
-            },
-          })
-        })
+        }).click(saveLocal)
       ),
       $('<section>', { id: 'about' }).append(
         $('<h3>', { text: _msg('preference-about-label') }),
@@ -325,6 +327,33 @@ const preference = {
     $tabList.find('a:first').addClass('active')
     $tabContent.find('section:first').addClass('active')
 
+    function showPreference(obj) {
+      $.each(obj, (key, val) => {
+        if (key === 'plugins') {
+          $modalContent.data(key, val.concat([]))
+          $('.plugin-checkbox').each(function () {
+            this.checked = preference._defaults.plugins.includes(this.id)
+          })
+          return
+        }
+        $modalContent.data(key, val)
+        var $input = $tabContent.find('#' + key)
+        if ($input.length > 0) {
+          if (typeof val === 'string') {
+            $input.val(val)
+          } else if (typeof val === 'boolean') {
+            $input.prop('checked', val)
+          }
+        } else {
+          $tabContent
+            .find('input[type=radio][name=' + key + ']')
+            .each(function () {
+              this.checked = this.value === val
+            })
+        }
+      })
+    }
+
     // 显示模态框
     ssi_modal.show({
       sizeClass: 'dialog',
@@ -354,8 +383,12 @@ const preference = {
               },
               (res) => {
                 if (res) {
-                  preference.set(preference._defaults)
-                  modal.close()
+                  if (typeof InPageEdit.myPreference !== 'undefined') {
+                    showPreference(preference._defaults)
+                  } else {
+                    preference.set(preference._defaults)
+                    modal.close()
+                  }
                 } else {
                   return false
                 }
@@ -367,9 +400,13 @@ const preference = {
           label: _msg('preference-save'),
           className: 'btn btn-primary',
           method: function (a, modal) {
-            preference.set($modalContent.data())
-            // console.info('[InPageEdit] Set preference', $modalContent.data())
-            modal.close()
+            if (typeof InPageEdit.myPreference !== 'undefined') {
+              saveLocal()
+            } else {
+              preference.set($modalContent.data())
+              // console.info('[InPageEdit] Set preference', $modalContent.data())
+              modal.close()
+            }
           },
         },
       ],
@@ -380,10 +417,7 @@ const preference = {
           $modalWindow,
         })
 
-        // 如果在本地有设定存档，disable掉全部input
         if (typeof InPageEdit.myPreference !== 'undefined') {
-          $modalWindow.find('.ssi-modalBtn.btn').attr({ disabled: true })
-          $tabContent.find('input').attr({ disabled: true })
           $tabList.before(
             $('<div>', {
               class: 'has-local-warn',
@@ -395,22 +429,7 @@ const preference = {
         }
 
         // 将现有设定反映到选项中
-        $.each(local, (key, val) => {
-          if (key === 'plugins') {
-            $modalContent.data(key, val)
-            return
-          }
-          var $input = $tabContent.find('#' + key)
-          if ($input.length > 0) {
-            $modalContent.data(key, val)
-            if (typeof val === 'string') {
-              $input.val(val)
-            }
-            if (typeof val === 'boolean') {
-              $input.prop('checked', val)
-            }
-          }
-        })
+        showPreference(local)
 
         // 获取插件列表
         var usedPlugin = preference.get('plugins')
@@ -445,9 +464,6 @@ const preference = {
                     checked: Boolean(
                       usedPlugin.indexOf(key) >= 0 || val._force === true
                     ), // 勾选当前正在使用以及强制启用的插件
-                    disabled:
-                      typeof InPageEdit.myPreference !== 'undefined' ||
-                      val._force === true, // 强制启用或者本地保存设定时禁止改变
                   }).on('change', function () {
                     // 当插件选择框变化时，暂存设定档
                     var $this = $(this)
