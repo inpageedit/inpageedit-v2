@@ -71,7 +71,7 @@ const preference = {
     } else {
       return
     }
-    Object.assign(options, preference.get())
+    options = $.extend({}, preference.get(), options)
     options = JSON.stringify(options)
     localStorage.setItem('InPageEditPreference', options)
   },
