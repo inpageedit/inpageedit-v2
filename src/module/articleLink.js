@@ -34,15 +34,16 @@ function articleLink(el) {
     // 不是本地编辑链接
     if (
       !url.startsWith(
-        `${/^https?:/i.test(config.wgServer) ? '' : location.protocol}${
-          config.wgServer
-        }/`
+        `${location.protocol}//${config.wgServer.split('//').pop()}`
       )
-    )
+    ) {
       return
+    }
 
     // 暂时屏蔽 undo
-    if (getParamValue('undo', url)) return
+    if (getParamValue('undo', url)) {
+      return
+    }
 
     // 不是 index.php?title=FOO 形式的url
     if (title === null && ['edit', 'editsource'].includes(action)) {
