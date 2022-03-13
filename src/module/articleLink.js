@@ -8,7 +8,7 @@ const { getParamValue } = mw.util
 
 /**
  * @module articleLink 获取段落编辑以及编辑链接
- * @param {Sting|Element} el jQuery element to find edit links
+ * @param {string | HTMLAnchorElement | JQuery<HTMLAnchorElement>} el Anchors to inject edit links
  */
 function articleLink(el) {
   if (el === undefined) {
@@ -18,10 +18,13 @@ function articleLink(el) {
       el = $('#mw-content-text a:not(.new)')
     }
   }
-  el = $(el)
-  $.each(el, function (_, item) {
-    var $this = $(item)
-    if ($this.attr('href') === undefined) return
+  /** @type {JQuery<HTMLAnchorElement>} */
+  const $el = $(el)
+  $el.each(function (_, item) {
+    const $this = $(item)
+    if ($this.attr('href') === undefined) {
+      return
+    }
     // element.href必定带protocol
     let url = $this[0].href,
       action = getParamValue('action', url) || getParamValue('veaction', url),
@@ -53,11 +56,13 @@ function articleLink(el) {
       const articlePath = RegExp(
         escape(config.wgArticlePath).replace('\\$1', '(.+)')
       )
-      if (title.startsWith(config.wgScript))
+      if (title.startsWith(config.wgScript)) {
         title = decodeURIComponent(title.slice(config.wgScript.length + 1))
-      else if (articlePath.test(title))
+      } else if (articlePath.test(title)) {
         title = decodeURIComponent(title.match(articlePath)[1])
-      else title = undefined
+      } else {
+        title = undefined
+      }
     }
 
     if (['edit', 'editsource'].includes(action) && title !== undefined) {
