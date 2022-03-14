@@ -201,26 +201,6 @@ var quickEdit = function (options) {
     class: 'editArea',
     style: 'margin-top: 0;',
   })
-  /**
-   * watchlist 选项处理逻辑：
-   * - undefined 或 'preferences' 视为 preferences（默认），此时默认锁上 watchlist 复选框
-   * - null, '' 或 'nochange' 视为 nochange，watchlist 复选框暂时锁上，待 API 请求返回后解锁并设置初始状态
-   * - 其他真值视为 watch
-   * - 其他假值视为 unwatch
-   */
-  switch (options.watchList) {
-    case undefined:
-    case 'preferences':
-      options.watchList = 'preferences'
-      break
-    case null:
-    case '':
-    case 'nochange':
-      options.watchList = 'nochange'
-      break
-    default:
-      options.watchList = options.watchList ? 'watch' : 'unwatch'
-  }
   var $optionsLabel = $('<div>', {
     class: 'editOptionsLabel hideBeforeLoaded',
   }).append(
@@ -275,6 +255,13 @@ var quickEdit = function (options) {
       $('<span>', { text: _msg('markAsMinor') })
     ),
     ' ',
+    /**
+     * watchlist 选项处理逻辑：
+     * - undefined 或 'preferences' 视为 preferences（默认），此时默认锁上 watchlist 复选框
+     * - null, '' 或 'nochange' 视为 nochange，watchlist 复选框暂时锁上，待 API 请求返回后解锁并设置初始状态
+     * - 其他真值视为 watch
+     * - 其他假值视为 unwatch
+     */
     $('<label>').append(
       $('<input>', {
         type: 'checkbox',
