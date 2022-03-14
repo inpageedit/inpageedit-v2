@@ -30,6 +30,7 @@ const preference = {
     lockToolBox: false,
     redLinkQuickEdit: true,
     outSideClose: true,
+    watchList: 'preferences',
     plugins: ['toolbox.js', 'wiki-editor.js'],
   },
   /**
@@ -49,6 +50,20 @@ const preference = {
       Object.assign(local, InPageEdit.myPreference)
     }
     var json = $.extend({}, preference._defaults, local)
+    // [type=radio] 的 watchList 需要特殊处理一下
+    switch (json.watchList) {
+      case null:
+      case '':
+        json.watchList = 'nochange'
+        break
+      case 'preferences':
+      case 'nochange':
+      case 'watch':
+      case 'unwatch':
+        break
+      default:
+        json.watchList = json.watchList ? 'watch' : 'unwatch'
+    }
     if (typeof setting === 'string' && setting !== '') {
       return json[setting] ? json[setting] : null
     } else {
@@ -421,6 +436,12 @@ const preference = {
             if (typeof val === 'boolean') {
               $input.prop('checked', val)
             }
+          } else {
+            $tabContent
+              .find('input[type=radio][name=' + key + ']')
+              .each(function () {
+                this.checked = this.value === val
+              })
           }
         })
 
