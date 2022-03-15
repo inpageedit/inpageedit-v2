@@ -359,7 +359,7 @@ const preference = {
         if (key === 'plugins') {
           $modalContent.data(key, val.concat([]))
           $('.plugin-checkbox').each(function () {
-            this.checked = preference._defaults.plugins.includes(this.id)
+            this.checked = val.includes(this.id)
           })
           return
         }
@@ -491,6 +491,7 @@ const preference = {
                     checked: Boolean(
                       usedPlugin.indexOf(key) >= 0 || val._force === true
                     ), // 勾选当前正在使用以及强制启用的插件
+                    disabled: val._force === true, // 强制启用时禁止改变
                   }).on('change', function () {
                     // 当插件选择框变化时，暂存设定档
                     var $this = $(this)
@@ -505,8 +506,6 @@ const preference = {
                     if (!checked && index >= 0) {
                       original.splice(index, 1)
                     }
-                    // 暂存
-                    $modalContent.data('plugins', original)
                   }),
                   $('<span>'), // checkbox框框
                   $('<div>', { class: 'plugin-name', text: name }),
