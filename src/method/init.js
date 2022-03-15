@@ -41,7 +41,6 @@ module.exports = async function init() {
   const { about } = require('../module/about')
   const api = require('../module/api')
   const { articleLink } = require('../module/articleLink')
-  const { findAndReplace } = require('../module/findAndReplace')
   const { linksHere } = require('../module/linksHere')
   const { loadQuickDiff } = require('../module/loadQuickDiff')
   const { preference } = require('../module/preference')
@@ -71,7 +70,6 @@ module.exports = async function init() {
     about,
     api,
     articleLink,
-    findAndReplace,
     linksHere,
     loadQuickDiff,
     preference,
@@ -86,7 +84,6 @@ module.exports = async function init() {
     version,
     versionInfo,
     // 别名 Alias
-    fnr: findAndReplace,
     delete: quickDelete,
     diff: quickDiff,
     edit: quickEdit,

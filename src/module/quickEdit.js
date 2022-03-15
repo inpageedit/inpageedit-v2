@@ -6,7 +6,6 @@ const { _hasRight } = require('./_hasRight')
 
 const { $br, $progress } = require('./_elements')
 
-const { findAndReplace } = require('./findAndReplace')
 const { preference } = require('./preference')
 const { progress } = require('./progress')
 const { quickPreview } = require('./quickPreview')
