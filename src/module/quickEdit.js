@@ -46,6 +46,7 @@ var quickEdit = function (options) {
     pageDetail: {},
     jumpTo: '',
     reload: true,
+    watchList: 'preferences',
   }
 
   /** 获取用户设置 **/
@@ -145,12 +146,20 @@ var quickEdit = function (options) {
       $('<span>', { text: _msg('markAsMinor') })
     ),
     ' ',
+    /**
+     * watchlist 选项处理逻辑：
+     * - undefined 或 'preferences' 视为 preferences（默认），此时默认锁上 watchlist 复选框
+     * - null, '' 或 'nochange' 视为 nochange，watchlist 复选框暂时锁上，待 API 请求返回后解锁并设置初始状态
+     * - 其他真值视为 watch
+     * - 其他假值视为 unwatch
+     */
     $('<label>').append(
       $('<input>', {
         type: 'checkbox',
         class: 'watchList',
         id: 'watchList',
-        checked: options.watchList,
+        checked: options.watchList === 'watch',
+        disabled: ['nochange', 'preferences'].includes(options.watchList),
       }),
       $('<span>', { text: _msg('watchThisPage') })
     ),
@@ -166,6 +175,16 @@ var quickEdit = function (options) {
       $('<span>', { text: _msg('editor-reload-page') })
     )
   )
+  if (['nochange', 'preferences'].includes(options.watchList)) {
+    $optionsLabel
+      .find('.watchList')
+      .parent()
+      .one('click', function (e) {
+        e.preventDefault()
+        $(this).removeAttr('title').children('input').prop('disabled', false)
+      })
+      .attr('title', _msg('unlockWatchList'))
+  }
   var $newSectionTitleInput = $('<input>', {
     type: 'text',
     class: 'newSectionTitleInput',
@@ -244,6 +263,11 @@ var quickEdit = function (options) {
                 section = options.section,
                 summary = summaryVal,
                 isWatch = $optionsLabel.find('.watchList').prop('checked')
+                  ? 'watch'
+                  : 'unwatch',
+                watchlist = $optionsLabel.find('.watchList').prop('disabled')
+                  ? options.watchList
+                  : isWatch
               postArticle(
                 {
                   text,
@@ -252,7 +276,7 @@ var quickEdit = function (options) {
                   section,
                   sectiontitle,
                   summary,
-                  isWatch,
+                  watchlist,
                 },
                 modal
               )
@@ -477,7 +501,7 @@ var quickEdit = function (options) {
         var queryJson = {
           action: 'query',
           prop: 'revisions|info',
-          inprop: 'protection',
+          inprop: 'protection|watched',
           format: 'json',
         }
         if (options.pageId !== -1) {
@@ -523,6 +547,15 @@ var quickEdit = function (options) {
           // 使页面名标准化
           options.page = pageData.title
           $modalTitle.find('.editPage').text(options.page)
+
+          if (options.watchList === 'nochange') {
+            $optionsLabel
+              .find('.watchList')
+              .prop('disabled', false)
+              .prop('checked', 'watched' in pageData)
+              .off('click')
+              .removeAttr('title')
+          }
 
           if (options.revision && options.section !== 'new') {
             $modalWindow
@@ -839,7 +872,7 @@ var quickEdit = function (options) {
 
   // 发布编辑模块
   function postArticle(
-    { text, page, minor, summary, isWatch, section, sectiontitle },
+    { text, page, minor, summary, section, sectiontitle, watchlist },
     modal
   ) {
     _analysis('quick_edit_save')
@@ -850,7 +883,7 @@ var quickEdit = function (options) {
       basetimestamp: $modalContent.data('basetimestamp'),
       text,
       title: page,
-      watchlist: isWatch ? 'watch' : 'unwatch',
+      watchlist,
       minor,
       summary,
       errorformat: 'plaintext',
