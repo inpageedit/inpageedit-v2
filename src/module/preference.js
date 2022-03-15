@@ -30,7 +30,7 @@ const preference = {
     lockToolBox: false,
     redLinkQuickEdit: true,
     outSideClose: true,
-    watchList: !!mw.user.options.get('watchdefault'),
+    watchList: 'preferences',
     plugins: ['toolbox.js', 'wiki-editor.js'],
   },
   /**
@@ -47,9 +47,19 @@ const preference = {
       local = {}
     }
     if (typeof InPageEdit.myPreference === 'object') {
-      local = $.extend({}, local, InPageEdit.myPreference)
+      Object.assign(local, InPageEdit.myPreference)
     }
     var json = $.extend({}, preference._defaults, local)
+    /**
+     * < 14.3.0 版本中的 watchList 语义与现在不同
+     * 需要统一转换为 'preferences'
+     * @bhsd-harry @Dragon-Fish 2022年3月15日
+     */
+    if (
+      !['watch', 'unwatch', 'preferences', 'nochange'].includes(json.watchList)
+    ) {
+      json.watchList = 'preferences'
+    }
     if (typeof setting === 'string' && setting !== '') {
       return json[setting] ? json[setting] : null
     } else {
@@ -121,16 +131,33 @@ const preference = {
           $('<span>', { text: _msg('preference-setMinor') })
         ),
         $('<label>').append(
-          $('<input>', { type: 'checkbox', id: 'watchList' }),
-          $('<span>', { text: _msg('preference-watchList') })
-        ),
-        $('<label>').append(
           $('<input>', { type: 'checkbox', id: 'outSideClose' }),
           $('<span>', { text: _msg('preference-outSideClose') })
         ),
         $('<label>').append(
           $('<input>', { type: 'checkbox', id: 'noConfirmEdit' }),
           $('<span>', { text: _msg('preference-noConfirmEdit') })
+        ),
+        $('<h4>', { text: _msg('preference-watchList-label') }),
+        $('<label>').append(
+          $('<input>', { type: 'radio', name: 'watchList', value: 'nochange' }),
+          $('<span>', { text: _msg('preference-watchList-nochange') })
+        ),
+        $('<label>').append(
+          $('<input>', {
+            type: 'radio',
+            name: 'watchList',
+            value: 'preferences',
+          }),
+          $('<span>', { text: _msg('preference-watchList-preferences') })
+        ),
+        $('<label>').append(
+          $('<input>', { type: 'radio', name: 'watchList', value: 'unwatch' }),
+          $('<span>', { text: _msg('preference-watchList-unwatch') })
+        ),
+        $('<label>').append(
+          $('<input>', { type: 'radio', name: 'watchList', value: 'watch' }),
+          $('<span>', { text: _msg('preference-watchList-watch') })
         ),
         $('<h4>', { text: _msg('preference-summary-label') }),
         $('<label>', {
@@ -310,7 +337,7 @@ const preference = {
     // 绑定input事件
     $tabContent.find('input').on('change', function () {
       var $this = $(this)
-      var key = $this.attr('id')
+      var key = $this.attr('id') || $this.prop('name')
       var val
       if ($this.prop('type') === 'checkbox') {
         val = $this.prop('checked')
@@ -409,6 +436,12 @@ const preference = {
             if (typeof val === 'boolean') {
               $input.prop('checked', val)
             }
+          } else {
+            $tabContent
+              .find('input[type=radio][name=' + key + ']')
+              .each(function () {
+                this.checked = this.value === val
+              })
           }
         })
 

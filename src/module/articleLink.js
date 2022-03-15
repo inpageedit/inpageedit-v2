@@ -8,50 +8,61 @@ const { getParamValue } = mw.util
 
 /**
  * @module articleLink 获取段落编辑以及编辑链接
- * @param {Sting|Element} el jQuery element to find edit links
+ * @param {string | HTMLAnchorElement | JQuery<HTMLAnchorElement>} el Anchors to inject edit links
  */
 function articleLink(el) {
-  if (el === undefined) {
+  if (!el) {
     if (preference.get('redLinkQuickEdit') === true) {
       el = $('#mw-content-text a')
     } else {
       el = $('#mw-content-text a:not(.new)')
     }
   }
-  el = $(el)
-  $.each(el, function (_, item) {
-    var $this = $(item)
-    if ($this.attr('href') === undefined) return
+  /** @type {JQuery<HTMLAnchorElement>} */
+  const $el = $(el)
+  $el.each(function (_, item) {
+    const $this = $(item)
+    if (
+      $this.attr('href') === undefined ||
+      $this.attr('href').startsWith('#')
+    ) {
+      return
+    }
     // element.href必定带protocol
-    let url = $this[0].href,
+    let url = $this.get(0).href,
       action = getParamValue('action', url) || getParamValue('veaction', url),
       title = getParamValue('title', url),
       section = getParamValue('section', url)
         ? getParamValue('section', url).replace(/T-/, '')
         : null,
-      revision = getParamValue('oldid', url)
+      revision = getParamValue('oldid', url),
+      wikiUrl = `${location.protocol}//${config.wgServer.split('//').pop()}`
 
     // 不是本地编辑链接
-    if (!url.startsWith(`${location.protocol}${config.wgServer}/`)) return
-
-    // 暂时屏蔽 section=new #137
-    if (section === 'new') return
+    if (!url.startsWith(wikiUrl)) {
+      return
+    }
 
     // 暂时屏蔽 undo
-    if (getParamValue('undo', url)) return
+    if (getParamValue('undo', url)) {
+      return
+    }
+    // @FIXME 暂时屏蔽 preload，应在后面的版本中支持
+    if (getParamValue('preload', url)) {
+      return
+    }
 
     // 不是 index.php?title=FOO 形式的url
     if (title === null && ['edit', 'editsource'].includes(action)) {
-      title = url.slice(location.protocol.length + config.wgServer.length)
-      title = title.split('?')[0]
-      const escape = mw.util.escapeRegExp ?? mw.RegExp.escape
-      const articlePath = RegExp(escape(config.wgArticlePath).replace('\\$1', '(.+)'))
-      if (title.startsWith(config.wgScript))
-        title = decodeURIComponent(title.slice(config.wgScript.length + 1))
-      else if (articlePath.test(title))
-        title = decodeURIComponent(title.match(articlePath)[1])
-      else title = undefined
+      let articlePath = config.wgArticlePath.replace('$1', '')
+      // 掐头去尾，获取包含文章路径的字符串
+      title = url.slice(wikiUrl.length).split('?')[0]
+      // 去除文章路径，之所以这么处理是因为文章路径有可能是 /
+      title = title.split(articlePath).slice(1).join(articlePath)
     }
+
+    // 解码 URL
+    title = decodeURIComponent(title)
 
     if (['edit', 'editsource'].includes(action) && title !== undefined) {
       $this.addClass('ipe-articleLink-resolved').after(
