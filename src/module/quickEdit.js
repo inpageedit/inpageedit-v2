@@ -46,6 +46,7 @@ var quickEdit = function (options) {
     pageDetail: {},
     jumpTo: '',
     reload: true,
+    watchList: 'preferences',
   }
 
   /** 获取用户设置 **/
@@ -86,115 +87,6 @@ var quickEdit = function (options) {
       ': <u class="editPage">' +
       options.page.replace(/_/g, ' ') +
       '</u>'
-  )
-  var $editTools = $('<div>', { class: 'editTools' }).append(
-    $('<div>', { class: 'btnGroup' }).append(
-      $('<div>', { class: 'toolSelect' }).append(
-        $('<div>', { class: 'label', text: _msg('editor-edittool-header') }),
-        $('<ul>', { class: 'ul-list' }).append(
-          $('<li>', {
-            class: 'editToolBtn',
-            'data-open': '\n== ',
-            'data-middle': _msg('editor-edittool-header-text'),
-            'data-close': ' ==\n',
-            text: 'H2',
-          }),
-          $('<li>', {
-            class: 'editToolBtn',
-            'data-open': '\n=== ',
-            'data-middle': _msg('editor-edittool-header-text'),
-            'data-close': ' ===\n',
-            text: 'H3',
-          }),
-          $('<li>', {
-            class: 'editToolBtn',
-            'data-open': '\n==== ',
-            'data-middle': _msg('editor-edittool-header-text'),
-            'data-close': ' ====\n',
-            text: 'H4',
-          }),
-          $('<li>', {
-            class: 'editToolBtn',
-            'data-open': '\n===== ',
-            'data-middle': _msg('editor-edittool-header-text'),
-            'data-close': ' =====\n',
-            text: 'H5',
-          })
-        )
-      )
-    ),
-    $('<div>', { class: 'btnGroup' }).append(
-      $('<span>', { class: 'label', text: '格式' }),
-      $('<button>', {
-        class: 'editToolBtn fa fa-bold btn',
-        'data-open': "'''",
-        'data-middle': _msg('editor-edittool-bold'),
-        'data-close': "'''",
-      }),
-      $('<button>', {
-        class: 'editToolBtn fa fa-italic btn',
-        'data-open': "''",
-        'data-middle': _msg('editor-edittool-italic'),
-        'data-close': "''",
-      }),
-      $('<button>', {
-        class: 'editToolBtn fa fa-list-ul btn',
-        'data-open': '\n* ',
-        'data-middle': _msg('editor-edittool-list-bulleted'),
-        'data-close': '\n',
-      }),
-      $('<button>', {
-        class: 'editToolBtn fa fa-list-ol btn',
-        'data-open': '\n# ',
-        'data-middle': _msg('editor-edittool-list-numbered'),
-        'data-close': '\n',
-      }),
-      $('<button>', {
-        class: 'editToolBtn fa fa-won btn',
-        'data-open': '<' + 'nowiki>',
-        'data-middle': _msg('editor-edittool-nowiki'),
-        'data-close': '</nowiki>',
-      }),
-      $('<button>', {
-        class: 'editToolBtn fa fa-level-down fa-rotate-90 btn',
-        'data-open': '<br>\n',
-        'data-middle': '',
-        'data-close': '',
-      })
-    ),
-    $('<div>', { class: 'btnGroup' }).append(
-      $('<span>', { class: 'label', text: '插入' }),
-      $('<button>', {
-        class: 'editToolBtn fa fa-link btn',
-        'data-open': '[' + '[',
-        'data-middle': _msg('editor-edittool-internal-link'),
-        'data-close': ']]',
-      }),
-      $('<button>', {
-        class: 'editToolBtn fa fa-file-image-o btn',
-        'data-open': '[' + '[File:',
-        'data-middle': 'Example.png',
-        'data-close': '|thumb]]',
-      }),
-      $('<button>', {
-        class: 'editToolBtn btn',
-        'data-open': '\n<' + 'gallery>\n',
-        'data-middle': 'Example1.jpg|Description\nExample2.png|Description',
-        'data-close': '\n</gallery>\n',
-        html: '<span class="fa-stack"><i class="fa fa-picture-o fa-stack-1x"></i><i class="fa fa-picture-o fa-stack-1x" style="left: 2px;top: 2px;text-shadow: 1px 1px 0 #fff;"></i></span>',
-      })
-    ),
-    $('<div>', { class: 'btnGroup extra', style: 'display: none' }).append(
-      $('<span>', { class: 'label', text: '自定义' })
-    ),
-    $('<div>', {
-      class: 'btnGroup special-tools',
-      style: 'float: right',
-    }).append(
-      $('<button>', { class: 'btn fa fa-search' }).on('click', function () {
-        findAndReplace($editArea)
-      })
-    )
   )
   var $editArea = $('<textarea>', {
     class: 'editArea',
@@ -254,12 +146,20 @@ var quickEdit = function (options) {
       $('<span>', { text: _msg('markAsMinor') })
     ),
     ' ',
+    /**
+     * watchlist 选项处理逻辑：
+     * - undefined 或 'preferences' 视为 preferences（默认），此时默认锁上 watchlist 复选框
+     * - null, '' 或 'nochange' 视为 nochange，watchlist 复选框暂时锁上，待 API 请求返回后解锁并设置初始状态
+     * - 其他真值视为 watch
+     * - 其他假值视为 unwatch
+     */
     $('<label>').append(
       $('<input>', {
         type: 'checkbox',
         class: 'watchList',
         id: 'watchList',
-        checked: options.watchList,
+        checked: options.watchList === 'watch',
+        disabled: ['nochange', 'preferences'].includes(options.watchList),
       }),
       $('<span>', { text: _msg('watchThisPage') })
     ),
@@ -275,6 +175,16 @@ var quickEdit = function (options) {
       $('<span>', { text: _msg('editor-reload-page') })
     )
   )
+  if (['nochange', 'preferences'].includes(options.watchList)) {
+    $optionsLabel
+      .find('.watchList')
+      .parent()
+      .one('click', function (e) {
+        e.preventDefault()
+        $(this).removeAttr('title').children('input').prop('disabled', false)
+      })
+      .attr('title', _msg('unlockWatchList'))
+  }
   var $newSectionTitleInput = $('<input>', {
     type: 'text',
     class: 'newSectionTitleInput',
@@ -283,8 +193,6 @@ var quickEdit = function (options) {
   var $modalContent = $('<div>').append(
     $progress,
     $('<section>', { class: 'hideBeforeLoaded' }).append(
-      // 编辑工具条
-      $editTools,
       // 编辑框
       $editArea
     )
@@ -355,6 +263,11 @@ var quickEdit = function (options) {
                 section = options.section,
                 summary = summaryVal,
                 isWatch = $optionsLabel.find('.watchList').prop('checked')
+                  ? 'watch'
+                  : 'unwatch',
+                watchlist = $optionsLabel.find('.watchList').prop('disabled')
+                  ? options.watchList
+                  : isWatch
               postArticle(
                 {
                   text,
@@ -363,7 +276,7 @@ var quickEdit = function (options) {
                   section,
                   sectiontitle,
                   summary,
-                  isWatch,
+                  watchlist,
                 },
                 modal
               )
@@ -454,67 +367,6 @@ var quickEdit = function (options) {
           })
         })
       )
-
-      /** Edit-Tool 扩展 **/
-      function insertText(strings, obj) {
-        var textarea = obj || $editArea[0],
-          start = textarea.selectionStart,
-          stop = textarea.selectionEnd,
-          selectedText = textarea.value.slice(start, stop)
-        textarea.value =
-          textarea.value.slice(0, start) +
-          (strings.open || '') +
-          (selectedText || strings.middle || '') +
-          (strings.close || '') +
-          textarea.value.slice(stop)
-        var selectStart = start + (strings.open.length || 0)
-        textarea.setSelectionRange(
-          selectStart,
-          selectStart + (selectedText.length || strings.middle.length || 0)
-        )
-        textarea.focus()
-      }
-      // 添加按钮
-      function addBtn(open, middle, close, icon) {
-        open = open || ''
-        middle = middle || ''
-        close = close || ''
-        icon = 'fa-' + icon || 'fa-wrench'
-        $modalContent.find('.btnGroup.extra').append(
-          $('<button>', {
-            class: 'editToolBtn btn',
-            'data-open': open,
-            'data-middle': middle,
-            'data-close': close,
-            html: `<i class="fa ${icon}"></i>`,
-          })
-        )
-      }
-      // 用户自定义按钮
-      if (InPageEdit.buttons) {
-        var btns = InPageEdit.buttons
-        $editTools.find('.btnGroup.extra').show()
-
-        for (var i = 0; i < btns.length; i++) {
-          var btn = btns[i]
-          addBtn(btn.open, btn.middle, btn.close, btn.text)
-        }
-      }
-      $editTools.find('.editToolBtn').on('click', function (e) {
-        e.preventDefault()
-        var $this = $(this),
-          $open = $this.attr('data-open') || '',
-          $middle = $this.attr('data-middle') || '',
-          $close = $this.attr('data-close') || ''
-        insertText(
-          {
-            open: $open,
-            middle: $middle,
-            close: $close,
-          },
-          $editArea[0]
-        )
-      })
     },
     /**
      * @event onShow
@@ -528,7 +380,6 @@ var quickEdit = function (options) {
         $modalTitle,
         $modalContent,
         $editArea,
-        $editTools,
         $optionsLabel,
       })
       // 绑定事件，在尝试离开页面时提示
@@ -650,7 +501,7 @@ var quickEdit = function (options) {
         var queryJson = {
           action: 'query',
           prop: 'revisions|info',
-          inprop: 'protection',
+          inprop: 'protection|watched',
           format: 'json',
         }
         if (options.pageId !== -1) {
@@ -696,6 +547,15 @@ var quickEdit = function (options) {
           // 使页面名标准化
           options.page = pageData.title
           $modalTitle.find('.editPage').text(options.page)
+
+          if (options.watchList === 'nochange') {
+            $optionsLabel
+              .find('.watchList')
+              .prop('disabled', false)
+              .prop('checked', 'watched' in pageData)
+              .off('click')
+              .removeAttr('title')
+          }
 
           if (options.revision && options.section !== 'new') {
             $modalWindow
@@ -772,13 +632,22 @@ var quickEdit = function (options) {
                   contentmodel: 'wikitext',
                   preview: true,
                   text: wikitextPage + '\n' + wikitextNs,
+                  disablelimitreport: true,
                 })
                 .done(function (data) {
                   options.editNotice = data.parse.text['*']
                   var notice = $modalContent.data('editNotice') || ''
                   notice += '\n' + options.editNotice
-                  $modalContent.data('editNotice', notice)
-                  $modalContent.find('.showEditNotice').show()
+                  if (
+                    // 忽略空白提示；使用$.parseHTML不会执行<script>
+                    $.parseHTML(notice)
+                      .map((ele) => ele.innerText)
+                      .join('')
+                      .trim()
+                  ) {
+                    $modalContent.data('editNotice', notice)
+                    $modalWindow.find('.showEditNotice').show()
+                  }
                 })
             })
         }
@@ -1003,7 +872,7 @@ var quickEdit = function (options) {
 
   // 发布编辑模块
   function postArticle(
-    { text, page, minor, summary, isWatch, section, sectiontitle },
+    { text, page, minor, summary, section, sectiontitle, watchlist },
     modal
   ) {
     _analysis('quick_edit_save')
@@ -1014,7 +883,7 @@ var quickEdit = function (options) {
       basetimestamp: $modalContent.data('basetimestamp'),
       text,
       title: page,
-      watchlist: isWatch ? 'watch' : 'unwatch',
+      watchlist,
       minor,
       summary,
       errorformat: 'plaintext',

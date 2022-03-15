@@ -1,6 +1,6 @@
 {
   "name": "mediawiki-inpageedit",
-  "version": "14.3.0-rc.3",
+  "version": "14.3.0-rc.4",
   "description": "A useful MediaWiki JavaScript Plugin written with jQuery",
   "main": "dist/InPageEdit.min.js",
   "dependencies": {},
