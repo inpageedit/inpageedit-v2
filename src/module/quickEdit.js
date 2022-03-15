@@ -805,13 +805,21 @@ var quickEdit = function (options) {
                   contentmodel: 'wikitext',
                   preview: true,
                   text: wikitextPage + '\n' + wikitextNs,
+                  disablelimitreport: true,
                 })
                 .done(function (data) {
                   options.editNotice = data.parse.text['*']
                   var notice = $modalContent.data('editNotice') || ''
                   notice += '\n' + options.editNotice
-                  $modalContent.data('editNotice', notice)
-                  $modalContent.find('.showEditNotice').show()
+                  if ( // 忽略空白提示；使用$.parseHTML不会执行<script>
+                    $.parseHTML(notice)
+                      .map((ele) => ele.innerText)
+                      .join('')
+                      .trim()
+                  ) {
+                    $modalContent.data('editNotice', notice)
+                    $modalWindow.find('.showEditNotice').show()
+                  }
                 })
             })
         }
