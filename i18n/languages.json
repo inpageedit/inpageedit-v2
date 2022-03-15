@@ -1239,7 +1239,8 @@
         "links-here-title": "链接至“<u>$1</u>”的页面",
         "links-here-isRedirect": "重定向页面",
         "links-here-no-page": "没有页面链接到“<strong>$1</strong>” QAQ",
-        "links-here-not-exist": "注意：页面“<strong>$1</strong>”似乎不存在"
+        "links-here-not-exist": "注意：页面“<strong>$1</strong>”似乎不存在",
+        "preference-noConfirmEdit": "提交编辑前无需再次点击确认"
     },
     "zh-hant": {
         "quick-edit": "快速編輯",
@@ -1341,6 +1342,7 @@
         "preview-placeholder": "正在載入預覽……",
         "preview-title": "預覽",
         "preview-error": "載入預覽時出現錯誤。",
-        "quick-diff": "快速差異"
+        "quick-diff": "快速差異",
+        "preference-noConfirmEdit": "變更儲存前無需再次確認"
     }
 }
