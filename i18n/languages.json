@@ -176,7 +176,7 @@
         "preference-editHobits-label": "Edit hobits",
         "preference-watchList-label": "Watchlist preference",
         "preference-watchList-nochange": "Do not change my watchlist when editing",
-        "preference-watchList-preferences": "Conform to Special:Preferences",
+        "preference-watchList-preferences": "Conform to [[Special:Preferences]]",
         "preference-watchList-unwatch": "Remove edited pages from my watchlist",
         "preference-watchList-watch": "Add edited pages to my watchlist",
         "preference-redLinkQuickEdit": "Add quick edit buttons after red links",
