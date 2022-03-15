@@ -47,6 +47,10 @@ function articleLink(el) {
     if (getParamValue('undo', url)) {
       return
     }
+    // @FIXME 暂时屏蔽 preload，应在后面的版本中支持
+    if (getParamValue('preload', url)) {
+      return
+    }
 
     // 不是 index.php?title=FOO 形式的url
     if (title === null && ['edit', 'editsource'].includes(action)) {
