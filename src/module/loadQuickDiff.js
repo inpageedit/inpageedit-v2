@@ -54,7 +54,7 @@ function injectLinks(container) {
         return
       }
       // 少数情况下可能只存在 diff，这种情况应该当做与前一版本比较
-      if (!!oldid && !!curid) {
+      if (!oldid && !curid) {
         oldid = 'prev'
       }
       /**
