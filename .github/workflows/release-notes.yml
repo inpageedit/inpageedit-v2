@@ -15,36 +15,8 @@ jobs:
           # Fetch all history
           fetch-depth: 0
 
-      - name: Generate Changelog
-        id: changelog
-        shell: bash
-        env:
-          CURRENT: ${{ github.ref }}
-        # Special thanks to this post on Stack Overflow regarding change set between two tags:
-        # https://stackoverflow.com/questions/12082981
-        # Do note that actions/checkout will enter detach mode by default, so you won't have
-        # access to HEAD ref. Use GitHub-Action-supplied `github.ref` instead.
-        # Special thanks to this issue ticket regarding escaping newline:
-        # https://github.com/actions/create-release/issues/25
-        # We use Bash parameter expansion to do find-and-replace.
-        # https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html
-        # Also we cannot use git rev-list because it always prepend "commit <hash>"
-        # See https://stackoverflow.com/questions/36927089/
-        run: |
-          current_tag=${CURRENT/refs\/tags\//}
-          last_tag=`git describe --tags --abbrev=0 "$current_tag"^ 2>/dev/null || echo`
-          if [ $last_tag ]; then
-          changelog=`git log --pretty="format:%H: %s" ${last_tag}..$current_tag`
-          else
-          changelog=`git log --pretty="format:%H: %s"`
-          fi
-          changelog="${changelog//'%'/'%25'}"
-          changelog="${changelog//$'\n'/'  %0A'}"
-          echo "::set-output name=value::Changes since ${last_tag:-the beginning}:  %0A%0A$changelog"
-
       - name: GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           prerelease: false
-          body: |
-            ${{ steps.changelog.outputs.value }}
+          generate_release_notes: true

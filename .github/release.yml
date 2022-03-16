@@ -1,0 +1,22 @@
+# 自动生成的发行说明
+# https://docs.github.com/cn/repositories/releasing-projects-on-github/automatically-generated-release-notes
+
+changelog:
+  categories:
+    - title: 💥 Breaking Changes
+      labels:
+        - Semver-Major
+        - breaking-change
+    - title: ✨ New Features 
+      labels:
+        - Semver-Minor
+        - enhancement
+        - feature
+    - title: 🐛 Bug Fixes
+      labels:
+        - Semver-Patch
+        - Bug
+        - 'Level-*'
+    - title: 🛠️ Housekeeping
+      labels:
+        - '*'
