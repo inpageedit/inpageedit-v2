@@ -122,33 +122,22 @@ var quickRedirect = function (type = 'to') {
 
           let promise = Promise.resolve()
           if (preference.get('noRedirectIfConvertedTitleExists')) {
-            promise = mwApi
-              .get({ titles: json.title, converttitles: 1, formatversion: 2 })
-              .done((data) => {
-                const convertedTitle = data.query.pages[0]
-                if (convertedTitle?.missing !== true) {
-                  failed('articleexists', {
-                    fromPage: convertedTitle.title,
-                    errors: [
-                      {
-                        '*': _msg('notify-redirect-converted-error'),
-                      },
-                    ],
-                  })
-                  throw null
-                }
-              })
-              .fail((errorCode, errorThrown) => {
-                failed(errorCode, errorThrown)
+            promise = mwApi.get({ titles: json.title, converttitles: 1, formatversion: 2 }).done(data => {
+              const convertedTitle = data.query.pages[0]
+              if (convertedTitle?.missing !== true) {
+                failed('articleexists', { fromPage: convertedTitle.title, errors: [{
+                  '*':  _msg('notify-redirect-converted-error')
+                }] })
                 throw null
-              })
+              }
+            }).fail((errorCode, errorThrown) => {
+              failed(errorCode, errorThrown)
+              throw null
+            })
           }
-          promise.then(
-            () => {
-              mwApi.postWithToken('csrf', json).done(successed).fail(failed)
-            },
-            () => {}
-          )
+          promise.then(() => {
+            mwApi.postWithToken('csrf', json).done(successed).fail(failed)
+          }, () => {})
           // 重定向成功
           function successed(data) {
             if (data.errors) {
