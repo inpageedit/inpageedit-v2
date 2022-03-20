@@ -122,11 +122,12 @@ const preference = {
 
     function saveLocal() {
       // 永久保存（本地用户页）
-      var $saveLocalModal = $('<section>').append(
+      const $saveLocalModal = $('<section>').append(
         _msg('preference-savelocal-popup'),
         $br,
         $('<textarea>', {
-          style: 'font-size: 12px; resize: none; width: 100%; height: 10em;',
+          style:
+            'font-size: 12px; resize: none; width: 100%; height: 10em;',
           readonly: true,
         })
           .on('click', function () {
@@ -260,7 +261,7 @@ const preference = {
           class: 'btn btn-secondary',
           id: 'ipeSaveLocalShow',
           text: _msg('preference-savelocal-btn'),
-        }).click(saveLocal)
+        }).on('click', saveLocal)
       ),
       $('<section>', { id: 'about' }).append(
         $('<h3>', { text: _msg('preference-about-label') }),
@@ -358,13 +359,13 @@ const preference = {
       $.each(obj, (key, val) => {
         if (key === 'plugins') {
           $modalContent.data(key, val.concat([]))
-          $('.plugin-checkbox').each(function () {
+          $tabContent.find('.plugin-checkbox').each(function () {
             this.checked = val.includes(this.id)
           })
           return
         }
         $modalContent.data(key, val)
-        var $input = $tabContent.find('#' + key)
+        const $input = $tabContent.find('#' + key)
         if ($input.length > 0) {
           if (typeof val === 'string') {
             $input.val(val)
@@ -373,7 +374,7 @@ const preference = {
           }
         } else {
           $tabContent
-            .find('input[type=radio][name=' + key + ']')
+            .find('input[name=' + key + ']')
             .each(function () {
               this.checked = this.value === val
             })
