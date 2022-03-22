@@ -38,7 +38,6 @@ var quickRedirect = function (type = 'to') {
       '<b>' + config.wgPageName.replace(/_/g, ' ') + '</b>'
     )
     summary = _msg('redirect-summary') + ' → [[:' + config.wgPageName + ']]'
-    json.text = text.replace('$1', config.wgPageName)
   } else {
     console.error('[InPageEdit] quickRedirect only accept "from" or "to"')
     return
@@ -60,6 +59,16 @@ var quickRedirect = function (type = 'to') {
             $(this).css('box-shadow', '')
           }
         ),
+        ...(type === 'from'
+          ? [
+              $br,
+              $('<label>', {
+                for: 'redirect-fragment',
+                text: _msg('redirect-question-fragment'),
+              }),
+              $('<input>', { id: 'redirect-fragment', style: 'width:96%' }),
+            ]
+          : []),
         $br,
         $('<label>', { for: 'redirect-reason', text: _msg('editSummary') }),
         $('<input>', { id: 'redirect-reason', style: 'width:96%' })
@@ -89,7 +98,14 @@ var quickRedirect = function (type = 'to') {
             summary = _msg('redirect-summary') + ' → [[:' + target + ']]'
             json.text = text.replace('$1', target)
           } else if (type === 'from') {
+            let fragment = $('.in-page-edit.quick-redirect #redirect-fragment')
+              .val()
+              .trim()
+            if (fragment && !fragment.startsWith('#')) {
+              fragment = `#${fragment}`
+            }
             json.title = target
+            json.text = text.replace('$1', `${config.wgPageName}${fragment}`)
           }
           if ($('.in-page-edit.quick-redirect #redirect-reason').val() !== '') {
             summary =
