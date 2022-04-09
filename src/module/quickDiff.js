@@ -1,5 +1,4 @@
 var mwApi = new mw.Api()
-var config = mw.config.get()
 
 const { _analytics: _analysis } = require('./_analytics')
 const { _msg } = require('./_msg')
@@ -13,24 +12,17 @@ const { $br, $progress } = require('./_elements')
 var quickDiff = function (param) {
   mw.hook('InPageEdit.quickDiff').fire()
   _analysis('quick_diff')
-  if ($('[href*="mediawiki.diff.styles"]').length < 1) {
-    mw.loader.load(
-      `${mw.util.wikiScript('load')}?${new URLSearchParams({
-        modules: 'mediawiki.legacy.shared|mediawiki.diff.styles',
-        only: 'styles',
-      })}`,
-      'text/css'
-    )
-  }
+  mw.loader.load(['mediawiki.legacy.shared', 'mediawiki.diff.styles'])
   var $modalTitle, $diffArea, $loading
-  if ($('.quick-diff').length > 0) {
+  var $quickDiff = $('.quick-diff')
+  if ($quickDiff.length > 0) {
     console.info('[InPageEdit] Quick diff 正在加载新内容')
-    $modalTitle = $('.quick-diff .pageName')
-    $diffArea = $('.quick-diff .diffArea')
-    $loading = $('.quick-diff .ipe-progress')
+    $modalTitle = $quickDiff.find('.pageName')
+    $diffArea = $quickDiff.find('.diffArea')
+    $loading = $quickDiff.find('.ipe-progress')
     $modalTitle.text(_msg('diff-loading'))
     $diffArea.hide()
-    $('.quick-diff').appendTo('body')
+    $quickDiff.appendTo(document.body)
   } else {
     $modalTitle = $('<span>', { class: 'pageName', text: _msg('diff-loading') })
     $diffArea = $('<div>', { class: 'diffArea', style: 'display: none' })
@@ -50,13 +42,14 @@ var quickDiff = function (param) {
         },
       ],
     })
+    $quickDiff = $('.quick-diff')
   }
   $loading
     .show()
-    .css('margin-top', $('.quick-diff .ssi-modalContent').height() / 2)
-  $('.quick-diff .toDiffPage').off()
+    .css('margin-top', $quickDiff.find('.ssi-modalContent').height() / 2)
+  $quickDiff.find('.toDiffPage').off('click')
   param.action = 'compare'
-  param.prop = 'diff|diffsize|rel|ids|title|user|comment|parsedcomment|size'
+  param.prop = 'diff|rel|ids|title|user|parsedcomment|size'
   param.format = 'json'
   if (param.totext) {
     param.topst = true
@@ -98,7 +91,7 @@ var quickDiff = function (param) {
       $modalTitle.html(_msg('diff-title') + ': <u>' + toTitle + '</u>')
       $diffArea
         .show()
-        .html('')
+        .empty()
         .append(
           $('<table>', { class: 'diff difftable' }).append(
             $('<colgroup>').append(
@@ -111,7 +104,7 @@ var quickDiff = function (param) {
               $('<tr>').append(
                 $('<td>', { colspan: 2, class: 'diff-otitle' }).append(
                   $('<a>', {
-                    href: config.wgScript + '?oldid=' + data.compare.fromrevid,
+                    href: mw.util.getUrl('', { oldid: data.compare.fromrevid }),
                     text: data.compare.fromtitle,
                   }),
                   ' (',
@@ -122,12 +115,10 @@ var quickDiff = function (param) {
                   ') (',
                   $('<a>', {
                     class: 'editLink',
-                    href:
-                      config.wgScript +
-                      '?action=edit&title=' +
-                      data.compare.fromtitle +
-                      '&oldid=' +
-                      data.compare.fromrevid,
+                    href: mw.util.getUrl(data.compare.fromtitle, {
+                      action: 'edit',
+                      oldid: data.compare.fromrevid,
+                    }),
                     text: _msg('diff-edit'),
                   }),
                   ')',
@@ -156,7 +147,7 @@ var quickDiff = function (param) {
                 ),
                 $('<td>', { colspan: 2, class: 'diff-ntitle' }).append(
                   $('<a>', {
-                    href: config.wgScript + '?oldid=' + data.compare.torevid,
+                    href: mw.util.getUrl('', { oldid: data.compare.torevid }),
                     text: data.compare.totitle,
                   }),
                   ' (',
@@ -167,12 +158,10 @@ var quickDiff = function (param) {
                   ') (',
                   $('<a>', {
                     class: 'editLink',
-                    href:
-                      config.wgScript +
-                      '?action=edit&title=' +
-                      data.compare.totitle +
-                      '&oldid=' +
-                      data.compare.torevid,
+                    href: mw.util.getUrl(data.compare.totitle, {
+                      action: 'edit',
+                      oldid: data.compare.torevid,
+                    }),
                     text: _msg('diff-edit'),
                   }),
                   ')',
@@ -218,17 +207,15 @@ var quickDiff = function (param) {
             )
           )
         )
-      $('.quick-diff button.toDiffPage').on('click', function () {
-        location.href =
-          config.wgScript +
-          '?oldid=' +
-          data.compare.fromrevid +
-          '&diff=' +
-          data.compare.torevid
+      $quickDiff.find('button.toDiffPage').on('click', function () {
+        location.href = mw.util.getUrl('', {
+          oldid: data.compare.fromrevid,
+          diff: data.compare.torevid,
+        })
       })
-      require('./articleLink').articleLink($('.quick-diff .editLink'))
+      require('./articleLink').articleLink($quickDiff.find('.editLink'))
       if (param.isPreview === true) {
-        $('.quick-diff button.toDiffPage').hide()
+        $quickDiff.find('button.toDiffPage').hide()
         $diffArea
           .find('.diff-otitle')
           .html('<b>' + _msg('diff-title-original-content') + '</b>')
@@ -246,7 +233,7 @@ var quickDiff = function (param) {
       if (!data.compare?.fromrevid && !param.isPreview) {
         $diffArea
           .find('.diff-otitle')
-          .html('')
+          .empty()
           .append(
             $('<span>', {
               class: 'noPrevVerson',
@@ -258,7 +245,7 @@ var quickDiff = function (param) {
       if (!data.compare?.torevid && !param.isPreview) {
         $diffArea
           .find('.diff-otitle')
-          .html('')
+          .empty()
           .append(
             $('<span>', {
               class: 'noNextVerson',
@@ -294,17 +281,6 @@ var quickDiff = function (param) {
         $diffArea
           .find('.diff-ntitle .diff-comment')
           .addClass('diff-hidden-history')
-      }
-      if (data.error) {
-        console.warn('[InPageEdit] 快速差异获取时系统告知出现问题')
-        $diffArea.html(
-          _msg('diff-error') +
-            ': ' +
-            data.error.info +
-            '(<code>' +
-            data.error.code +
-            '</code>)'
-        )
       }
     })
     .fail(function (errorCode, errorThrown) {
