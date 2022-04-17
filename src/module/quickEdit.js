@@ -883,9 +883,9 @@ var quickEdit = function (options) {
       text,
       title: page,
       watchlist,
-      minor,
       summary,
       errorformat: 'plaintext',
+      ...(minor ? { minor: true } : { notminor: true }),
     }
     if (section !== undefined && section !== '' && section !== null) {
       options.jsonPost.section = section
