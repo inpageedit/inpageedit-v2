@@ -32,7 +32,7 @@ jobs:
 
   deploy-aliyun-oss-latest-folder:
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/master' ) }}
+    if: ${{ github.ref == 'refs/heads/master' }}
     needs: build
     steps:
       - name: Upload to Aliyun oss
