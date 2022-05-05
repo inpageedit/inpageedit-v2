@@ -1,0 +1,57 @@
+name: Deploy Canary
+
+# Controls when the workflow will run
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@master
+        with:
+          node-version: 16
+          registry-url: https://registry.npmjs.org/
+
+      - name: Run Build
+        run: |
+          yarn install
+          yarn build
+
+  deploy-aliyun-oss-latest-folder:
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.action_ref, 'refs/tags/') }}
+    needs: build
+    steps:
+      - name: Upload to Aliyun oss
+        uses: Menci/upload-to-oss@beta-v3
+        with:
+          access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
+          access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+          bucket: inpageedit-dev
+          endpoint: https://canary.ipe.wiki
+          local-path: dist
+          remote-path: inpageedit-v2/latest
+
+  publish-npm:
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.action_ref, 'refs/tags/') }}
+    needs: build
+    steps:
+      - name: Publish npm
+        run: |
+          npm publish --tag canary
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
