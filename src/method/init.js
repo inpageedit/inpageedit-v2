@@ -15,6 +15,7 @@ const { pluginCDN } = require('../module/api')
  */
 module.exports = async function init() {
   mw.hook('InPageEdit.init.before').fire()
+  await mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user'])
   // 是否需要刷新缓存
   const noCache = !!(
     mw.util.getParamValue('ipedev', location.href) ||
@@ -56,10 +57,7 @@ module.exports = async function init() {
   // 初始化前置模块
   preference.set()
   mw.hook('wikipage.content').add(loadQuickDiff)
-  await Promise.all([
-    $.ready,
-    mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user']),
-  ])
+  await $.ready
   articleLink()
   updateNotice()
 
