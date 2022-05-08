@@ -3,7 +3,6 @@
   "version": "14.3.0",
   "description": "A useful MediaWiki JavaScript Plugin written with jQuery",
   "main": "dist/InPageEdit.min.js",
-  "dependencies": {},
   "devDependencies": {
     "@dragon-fish/bump": "^0.0.15",
     "cross-env": "^7.0.3",
