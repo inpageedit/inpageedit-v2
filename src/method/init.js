@@ -15,7 +15,6 @@ const { pluginCDN } = require('../module/api')
  */
 module.exports = async function init() {
   mw.hook('InPageEdit.init.before').fire()
-  await $.ready
   // 是否需要刷新缓存
   const noCache = !!(
     mw.util.getParamValue('ipedev', location.href) ||
@@ -25,7 +24,6 @@ module.exports = async function init() {
   loadStyles(noCache)
   // 等待前置项目
   await Promise.all([
-    mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user']),
     syncI18nData(noCache),
     loadScript(`${pluginCDN}/lib/ssi-modal/ssi-modal.js`),
     initQueryData(),
@@ -58,6 +56,10 @@ module.exports = async function init() {
   // 初始化前置模块
   preference.set()
   mw.hook('wikipage.content').add(loadQuickDiff)
+  await Promise.all([
+    $.ready,
+    mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user']),
+  ])
   articleLink()
   updateNotice()
 
