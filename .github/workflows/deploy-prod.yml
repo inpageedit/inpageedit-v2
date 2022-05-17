@@ -77,7 +77,7 @@ jobs:
 
             ## OSS Management Panel
 
-            - https://oss.console.aliyun.com/bucket/oss-cn-hongkong/inpageedit-dev/object?path=${{ env.dist_path }}
+            - https://oss.console.aliyun.com/bucket/oss-cn-hongkong/inpageedit-prod/object?path=${{ env.dist_path }}
 
       - name: Notify that the build was failed
         if: ${{ failure() }}

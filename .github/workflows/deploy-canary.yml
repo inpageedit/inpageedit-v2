@@ -6,7 +6,7 @@ on:
     branches:
       - master
     tags:
-      - '*'
+      - '*.*.*-*.*'
   pull_request:
     branches:
       - master
@@ -48,7 +48,6 @@ jobs:
           ossutil64 config -e https://oss-cn-hongkong.aliyuncs.com -i ${{ secrets.ALIYUN_ACCESS_KEY_ID }} -k ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
 
       - name: Upload to Aliyun oss
-        if: ${{ github.ref == 'refs/heads/master' }}
         run: |
           ossutil64 cp -r -u dist/ oss://inpageedit-dev/inpageedit-v2/${{ github.ref_name }}/
 
