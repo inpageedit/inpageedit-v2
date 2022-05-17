@@ -15,7 +15,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Notify the build step is starting
+        uses: hasura/comment-progress@v2.1.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          number: ${{ github.event.number }}
+          id: comment-progress
+          recreate: true
+          message: 'Starting deployment of this pull request...'
+
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -30,43 +39,56 @@ jobs:
           yarn install
           yarn build
 
-  deploy-aliyun-oss-latest-folder:
-    runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/master' }}
-    needs: build
-    steps:
-      - name: Upload to Aliyun oss
-        uses: Menci/upload-to-oss@beta-v3
-        with:
-          access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
-          access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
-          bucket: inpageedit-dev
-          endpoint: https://canary.ipe.wiki
-          local-path: dist
-          remote-path: inpageedit-v2/latest
+      # https://help.aliyun.com/document_detail/120072.htm
+      - name: Setup Aliyun OSS CLI
+        run: |
+          wget https://gosspublic.alicdn.com/ossutil/1.7.11/ossutil64
+          chmod 755 ossutil64
+          cp ./ossutil64 /usr/local/bin/
+          ossutil64 config -e https://oss-cn-hongkong.aliyuncs.com -i ${{ secrets.ALIYUN_ACCESS_KEY_ID }} -k ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
 
-  deploy-aliyun-oss-version-folder:
-    runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/') }}
-    needs: build
-    steps:
       - name: Upload to Aliyun oss
-        uses: Menci/upload-to-oss@beta-v3
-        with:
-          access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
-          access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
-          bucket: inpageedit-dev
-          endpoint: https://canary.ipe.wiki
-          local-path: dist
-          remote-path: inpageedit-v2/${{ github.ref_name }}
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          ossutil64 cp -r -u dist/ oss://inpageedit-dev/inpageedit-v2/${{ github.ref_name }}/
 
-  publish-npm:
-    runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/') }}
-    needs: build
-    steps:
       - name: Publish npm
+        if: ${{ startsWith(github.ref, 'refs/tags/') }}
         run: |
           npm publish --tag canary
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Notify that the build was successful
+        if: ${{ github.ref != 'refs/heads/master' }}
+        uses: hasura/comment-progress@v2.1.0
+        env:
+          dist_path: inpageedit-v2/${{ github.ref_name }}/
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          number: ${{ github.event.number }}
+          id: comment-progress
+          recreate: true
+          message: |
+            Successfully deployed to the following URLs:
+
+            ## Live preview
+
+            - https://canary.ipe.wiki/${{ env.dist_path }}
+            - https://dev.ipe.wiki/${{ env.dist_path }}
+
+            ## OSS Management Panel
+
+            - https://oss.console.aliyun.com/bucket/oss-cn-hongkong/inpageedit-dev/object?path=${{ env.dist_path }}
+
+      - name: Notify that the build was failed
+        if: ${{ failure() }}
+        uses: hasura/comment-progress@v2.1.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          number: ${{ github.event.number }}
+          id: comment-progress
+          message: ':x: Some errors occurred during the build process'
+          append: true
