@@ -70,8 +70,8 @@ var quickEdit = function (options) {
     delete options.jsonGet.page
     options.jsonGet.oldid = options.revision
     options.summaryRevision = `(${_msg(
-      'editor-summary-rivision'
-    )} [[Special:Diff/${options.revision}]])`
+      'editor-summary-revision'
+    )} [[Special:Redirect/revision/${options.revision}]])`
   }
   if (options.section && options.section !== 'new') {
     options.jsonGet.section = options.section
