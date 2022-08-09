@@ -71,7 +71,7 @@ var quickEdit = function (options) {
     options.jsonGet.oldid = options.revision
     options.summaryRevision = `(${_msg(
       'editor-summary-revision'
-    )} [[Special:Redirect/revision/${options.revision}]])`
+    )} [[Special:Permalink/${options.revision}]])`
   }
   if (options.section && options.section !== 'new') {
     options.jsonGet.section = options.section
