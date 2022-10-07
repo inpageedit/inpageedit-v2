@@ -111,7 +111,7 @@ var quickEdit = function (options) {
           href: 'javascript:;',
           class: 'detailBtn',
           id: 'showImages',
-          text: _msg('editor-detail-button-images'),
+          text: _msg('editor-detail-button-files'),
         }),
         ' | ',
         $('<a>', {
@@ -792,7 +792,7 @@ var quickEdit = function (options) {
         ssi_modal.show({
           className: 'in-page-edit quick-edit-detail',
           sizeClass: 'dialog',
-          title: _msg('editor-detail-title-images'),
+          title: _msg('editor-detail-title-files'),
           content,
         })
         break
