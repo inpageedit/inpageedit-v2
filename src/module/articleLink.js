@@ -13,9 +13,9 @@ const { getParamValue } = mw.util
 function articleLink(el) {
   if (!el) {
     if (preference.get('redLinkQuickEdit') === true) {
-      el = $('#mw-content-text a')
+      el = $('#mw-content-text a, #firstHeading a')
     } else {
-      el = $('#mw-content-text a:not(.new)')
+      el = $('#mw-content-text a:not(.new), #firstHeading a:not(.new)')
     }
   }
   /** @type {JQuery<HTMLAnchorElement>} */
