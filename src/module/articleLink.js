@@ -39,7 +39,7 @@ function articleLink(el) {
       wikiUrl = `${location.protocol}//${config.wgServer.split('//').pop()}`
 
     // 不是本地编辑链接
-    if (!url.startsWith(wikiUrl)) {
+    if (!url.startsWith(wikiUrl) && !url.startsWith(location.origin)) {
       return
     }
 
@@ -56,7 +56,7 @@ function articleLink(el) {
     if (title === null && ['edit', 'editsource'].includes(action)) {
       let articlePath = config.wgArticlePath.replace('$1', '')
       // 掐头去尾，获取包含文章路径的字符串
-      title = url.slice(wikiUrl.length).split('?')[0]
+      title = url.slice((url.startsWith(wikiUrl) ? wikiUrl : location.origin).length).split('?')[0]
       // 去除文章路径，之所以这么处理是因为文章路径有可能是 /
       title = title.split(articlePath).slice(1).join(articlePath)
     }
