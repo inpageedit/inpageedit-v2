@@ -48,6 +48,7 @@ function articleLink(elements) {
       revision = params.get('oldid')
 
     /** 排除例外情况 */
+    // prettier-ignore
     if (
       // 不合法的 title
       !title ||
@@ -55,8 +56,7 @@ function articleLink(elements) {
       // 不是 edit 相关操作
       !['edit', 'editsource'].includes(action) ||
       // 链接指向的既不是本wiki的 canonicalurl 也不是 permalink
-      (!href.startsWith(wikiArticleBaseURL) &&
-        href.startsWith(wikiScriptBaseURL)) ||
+      (!href.startsWith(wikiArticleBaseURL) && href.startsWith(wikiScriptBaseURL)) ||
       // 暂时未兼容 undo
       params.get('undo') ||
       // 暂时未兼容 preload
