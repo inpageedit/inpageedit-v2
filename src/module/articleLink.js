@@ -18,9 +18,9 @@ function articleLink(elements) {
   }
   /** @type {JQuery<HTMLAnchorElement>} */
   const $elements = $(elements)
-  $elements.each(function (_, el) {
+  $elements.each(function (_, anchor) {
     // 排除异常
-    const rawHref = el.getAttribute('href')
+    const rawHref = anchor.getAttribute('href')
     if (
       !rawHref ||
       rawHref.startsWith('#') ||
@@ -37,12 +37,12 @@ function articleLink(elements) {
       wikiScriptBaseURL = `${wikiBaseURL}${config.wgScriptPath}`
     // 缓存链接相关变量
     // prettier-ignore
-    const href = el.href,
-      url = new URL(href),
-      params = url.searchParams,
+    const href = anchor.href,
+      anchorURL = new URL(href),
+      params = anchorURL.searchParams,
       action = params.get('action') || params.get('veaction'),
       title = params.get('title') ||
-              decodeURI(url.pathname.substring(articlePath.length)) ||
+              decodeURI(anchorURL.pathname.substring(articlePath.length)) ||
               null,
       section = params.get('section')?.replace(/^T-/, '') || null,
       revision = params.get('oldid')
@@ -87,8 +87,7 @@ function articleLink(elements) {
       })
     )
 
-    el.classList.add('ipe-articleLink-resolved')
-    el.insertAdjacentElement('afterend', $editLink.get(0))
+    $(anchor).addClass('ipe-articleLink-resolved').after($editLink)
   })
 }
 
