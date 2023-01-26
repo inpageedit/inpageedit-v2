@@ -29,27 +29,34 @@ function articleLink(elements) {
       return
     }
 
-    // 缓存变量
+    // 缓存wiki相关变量
+    // prettier-ignore
+    const articlePath = config.wgArticlePath.replace('$1', ''),
+      wikiBaseURL = `${location.protocol}//${config.wgServer.split('//')[1]}`,
+      wikiArticleBaseURL = `${wikiBaseURL}${articlePath}`,
+      wikiScriptBaseURL = `${wikiBaseURL}${config.wgScriptPath}`
+    // 缓存链接相关变量
+    // prettier-ignore
     const href = el.href,
       url = new URL(href),
-      wikiURL = new URL(config.wgServer),
       params = url.searchParams,
       action = params.get('action') || params.get('veaction'),
-      // prettier-ignore
       title = params.get('title') ||
-              decodeURI(url.pathname.substring(config.wgArticlePath.replace('$1', '').length)) ||
+              decodeURI(url.pathname.substring(articlePath.length)) ||
               null,
       section = params.get('section')?.replace(/^T-/, '') || null,
       revision = params.get('oldid')
 
     /** 排除例外情况 */
     if (
-      // 未能取得 title
+      // 不合法的 title
       !title ||
+      title.endsWith('.php') ||
       // 不是 edit 相关操作
       !['edit', 'editsource'].includes(action) ||
-      // 链接的地址与wiki地址和标签页地址均不一致，不是本wiki的链接
-      ![wikiURL.host, location.host].includes(url.host) ||
+      // 链接指向的既不是本wiki的 canonicalurl 也不是 permalink
+      (!href.startsWith(wikiArticleBaseURL) &&
+        href.startsWith(wikiScriptBaseURL)) ||
       // 暂时未兼容 undo
       params.get('undo') ||
       // 暂时未兼容 preload
