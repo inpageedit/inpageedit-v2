@@ -33,12 +33,12 @@ function articleLink(elements) {
     const href = el.href,
       url = new URL(href),
       wikiURL = new URL(config.wgServer),
-      params = new URLSearchParams(url.searchParams),
+      params = url.searchParams,
       action = params.get('action') || params.get('veaction'),
-      title =
-        params.get('title') ||
-        url.pathname.substring(config.wgArticlePath.replace('$1', '').length) ||
-        null,
+      // prettier-ignore
+      title = params.get('title') ||
+              decodeURI(url.pathname.substring(config.wgArticlePath.replace('$1', '').length)) ||
+              null,
       section = params.get('section')?.replace(/^T-/, '') || null,
       revision = params.get('oldid')
 
