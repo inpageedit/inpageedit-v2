@@ -9,7 +9,7 @@ function loadStyles(purge) {
     // ssi-modal Style
     `${pluginCDN}/lib/ssi-modal/ssi-modal.css`,
     // FontAwesome
-    'https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css',
+    'https://fastly.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css',
   ]
 
   styleFiles.forEach((link) => {

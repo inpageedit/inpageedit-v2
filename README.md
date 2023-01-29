@@ -13,7 +13,13 @@
 在*个人 JS 页*添加以下代码：
 
 ```javascript
-mw.loader.load("https://cdn.jsdelivr.net/npm/mediawiki-inpageedit@latest/dist/InPageEdit.min.js");
+/**
+ * 从下面的方法中任选一个即可 Choose one from the following
+ */
+// 1. jsdelivr
+mw.loader.load('https://cdn.jsdelivr.net/npm/mediawiki-inpageedit')
+// 2. unpkg
+mw.loader.load('https://unpkg.com/mediawiki-inpageedit')
 ```
 
 **注意**：在保存之后，您可能需要清除浏览器缓存才能看到所作出的变更的影响。

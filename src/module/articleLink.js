@@ -4,89 +4,90 @@ const { _msg } = require('./_msg')
 const { preference } = require('./preference')
 const { quickEdit } = require('./quickEdit')
 
-const { getParamValue } = mw.util
-
 /**
  * @module articleLink 获取段落编辑以及编辑链接
- * @param {string | HTMLAnchorElement | JQuery<HTMLAnchorElement>} el Anchors to inject edit links
+ * @param {string | HTMLAnchorElement | JQuery<HTMLAnchorElement>} elements Anchors to inject edit links
  */
-function articleLink(el) {
-  if (!el) {
+function articleLink(elements) {
+  if (!elements) {
     if (preference.get('redLinkQuickEdit') === true) {
-      el = $('#mw-content-text a')
+      elements = $('#mw-content-text a, #firstHeading a')
     } else {
-      el = $('#mw-content-text a:not(.new)')
+      elements = $('#mw-content-text a:not(.new), #firstHeading a:not(.new)')
     }
   }
   /** @type {JQuery<HTMLAnchorElement>} */
-  const $el = $(el)
-  $el.each(function (_, item) {
-    const $this = $(item)
+  const $elements = $(elements)
+  $elements.each(function (_, anchor) {
+    // 排除异常
+    const rawHref = anchor.getAttribute('href')
     if (
-      $this.attr('href') === undefined ||
-      $this.attr('href').startsWith('#')
+      !rawHref ||
+      rawHref.startsWith('#') ||
+      rawHref.startsWith('javascript:')
     ) {
       return
     }
-    // element.href必定带protocol
-    let url = $this.get(0).href,
-      action = getParamValue('action', url) || getParamValue('veaction', url),
-      title = getParamValue('title', url),
-      section = getParamValue('section', url)
-        ? getParamValue('section', url).replace(/T-/, '')
-        : null,
-      revision = getParamValue('oldid', url),
-      wikiUrl = `${location.protocol}//${config.wgServer.split('//').pop()}`
 
-    // 不是本地编辑链接
-    if (!url.startsWith(wikiUrl)) {
+    // 缓存wiki相关变量
+    // prettier-ignore
+    const articlePath = config.wgArticlePath.replace('$1', ''),
+      wikiBaseURL = `${location.protocol}//${config.wgServer.split('//')[1]}`,
+      wikiArticleBaseURL = `${wikiBaseURL}${articlePath}`,
+      wikiScriptBaseURL = `${wikiBaseURL}${config.wgScriptPath}`
+    // 缓存链接相关变量
+    // prettier-ignore
+    const href = anchor.href,
+      anchorURL = new URL(href),
+      params = anchorURL.searchParams,
+      action = params.get('action') || params.get('veaction'),
+      title = params.get('title') ||
+              decodeURI(anchorURL.pathname.substring(articlePath.length)) ||
+              null,
+      section = params.get('section')?.replace(/^T-/, '') || null,
+      revision = params.get('oldid')
+
+    /** 排除例外情况 */
+    // prettier-ignore
+    if (
+      // 不合法的 title
+      !title ||
+      title.endsWith('.php') ||
+      // 不是 edit 相关操作
+      !['edit', 'editsource'].includes(action) ||
+      // 链接指向的既不是本wiki的 canonicalurl 也不是 permalink
+      (!href.startsWith(wikiArticleBaseURL) && href.startsWith(wikiScriptBaseURL)) ||
+      // 暂时未兼容 undo
+      params.get('undo') ||
+      // 暂时未兼容 preload
+      params.get('preload')
+    ) {
       return
     }
 
-    // 暂时屏蔽 undo
-    if (getParamValue('undo', url)) {
-      return
-    }
-    // @FIXME 暂时屏蔽 preload，应在后面的版本中支持
-    if (getParamValue('preload', url)) {
-      return
-    }
+    const $editLink = $('<span>', {
+      class: 'in-page-edit-article-link-group',
+    }).append(
+      $('<a>', {
+        href: 'javascript:;',
+        class: 'in-page-edit-article-link',
+        text: _msg('quick-edit'),
+      }).on('click', function () {
+        var options = {}
+        options.page = title
+        if (revision !== null) {
+          options.revision = revision
+        } else if (section !== null) {
+          options.section = section
+        }
+        if (!config.wgIsArticle) {
+          options.reload = false
+        }
+        quickEdit(options)
+      })
+    )
 
-    // 不是 index.php?title=FOO 形式的url
-    if (title === null && ['edit', 'editsource'].includes(action)) {
-      let articlePath = config.wgArticlePath.replace('$1', '')
-      // 掐头去尾，获取包含文章路径的字符串
-      title = url.slice(wikiUrl.length).split('?')[0]
-      // 去除文章路径，之所以这么处理是因为文章路径有可能是 /
-      title = title.split(articlePath).slice(1).join(articlePath)
-    }
-
-    // 解码 URL
-    title = decodeURIComponent(title)
-
-    if (['edit', 'editsource'].includes(action) && title !== undefined) {
-      $this.addClass('ipe-articleLink-resolved').after(
-        $('<span>', {
-          class: 'in-page-edit-article-link-group',
-        }).append(
-          $('<a>', {
-            href: 'javascript:void(0)',
-            class: 'in-page-edit-article-link',
-            text: _msg('quick-edit'),
-          }).on('click', function () {
-            var options = {}
-            options.page = title
-            if (revision !== null) {
-              options.revision = revision
-            } else if (section !== null) {
-              options.section = section
-            }
-            if (!config.wgIsArticle) options.reload = false
-            quickEdit(options)
-          })
-        )
-      )
-    }
+    $(anchor).addClass('ipe-articleLink-resolved').after($editLink)
   })
 }
 
