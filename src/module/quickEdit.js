@@ -224,6 +224,7 @@ var quickEdit = function (options) {
         side: 'left',
         label: _msg('editor-button-save'),
         className: 'btn btn-primary leftBtn hideBeforeLoaded save-btn',
+        keyPress: 'ctrl-s',
         method(e, modal) {
           console.log({
             title: $newSectionTitleInput.val(),
@@ -330,6 +331,7 @@ var quickEdit = function (options) {
       {
         label: _msg('cancel'),
         className: 'btn btn-danger',
+        keyPress: 'escape',
         method(e, modal) {
           modal.close()
         },
