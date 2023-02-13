@@ -70,8 +70,8 @@ var quickEdit = function (options) {
     delete options.jsonGet.page
     options.jsonGet.oldid = options.revision
     options.summaryRevision = `(${_msg(
-      'editor-summary-rivision'
-    )} [[Special:Diff/${options.revision}]])`
+      'editor-summary-revision'
+    )} [[Special:Permalink/${options.revision}]])`
   }
   if (options.section && options.section !== 'new') {
     options.jsonGet.section = options.section
@@ -111,7 +111,7 @@ var quickEdit = function (options) {
           href: 'javascript:;',
           class: 'detailBtn',
           id: 'showImages',
-          text: _msg('editor-detail-button-images'),
+          text: _msg('editor-detail-button-files'),
         }),
         ' | ',
         $('<a>', {
@@ -224,6 +224,7 @@ var quickEdit = function (options) {
         side: 'left',
         label: _msg('editor-button-save'),
         className: 'btn btn-primary leftBtn hideBeforeLoaded save-btn',
+        keyPress: 'ctrl-s',
         method(e, modal) {
           console.log({
             title: $newSectionTitleInput.val(),
@@ -330,6 +331,7 @@ var quickEdit = function (options) {
       {
         label: _msg('cancel'),
         className: 'btn btn-danger',
+        keyPress: 'escape',
         method(e, modal) {
           modal.close()
         },
@@ -792,7 +794,7 @@ var quickEdit = function (options) {
         ssi_modal.show({
           className: 'in-page-edit quick-edit-detail',
           sizeClass: 'dialog',
-          title: _msg('editor-detail-title-images'),
+          title: _msg('editor-detail-title-files'),
           content,
         })
         break

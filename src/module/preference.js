@@ -159,7 +159,7 @@ const preference = {
     }).append(
       $('<section>', { id: 'editor' }).append(
         $('<h3>', { text: _msg('preference-editor-title') }),
-        $('<h4>', { text: _msg('preference-editHobits-label') }),
+        $('<h4>', { text: _msg('preference-editHobbies-label') }),
         $('<label>').append(
           $('<input>', { type: 'checkbox', id: 'editMinor' }),
           $('<span>', { text: _msg('preference-setMinor') })

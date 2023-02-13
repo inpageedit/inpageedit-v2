@@ -109,6 +109,10 @@ const loadQuickDiff = function (container) {
       $('<button>')
         .text(_msg('quick-diff'))
         .on('click', function (e) {
+          if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
+            return
+          }
+
           e.preventDefault()
           _analytics('quick_diff_history_page')
           const before = $('.selected.before').attr('data-mw-revid'),
