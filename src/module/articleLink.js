@@ -23,8 +23,7 @@ function articleLink(elements) {
     const rawHref = anchor.getAttribute('href')
     if (
       !rawHref ||
-      rawHref.startsWith('#') ||
-      rawHref.startsWith('javascript:')
+      /^(?:#|javascript:|vbscript:|data:)/i.test(rawHref)
     ) {
       return
     }
