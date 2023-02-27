@@ -23,27 +23,34 @@ function articleLink(elements) {
     const rawHref = anchor.getAttribute('href')
     if (
       !rawHref ||
-      rawHref.startsWith('#') ||
-      rawHref.startsWith('javascript:')
+      /^(?:#|javascript:|vbscript:|data:)/i.test(rawHref)
     ) {
       return
     }
 
     // 缓存wiki相关变量
-    // prettier-ignore
-    const articlePath = config.wgArticlePath.replace('$1', ''),
+    const href = anchor.href,
+      articlePath = config.wgArticlePath.replace('$1', ''),
       wikiBaseURL = `${location.protocol}//${config.wgServer.split('//')[1]}`,
       wikiArticleBaseURL = `${wikiBaseURL}${articlePath}`,
       wikiScriptBaseURL = `${wikiBaseURL}${config.wgScriptPath}`
+
+    // 链接指向的既不是本wiki的 canonicalurl 也不是 permalink
+    if (
+      !href.startsWith(wikiArticleBaseURL) &&
+      !href.startsWith(wikiScriptBaseURL)
+    ) {
+      return
+    }
+
     // 缓存链接相关变量
-    // prettier-ignore
-    const href = anchor.href,
-      anchorURL = new URL(href),
+    const anchorURL = new URL(href),
       params = anchorURL.searchParams,
       action = params.get('action') || params.get('veaction'),
-      title = params.get('title') ||
-              decodeURI(anchorURL.pathname.substring(articlePath.length)) ||
-              null,
+      title =
+        params.get('title') ||
+        decodeURI(anchorURL.pathname.substring(articlePath.length)) ||
+        null,
       section = params.get('section')?.replace(/^T-/, '') || null,
       revision = params.get('oldid')
 
@@ -51,12 +58,9 @@ function articleLink(elements) {
     // prettier-ignore
     if (
       // 不合法的 title
-      !title ||
-      title.endsWith('.php') ||
+      !title || title.endsWith('.php') ||
       // 不是 edit 相关操作
       !['edit', 'editsource'].includes(action) ||
-      // 链接指向的既不是本wiki的 canonicalurl 也不是 permalink
-      !(href.startsWith(wikiArticleBaseURL) || href.startsWith(wikiScriptBaseURL)) ||
       // 暂时未兼容 undo
       params.get('undo') ||
       // 暂时未兼容 preload
