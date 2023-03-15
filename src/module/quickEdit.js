@@ -224,6 +224,7 @@ var quickEdit = function (options) {
         side: 'left',
         label: _msg('editor-button-save'),
         className: 'btn btn-primary leftBtn hideBeforeLoaded save-btn',
+        keyPress: 'ctrl-s',
         method(e, modal) {
           console.log({
             title: $newSectionTitleInput.val(),
