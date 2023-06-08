@@ -5,6 +5,7 @@
   "main": "dist/InPageEdit.min.js",
   "devDependencies": {
     "@dragon-fish/bump": "^0.0.15",
+    "@types/node": "^18",
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.3",
     "eslint": "^8.32.0",
