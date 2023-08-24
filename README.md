@@ -41,8 +41,8 @@ mw.loader.load('https://unpkg.com/mediawiki-inpageedit')
 - Nederlands (nl)
 - Polski (pl)
 - Português do Brasil (pt-br)
-- ‪**中文(简体)‬ (zh-hans)**
-- 中文(繁體)‬ (zh-hant)
+- **中文(简体) (zh-hans)**
+- 中文(繁體) (zh-hant)
 
 Help us to translate InPageEdit~
 
