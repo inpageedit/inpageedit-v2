@@ -3,6 +3,18 @@
   "version": "14.3.5",
   "description": "A useful MediaWiki JavaScript Plugin written with jQuery",
   "main": "dist/InPageEdit.min.js",
+  "scripts": {
+    "build": "npm run lint && npm run clear && run-p \"build:*\"",
+    "build:full": "webpack",
+    "build:compressed": "cross-env MINIFY=1 webpack",
+    "lint": "eslint ./src",
+    "dev": "webpack serve",
+    "clear": "rimraf dev dist",
+    "pretty": "prettier --write ./src"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "devDependencies": {
     "@dragon-fish/bump": "^0.0.15",
     "@types/node": "^18",
@@ -18,28 +30,19 @@
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
   },
-  "scripts": {
-    "build": "npm run lint && npm run clear && run-p \"build:*\"",
-    "build:full": "webpack",
-    "build:compressed": "cross-env MINIFY=1 webpack",
-    "lint": "eslint ./src",
-    "dev": "webpack serve",
-    "clear": "rimraf dev dist",
-    "pretty": "prettier --write ./src"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/inpageedit/inpageedit-v2.git"
-  },
+  "author": "Dragon-Fish",
+  "license": "GPL-3.0-or-later",
   "keywords": [
     "mediawiki",
     "mediawiki-gadget",
     "inpageedit"
   ],
-  "author": "Dragon-Fish",
-  "license": "GPL-3.0-or-later",
+  "homepage": "https://www.ipe.wiki/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inpageedit/inpageedit-v2.git"
+  },
   "bugs": {
     "url": "https://github.com/inpageedit/inpageedit-v2/issues"
-  },
-  "homepage": "https://www.ipe.wiki/"
+  }
 }
