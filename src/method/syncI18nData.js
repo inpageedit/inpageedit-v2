@@ -1,10 +1,10 @@
-import _dir from './_dir'
+import { resolvePath } from './_dir'
 
 const config = mw.config.get()
 
 // 设置
 const cacheTime = 2 * 60 * 60 * 1000
-const cacheUrl = _dir + '/i18n/languages.json'
+const cacheUrl = resolvePath('/i18n/languages.json')
 const funcName = 'InPageEdit'
 const localCacheName = 'i18n-cache-' + funcName + '-content'
 const localCacheTime = 'i18n-cache-' + funcName + '-timestamp'

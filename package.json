@@ -4,6 +4,10 @@
   "description": "A useful MediaWiki JavaScript Plugin written with jQuery",
   "main": "dist/InPageEdit.min.js",
   "type": "module",
+  "files": [
+    "dist",
+    "i18n"
+  ],
   "scripts": {
     "build": "npm run lint && npm run clear && run-p \"build:*\"",
     "build:full": "vite build",

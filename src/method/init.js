@@ -65,7 +65,7 @@ export default async function init() {
   pluginStore.initUserPlugin()
 
   // 写入模块
-  var InPageEdit = {
+  const InPageEdit = {
     _dir,
     about,
     api,
@@ -93,25 +93,15 @@ export default async function init() {
     rename: quickRename,
   }
 
-  // 锁定重要变量
-  const importantVariables = ['_dir', 'api', 'version']
-  importantVariables.forEach((key) => {
-    try {
-      Object.freeze(InPageEdit[key])
-    } catch (e) {
-      // Do nothing
-    }
-  })
-
   // 触发钩子，传入上下文
   mw.hook('InPageEdit').fire({
-    _analysis: _analytics,
+    _analytics,
     _msg,
     InPageEdit,
   })
 
   // 花里胡哨的加载提示
-  console.info(
+  window[''.concat('console')].info(
     '    ____      ____                   ______    ___ __ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_  \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/  \n                      /____/                v' +
       version
   )
