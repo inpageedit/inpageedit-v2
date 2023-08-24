@@ -1,21 +1,22 @@
 'use strict'
-const process = require('process')
-const path = require('path')
 
-const { MINIFY } = process.env
+const { env } = require('process')
+const { resolve } = require('path')
+
+const { MINIFY } = env
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
   entry: {
     InPageEdit: './src/index.js',
   },
-  context: path.resolve(__dirname),
+  context: resolve(__dirname),
   watchOptions: {
     ignored: /(node_modules|dist)/,
   },
   mode: MINIFY ? 'production' : 'development',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: resolve(__dirname, 'dist'),
     filename: MINIFY ? '[name].min.js' : '[name].js',
   },
   module: {

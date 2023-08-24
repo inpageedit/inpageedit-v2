@@ -1,12 +1,19 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ES2019",
+    "module": "ESNext",
     "moduleResolution": "node",
     "strict": true,
     "jsx": "preserve",
     "sourceMap": true,
-    "lib": ["esnext", "dom"]
+    "types": ["node"],
+    "lib": ["ESNext", "DOM"]
   },
-  "include": ["./node_modules/types-mediawiki"]
+  "include": [
+    "./node_modules/types-mediawiki",
+    "./src",
+    "./webpack.*.js",
+    "webpack.config.cjs"
+  ],
+  "exclude": ["node_modules", "lib", "**/dist"]
 }
