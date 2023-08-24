@@ -441,7 +441,7 @@ var quickEdit = function (options) {
         $editArea.val(options.editText + '\n')
 
         var summaryVal
-        if (options.section !== null && options.section !== 'new') {
+        if (options.section && options.section !== 'new') {
           summaryVal = $optionsLabel.find('.editSummary').val()
           summaryVal = summaryVal.replace(
             /\$section/gi,
