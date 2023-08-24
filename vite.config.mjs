@@ -1,5 +1,7 @@
 import { defineConfig } from 'vite'
 
+const { MINIFY } = process.env
+
 export default defineConfig({
   build: {
     target: 'es2020',
@@ -8,10 +10,13 @@ export default defineConfig({
       name: 'InPageEditImport',
       fileName: (format, entryName) => {
         console.info('lib build', format, entryName)
-        return `InPageEdit.js`
+        return `InPageEdit${MINIFY ? '.min' : ''}.js`
       },
       formats: ['umd'],
     },
+    minify: !!MINIFY,
+    emptyOutDir: false,
+    sourcemap: true,
   },
   server: {
     host: true,

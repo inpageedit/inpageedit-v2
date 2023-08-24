@@ -1,4 +1,4 @@
 *.dev.*
 dist
 ssi_modal
-webpack.*
+*.config.*
