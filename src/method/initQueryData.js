@@ -5,7 +5,7 @@ const mwApi = new mw.Api({
   },
 })
 
-async function initQueryData() {
+export async function initQueryData() {
   // Init
   mw.config.set('wgUserRights', [])
   mw.config.set('wgUserIsBlocked', false)
@@ -32,8 +32,4 @@ async function initQueryData() {
   mw.config.set('wgSpecialPageAliases', specialpagealiases)
 
   return { users, userinfo, specialpagealiases }
-}
-
-module.exports = {
-  initQueryData,
 }

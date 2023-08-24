@@ -1,10 +1,10 @@
-// const api = require('./api.json');
-const { _msg } = require('./_msg')
+// import api from './api.json';
+import { _msg } from './_msg'
 
 /**
  * @module specialNotice 特别通知
  */
-var specialNotice = function () {
+export function specialNotice() {
   ssi_modal.notify(
     'dialog',
     {
@@ -21,8 +21,4 @@ var specialNotice = function () {
       modal.close()
     }
   )
-}
-
-module.exports = {
-  specialNotice,
 }

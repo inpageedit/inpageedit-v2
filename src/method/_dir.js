@@ -29,4 +29,4 @@ const getDir = (src = '') => {
  */
 const _dir = getDir(document?.currentScript?.src)
 
-module.exports = _dir
+export { _dir as default, getDir }

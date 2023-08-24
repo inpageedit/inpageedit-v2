@@ -1,15 +1,16 @@
+import { _analysis } from './_analytics'
+import { _msg } from './_msg'
+import { _hasRight } from './_hasRight'
+import { $br } from './_elements'
+
 var mwApi = new mw.Api()
 var config = mw.config.get()
-const { _analytics: _analysis } = require('./_analytics')
-const { _msg } = require('./_msg')
-const { _hasRight } = require('./_hasRight')
-const { $br } = require('./_elements')
 
 /**
  * @module quickDelete 删除页面模块
  * @param {String} page
  */
-var quickDelete = function (page, givenReason = '') {
+export function quickDelete(page, givenReason = '') {
   mw.hook('InPageEdit.quickDelete').fire()
   console.log('Quick delete', page, givenReason)
   var reason
@@ -127,8 +128,4 @@ var quickDelete = function (page, givenReason = '') {
       },
     ],
   })
-}
-
-module.exports = {
-  quickDelete,
 }

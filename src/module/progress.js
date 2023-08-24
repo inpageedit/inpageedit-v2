@@ -1,6 +1,5 @@
-const { _msg } = require('./_msg')
-
-const { $progress } = require('./_elements.js')
+import { _msg } from './_msg'
+import { $progress } from './_elements.js'
 
 /**
  * @module progress 载入中模块
@@ -11,7 +10,7 @@ const { $progress } = require('./_elements.js')
  * - false: Close top progress box
  * - String: Show new progress box with title
  */
-var progress = function (title) {
+export function progress(title) {
   if (title === true) {
     $('.in-page-edit.loadingbox .ssi-modalTitle').html(_msg('done'))
     $('.in-page-edit.loadingbox .ipe-progress').addClass('done')
@@ -35,8 +34,4 @@ var progress = function (title) {
       outSideClose: false,
     })
   }
-}
-
-module.exports = {
-  progress,
 }

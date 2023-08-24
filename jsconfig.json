@@ -12,8 +12,8 @@
   "include": [
     "./node_modules/types-mediawiki",
     "./src",
-    "./webpack.*.js",
-    "webpack.config.cjs"
+    "webpack.config.cjs",
+    "vite.config.mjs"
   ],
   "exclude": ["node_modules", "lib", "**/dist"]
 }

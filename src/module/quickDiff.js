@@ -1,15 +1,15 @@
 var mwApi = new mw.Api()
 
-const { _analytics: _analysis } = require('./_analytics')
-const { _msg } = require('./_msg')
-
-const { $br, $progress } = require('./_elements')
+import { _analysis } from './_analytics'
+import { _msg } from './_msg'
+import { $br, $progress } from './_elements'
+import { articleLink } from './articleLink'
 
 /**
  * @module quickDiff 快速页面差异模块
  * @param {Object} param standard MediaWiki API params
  */
-var quickDiff = function (param) {
+export function quickDiff(param) {
   mw.hook('InPageEdit.quickDiff').fire()
   _analysis('quick_diff')
   mw.loader.load(['mediawiki.legacy.shared', 'mediawiki.diff.styles'])
@@ -213,7 +213,7 @@ var quickDiff = function (param) {
           diff: data.compare.torevid,
         })
       })
-      require('./articleLink').articleLink($quickDiff.find('.editLink'))
+      articleLink($quickDiff.find('.editLink'))
       if (param.isPreview === true) {
         $quickDiff.find('button.toDiffPage').hide()
         $diffArea
@@ -305,8 +305,4 @@ var quickDiff = function (param) {
         $diffArea.show().html(_msg('diff-error'))
       }
     })
-}
-
-module.exports = {
-  quickDiff,
 }

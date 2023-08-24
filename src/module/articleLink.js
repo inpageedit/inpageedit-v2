@@ -1,14 +1,14 @@
-var config = mw.config.get()
-const { _msg } = require('./_msg')
+import { _msg } from './_msg'
+import { preference } from './preference'
+import { quickEdit } from './quickEdit'
 
-const { preference } = require('./preference')
-const { quickEdit } = require('./quickEdit')
+const config = mw.config.get()
 
 /**
  * @module articleLink 获取段落编辑以及编辑链接
  * @param {string | HTMLAnchorElement | JQuery<HTMLAnchorElement>} elements Anchors to inject edit links
  */
-function articleLink(elements) {
+export function articleLink(elements) {
   if (!elements) {
     if (preference.get('redLinkQuickEdit') === true) {
       elements = $('#mw-content-text a, #firstHeading a')
@@ -21,10 +21,7 @@ function articleLink(elements) {
   $elements.each(function (_, anchor) {
     // 排除异常
     const rawHref = anchor.getAttribute('href')
-    if (
-      !rawHref ||
-      /^(?:#|javascript:|vbscript:|data:)/i.test(rawHref)
-    ) {
+    if (!rawHref || /^(?:#|javascript:|vbscript:|data:)/i.test(rawHref)) {
       return
     }
 
@@ -93,8 +90,4 @@ function articleLink(elements) {
 
     $(anchor).addClass('ipe-articleLink-resolved').after($editLink)
   })
-}
-
-module.exports = {
-  articleLink,
 }

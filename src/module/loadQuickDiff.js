@@ -1,10 +1,10 @@
-const config = mw.config.get()
-const { _msg } = require('./_msg')
-const { _analytics } = require('./_analytics')
-const { getParamValue } = mw.util
+import { _msg } from './_msg'
+import { _analytics } from './_analytics'
+import { quickDiff } from './quickDiff'
+import { quickEdit } from './quickEdit'
 
-const { quickDiff } = require('./quickDiff')
-const { quickEdit } = require('./quickEdit')
+const config = mw.config.get()
+const { getParamValue } = mw.util
 
 function injectLinks(container) {
   $(container || '#mw-content-text')
@@ -95,7 +95,7 @@ function injectLinks(container) {
     })
 }
 
-const loadQuickDiff = function (container) {
+export function loadQuickDiff(container) {
   /**
    * 此处原本使用 setInterval 处理开启了自动刷新的最近更改带来的问题
    * 现发现 wikipage.content 钩子似乎会在列表刷新时触发，因此不再需要 setInterval
@@ -140,8 +140,4 @@ const loadQuickDiff = function (container) {
       )
     })
   }
-}
-
-module.exports = {
-  loadQuickDiff,
 }

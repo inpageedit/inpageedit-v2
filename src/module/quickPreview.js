@@ -1,13 +1,13 @@
-const { _msg } = require('./_msg')
-const { $progress } = require('./_elements')
+import { _msg } from './_msg'
+import { $progress } from './_elements'
 
-var mwApi = new mw.Api()
+const mwApi = new mw.Api()
 
 /**
  * @module quickPreview 快速预览文章页
  * @param params {Object}
  */
-var quickPreview = function (params, modalSize = 'large', center = false) {
+export function quickPreview(params, modalSize = 'large', center = false) {
   var defaultOptions = {
     action: 'parse',
     preview: true,
@@ -66,8 +66,4 @@ var quickPreview = function (params, modalSize = 'large', center = false) {
         })
     },
   })
-}
-
-module.exports = {
-  quickPreview,
 }

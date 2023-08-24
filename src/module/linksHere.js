@@ -2,12 +2,11 @@
  * @module linksHere
  */
 
-// const { quickEdit } = require('./quickEdit')
-const { _analytics } = require('./_analytics')
-const { $progress, $link } = require('./_elements')
-const { _msg } = require('./_msg')
-
-const { mwApi, config } = require('./util')
+// import { quickEdit } from './quickEdit'
+import { _analytics } from './_analytics'
+import { $progress, $link } from './_elements'
+import { _msg } from './_msg'
+import { mwApi, config } from './util'
 
 /**
  * @function isFile
@@ -72,7 +71,7 @@ const makeList = (list) => {
  * @module linksHere
  * @param {string} title page title
  */
-async function linksHere(title = config.wgPageName) {
+export async function linksHere(title = config.wgPageName) {
   _analytics('linkshere')
 
   if (!title || typeof title !== 'string') title = config.wgPageName
@@ -154,8 +153,4 @@ async function linksHere(title = config.wgPageName) {
     console.error('[InPageEdit] linksHere', '获取页面信息时出现问题', err)
     return err
   }
-}
-
-module.exports = {
-  linksHere,
 }

@@ -1,7 +1,7 @@
-const { pluginCDN } = require('../module/api')
-const _dir = require('./_dir')
+import { pluginCDN } from '../module/api'
+import _dir from './_dir'
 
-function loadStyles(purge) {
+export function loadStyles(purge) {
   // 放在越上面优先级越高
   const styleFiles = [
     // Default Skin
@@ -23,8 +23,4 @@ function loadStyles(purge) {
       $('<link>', { href: link, rel: 'stylesheet', 'data-ipe': 'style' })
     )
   })
-}
-
-module.exports = {
-  loadStyles,
 }
