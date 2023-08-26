@@ -5,7 +5,7 @@ var config = mw.config.get()
  * @param {String} right
  * @return {Boolean}
  */
-const _hasRight = function (right) {
+export const _hasRight = function (right) {
   if (config.wgUserIsBlocked === true) {
     return false
   }
@@ -14,8 +14,4 @@ const _hasRight = function (right) {
   } else {
     return false
   }
-}
-
-module.exports = {
-  _hasRight,
 }

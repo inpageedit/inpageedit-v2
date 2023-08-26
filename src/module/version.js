@@ -1,3 +1,2 @@
-const version = require('../../package.json').version
-
-module.exports = version
+import { version } from '../../package.json'
+export default version

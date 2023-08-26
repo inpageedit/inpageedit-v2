@@ -1,8 +1,7 @@
-const { _msg } = require('./_msg')
-const { _hasRight } = require('./_hasRight')
-
-const { quickDelete } = require('./quickDelete')
-const { quickEdit } = require('./quickEdit')
+import { _msg } from './_msg'
+import { _hasRight } from './_hasRight'
+import { quickDelete } from './quickDelete'
+import { quickEdit } from './quickEdit'
 
 /**
  * @module _resolveExists 解决目标页面已存在的问题
@@ -11,8 +10,8 @@ const { quickEdit } = require('./quickEdit')
  * @param {String} reason.delete 删除原因
  * @param {String} reason.edit 编辑原因
  */
-var _resolveExists = function (page, reason = {}) {
-  var canDelete = _hasRight('delete')
+export const _resolveExists = function (page, reason = {}) {
+  const canDelete = _hasRight('delete')
 
   if (typeof reason === 'string') {
     reason = {
@@ -65,8 +64,4 @@ var _resolveExists = function (page, reason = {}) {
       }
     },
   })
-}
-
-module.exports = {
-  _resolveExists,
 }

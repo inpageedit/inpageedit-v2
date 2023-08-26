@@ -1,12 +1,11 @@
-const { _msg } = require('./_msg')
-
-const { aboutUrl } = require('./api')
+import { _msg } from './_msg'
+import { aboutUrl } from './api'
 
 /**
  * @module about 关于插件模块
  * @description Show "What is" modal box of IPE2
  */
-var about = function () {
+export const about = function () {
   ssi_modal.show({
     title: _msg('preference-about-label'),
     className: 'in-page-edit in-page-edit-about',
@@ -17,8 +16,4 @@ var about = function () {
       })
     ),
   })
-}
-
-module.exports = {
-  about,
 }

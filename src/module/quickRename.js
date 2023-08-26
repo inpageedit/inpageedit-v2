@@ -1,20 +1,20 @@
-var mwApi = new mw.Api()
-var config = mw.config.get()
+import { _analysis } from './_analytics'
+import { _msg } from './_msg'
+import { _hasRight } from './_hasRight'
+import { _resolveExists } from './_resolveExists'
+import { $br } from './_elements'
 
-const { _analytics: _analysis } = require('./_analytics')
-const { _msg } = require('./_msg')
-const { _hasRight } = require('./_hasRight')
-const { _resolveExists } = require('./_resolveExists')
-const { $br } = require('./_elements')
+import { progress } from './progress'
 
-const { progress } = require('./progress')
+const mwApi = new mw.Api()
+const config = mw.config.get()
 
 /**
  * @module quickRename 快速重命名模块
  * @param {String} from
  * @param {String} to
  */
-var quickRename = function (from, to) {
+export function quickRename(from, to) {
   mw.hook('InPageEdit.quickRename').fire()
   from = from || config.wgPageName
   to = to || ''
@@ -58,7 +58,11 @@ var quickRename = function (from, to) {
       $br,
 
       $('<label>').append(
-        $('<input>', { type: 'checkbox', id: 'noredirect', disabled: !_hasRight('suppressredirect') }),
+        $('<input>', {
+          type: 'checkbox',
+          id: 'noredirect',
+          disabled: !_hasRight('suppressredirect'),
+        }),
         $('<span>', { text: _msg('rename-noredirect') })
       )
     ),
@@ -160,8 +164,4 @@ var quickRename = function (from, to) {
       }
     },
   })
-}
-
-module.exports = {
-  quickRename,
 }

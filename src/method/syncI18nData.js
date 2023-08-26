@@ -1,10 +1,10 @@
-var config = mw.config.get()
+import { resolvePath } from './_dir'
 
-const _dir = require('./_dir')
+const config = mw.config.get()
 
 // 设置
 const cacheTime = 2 * 60 * 60 * 1000
-const cacheUrl = _dir + '/i18n/languages.json'
+const cacheUrl = resolvePath('/i18n/languages.json')
 const funcName = 'InPageEdit'
 const localCacheName = 'i18n-cache-' + funcName + '-content'
 const localCacheTime = 'i18n-cache-' + funcName + '-timestamp'
@@ -13,7 +13,7 @@ const localCacheTime = 'i18n-cache-' + funcName + '-timestamp'
  * @method i18n Get i18n data
  * @param {Boolean} noCache true - forced no cache
  */
-async function syncI18nData(noCache) {
+export async function syncI18nData(noCache) {
   const now = new Date().getTime()
   // 如果语言为 qqx，不返回任何东西
   if (config.wgUserLanguage === 'qqx') {
@@ -70,8 +70,4 @@ async function getOriginalData() {
   saveToCache(data)
   console.timeEnd('[InPageEdit] 从远程获取 i18n 数据')
   return data
-}
-
-module.exports = {
-  syncI18nData,
 }

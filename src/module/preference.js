@@ -1,24 +1,24 @@
-var InPageEdit = window.InPageEdit || {}
-var config = mw.config.get()
-
-// const { _analytics } = require('./_analytics')
-const { _msg } = require('./_msg')
-const { $br, $hr, $progress, $link } = require('./_elements')
-
-const {
+// import { _analytics } from './_analytics'
+import { _msg } from './_msg'
+import { $br, $hr, $progress, $link } from './_elements'
+import {
   githubLink,
   pluginGithub,
   analyticsApi,
   analyticsDash,
   pluginCDN,
-} = require('./api')
-const version = require('./version')
-const { pluginStore } = require('./pluginStore')
+} from './api'
+import version from './version'
+import { pluginStore } from './pluginStore'
+import { _analytics, getSiteID } from './_analytics'
+
+const InPageEdit = window.InPageEdit || {}
+const config = mw.config.get()
 
 /**
  * @module preference 个人设置模块
  */
-const preference = {
+export const preference = {
   /**
    * @name 预设值
    * @return {object}
@@ -99,7 +99,7 @@ const preference = {
     var local = preference.get()
 
     // There is an "xxx is undefined" bug, no solution for the time being
-    require('./_analytics')._analytics('plugin_setting') // Keep this line.
+    _analytics('plugin_setting') // Keep this line.
 
     /** 定义模态框内部结构 */
     var $tabList = $('<ul>', { class: 'tab-list' }).append(
@@ -126,8 +126,7 @@ const preference = {
         _msg('preference-savelocal-popup'),
         $br,
         $('<textarea>', {
-          style:
-            'font-size: 12px; resize: none; width: 100%; height: 10em;',
+          style: 'font-size: 12px; resize: none; width: 100%; height: 10em;',
           readonly: true,
         })
           .on('click', function () {
@@ -373,11 +372,9 @@ const preference = {
             $input.prop('checked', val)
           }
         } else {
-          $tabContent
-            .find('input[name=' + key + ']')
-            .each(function () {
-              this.checked = this.value === val
-            })
+          $tabContent.find('input[name=' + key + ']').each(function () {
+            this.checked = this.value === val
+          })
         }
       })
     }
@@ -522,7 +519,7 @@ const preference = {
         const userName = config.wgUserName
         $.get(`${analyticsApi}/query/user`, {
           userName,
-          siteUrl: require('./_analytics').getSiteID(),
+          siteUrl: getSiteID(),
           prop: '*',
         }).then((ret) => {
           $tabContent.find('#analysis-container').html('')
@@ -572,8 +569,4 @@ const preference = {
       },
     })
   },
-}
-
-module.exports = {
-  preference,
 }

@@ -1,4 +1,2 @@
-module.exports = {
-  config: mw.config.get(),
-  mwApi: new mw.Api(),
-}
+export const config = mw.config.get()
+export const mwApi = new mw.Api()

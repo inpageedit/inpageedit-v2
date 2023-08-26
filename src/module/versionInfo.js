@@ -1,13 +1,13 @@
-const { _msg } = require('./_msg')
+import { _msg } from './_msg'
 
-const version = require('./version')
-const { updatelogsUrl, githubLink, aboutUrl } = require('./api')
+import version from './version'
+import { updatelogsUrl, githubLink, aboutUrl } from './api'
 
 /**
  * @module versionInfo 版本信息模块
  * @description Show Update Logs Modal box
  */
-var versionInfo = function () {
+export function versionInfo() {
   // 显示模态框
   ssi_modal.show({
     className: 'in-page-edit update-logs-modal',
@@ -46,8 +46,4 @@ var versionInfo = function () {
       },
     ],
   })
-}
-
-module.exports = {
-  versionInfo,
 }

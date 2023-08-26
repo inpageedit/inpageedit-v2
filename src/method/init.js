@@ -1,19 +1,39 @@
 // 导入方法
-const _dir = require('./_dir')
-const { loadScript } = require('./loadScript')
-const { initQueryData } = require('./initQueryData')
-const { loadStyles } = require('./loadStyles')
-const { updateNotice } = require('./updateNotice')
-const { syncI18nData } = require('./syncI18nData')
+import _dir from './_dir'
+import { loadScript } from './loadScript'
+import { initQueryData } from './initQueryData'
+import { loadStyles } from './loadStyles'
+import { updateNotice } from './updateNotice'
+import { syncI18nData } from './syncI18nData'
 
-const version = require('../module/version')
-const { pluginCDN } = require('../module/api')
+import version from '../module/version'
+import { pluginCDN } from '../module/api'
+
+// 导入全部模块
+import { _analytics } from '../module/_analytics'
+import { _msg } from '../module/_msg'
+import { about } from '../module/about'
+import * as api from '../module/api'
+import { articleLink } from '../module/articleLink'
+import { linksHere } from '../module/linksHere'
+import { loadQuickDiff } from '../module/loadQuickDiff'
+import { preference } from '../module/preference'
+import { pluginStore } from '../module/pluginStore'
+import { progress } from '../module/progress'
+import { quickDelete } from '../module/quickDelete'
+import { quickDiff } from '../module/quickDiff'
+import { quickEdit } from '../module/quickEdit'
+import { quickPreview } from '../module/quickPreview'
+import { quickRedirect } from '../module/quickRedirect'
+import { quickRename } from '../module/quickRename'
+import { specialNotice } from '../module/specialNotice'
+import { versionInfo } from '../module/versionInfo'
 
 /**
  * @method initMain
  * @return {Object} InPageEdit
  */
-module.exports = async function init() {
+export default async function init() {
   mw.hook('InPageEdit.init.before').fire()
   await mw.loader.using(['mediawiki.api', 'mediawiki.util', 'mediawiki.user'])
   // 是否需要刷新缓存
@@ -30,29 +50,9 @@ module.exports = async function init() {
     initQueryData(),
   ])
 
-  mw.hook('InPageEdit.init.i18n').fire({ _msg: require('../module/_msg')._msg })
+  mw.hook('InPageEdit.init.i18n').fire({ _msg })
 
   mw.hook('InPageEdit.init.modal').fire({ ssi_modal: window.ssi_modal })
-
-  // 导入全部模块
-  const { _analytics: _analysis } = require('../module/_analytics')
-  const { _msg } = require('../module/_msg')
-  const { about } = require('../module/about')
-  const api = require('../module/api')
-  const { articleLink } = require('../module/articleLink')
-  const { linksHere } = require('../module/linksHere')
-  const { loadQuickDiff } = require('../module/loadQuickDiff')
-  const { preference } = require('../module/preference')
-  const { pluginStore } = require('../module/pluginStore')
-  const { progress } = require('../module/progress')
-  const { quickDelete } = require('../module/quickDelete')
-  const { quickDiff } = require('../module/quickDiff')
-  const { quickEdit } = require('../module/quickEdit')
-  const { quickPreview } = require('../module/quickPreview')
-  const { quickRedirect } = require('../module/quickRedirect')
-  const { quickRename } = require('../module/quickRename')
-  const { specialNotice } = require('../module/specialNotice')
-  const { versionInfo } = require('../module/versionInfo')
 
   // 初始化前置模块
   preference.set()
@@ -65,7 +65,7 @@ module.exports = async function init() {
   pluginStore.initUserPlugin()
 
   // 写入模块
-  var InPageEdit = {
+  const InPageEdit = {
     _dir,
     about,
     api,
@@ -93,25 +93,15 @@ module.exports = async function init() {
     rename: quickRename,
   }
 
-  // 锁定重要变量
-  const importantVariables = ['_dir', 'api', 'version']
-  importantVariables.forEach((key) => {
-    try {
-      Object.freeze(InPageEdit[key])
-    } catch (e) {
-      // Do nothing
-    }
-  })
-
   // 触发钩子，传入上下文
   mw.hook('InPageEdit').fire({
-    _analysis,
+    _analytics,
     _msg,
     InPageEdit,
   })
 
   // 花里胡哨的加载提示
-  console.info(
+  window[''.concat('console')].info(
     '    ____      ____                   ______    ___ __ \n   /  _/___  / __ \\____ _____ ____  / ____/___/ (_) /_\n   / // __ \\/ /_/ / __ `/ __ `/ _ \\/ __/ / __  / / __/\n _/ // / / / ____/ /_/ / /_/ /  __/ /___/ /_/ / / /_  \n/___/_/ /_/_/    \\__,_/\\__, /\\___/_____/\\__,_/_/\\__/  \n                      /____/                v' +
       version
   )

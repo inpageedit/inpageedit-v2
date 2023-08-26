@@ -7,23 +7,26 @@
  * @url https://github.com/Dragon-Fish/InPageEdit-v2
  */
 
-!(async function () {
+import init from './method/init'
+
+// Main IIFE
+;(async function () {
   // 创建 InPageEdit 变量
   const InPageEdit = window.InPageEdit || {}
 
   // 防止多次运行
-  if (InPageEdit.loaded) {
+  if (InPageEdit.__loaded) {
     throw '[InPageEdit] InPageEdit 被多次加载。'
   } else {
-    InPageEdit.loaded = true
+    InPageEdit.__loaded = true
   }
 
   // 初始化插件
-  const init = require('./method/init')
+  const core = await init()
 
   // 合并入全局变量
   window.InPageEdit = {
     ...InPageEdit,
-    ...(await init()),
+    ...core,
   }
 })()

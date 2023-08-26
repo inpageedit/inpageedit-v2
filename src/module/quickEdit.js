@@ -1,22 +1,22 @@
-const { mwApi, config } = require('./util')
+import { mwApi, config } from './util'
 
-const { _analytics: _analysis } = require('./_analytics')
-const { _msg } = require('./_msg')
-const { _hasRight } = require('./_hasRight')
+import { _analysis } from './_analytics'
+import { _msg } from './_msg'
+import { _hasRight } from './_hasRight'
 
-const { $br, $progress } = require('./_elements')
+import { $br, $progress } from './_elements'
 
-const { preference } = require('./preference')
-const { progress } = require('./progress')
-const { quickPreview } = require('./quickPreview')
-const { quickDiff } = require('./quickDiff')
-const { linksHere } = require('./linksHere')
+import { preference } from './preference'
+import { progress } from './progress'
+import { quickPreview } from './quickPreview'
+import { quickDiff } from './quickDiff'
+import { linksHere } from './linksHere'
 
 /**
  * @module quickEdit 快速编辑模块
  * @param {{ page: string; revision?: number; section?: number; reload?: boolean }} options
  */
-var quickEdit = function (options) {
+export function quickEdit(options) {
   /** 获取设定信息，设置缺省值 **/
   options = options || {}
   if (typeof options === 'string') {
@@ -979,8 +979,4 @@ var quickEdit = function (options) {
       return
     }
   }
-}
-
-module.exports = {
-  quickEdit,
 }

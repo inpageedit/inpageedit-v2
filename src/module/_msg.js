@@ -428,10 +428,6 @@ function getMessage(lang, msgKey, ...args) {
  * @param {String} msgKey 消息的键
  * @param  {String} args 替代占位符($1, $2...)的内容，可以解析简单的wikitext
  */
-var _msg = function (msgKey, ...args) {
+export const _msg = function (msgKey, ...args) {
   return getMessage(userLang, msgKey, ...args)
-}
-
-module.exports = {
-  _msg,
 }

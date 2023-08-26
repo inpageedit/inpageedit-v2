@@ -1,30 +1,24 @@
-const { pluginCDN } = require('../module/api')
-const _dir = require('./_dir')
+import { pluginCDN } from '../module/api'
 
-function loadStyles(purge) {
-  // 放在越上面优先级越高
-  const styleFiles = [
-    // Default Skin
-    `${pluginCDN}/skins/ipe-default.css`,
-    // ssi-modal Style
-    `${pluginCDN}/lib/ssi-modal/ssi-modal.css`,
-    // FontAwesome
-    'https://fastly.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css',
-  ]
+// 放在越上面优先级越高
+const styleList = [
+  // Default Skin
+  `${pluginCDN}/skins/ipe-default.css`,
+  // ssi-modal Style
+  `${pluginCDN}/lib/ssi-modal/ssi-modal.css`,
+  // FontAwesome
+  'https://fastly.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css',
+]
 
-  styleFiles.forEach((link) => {
-    if (/^https?:\/\//.test(link) !== true) {
-      link = _dir + link
-    }
-    if (purge) {
-      link += '?timestamp' + new Date().getTime()
+export function loadStyles(noCache = false) {
+  styleList.forEach((href) => {
+    if (noCache) {
+      const url = new URL(href)
+      url.searchParams.set(Date.now(), 'no_cache')
+      href = '' + url
     }
     $('head').prepend(
-      $('<link>', { href: link, rel: 'stylesheet', 'data-ipe': 'style' })
+      $('<link>', { href, rel: 'stylesheet', 'data-ipe': 'style' })
     )
   })
-}
-
-module.exports = {
-  loadStyles,
 }

@@ -3,12 +3,18 @@
   "version": "14.3.5",
   "description": "A useful MediaWiki JavaScript Plugin written with jQuery",
   "main": "dist/InPageEdit.min.js",
+  "type": "module",
+  "files": [
+    "dist",
+    "i18n"
+  ],
   "scripts": {
     "build": "npm run lint && npm run clear && run-p \"build:*\"",
-    "build:full": "webpack",
-    "build:compressed": "cross-env MINIFY=1 webpack",
+    "build:full": "vite build",
+    "build:compressed": "cross-env MINIFY=1 vite build",
+    "prepublish": "npm run build",
     "lint": "eslint ./src",
-    "dev": "webpack serve",
+    "dev": "vite",
     "clear": "rimraf dev dist",
     "pretty": "prettier --write ./src"
   },
@@ -19,16 +25,12 @@
     "@dragon-fish/bump": "^0.0.15",
     "@types/node": "^18",
     "cross-env": "^7.0.3",
-    "css-loader": "^6.8.1",
     "eslint": "^8.47.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.0.2",
     "rimraf": "^5.0.1",
-    "style-loader": "^3.3.3",
     "types-mediawiki": "^1.4.0",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
+    "vite": "^4.4.9"
   },
   "author": "Dragon-Fish",
   "license": "GPL-3.0-or-later",

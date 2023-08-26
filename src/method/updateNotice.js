@@ -1,11 +1,10 @@
-const version = require('../module/version')
+import version from '../module/version'
 
-const { _msg } = require('../module/_msg')
-// const api = require('../module/api.json');
-const { versionInfo } = require('../module/versionInfo')
-const { specialNotice } = require('../module/specialNotice')
+import { _msg } from '../module/_msg'
+import { versionInfo } from '../module/versionInfo'
+import { specialNotice } from '../module/specialNotice'
 
-function updateNotice() {
+export function updateNotice() {
   if (localStorage.getItem('InPageEditVersion') !== version) {
     ssi_modal.notify('', {
       title: _msg('updatelog-update-success-title'),
@@ -48,8 +47,4 @@ function updateNotice() {
   if (localStorage.getItem('InPageEditNoticeId') !== _msg('noticeid')) {
     specialNotice()
   }
-}
-
-module.exports = {
-  updateNotice,
 }

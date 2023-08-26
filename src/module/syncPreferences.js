@@ -3,7 +3,7 @@
 // 将 IPE 的参数设置保存在数据库内，实现多端同步
 // ========================================= //
 
-const { mwApi } = require('./util')
+import { mwApi } from './util'
 
 /**
  * @param {string} name
@@ -16,7 +16,7 @@ const prefKey = (name) => `userjs-inpageedit-${name}`
  * @param {Record<string, any>} value
  * @returns {Promise<{options: 'success'}>}
  */
-async function setPreferences(name, value) {
+export async function setPreferences(name, value) {
   value = {
     ...mw.user.options.value[prefKey(name)],
     ...value,
@@ -24,7 +24,9 @@ async function setPreferences(name, value) {
   return mwApi.postWithToken('csrf', {
     format: 'json',
     action: 'options',
-    change: `${prefKey(name)}=${encodeURIComponent(JSON.stringify(value))}`,
+    change: new URLSearchParams({
+      [prefKey(name)]: JSON.stringify(value),
+    }).toString(),
   })
 }
 
@@ -32,7 +34,7 @@ async function setPreferences(name, value) {
  * @param {string} name
  * @returns {Promise<Record<string, any>>}
  */
-async function getPreferences(name) {
+export async function getPreferences(name) {
   const data = await mwApi.get({
     format: 'json',
     action: 'query',
@@ -42,9 +44,4 @@ async function getPreferences(name) {
   mw.user.options.value = data
   const option = data.query.userinfo.options[prefKey(name)] || '{}'
   return JSON.parse(decodeURIComponent(option))
-}
-
-module.exports = {
-  setPreferences,
-  getPreferences,
 }
