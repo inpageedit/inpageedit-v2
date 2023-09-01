@@ -57,7 +57,7 @@ export function articleLink(elements) {
       // 不合法的 title
       !title || title.endsWith('.php') ||
       // 不是 edit 相关操作
-      !['edit', 'editsource'].includes(action) ||
+      !['edit', 'editsource', 'editredlink', 'submit'].includes(action) ||
       // 暂时未兼容 undo
       params.get('undo') ||
       // 暂时未兼容 preload
