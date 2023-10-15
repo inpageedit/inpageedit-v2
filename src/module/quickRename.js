@@ -143,7 +143,9 @@ export function quickRename(from, to) {
               })
               // 如果原因是页面已存在，给出解决方案
               if (errorThrown.error.code === 'articleexists') {
-                _resolveExists(to, 'To move the page [[' + from + ']] here.')
+                _resolveExists(to,
+                  _msg('rename-articleexists-reason', from)
+                )
               }
             })
         },
