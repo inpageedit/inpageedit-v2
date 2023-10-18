@@ -18,6 +18,7 @@ export default defineConfig({
     emptyOutDir: false,
     sourcemap: true,
   },
+  mode: process.env.NODE_ENV,
   server: {
     host: true,
     port: 1005,
