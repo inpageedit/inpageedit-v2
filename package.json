@@ -15,7 +15,7 @@
     "prepublish": "npm run build",
     "lint": "eslint ./src",
     "dev": "vite",
-    "clear": "rimraf dev dist",
+    "clear": "rimraf dist",
     "pretty": "prettier --write ./src"
   },
   "publishConfig": {
