@@ -14,7 +14,9 @@
     "build:compressed": "cross-env MINIFY=1 vite build",
     "prepublish": "npm run build",
     "lint": "eslint ./src",
-    "dev": "vite",
+    "dev": "cross-env NODE_ENV=development && run-p dev:*",
+    "dev:preview": "vite preview",
+    "dev:build": "vite build --mode development --watch",
     "clear": "rimraf dist",
     "pretty": "prettier --write ./src"
   },
