@@ -22,7 +22,7 @@ import {
       const last = ref(0)
       const now = ref(Date.now())
       const isCopied = computed(() => now.value - last.value <= cd)
-      let timer = setInterval(() => {
+      let timer = window.setInterval(() => {
         now.value = Date.now()
       })
       const canCopy = computed(() => typeof props.value !== 'string')
