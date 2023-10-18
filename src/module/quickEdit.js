@@ -251,10 +251,15 @@ export function quickEdit(options) {
                 sectiontitle
               if (options.section === 'new') {
                 sectiontitle = $newSectionTitleInput.val()
-                const anchor = (await mwApi.post({
-                  action: 'parse', text: `==${sectiontitle}==`,
-                  contentmodel: 'wikitext', prop: 'sections', formatversion: 2,
-                })).parse.sections[0].anchor
+                const anchor = (
+                  await mwApi.post({
+                    action: 'parse',
+                    text: `==${sectiontitle}==`,
+                    contentmodel: 'wikitext',
+                    prop: 'sections',
+                    formatversion: 2,
+                  })
+                ).parse.sections[0].anchor
                 summaryVal = summaryVal.replace(
                   /\$section/gi,
                   `/* ${anchor} */`
