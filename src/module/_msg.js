@@ -217,7 +217,7 @@ function makeLink(href, text, hasProtocol, blank) {
   text = mw.html.escape(text)
   href = mw.html.escape(href)
 
-  blank = blank ? 'target="_blank"' : ''
+  blank = blank ? 'rel="noopener" target="_blank"' : ''
 
   return (
     '<a href="' + href + '" title="' + text + '"' + blank + '>' + text + '</a>'

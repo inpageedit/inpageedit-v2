@@ -12,7 +12,7 @@ export const $button = ({ type, text, html, href, link }) => {
   if (href || link) {
     let target = ''
     if (/^https?:\/\//.test(href)) target = '_blank'
-    const $a = $('<a>', { target, href })
+    const $a = $('<a>', { rel: 'noopener', target, href })
     $btn.appendTo($a)
   }
   return $btn
@@ -26,7 +26,7 @@ export const $link = ({ page, link, href, text, html }) => {
   if (!html) html = href
   let target = ''
   if (/^https?:\/\//.test(href)) target = '_blank'
-  return $('<a>', { href, target, html })
+  return $('<a>', { href, rel: 'noopener', target, html })
 }
 export const $progress =
   '<div class="ipe-progress" style="width: 100%"><div class="ipe-progress-bar"></div></div>'
