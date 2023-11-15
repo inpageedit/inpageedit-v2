@@ -45,7 +45,7 @@ const makeList = (list) => {
   $.each(list, (index, { title, redirect }) => {
     $list.append(
       $('<li>').append(
-        $link({ page: title }).attr('target', '_blank'),
+        $link({ page: title }).attr({ rel: 'noopener', target: '_blank' }),
         redirect !== undefined
           ? ' (<i>' + _msg('links-here-isRedirect') + '</i>)'
           : '',

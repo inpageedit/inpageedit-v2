@@ -727,6 +727,7 @@ export function quickEdit(options) {
             .append(
               $('<a>', {
                 href: mw.util.getUrl(templateName),
+                rel: 'noopener',
                 target: '_blank',
                 text: templateName,
               }),

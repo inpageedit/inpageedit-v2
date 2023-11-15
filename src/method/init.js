@@ -31,7 +31,7 @@ import { versionInfo } from '../module/versionInfo'
 
 /**
  * @method initMain
- * @return {Object} InPageEdit
+ * @return {Promise<Object>} InPageEdit
  */
 export default async function init() {
   mw.hook('InPageEdit.init.before').fire()

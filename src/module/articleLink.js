@@ -70,10 +70,11 @@ export function articleLink(elements) {
       class: 'in-page-edit-article-link-group',
     }).append(
       $('<a>', {
-        href: 'javascript:;',
+        href,
         class: 'in-page-edit-article-link',
         text: _msg('quick-edit'),
-      }).on('click', function () {
+      }).on('click', function (event) {
+        event.preventDefault();
         var options = {}
         options.page = title
         if (revision !== null) {

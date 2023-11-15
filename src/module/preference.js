@@ -291,6 +291,7 @@ export const preference = {
           $('<a>', {
             href: githubLink,
             text: githubLink,
+            rel: 'noopener',
             target: '_blank',
           })
         ),
