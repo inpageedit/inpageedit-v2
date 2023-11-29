@@ -35,6 +35,7 @@ mw.loader.load('https://unpkg.com/mediawiki-inpageedit')
 
 - **English (en)**
 - العربية (ar)
+- Deutsch (de)
 - Français (fr)
 - Hindī (hi)
 - 日本語 (ja)
