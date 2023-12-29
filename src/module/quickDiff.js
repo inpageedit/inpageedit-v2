@@ -2,7 +2,7 @@ import { _analysis } from './_analytics'
 import { _msg } from './_msg'
 import { $br, $progress } from './_elements'
 import { articleLink } from './articleLink'
-import { mwApi } from './util'
+import { mwApi } from './mw'
 
 /**
  * @module quickDiff 快速页面差异模块
@@ -58,8 +58,8 @@ export function quickDiff(param) {
   mwApi
     .post(param)
     .done(function (data) {
-      var compareTableBody = data.compare['*']
-      var toTitle
+      const compareTableBody = data.compare.body
+      let toTitle
       $loading.hide()
       if (param.pageName === undefined) {
         toTitle = data.compare.totitle
@@ -263,7 +263,7 @@ export function quickDiff(param) {
             $('<span>', {
               class: 'noPrevVerson',
               text:
-                data?.warnings?.compare?.body || 'Previous version not exist',
+                data?.warnings?.compare?.info || 'Previous version not exist',
             })
           )
       }
@@ -274,7 +274,7 @@ export function quickDiff(param) {
           .append(
             $('<span>', {
               class: 'noNextVerson',
-              text: data?.warnings?.compare?.body || 'Next version not exist',
+              text: data?.warnings?.compare?.info || 'Next version not exist',
             })
           )
       }

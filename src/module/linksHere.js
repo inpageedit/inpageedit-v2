@@ -6,14 +6,15 @@
 import { _analytics } from './_analytics'
 import { $progress, $link } from './_elements'
 import { _msg } from './_msg'
-import { mwApi, config } from './util'
+import { mwApi, mwConfig } from './mw'
+import { quickEdit } from './quickEdit'
 
 /**
  * @function isFile
  * @returns {Boolean} Is file page?
  */
 const isFile = (title) => {
-  const fileReg = new RegExp(`^(File|${config.wgFormattedNamespaces[6]}):`)
+  const fileReg = new RegExp(`^(File|${mwConfig.wgFormattedNamespaces[6]}):`)
   return fileReg.test(title)
 }
 
@@ -55,7 +56,7 @@ const makeList = (list) => {
         }),
         ' | ',
         $link({ text: _msg('quick-edit') }).on('click', function () {
-          require('./quickEdit').quickEdit({
+          quickEdit({
             page: title,
             reload: false,
           })
@@ -71,10 +72,10 @@ const makeList = (list) => {
  * @module linksHere
  * @param {string} title page title
  */
-export async function linksHere(title = config.wgPageName) {
+export async function linksHere(title = mwConfig.wgPageName) {
   _analytics('linkshere')
 
-  if (!title || typeof title !== 'string') title = config.wgPageName
+  if (!title || typeof title !== 'string') title = mwConfig.wgPageName
 
   // 构建内容
   var $progressBar = $($progress)

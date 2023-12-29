@@ -1,4 +1,4 @@
-import { pluginCDN } from '../module/api'
+import { pluginCDN } from '../module/endpoints'
 
 // 放在越上面优先级越高
 const styleList = [

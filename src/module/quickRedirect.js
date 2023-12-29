@@ -1,12 +1,9 @@
 import { _analysis } from './_analytics'
 import { _msg } from './_msg'
 import { $br, $progress } from './_elements'
-
+import { mwApi, mwConfig } from './mw'
 import { _resolveExists } from './_resolveExists'
 import { preference } from './preference'
-
-const mwApi = new mw.Api()
-const config = mw.config.get()
 
 /**
  * @module quickRedirect 快速重定向模块
@@ -27,17 +24,17 @@ export function quickRedirect(type = 'to') {
     summary
 
   if (type === 'to') {
-    json.title = config.wgPageName
+    json.title = mwConfig.wgPageName
     question = _msg(
       'redirect-question-to',
-      '<b>' + config.wgPageName.replace(/_/g, ' ') + '</b>'
+      '<b>' + mwConfig.wgPageName.replace(/_/g, ' ') + '</b>'
     )
   } else if (type === 'from') {
     question = _msg(
       'redirect-question-from',
-      '<b>' + config.wgPageName.replace(/_/g, ' ') + '</b>'
+      '<b>' + mwConfig.wgPageName.replace(/_/g, ' ') + '</b>'
     )
-    summary = _msg('redirect-summary') + ' → [[:' + config.wgPageName + ']]'
+    summary = _msg('redirect-summary') + ' → [[:' + mwConfig.wgPageName + ']]'
   } else {
     console.error('[InPageEdit] quickRedirect only accept "from" or "to"')
     return
@@ -83,7 +80,7 @@ export function quickRedirect(type = 'to') {
           target = $('.in-page-edit.quick-redirect #redirect-page').val()
           if (
             target === '' ||
-            target.replace(/_/g, ' ') === config.wgPageName.replace(/_/g, ' ')
+            target.replace(/_/g, ' ') === mwConfig.wgPageName.replace(/_/g, ' ')
           ) {
             $('.in-page-edit.quick-redirect #redirect-page').css(
               'box-shadow',
@@ -105,7 +102,7 @@ export function quickRedirect(type = 'to') {
               fragment = `#${fragment}`
             }
             json.title = target
-            json.text = text.replace('$1', `${config.wgPageName}${fragment}`)
+            json.text = text.replace('$1', `${mwConfig.wgPageName}${fragment}`)
           }
           if ($('.in-page-edit.quick-redirect #redirect-reason').val() !== '') {
             summary =
@@ -123,7 +120,7 @@ export function quickRedirect(type = 'to') {
           let promise = Promise.resolve()
           if (preference.get('noRedirectIfConvertedTitleExists')) {
             promise = mwApi
-              .get({ titles: json.title, converttitles: 1, formatversion: 2 })
+              .get({ titles: json.title, converttitles: 1 })
               .done((data) => {
                 const convertedTitle = data.query.pages[0]
                 if (convertedTitle?.missing !== true) {
@@ -131,7 +128,7 @@ export function quickRedirect(type = 'to') {
                     fromPage: convertedTitle.title,
                     errors: [
                       {
-                        '*': _msg('notify-redirect-converted-error'),
+                        info: _msg('notify-redirect-converted-error'),
                       },
                     ],
                   })
@@ -181,7 +178,7 @@ export function quickRedirect(type = 'to') {
               content:
                 _msg('notify-redirect-error') +
                 '<br>' +
-                errorThrown.errors[0]['*'] +
+                errorThrown.errors[0].info +
                 ' (<code>' +
                 errorCode +
                 '</code>)',
@@ -192,9 +189,9 @@ export function quickRedirect(type = 'to') {
               var fromPage, toPage
               if (type === 'from') {
                 fromPage = errorThrown.fromPage ?? target
-                toPage = config.wgPageName
+                toPage = mwConfig.wgPageName
               } else if (type === 'to') {
-                fromPage = errorThrown.fromPage ?? config.wgPageName
+                fromPage = errorThrown.fromPage ?? mwConfig.wgPageName
                 toPage = target
               }
               _resolveExists(fromPage, {

@@ -1,5 +1,5 @@
 import { _msg } from './_msg'
-import { aboutUrl } from './api'
+import { aboutUrl } from './endpoints'
 
 /**
  * @module about 关于插件模块

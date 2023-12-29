@@ -7,7 +7,7 @@ import {
   analyticsApi,
   analyticsDash,
   pluginCDN,
-} from './api'
+} from './endpoints'
 import version from './version'
 import { pluginStore } from './pluginStore'
 import { _analytics, getSiteID } from './_analytics'

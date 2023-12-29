@@ -7,13 +7,13 @@ import { updateNotice } from './updateNotice'
 import { syncI18nData } from './syncI18nData'
 
 import version from '../module/version'
-import { pluginCDN } from '../module/api'
+import { pluginCDN } from '../module/endpoints'
 
 // 导入全部模块
 import { _analytics } from '../module/_analytics'
 import { _msg } from '../module/_msg'
 import { about } from '../module/about'
-import * as api from '../module/api'
+import * as endpoints from '../module/endpoints'
 import { articleLink } from '../module/articleLink'
 import { linksHere } from '../module/linksHere'
 import { loadQuickDiff } from '../module/loadQuickDiff'
@@ -68,7 +68,7 @@ export default async function init() {
   const InPageEdit = {
     _dir,
     about,
-    api,
+    endpoints,
     articleLink,
     linksHere,
     loadQuickDiff,
