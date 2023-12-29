@@ -123,7 +123,10 @@ export function quickRename(from, to) {
                 content: _msg('notify-rename-success'),
                 title: _msg('notify-success'),
               })
-              location.href = mwConfig.wgArticlePath.replace('$1', to)
+              location.href = mwConfig.wgArticlePath.replace(
+                '$1',
+                encodeURI(to)
+              )
             })
             .fail(function (errorCode, feedback, errorThrown) {
               progress(false)
