@@ -1,9 +1,8 @@
-var mwApi = new mw.Api()
-
 import { _analysis } from './_analytics'
 import { _msg } from './_msg'
 import { $br, $progress } from './_elements'
 import { articleLink } from './articleLink'
+import { mwApi } from './util'
 
 /**
  * @module quickDiff 快速页面差异模块
@@ -49,7 +48,7 @@ export function quickDiff(param) {
     .css('margin-top', $quickDiff.find('.ssi-modalContent').height() / 2)
   $quickDiff.find('.toDiffPage').off('click')
   param.action = 'compare'
-  param.prop = 'diff|rel|ids|title|user|parsedcomment|size'
+  param.prop = 'diff|rel|ids|title|user|parsedcomment|size|timestamp'
   param.format = 'json'
   if (param.totext) {
     param.topst = true
@@ -59,7 +58,7 @@ export function quickDiff(param) {
   mwApi
     .post(param)
     .done(function (data) {
-      var diffTable = data.compare['*']
+      var compareTableBody = data.compare['*']
       var toTitle
       $loading.hide()
       if (param.pageName === undefined) {
@@ -67,26 +66,44 @@ export function quickDiff(param) {
       } else {
         toTitle = param.pageName
       }
-      function userLink(user) {
-        return (
-          '<a class="diff-user" href="' +
-          mw.util.getUrl('User:' + user) +
-          '">' +
-          user +
-          '</a> (<a href="' +
-          mw.util.getUrl('User_talk:' + user) +
-          '">' +
-          _msg('diff-usertalk') +
-          '</a> | <a href="' +
-          mw.util.getUrl('Special:Contributions/' + user) +
-          '">' +
-          _msg('diff-usercontrib') +
-          '</a> | <a href="' +
-          mw.util.getUrl('Special:Block/' + user) +
-          '">' +
-          _msg('diff-userblock') +
-          '</a>)'
+      function makeUserLinks(user) {
+        const page = $('<a>', {
+          class: 'diff-user',
+          href: mw.util.getUrl('User:' + user),
+          text: user,
+        })
+        const talk = $('<a>', {
+          href: mw.util.getUrl('User_talk:' + user),
+          text: _msg('diff-usertalk'),
+        })
+        const contrib = $('<a>', {
+          href: mw.util.getUrl('Special:Contributions/' + user),
+          text: _msg('diff-usercontrib'),
+        })
+        const block = $('<a>', {
+          href: mw.util.getUrl('Special:Block/' + user),
+          text: _msg('diff-userblock'),
+        })
+        return $('<span>', { class: 'diff-user-links' }).append(
+          page,
+          ' (',
+          talk,
+          ' | ',
+          contrib,
+          ' | ',
+          block,
+          ')'
         )
+      }
+      function formatTimeString(time) {
+        const date = new Date(time)
+        const week = Intl.DateTimeFormat('default', {
+          weekday: 'narrow',
+        }).format(date)
+        return `${Intl.DateTimeFormat('default', {
+          dateStyle: 'medium',
+          timeStyle: 'short',
+        }).format(date)} (${week})`
       }
       $modalTitle.html(_msg('diff-title') + ': <u>' + toTitle + '</u>')
       $diffArea
@@ -123,14 +140,18 @@ export function quickDiff(param) {
                   }),
                   ')',
                   $br,
-                  userLink(data.compare.fromuser),
-                  $br,
-                  ' (',
-                  $('<span>', {
-                    class: 'diff-comment',
-                    html: data.compare.fromparsedcomment,
-                  }),
-                  ') ',
+                  makeUserLinks(data.compare.fromuser),
+                  data.compare.fromtimestamp
+                    ? [$br, formatTimeString(data.compare.fromtimestamp)]
+                    : '',
+                  data.compare.fromparsedcomment
+                    ? [
+                        $br,
+                        $('<span>', {
+                          class: 'diff-comment',
+                        }).append(' (', data.compare.fromparsedcomment, ') '),
+                      ]
+                    : '',
                   $br,
                   $('<a>', {
                     class: 'prevVersion ipe-analysis-quick_diff_modalclick',
@@ -166,14 +187,18 @@ export function quickDiff(param) {
                   }),
                   ')',
                   $br,
-                  userLink(data.compare.touser),
-                  $br,
-                  ' (',
-                  $('<span>', {
-                    class: 'diff-comment',
-                    html: data.compare.toparsedcomment,
-                  }),
-                  ') ',
+                  makeUserLinks(data.compare.touser),
+                  data.compare.totimestamp
+                    ? $br + formatTimeString(data.compare.totimestamp)
+                    : '',
+                  data.compare.toparsedcomment
+                    ? [
+                        $br,
+                        $('<span>', {
+                          class: 'diff-comment',
+                        }).append(' (', data.compare.toparsedcomment, ') '),
+                      ]
+                    : '',
                   $br,
                   $('<a>', {
                     class: 'nextVersion ipe-analysis-quick_diff_modalclick',
@@ -190,7 +215,7 @@ export function quickDiff(param) {
                     })
                 )
               ),
-              diffTable,
+              compareTableBody,
               $('<tr>', {
                 class: 'diffSize',
                 style: 'text-align: center',
@@ -238,7 +263,7 @@ export function quickDiff(param) {
             $('<span>', {
               class: 'noPrevVerson',
               text:
-                data?.warnings?.compare?.['*'] || 'Previous version not exist',
+                data?.warnings?.compare?.body || 'Previous version not exist',
             })
           )
       }
@@ -249,7 +274,7 @@ export function quickDiff(param) {
           .append(
             $('<span>', {
               class: 'noNextVerson',
-              text: data?.warnings?.compare?.['*'] || 'Next version not exist',
+              text: data?.warnings?.compare?.body || 'Next version not exist',
             })
           )
       }
