@@ -1,7 +1,7 @@
 import { _msg } from './_msg'
 
 import version from './version'
-import { updatelogsUrl, githubLink, aboutUrl } from './api'
+import { updatelogsUrl, githubLink, aboutUrl } from './endpoints'
 
 /**
  * @module versionInfo 版本信息模块

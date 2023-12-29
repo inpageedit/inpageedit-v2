@@ -1,7 +1,6 @@
 import { _msg } from './_msg'
 import { $progress } from './_elements'
-
-const mwApi = new mw.Api()
+import { mwApi } from './mw'
 
 /**
  * @module quickPreview 快速预览文章页
@@ -17,52 +16,53 @@ export function quickPreview(params, modalSize = 'large', center = false) {
   }
   var options = $.extend({}, defaultOptions, params)
   mw.hook('InPageEdit.quickPreview').fire()
-  var timestamp = new Date().getTime()
   console.time('[InPageEdit] Request preview')
+  const $loading = $('<div>').append($progress)
+  const $content = $('<div>', {
+    class: 'InPageEditPreview',
+    style: 'display:none',
+    text: _msg('preview-placeholder'),
+  })
+  $content.on('click', function (e) {
+    e.preventDefault()
+    e.stopPropagation()
+  })
   ssi_modal.show({
-    sizeClass: new RegExp(
-      /dialog|small|smallToMedium|medium|mediumToLarge|large|full|auto/
-    ).test(modalSize)
+    sizeClass: [
+      'dialog',
+      'small',
+      'smallToMedium',
+      'medium',
+      'mediumToLarge',
+      'large',
+      'full',
+      'auto',
+    ].includes(modalSize)
       ? modalSize
       : 'large',
-    center: Boolean(center),
+    center: !!center,
     className: 'in-page-edit previewbox',
     title: _msg('preview-title'),
-    content: $('<section>').append(
-      $progress,
-      $('<div>', {
-        class: 'InPageEditPreview',
-        'data-timestamp': timestamp,
-        style: 'display:none',
-        text: _msg('preview-placeholder'),
-      })
-    ),
+    content: $('<section>').append($loading, $content),
     fixedHeight: true,
     fitScreen: true,
     buttons: [{ label: '', className: 'hideThisBtn' }],
     onShow() {
-      $('.previewbox .ipe-progress').css(
-        'margin-top',
-        $('.previewbox .ipe-progress').parent().height() / 2
-      )
+      $loading.css('margin-top', window.innerHeight / 2 - 100)
       $('.previewbox .hideThisBtn').hide()
       mwApi
         .post(options)
         .then(function (data) {
           console.timeEnd('[InPageEdit] Request preview')
-          var content = data.parse.text['*']
-          $('.previewbox .ipe-progress').hide(150)
-          $('.InPageEditPreview[data-timestamp="' + timestamp + '"]')
-            .fadeIn(500)
-            .html(content)
+          const html = data.parse.text
+          $loading.hide(150)
+          $content.fadeIn(500).html(html)
         })
         .fail(function () {
           console.timeEnd('[InPageEdit] Request preview')
           console.warn('[InPageEdit] 预览失败')
-          $('.previewbox .ipe-progress').hide(150)
-          $('.InPageEditPreview[data-timestamp="' + timestamp + '"]')
-            .fadeIn(500)
-            .html(_msg('preview-error'))
+          $loading.hide(150)
+          $content.fadeIn(500).html(_msg('preview-error'))
         })
     },
   })

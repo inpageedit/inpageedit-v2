@@ -2,9 +2,7 @@ import { _analysis } from './_analytics'
 import { _msg } from './_msg'
 import { _hasRight } from './_hasRight'
 import { $br } from './_elements'
-
-var mwApi = new mw.Api()
-var config = mw.config.get()
+import { mwApi, mwConfig } from './mw'
 
 /**
  * @module quickDelete 删除页面模块
@@ -13,8 +11,8 @@ var config = mw.config.get()
 export function quickDelete(page, givenReason = '') {
   mw.hook('InPageEdit.quickDelete').fire()
   console.log('Quick delete', page, givenReason)
-  var reason
-  page = page || config.wgPageName
+  let reason = ''
+  page = page || mwConfig.wgPageName
 
   ssi_modal.show({
     outSideClose: false,
@@ -112,7 +110,7 @@ export function quickDelete(page, givenReason = '') {
                       content:
                         _msg('notify-delete-error') +
                         ': <br/><span style="font-size:amall">' +
-                        errorThrown.error['*'] +
+                        errorThrown.error.info +
                         '(<code>' +
                         errorThrown.error['code'] +
                         '</code>)</span>',

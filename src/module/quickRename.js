@@ -3,11 +3,8 @@ import { _msg } from './_msg'
 import { _hasRight } from './_hasRight'
 import { _resolveExists } from './_resolveExists'
 import { $br } from './_elements'
-
+import { mwApi, mwConfig } from './mw'
 import { progress } from './progress'
-
-const mwApi = new mw.Api()
-const config = mw.config.get()
 
 /**
  * @module quickRename 快速重命名模块
@@ -16,7 +13,7 @@ const config = mw.config.get()
  */
 export function quickRename(from, to) {
   mw.hook('InPageEdit.quickRename').fire()
-  from = from || config.wgPageName
+  from = from || mwConfig.wgPageName
   to = to || ''
   var reason, movetalk, movesubpages, noredirect
 
@@ -81,8 +78,8 @@ export function quickRename(from, to) {
           to = $('.in-page-edit.quick-rename #move-to').val()
           if (
             to === '' ||
-            to === config.wgPageName ||
-            to === config.wgPageName.replace(/_/g, ' ')
+            to === mwConfig.wgPageName ||
+            to === mwConfig.wgPageName.replace(/_/g, ' ')
           ) {
             $('.in-page-edit.quick-rename #move-to').css(
               'box-shadow',
@@ -112,12 +109,12 @@ export function quickRename(from, to) {
           mwApi
             .postWithToken('csrf', {
               action: 'move',
-              from: from,
-              to: to,
-              reason: reason,
-              movetalk: movetalk,
-              movesubpages: movesubpages,
-              noredirect: noredirect,
+              from,
+              to,
+              reason,
+              movetalk,
+              movesubpages,
+              noredirect,
             })
             .done(function () {
               progress(true)
@@ -126,7 +123,10 @@ export function quickRename(from, to) {
                 content: _msg('notify-rename-success'),
                 title: _msg('notify-success'),
               })
-              location.href = config.wgArticlePath.replace('$1', to)
+              location.href = mwConfig.wgArticlePath.replace(
+                '$1',
+                encodeURI(to)
+              )
             })
             .fail(function (errorCode, feedback, errorThrown) {
               progress(false)
