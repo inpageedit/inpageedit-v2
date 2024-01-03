@@ -48,5 +48,8 @@
   },
   "bugs": {
     "url": "https://github.com/inpageedit/inpageedit-v2/issues"
+  },
+  "dependencies": {
+    "filter-altered-clicks": "^2.0.1"
   }
 }

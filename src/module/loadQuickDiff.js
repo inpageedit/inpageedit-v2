@@ -1,3 +1,4 @@
+import filterAlteredClicks from 'filter-altered-clicks'
 import { _msg } from './_msg'
 import { _analytics } from './_analytics'
 import { quickDiff } from './quickDiff'
@@ -86,11 +87,14 @@ function injectLinks(container) {
       $this.attr('ipe-diff-params', JSON.stringify(params))
 
       // 点击事件
-      $this.on('click', function (e) {
-        e.preventDefault()
-        _analytics('quick_diff_recentchanges')
-        return quickDiff(params)
-      })
+      $this.on(
+        'click',
+        filterAlteredClicks(function (e) {
+          e.preventDefault()
+          _analytics('quick_diff_recentchanges')
+          return quickDiff(params)
+        })
+      )
     })
 }
 
@@ -107,17 +111,16 @@ export function loadQuickDiff(container) {
     $('.historysubmit.mw-history-compareselectedversions-button').after(
       $('<button>')
         .text(_msg('quick-diff'))
-        .on('click', function (e) {
-          if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
-            return
-          }
-
-          e.preventDefault()
-          _analytics('quick_diff_history_page')
-          const before = $('.selected.before').attr('data-mw-revid'),
-            after = $('.selected.after').attr('data-mw-revid')
-          quickDiff({ fromrev: after, torev: before })
-        })
+        .on(
+          'click',
+          filterAlteredClicks(function (e) {
+            e.preventDefault()
+            _analytics('quick_diff_history_page')
+            const before = $('.selected.before').attr('data-mw-revid'),
+              after = $('.selected.after').attr('data-mw-revid')
+            quickDiff({ fromrev: after, torev: before })
+          })
+        )
     )
     $('[data-mw-revid]').each(function () {
       var $this = $(this),
