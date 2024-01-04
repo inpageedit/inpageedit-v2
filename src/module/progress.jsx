@@ -1,5 +1,5 @@
 import { _msg } from './_msg'
-import { $progress } from './_elements.js'
+import { $progress } from './_elements'
 
 /**
  * @module progress 载入中模块

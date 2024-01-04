@@ -3,11 +3,12 @@ module.exports = {
     browser: true,
     commonjs: true,
     es2021: true,
+    jsxDom: true,
   },
   extends: 'eslint:recommended',
   parserOptions: {
     ecmaVersion: 12,
-    sourceType:'module'
+    sourceType: 'module',
   },
   rules: {},
   globals: {

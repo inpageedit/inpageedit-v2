@@ -4,11 +4,12 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "strict": true,
-    "jsx": "preserve",
     "sourceMap": true,
     "types": ["node"],
-    "lib": ["ESNext", "DOM"]
+    "lib": ["ESNext", "DOM"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "jax-dom"
   },
   "include": ["./node_modules/types-mediawiki", "./src", "vite.config.mjs"],
-  "exclude": ["node_modules", "lib", "**/dist"]
+  "exclude": ["lib", "**/dist"]
 }

@@ -3,7 +3,6 @@ import _dir from './_dir'
 import { loadScript } from './loadScript'
 import { initQueryData } from './initQueryData'
 import { loadStyles } from './loadStyles'
-import { updateNotice } from './updateNotice'
 import { syncI18nData } from './syncI18nData'
 
 import version from '../module/version'
@@ -27,6 +26,7 @@ import { quickPreview } from '../module/quickPreview'
 import { quickRedirect } from '../module/quickRedirect'
 import { quickRename } from '../module/quickRename'
 import { specialNotice } from '../module/specialNotice'
+import { updateNotice } from '../module/updateNotice'
 import { versionInfo } from '../module/versionInfo'
 
 /**

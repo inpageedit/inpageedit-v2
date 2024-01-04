@@ -21,7 +21,7 @@ const config = mw.config.get()
 export const preference = {
   /**
    * @name 预设值
-   * @return {object}
+   * @return {Record<string, any>}
    */
   _defaults: {
     doNotCollectMyInfo: false,

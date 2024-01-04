@@ -1,4 +1,5 @@
 import { pluginCDN } from '../module/endpoints'
+import { h } from 'jsx-dom'
 
 // 放在越上面优先级越高
 const styleList = [
@@ -17,8 +18,7 @@ export function loadStyles(noCache = false) {
       url.searchParams.set(Date.now(), 'no_cache')
       href = '' + url
     }
-    $('head').prepend(
-      $('<link>', { href, rel: 'stylesheet', 'data-ipe': 'style' })
-    )
+    const link = h('link', { rel: 'stylesheet', 'data-ipe': 'style', href })
+    document.head.insertAdjacentElement('afterbegin', link)
   })
 }

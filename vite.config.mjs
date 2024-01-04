@@ -1,12 +1,18 @@
 import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
 const { MINIFY } = process.env
 
 export default defineConfig({
+  plugins: [
+    react({
+      jsxImportSource: 'jsx-dom',
+    }),
+  ],
   build: {
     target: 'es2020',
     lib: {
-      entry: 'src/index.js',
+      entry: 'src/index.jsx',
       name: 'InPageEditImport',
       fileName: (format, entryName) => {
         console.info('lib build', format, entryName)
