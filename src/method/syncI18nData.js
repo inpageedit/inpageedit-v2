@@ -1,5 +1,5 @@
 import { resolvePath } from './_dir'
-import { mwConfig } from '../module/mw'
+import { mwConfig } from '../utils/mw'
 
 // 设置
 const cacheTime = 2 * 60 * 60 * 1000
