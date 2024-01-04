@@ -3,7 +3,7 @@ import { _analytics } from './_analytics'
 import { quickDiff } from './quickDiff'
 import { quickEdit } from './quickEdit'
 import { mwConfig } from '../utils/mw'
-import { isAlternativeClick } from '../utils/alternativeClick'
+import { isPureLMBClick } from '../utils/mouseEvent'
 const { getParamValue } = mw.util
 
 function injectLinks(container) {
@@ -88,7 +88,7 @@ function injectLinks(container) {
 
       // 点击事件
       $this.on('click', function (e) {
-        if (isAlternativeClick(e)) return
+        if (!isPureLMBClick(e)) return
         e.preventDefault()
         _analytics('quick_diff_recentchanges')
         return quickDiff(params)
@@ -110,7 +110,7 @@ export function loadQuickDiff(container) {
       $('<button>')
         .text(_msg('quick-diff'))
         .on('click', function (e) {
-          if (isAlternativeClick(e)) return
+          if (!isPureLMBClick(e)) return
 
           e.preventDefault()
           _analytics('quick_diff_history_page')
