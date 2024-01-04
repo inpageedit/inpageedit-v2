@@ -7,9 +7,8 @@ export default defineConfig({
     target: 'es2020',
     lib: {
       entry: 'src/index.js',
-      name: 'InPageEditImport',
-      fileName: (format, entryName) => {
-        console.info('lib build', format, entryName)
+      name: 'InPageEditPkg',
+      fileName() {
         return `InPageEdit${MINIFY ? '.min' : ''}.js`
       },
       formats: ['umd'],
