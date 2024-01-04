@@ -1,8 +1,8 @@
-import { mwApi, mwConfig } from './mw'
+import { mwApi, mwConfig } from '../utils/mw'
 
 import { _analysis } from './_analytics'
 import { _msg } from './_msg'
-import { _hasRight } from './_hasRight'
+import { hasRight } from '../utils/hasRight'
 
 import { $br, $progress } from './_elements'
 
@@ -397,7 +397,7 @@ export function quickEdit(options) {
         })
       })
       // 获取权限
-      if (!_hasRight('edit')) {
+      if (!hasRight('edit')) {
         ssi_modal.notify('dialog', {
           className: 'in-page-edit',
           position: 'center bottom',
@@ -588,7 +588,7 @@ export function quickEdit(options) {
           if (options.protection.length > 0) {
             const isEditable = (level) => {
               if (!level) return true
-              return _hasRight(
+              return hasRight(
                 level
                   .replace('sysop', 'editprotected')
                   .replace('autoconfirmed', 'editsemiprotected')
@@ -599,7 +599,7 @@ export function quickEdit(options) {
             )
             if (
               !isEditable(protectionEdit?.level) ||
-              (options.namespace === 8 && !_hasRight('editinterface'))
+              (options.namespace === 8 && !hasRight('editinterface'))
             ) {
               $modalWindow
                 .find('.save-btn')

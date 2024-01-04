@@ -2,7 +2,7 @@ import { _analysis } from './_analytics'
 import { _msg } from './_msg'
 import { $br, $progress } from './_elements'
 import { articleLink } from './articleLink'
-import { mwApi } from './mw'
+import { mwApi } from '../utils/mw'
 
 /**
  * @module quickDiff 快速页面差异模块

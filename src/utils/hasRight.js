@@ -3,7 +3,7 @@
  * @param {string} right
  * @return {boolean}
  */
-export const _hasRight = function (right) {
+export const hasRight = function (right) {
   const conf = window.mw.config.get()
   console.info(
     '[InPageEdit] _hasRight',
@@ -16,3 +16,5 @@ export const _hasRight = function (right) {
   }
   return (conf.wgUserRights || []).includes(right)
 }
+// KEEP THIS
+export { hasRight as _hasRight }
