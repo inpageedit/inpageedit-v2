@@ -13,8 +13,7 @@
     "./node_modules/types-mediawiki",
     "./src",
     "./dev",
-    "webpack.config.cjs",
     "vite.config.mjs"
   ],
-  "exclude": ["node_modules", "lib", "**/dist"]
+  "exclude": ["lib", "**/dist"]
 }
