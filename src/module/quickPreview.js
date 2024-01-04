@@ -1,6 +1,6 @@
 import { _msg } from './_msg'
 import { $progress } from './_elements'
-import { mwApi } from './mw'
+import { mwApi } from '../utils/mw'
 
 /**
  * @module quickPreview 快速预览文章页

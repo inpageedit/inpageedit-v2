@@ -1,4 +1,4 @@
-import version from './version'
+import version from '../module/version'
 
 export const mwConfig = mw.config.get()
 export const mwApi = new mw.Api({

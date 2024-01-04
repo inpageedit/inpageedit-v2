@@ -2,7 +2,7 @@ import { _msg } from './_msg'
 import { _analytics } from './_analytics'
 import { quickDiff } from './quickDiff'
 import { quickEdit } from './quickEdit'
-import { mwConfig } from './mw'
+import { mwConfig } from '../utils/mw'
 import { isAlternativeClick } from '../utils/alternativeClick'
 const { getParamValue } = mw.util
 

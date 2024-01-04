@@ -1,7 +1,7 @@
 import { _analysis } from './_analytics'
 import { _msg } from './_msg'
 import { $br, $progress } from './_elements'
-import { mwApi, mwConfig } from './mw'
+import { mwApi, mwConfig } from '../utils/mw'
 import { _resolveExists } from './_resolveExists'
 import { preference } from './preference'
 

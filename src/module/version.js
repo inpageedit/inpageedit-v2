@@ -1,2 +1,1 @@
-import { version } from '../../package.json'
-export default version
+export { version as default } from '../../package.json'

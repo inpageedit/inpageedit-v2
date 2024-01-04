@@ -1,9 +1,9 @@
 import { _analysis } from './_analytics'
 import { _msg } from './_msg'
-import { _hasRight } from './_hasRight'
+import { hasRight } from '../utils/hasRight'
 import { _resolveExists } from './_resolveExists'
 import { $br } from './_elements'
-import { mwApi, mwConfig } from './mw'
+import { mwApi, mwConfig } from '../utils/mw'
 import { progress } from './progress'
 
 /**
@@ -58,7 +58,7 @@ export function quickRename(from, to) {
         $('<input>', {
           type: 'checkbox',
           id: 'noredirect',
-          disabled: !_hasRight('suppressredirect'),
+          disabled: !hasRight('suppressredirect'),
         }),
         $('<span>', { text: _msg('rename-noredirect') })
       )
@@ -150,7 +150,7 @@ export function quickRename(from, to) {
       },
     ],
     beforeShow: function () {
-      if (!_hasRight('move')) {
+      if (!hasRight('move')) {
         ssi_modal.dialog({
           title: _msg('notify-no-right'),
           content: _msg('rename-no-right'),
