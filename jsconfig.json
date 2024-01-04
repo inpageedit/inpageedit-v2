@@ -10,6 +10,11 @@
     "jsx": "react-jsx",
     "jsxImportSource": "jax-dom"
   },
-  "include": ["./node_modules/types-mediawiki", "./src", "vite.config.mjs"],
+  "include": [
+    "./node_modules/types-mediawiki",
+    "./src",
+    "./dev",
+    "vite.config.mjs"
+  ],
   "exclude": ["lib", "**/dist"]
 }

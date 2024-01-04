@@ -1,6 +1,6 @@
 import { analyticsApi } from './endpoints'
 import { preference } from './preference'
-import { mwConfig } from './mw'
+import { mwConfig } from '../utils/mw'
 import version from './version'
 
 /**

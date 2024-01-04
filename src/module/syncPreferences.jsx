@@ -3,7 +3,7 @@
 // 将 IPE 的参数设置保存在数据库内，实现多端同步
 // ========================================= //
 
-import { mwApi } from './mw'
+import { mwApi } from '../utils/mw'
 
 /**
  * @param {string} name

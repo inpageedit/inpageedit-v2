@@ -1,8 +1,8 @@
 import { _analysis } from './_analytics'
 import { _msg } from './_msg'
-import { _hasRight } from './_hasRight'
+import { hasRight } from '../utils/hasRight'
 import { $br } from './_elements'
-import { mwApi, mwConfig } from './mw'
+import { mwApi, mwConfig } from '../utils/mw'
 
 /**
  * @module quickDelete 删除页面模块
@@ -36,7 +36,7 @@ export function quickDelete(page, givenReason = '') {
       )
     ),
     beforeShow: function () {
-      if (!_hasRight('delete')) {
+      if (!hasRight('delete')) {
         ssi_modal.dialog({
           title: _msg('notify-no-right'),
           content: _msg('delete-no-right'),

@@ -1,5 +1,5 @@
 import { _msg } from './_msg'
-import { _hasRight } from './_hasRight'
+import { hasRight } from '../utils/hasRight'
 import { quickDelete } from './quickDelete'
 import { quickEdit } from './quickEdit'
 
@@ -11,7 +11,7 @@ import { quickEdit } from './quickEdit'
  * @param {String} reason.edit 编辑原因
  */
 export const _resolveExists = function (page, reason = {}) {
-  const canDelete = _hasRight('delete')
+  const canDelete = hasRight('delete')
 
   if (typeof reason === 'string') {
     reason = {
