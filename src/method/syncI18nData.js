@@ -1,6 +1,5 @@
 import { resolvePath } from './_dir'
-
-const config = mw.config.get()
+import { mwConfig } from '../utils/mw'
 
 // 设置
 const cacheTime = 2 * 60 * 60 * 1000
@@ -20,7 +19,7 @@ const localCacheTime = 'i18n-cache-' + funcName + '-timestamp'
 export async function syncI18nData(noCache) {
   const now = new Date().getTime()
   // 如果语言为 qqx，不返回任何东西
-  if (config.wgUserLanguage === 'qqx') {
+  if (mwConfig.wgUserLanguage === 'qqx') {
     console.warn('[InPageEdit] User language is qqx')
     return true
   }
