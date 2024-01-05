@@ -2,7 +2,7 @@ import { _analysis } from './_analytics'
 import { _msg } from './_msg'
 import { hasRight } from '../utils/hasRight'
 import { $br } from './_elements'
-import { mwApi, mwConfig } from '../utils/mw'
+import { useMwApi, mwConfig } from '../utils/mw'
 
 /**
  * @module quickDelete 删除页面模块
@@ -89,7 +89,7 @@ export function quickDelete(page, givenReason = '') {
             function (result) {
               if (result) {
                 reason = _msg('delete-title') + ' (' + reason + ')'
-                mwApi
+                useMwApi()
                   .postWithToken('csrf', {
                     action: 'delete',
                     title: page,
