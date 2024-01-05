@@ -1,10 +1,4 @@
-import { mwConfig } from '../utils/mw'
-const mwApi = new mw.Api({
-  parameters: {
-    format: 'json',
-    formatversion: 2,
-  },
-})
+import { useMwApi } from '../utils/mw'
 
 export async function initQueryData() {
   // Init
@@ -14,7 +8,7 @@ export async function initQueryData() {
 
   const {
     query: { users, userinfo, specialpagealiases },
-  } = await mwApi.get({
+  } = await useMwApi().get({
     action: 'query',
     ususers: mwConfig.wgUserName,
     meta: ['userinfo', 'siteinfo'],
