@@ -1,4 +1,4 @@
-import { useMwApi } from '../utils/mw'
+import { mwConfig, useMwApi } from '../utils/mw'
 
 export async function initQueryData() {
   // Init
