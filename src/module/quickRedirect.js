@@ -1,7 +1,7 @@
 import { _analysis } from './_analytics'
 import { _msg } from './_msg'
 import { $br, $progress } from './_elements'
-import { mwApi, mwConfig } from '../utils/mw'
+import { useMwApi, mwConfig } from '../utils/mw'
 import { _resolveExists } from './_resolveExists'
 import { preference } from './preference'
 
@@ -119,7 +119,7 @@ export function quickRedirect(type = 'to') {
 
           let promise = Promise.resolve()
           if (preference.get('noRedirectIfConvertedTitleExists')) {
-            promise = mwApi
+            promise = useMwApi()
               .get({ titles: json.title, converttitles: 1 })
               .done((data) => {
                 const convertedTitle = data.query.pages[0]
@@ -142,7 +142,10 @@ export function quickRedirect(type = 'to') {
           }
           promise.then(
             () => {
-              mwApi.postWithToken('csrf', json).done(successed).fail(failed)
+              useMwApi()
+                .postWithToken('csrf', json)
+                .done(successed)
+                .fail(failed)
             },
             () => {}
           )

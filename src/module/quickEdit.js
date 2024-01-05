@@ -1,4 +1,4 @@
-import { mwApi, mwConfig } from '../utils/mw'
+import { useMwApi, mwConfig } from '../utils/mw'
 
 import { _analysis } from './_analytics'
 import { _msg } from './_msg'
@@ -252,7 +252,7 @@ export function quickEdit(options) {
               if (options.section === 'new') {
                 sectiontitle = $newSectionTitleInput.val()
                 const anchor = (
-                  await mwApi.post({
+                  await useMwApi().post({
                     action: 'parse',
                     text: `==${sectiontitle}==`,
                     contentmodel: 'wikitext',
@@ -415,7 +415,7 @@ export function quickEdit(options) {
       }
 
       // 解析页面内容
-      mwApi
+      useMwApi()
         .get(options.jsonGet)
         .done(function (data) {
           console.timeEnd('[InPageEdit] 获取页面源代码')
@@ -516,7 +516,7 @@ export function quickEdit(options) {
         } else {
           queryJson.titles = options.page
         }
-        mwApi
+        useMwApi()
           .get(queryJson)
           .done(function (data) {
             console.info('[InPageEdit] 获取页面基础信息成功')
@@ -620,7 +620,7 @@ export function quickEdit(options) {
                   ''
                 ) // 去掉名字空间
 
-          mwApi
+          useMwApi()
             .get({
               action: 'query',
               meta: 'allmessages',
@@ -634,7 +634,7 @@ export function quickEdit(options) {
 
               if (!fullWikitext.trim()) return
 
-              mwApi
+              useMwApi()
                 .post({
                   action: 'parse',
                   text: fullWikitext,
@@ -845,7 +845,7 @@ export function quickEdit(options) {
             },
           ],
           onShow() {
-            mwApi
+            useMwApi()
               .get({
                 action: 'query',
                 format: 'json',
@@ -898,7 +898,7 @@ export function quickEdit(options) {
       options.jumpTo = '#' + sectiontitle
     }
 
-    mwApi
+    useMwApi()
       .postWithToken('csrf', options.jsonPost)
       .done(saveSuccess)
       .fail(saveError)

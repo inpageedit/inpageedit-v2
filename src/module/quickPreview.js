@@ -1,6 +1,6 @@
 import { _msg } from './_msg'
 import { $progress } from './_elements'
-import { mwApi } from '../utils/mw'
+import { useMwApi } from '../utils/mw'
 
 /**
  * @module quickPreview 快速预览文章页
@@ -50,7 +50,7 @@ export function quickPreview(params, modalSize = 'large', center = false) {
     onShow() {
       $loading.css('margin-top', window.innerHeight / 2 - 100)
       $('.previewbox .hideThisBtn').hide()
-      mwApi
+      useMwApi()
         .post(options)
         .then(function (data) {
           console.timeEnd('[InPageEdit] Request preview')
