@@ -3,7 +3,7 @@ import { _msg } from './_msg'
 import { hasRight } from '../utils/hasRight'
 import { _resolveExists } from './_resolveExists'
 import { $br } from './_elements'
-import { mwApi, mwConfig } from '../utils/mw'
+import { useMwApi, mwConfig } from '../utils/mw'
 import { progress } from './progress'
 
 /**
@@ -106,7 +106,7 @@ export function quickRename(from, to) {
             reason =
               _msg('rename-summary') + ' → [[:' + to + ']] (' + reason + ')'
           }
-          mwApi
+          useMwApi()
             .postWithToken('csrf', {
               action: 'move',
               from,

@@ -1,4 +1,4 @@
-import { mwApi, mwConfig } from '../utils/mw'
+import { useMwApi, mwConfig } from '../utils/mw'
 
 import { _analysis } from './_analytics'
 import { _msg } from './_msg'
@@ -17,6 +17,8 @@ import { linksHere } from './linksHere'
  * @param {{ page: string; revision?: number; section?: number; reload?: boolean }} options
  */
 export function quickEdit(options) {
+  const mwApi = useMwApi()
+
   /** 获取设定信息，设置缺省值 **/
   options = options || {}
   if (typeof options === 'string') {
