@@ -11,9 +11,9 @@ import {
 import version from './version'
 import { pluginStore } from './pluginStore'
 import { _analytics, getSiteID } from './_analytics'
+import { mwConfig } from '../utils/mw'
 
 const InPageEdit = window.InPageEdit || {}
-const config = mw.config.get()
 
 /**
  * @module preference 个人设置模块
@@ -517,7 +517,7 @@ export const preference = {
         }
 
         // 获取Analysis数据
-        const userName = config.wgUserName
+        const userName = mwConfig.wgUserName
         $.get(`${analyticsApi}/query/user`, {
           userName,
           siteUrl: getSiteID(),

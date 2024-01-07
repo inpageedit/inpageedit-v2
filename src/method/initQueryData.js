@@ -1,4 +1,4 @@
-import { useMwApi } from '../utils/mw'
+import { mwConfig, useMwApi } from '../utils/mw'
 
 export async function initQueryData() {
   // Init
@@ -10,7 +10,7 @@ export async function initQueryData() {
     query: { users, userinfo, specialpagealiases },
   } = await useMwApi().get({
     action: 'query',
-    ususers: mw.config.get('wgUserName'),
+    ususers: mwConfig.wgUserName,
     meta: ['userinfo', 'siteinfo'],
     list: ['users'],
     uiprop: ['rights'],

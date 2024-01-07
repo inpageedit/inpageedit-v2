@@ -4,7 +4,7 @@
  * @return {boolean}
  */
 export const hasRight = function (right) {
-  const conf = window.mw.config.get()
+  const conf = mw.config.get() // Get the latest configuration (may have been called `mw.config.set()` before)
   console.info(
     '[InPageEdit] _hasRight',
     right,
