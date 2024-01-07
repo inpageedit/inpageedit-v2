@@ -1,6 +1,6 @@
 {
   "name": "mediawiki-inpageedit",
-  "version": "14.4.1",
+  "version": "14.5.0",
   "description": "A useful MediaWiki JavaScript Plugin written with jQuery",
   "main": "dist/InPageEdit.min.js",
   "type": "module",
@@ -24,15 +24,14 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@dragon-fish/bump": "^0.0.15",
-    "@types/node": "^18.18.6",
+    "@types/node": "^20.10.6",
     "cross-env": "^7.0.3",
-    "eslint": "^8.51.0",
+    "eslint": "^8.56.0",
     "npm-run-all2": "^6.1.1",
-    "prettier": "^3.0.3",
+    "prettier": "^3.1.1",
     "rimraf": "^5.0.5",
     "types-mediawiki": "^1.4.0",
-    "vite": "^4.5.0"
+    "vite": "^5.0.10"
   },
   "author": "Dragon-Fish",
   "license": "GPL-3.0-or-later",

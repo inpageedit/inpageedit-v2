@@ -1,8 +1,8 @@
-import { mwApi, config } from './util'
+import { useMwApi, mwConfig } from '../utils/mw'
 
 import { _analysis } from './_analytics'
 import { _msg } from './_msg'
-import { _hasRight } from './_hasRight'
+import { hasRight } from '../utils/hasRight'
 
 import { $br, $progress } from './_elements'
 
@@ -17,15 +17,17 @@ import { linksHere } from './linksHere'
  * @param {{ page: string; revision?: number; section?: number; reload?: boolean }} options
  */
 export function quickEdit(options) {
+  const mwApi = useMwApi()
+
   /** 获取设定信息，设置缺省值 **/
   options = options || {}
   if (typeof options === 'string') {
     options = {
-      page: options || config.wgPageName,
+      page: options || mwConfig.wgPageName,
     }
   }
   var defaultOptions = {
-    page: config.wgPageName,
+    page: mwConfig.wgPageName,
     pageId: -1,
     revision: null,
     summaryRevision: '',
@@ -37,7 +39,7 @@ export function quickEdit(options) {
     outSideClose: true,
     jsonGet: {
       action: 'parse',
-      page: options.page || config.wgPageName,
+      page: options.page || mwConfig.wgPageName,
       prop: 'wikitext|langlinks|categories|templates|images|sections',
       format: 'json',
     },
@@ -61,7 +63,7 @@ export function quickEdit(options) {
 
   _analysis('quick_edit')
 
-  if (options.revision && options.revision !== config.wgCurRevisionId) {
+  if (options.revision && options.revision !== mwConfig.wgCurRevisionId) {
     ssi_modal.notify('warning', {
       className: 'in-page-edit',
       content: _msg('notify-editing-history'),
@@ -397,7 +399,7 @@ export function quickEdit(options) {
         })
       })
       // 获取权限
-      if (!_hasRight('edit')) {
+      if (!hasRight('edit')) {
         ssi_modal.notify('dialog', {
           className: 'in-page-edit',
           position: 'center bottom',
@@ -439,7 +441,7 @@ export function quickEdit(options) {
           $optionsLabel.find('.detailArea').hide()
         } else {
           options.editText =
-            options.section === 'new' ? '' : data.parse.wikitext['*']
+            options.section === 'new' ? '' : data.parse.wikitext
           options.pageId = data.parse.pageid
         }
         // 设定一堆子样式
@@ -472,7 +474,7 @@ export function quickEdit(options) {
         if (
           options.revision !== null &&
           options.revision !== '' &&
-          options.revision !== config.wgCurRevisionId &&
+          options.revision !== mwConfig.wgCurRevisionId &&
           options.section !== 'new'
         ) {
           $modalTitle
@@ -524,13 +526,12 @@ export function quickEdit(options) {
             // 记录页面最后编辑时间，防止编辑冲突
             $modalContent.data(
               'basetimestamp',
-              data['query']['pages']?.[options.pageId]?.['revisions']?.[0]?.[
-                'timestamp'
-              ] ?? now
+              data['query']['pages']?.[0]?.['revisions']?.[0]?.['timestamp'] ??
+                now
             )
             $modalContent.data(
               'starttimestamp',
-              data['query']['pages']?.[options.pageId]?.touched,
+              data['query']['pages']?.[0]?.touched,
               now
             )
             queryDone(data)
@@ -546,7 +547,7 @@ export function quickEdit(options) {
 
         /** 页面保护等级和编辑提示等 **/
         function queryDone(data) {
-          const pageData = data.query.pages[options.pageId]
+          const pageData = data.query.pages[0]
           options.namespace = pageData?.ns ?? 0 // 名字空间ID
           options.protection = pageData?.['protection'] || [] // 保护等级
           options.revision = pageData?.['revisions']?.[0]?.['revid']
@@ -589,7 +590,7 @@ export function quickEdit(options) {
           if (options.protection.length > 0) {
             const isEditable = (level) => {
               if (!level) return true
-              return _hasRight(
+              return hasRight(
                 level
                   .replace('sysop', 'editprotected')
                   .replace('autoconfirmed', 'editsemiprotected')
@@ -600,7 +601,7 @@ export function quickEdit(options) {
             )
             if (
               !isEditable(protectionEdit?.level) ||
-              (options.namespace === 8 && !_hasRight('editinterface'))
+              (options.namespace === 8 && !hasRight('editinterface'))
             ) {
               $modalWindow
                 .find('.save-btn')
@@ -610,14 +611,14 @@ export function quickEdit(options) {
           }
 
           // 获取编辑提示
-          var namespaceNoticePage = 'Editnotice-' + options.namespace,
-            pageNoticePage =
-              namespaceNoticePage +
+          const noticeKeyNS = 'Editnotice-' + options.namespace,
+            noticeKeyCurPage =
+              noticeKeyNS +
               '-' +
               options.page
                 .replace(/_/g, ' ') // 将页面名里的 _ 转换为空格
                 .replace(
-                  config.wgFormattedNamespaces[options.namespace] + ':',
+                  mwConfig.wgFormattedNamespaces[options.namespace] + ':',
                   ''
                 ) // 去掉名字空间
 
@@ -625,36 +626,30 @@ export function quickEdit(options) {
             .get({
               action: 'query',
               meta: 'allmessages',
-              ammessages: namespaceNoticePage + '|' + pageNoticePage,
+              ammessages: [noticeKeyNS, noticeKeyCurPage],
+              amenableparser: 1,
             })
             .done(function (data) {
-              var wikitextNs = data.query.allmessages[0]['*'] || '',
-                wikitextPage = data.query.allmessages[1]['*'] || ''
-              if (wikitextNs === '' && wikitextPage === '') return // 没有编辑提示
-              // 将编辑提示解析为 html
+              const wikitextNS = data.query.allmessages[0].content || '',
+                wikitextPage = data.query.allmessages[1].content || '',
+                fullWikitext = wikitextNS + '\n' + wikitextPage
+
+              if (!fullWikitext.trim()) return
+
               mwApi
                 .post({
                   action: 'parse',
+                  text: fullWikitext,
                   title: options.page,
-                  contentmodel: 'wikitext',
                   preview: true,
-                  text: wikitextPage + '\n' + wikitextNs,
                   disablelimitreport: true,
+                  disableeditsection: true,
+                  disabletoc: true,
                 })
-                .done(function (data) {
-                  options.editNotice = data.parse.text['*']
-                  var notice = $modalContent.data('editNotice') || ''
-                  notice += '\n' + options.editNotice
-                  if (
-                    // 忽略空白提示；使用$.parseHTML不会执行<script>
-                    $.parseHTML(notice)
-                      .map((ele) => ele.innerText)
-                      .join('')
-                      .trim()
-                  ) {
-                    $modalContent.data('editNotice', notice)
-                    $modalWindow.find('.showEditNotice').show()
-                  }
+                .then((data) => {
+                  const html = data.parse.text
+                  $modalContent.data('editNotice', html)
+                  $modalWindow.find('.showEditNotice').show()
                 })
             })
         }
@@ -721,8 +716,9 @@ export function quickEdit(options) {
     switch (id) {
       case 'showTemplates': {
         const templates = options.pageDetail.parse.templates
+        console.info('[InPageEdit] QuickEdit', '模板列表', templates)
         for (let i = 0; i < templates.length; i++) {
-          let templateName = templates[i]['*']
+          let templateName = templates[i].title
           $('<li>')
             .append(
               $('<a>', {
@@ -779,7 +775,7 @@ export function quickEdit(options) {
               ' | ',
               $('<a>', {
                 href:
-                  config.wgScript +
+                  mwConfig.wgScript +
                   '?title=Special:Upload&wpDestFile=' +
                   imageName +
                   '&wpForReUpload=1',
@@ -919,7 +915,7 @@ export function quickEdit(options) {
           $(window).unbind('beforeunload')
           content = _msg('notify-save-success')
           setTimeout(function () {
-            if (page === config.wgPageName) {
+            if (page === mwConfig.wgPageName) {
               window.location = mw.util.getUrl(page) + options.jumpTo
               window.location.reload()
             } else {

@@ -1,5 +1,7 @@
+import { mwConfig } from '../utils/mw'
+
 const funcName = 'InPageEdit'
-const userLang = mw.config.get('wgUserLanguage')
+const userLang = mwConfig.wgUserLanguage
 const fallbacks = {
   ab: 'ru',
   ace: 'id',

@@ -2,8 +2,8 @@ import { _msg } from './_msg'
 import { _analytics } from './_analytics'
 import { quickDiff } from './quickDiff'
 import { quickEdit } from './quickEdit'
-
-const config = mw.config.get()
+import { mwConfig } from '../utils/mw'
+import { isPureLMBClick } from '../utils/mouseEvent'
 const { getParamValue } = mw.util
 
 function injectLinks(container) {
@@ -30,8 +30,8 @@ function injectLinks(container) {
           ?.aliases.map((i) => [i, encodeURI(i)])
           .flat() || ['Diff']
       ).join('|')
-      const articlePath = config.wgArticlePath.replace('$1', '')
-      const specialNS = `Special|${config.wgFormattedNamespaces[-1]}`
+      const articlePath = mwConfig.wgArticlePath.replace('$1', '')
+      const specialNS = `Special|${mwConfig.wgFormattedNamespaces[-1]}`
       const specialDiffReg = new RegExp(
         `^${articlePath}(?:${specialNS}):(?:${specialDiffNames})/(\\d+|${RELATIVE_TYPES.join(
           '|'
@@ -88,6 +88,7 @@ function injectLinks(container) {
 
       // 点击事件
       $this.on('click', function (e) {
+        if (!isPureLMBClick(e)) return
         e.preventDefault()
         _analytics('quick_diff_recentchanges')
         return quickDiff(params)
@@ -104,14 +105,12 @@ export function loadQuickDiff(container) {
   injectLinks(container)
 
   // 查看历史页面的比较按钮与快速编辑
-  if (config.wgAction === 'history') {
+  if (mwConfig.wgAction === 'history') {
     $('.historysubmit.mw-history-compareselectedversions-button').after(
       $('<button>')
         .text(_msg('quick-diff'))
         .on('click', function (e) {
-          if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
-            return
-          }
+          if (!isPureLMBClick(e)) return
 
           e.preventDefault()
           _analytics('quick_diff_history_page')
@@ -132,7 +131,7 @@ export function loadQuickDiff(container) {
             text: _msg('quick-edit'),
           }).on('click', function () {
             quickEdit({
-              page: config.wgPageName,
+              page: mwConfig.wgPageName,
               revision: oldid,
             })
           })

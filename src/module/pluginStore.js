@@ -1,6 +1,6 @@
 // import _dir from '../method/_dir';
 // import { _msg } from './_msg';
-import { pluginCDN } from './api'
+import { pluginCDN } from './endpoints'
 import { preference } from './preference'
 import { loadScript } from '../method/loadScript'
 

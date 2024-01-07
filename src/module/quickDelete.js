@@ -1,10 +1,8 @@
 import { _analysis } from './_analytics'
 import { _msg } from './_msg'
-import { _hasRight } from './_hasRight'
+import { hasRight } from '../utils/hasRight'
 import { $br } from './_elements'
-
-var mwApi = new mw.Api()
-var config = mw.config.get()
+import { useMwApi, mwConfig } from '../utils/mw'
 
 /**
  * @module quickDelete 删除页面模块
@@ -13,8 +11,8 @@ var config = mw.config.get()
 export function quickDelete(page, givenReason = '') {
   mw.hook('InPageEdit.quickDelete').fire()
   console.log('Quick delete', page, givenReason)
-  var reason
-  page = page || config.wgPageName
+  let reason = ''
+  page = page || mwConfig.wgPageName
 
   ssi_modal.show({
     outSideClose: false,
@@ -38,7 +36,7 @@ export function quickDelete(page, givenReason = '') {
       )
     ),
     beforeShow: function () {
-      if (!_hasRight('delete')) {
+      if (!hasRight('delete')) {
         ssi_modal.dialog({
           title: _msg('notify-no-right'),
           content: _msg('delete-no-right'),
@@ -91,7 +89,7 @@ export function quickDelete(page, givenReason = '') {
             function (result) {
               if (result) {
                 reason = _msg('delete-title') + ' (' + reason + ')'
-                mwApi
+                useMwApi()
                   .postWithToken('csrf', {
                     action: 'delete',
                     title: page,
@@ -112,7 +110,7 @@ export function quickDelete(page, givenReason = '') {
                       content:
                         _msg('notify-delete-error') +
                         ': <br/><span style="font-size:amall">' +
-                        errorThrown.error['*'] +
+                        errorThrown.error.info +
                         '(<code>' +
                         errorThrown.error['code'] +
                         '</code>)</span>',

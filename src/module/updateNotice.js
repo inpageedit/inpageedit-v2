@@ -1,8 +1,8 @@
-import version from '../module/version'
+import version from './version'
 
-import { _msg } from '../module/_msg'
-import { versionInfo } from '../module/versionInfo'
-import { specialNotice } from '../module/specialNotice'
+import { _msg } from './_msg'
+import { versionInfo } from './versionInfo'
+import { specialNotice } from './specialNotice'
 
 export function updateNotice() {
   if (localStorage.getItem('InPageEditVersion') !== version) {

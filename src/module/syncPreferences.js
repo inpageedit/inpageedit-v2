@@ -3,7 +3,7 @@
 // 将 IPE 的参数设置保存在数据库内，实现多端同步
 // ========================================= //
 
-import { mwApi } from './util'
+import { useMwApi } from '../utils/mw'
 
 /**
  * @param {string} name
@@ -21,7 +21,7 @@ export async function setPreferences(name, value) {
     ...mw.user.options.value[prefKey(name)],
     ...value,
   }
-  return mwApi.postWithToken('csrf', {
+  return useMwApi().postWithToken('csrf', {
     format: 'json',
     action: 'options',
     change: new URLSearchParams({
@@ -35,7 +35,7 @@ export async function setPreferences(name, value) {
  * @returns {Promise<Record<string, any>>}
  */
 export async function getPreferences(name) {
-  const data = await mwApi.get({
+  const data = await useMwApi().get({
     format: 'json',
     action: 'query',
     meta: 'userinfo',

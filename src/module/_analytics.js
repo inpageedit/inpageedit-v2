@@ -1,6 +1,6 @@
-import { analyticsApi } from './api'
+import { analyticsApi } from './endpoints'
 import { preference } from './preference'
-import { config } from './util'
+import { mwConfig } from '../utils/mw'
 import version from './version'
 
 /**
@@ -14,8 +14,8 @@ export function _analytics(featID) {
   }
   const submitData = {
     siteUrl: getSiteID(),
-    siteName: config.wgSiteName,
-    userName: config.wgUserName,
+    siteName: mwConfig.wgSiteName,
+    userName: mwConfig.wgUserName,
     featureID: featID,
     ipeVersion: version,
   }
@@ -30,7 +30,7 @@ export function _analytics(featID) {
 }
 
 export function getSiteID() {
-  return `${config.wgServer}${config.wgArticlePath.replace('$1', '')}`
+  return `${mwConfig.wgServer}${mwConfig.wgArticlePath.replace('$1', '')}`
 }
 
 export {

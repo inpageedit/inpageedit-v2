@@ -3,17 +3,16 @@ import _dir from './_dir'
 import { loadScript } from './loadScript'
 import { initQueryData } from './initQueryData'
 import { loadStyles } from './loadStyles'
-import { updateNotice } from './updateNotice'
 import { syncI18nData } from './syncI18nData'
 
 import version from '../module/version'
-import { pluginCDN } from '../module/api'
+import { pluginCDN } from '../module/endpoints'
 
 // 导入全部模块
 import { _analytics } from '../module/_analytics'
 import { _msg } from '../module/_msg'
 import { about } from '../module/about'
-import * as api from '../module/api'
+import * as endpoints from '../module/endpoints'
 import { articleLink } from '../module/articleLink'
 import { linksHere } from '../module/linksHere'
 import { loadQuickDiff } from '../module/loadQuickDiff'
@@ -27,6 +26,7 @@ import { quickPreview } from '../module/quickPreview'
 import { quickRedirect } from '../module/quickRedirect'
 import { quickRename } from '../module/quickRename'
 import { specialNotice } from '../module/specialNotice'
+import { updateNotice } from '../module/updateNotice'
 import { versionInfo } from '../module/versionInfo'
 
 /**
@@ -68,7 +68,7 @@ export default async function init() {
   const InPageEdit = {
     _dir,
     about,
-    api,
+    endpoints,
     articleLink,
     linksHere,
     loadQuickDiff,
