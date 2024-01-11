@@ -560,7 +560,7 @@ export function quickEdit(options) {
             $optionsLabel
               .find('.watchList')
               .prop('disabled', false)
-              .prop('checked', 'watched' in pageData)
+              .prop('checked', pageData.watched)
               .off('click')
               .removeAttr('title')
           }
