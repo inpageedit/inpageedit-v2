@@ -36,7 +36,7 @@ export class pluginStore {
    */
   static load(name) {
     if (/^https?:\/\//.test(name)) {
-      mw.loader.load(name)
+      mw.loader.load(name, /\.css$/.test(name) ? 'text/css' : undefined)
       console.info('[InPageEdit] 从远程加载非官方插件', name)
     } else {
       loadScript(pluginCDN + '/plugins/' + name).then(
