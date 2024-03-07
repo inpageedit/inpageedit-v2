@@ -382,6 +382,7 @@ export function quickEdit(options) {
      * @description 模态框显示后
      */
     onShow($modal) {
+      $modal.options.onShow = '';
       var $modalWindow = $('#' + $modal.modalId)
       mw.hook('InPageEdit.quickEdit').fire({
         $modal,
