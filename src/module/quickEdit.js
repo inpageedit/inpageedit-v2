@@ -382,6 +382,7 @@ export function quickEdit(options) {
      * @description 模态框显示后
      */
     onShow($modal) {
+      $modal.options.onShow = '';
       var $modalWindow = $('#' + $modal.modalId)
       mw.hook('InPageEdit.quickEdit').fire({
         $modal,
@@ -560,7 +561,7 @@ export function quickEdit(options) {
             $optionsLabel
               .find('.watchList')
               .prop('disabled', false)
-              .prop('checked', 'watched' in pageData)
+              .prop('checked', pageData.watched)
               .off('click')
               .removeAttr('title')
           }
