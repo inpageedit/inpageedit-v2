@@ -11,7 +11,7 @@ import { useMwApi } from '../utils/mw'
 export function quickDiff(param) {
   mw.hook('InPageEdit.quickDiff').fire()
   _analysis('quick_diff')
-  mw.loader.load(['mediawiki.legacy.shared', 'mediawiki.diff.styles'])
+  mw.loader.load(['mediawiki.diff.styles'])
   var $modalTitle, $diffArea, $loading
   var $quickDiff = $('.quick-diff')
   if ($quickDiff.length > 0) {
