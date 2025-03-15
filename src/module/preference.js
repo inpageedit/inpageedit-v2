@@ -133,7 +133,7 @@ export const preference = {
             this.select()
           })
           .val(
-            `/** InPageEdit Preferences */\n;(window.InPageEdit = window.InPageEdit || {}).myPreference = ${JSON.stringify(
+            `/** InPageEdit Preferences **/\n;(window.InPageEdit = window.InPageEdit || {}).myPreference = ${JSON.stringify(
               $modalContent.data(),
               null,
               2
