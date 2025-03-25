@@ -1,5 +1,7 @@
+import { mwConfig } from '../utils/mw'
+
 const funcName = 'InPageEdit'
-const userLang = mw.config.get('wgUserLanguage')
+const userLang = mwConfig.wgUserLanguage
 const fallbacks = {
   ab: 'ru',
   ace: 'id',
@@ -175,7 +177,7 @@ const fallbacks = {
 function toObject(data) {
   try {
     return JSON.parse(data)
-  } catch (e) {
+  } catch (_) {
     return {}
   }
 }

@@ -2,7 +2,7 @@ import { _analysis } from './_analytics'
 import { _msg } from './_msg'
 import { $br, $progress } from './_elements'
 import { articleLink } from './articleLink'
-import { mwApi } from '../utils/mw'
+import { useMwApi } from '../utils/mw'
 
 /**
  * @module quickDiff 快速页面差异模块
@@ -11,7 +11,7 @@ import { mwApi } from '../utils/mw'
 export function quickDiff(param) {
   mw.hook('InPageEdit.quickDiff').fire()
   _analysis('quick_diff')
-  mw.loader.load(['mediawiki.legacy.shared', 'mediawiki.diff.styles'])
+  mw.loader.load(['mediawiki.diff.styles'])
   var $modalTitle, $diffArea, $loading
   var $quickDiff = $('.quick-diff')
   if ($quickDiff.length > 0) {
@@ -55,7 +55,7 @@ export function quickDiff(param) {
   } else if (param.fromtext) {
     param.frompst = true
   }
-  mwApi
+  useMwApi()
     .post(param)
     .done(function (data) {
       const compareTableBody = data.compare.body

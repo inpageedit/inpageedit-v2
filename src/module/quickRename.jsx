@@ -3,8 +3,8 @@ import { _msg } from './_msg'
 import { hasRight } from '../utils/hasRight'
 import { _resolveExists } from './_resolveExists'
 import { $br } from './_elements'
-import { mwApi, mwConfig } from '../utils/mw'
-import { progress } from './progress'
+import { useMwApi, mwConfig } from '../utils/mw'
+import { progressOverlay } from './progress'
 
 /**
  * @module quickRename 快速重命名模块
@@ -90,7 +90,8 @@ export function quickRename(from, to) {
 
           _analysis('quick_move')
 
-          progress(_msg('editor-title-saving'))
+          const { done: finishProgress, close: closeProgress } =
+            progressOverlay(_msg('editor-title-saving'))
           movetalk = $('.in-page-edit.quick-rename #movetalk').prop('checked')
           movesubpages = $('.in-page-edit.quick-rename #movesubpages').prop(
             'checked'
@@ -106,7 +107,7 @@ export function quickRename(from, to) {
             reason =
               _msg('rename-summary') + ' → [[:' + to + ']] (' + reason + ')'
           }
-          mwApi
+          useMwApi()
             .postWithToken('csrf', {
               action: 'move',
               from,
@@ -117,7 +118,7 @@ export function quickRename(from, to) {
               noredirect,
             })
             .done(function () {
-              progress(true)
+              finishProgress()
               ssi_modal.notify('success', {
                 className: 'in-page-edit',
                 content: _msg('notify-rename-success'),
@@ -129,7 +130,7 @@ export function quickRename(from, to) {
               )
             })
             .fail(function (errorCode, feedback, errorThrown) {
-              progress(false)
+              closeProgress()
               ssi_modal.notify('error', {
                 className: 'in-page-edit',
                 content:

@@ -1,7 +1,7 @@
 import { _analysis } from './_analytics'
 import { _msg } from './_msg'
 import { $br, $progress } from './_elements'
-import { mwApi, mwConfig } from '../utils/mw'
+import { useMwApi, mwConfig } from '../utils/mw'
 import { _resolveExists } from './_resolveExists'
 import { preference } from './preference'
 
@@ -11,6 +11,9 @@ import { preference } from './preference'
  */
 export function quickRedirect(type = 'to') {
   mw.hook('InPageEdit.quickRedirect').fire()
+
+  const mwApi = useMwApi()
+
   var text = '#REDIRECT [[:$1]]',
     question,
     target,

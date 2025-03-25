@@ -1,8 +1,7 @@
 import { _msg } from './_msg'
 import { preference } from './preference'
 import { quickEdit } from './quickEdit'
-
-const config = mw.config.get()
+import { mwConfig } from '../utils/mw'
 
 /**
  * @module articleLink 获取段落编辑以及编辑链接
@@ -27,10 +26,10 @@ export function articleLink(elements) {
 
     // 缓存wiki相关变量
     const href = anchor.href,
-      articlePath = config.wgArticlePath.replace('$1', ''),
-      wikiBaseURL = `${location.protocol}//${config.wgServer.split('//')[1]}`,
+      articlePath = mwConfig.wgArticlePath.replace('$1', ''),
+      wikiBaseURL = `${location.protocol}//${mwConfig.wgServer.split('//')[1]}`,
       wikiArticleBaseURL = `${wikiBaseURL}${articlePath}`,
-      wikiScriptBaseURL = `${wikiBaseURL}${config.wgScriptPath}`
+      wikiScriptBaseURL = `${wikiBaseURL}${mwConfig.wgScriptPath}`
 
     // 链接指向的既不是本wiki的 canonicalurl 也不是 permalink
     if (
@@ -74,7 +73,7 @@ export function articleLink(elements) {
         class: 'in-page-edit-article-link',
         text: _msg('quick-edit'),
       }).on('click', function (event) {
-        event.preventDefault();
+        event.preventDefault()
         var options = {}
         options.page = title
         if (revision !== null) {
@@ -82,7 +81,7 @@ export function articleLink(elements) {
         } else if (section !== null) {
           options.section = section
         }
-        if (!config.wgIsArticle) {
+        if (!mwConfig.wgIsArticle) {
           options.reload = false
         }
         quickEdit(options)

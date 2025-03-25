@@ -6,7 +6,7 @@
 import { _analytics } from './_analytics'
 import { $progress, $link } from './_elements'
 import { _msg } from './_msg'
-import { mwApi, mwConfig } from '../utils/mw'
+import { useMwApi, mwConfig } from '../utils/mw'
 import { quickEdit } from './quickEdit'
 
 /**
@@ -34,7 +34,7 @@ const getList = (title) => {
   } else {
     opt.lhlimit = 'max'
   }
-  return mwApi.get(opt)
+  return useMwApi().get(opt)
 }
 
 /**

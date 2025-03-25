@@ -1,4 +1,4 @@
-import { mwApi, mwConfig } from '../utils/mw'
+import { useMwApi, mwConfig } from '../utils/mw'
 
 import { _analysis } from './_analytics'
 import { _msg } from './_msg'
@@ -7,7 +7,7 @@ import { hasRight } from '../utils/hasRight'
 import { $br, $progress } from './_elements'
 
 import { preference } from './preference'
-import { progress } from './progress'
+import { progressOverlay } from './progress'
 import { quickPreview } from './quickPreview'
 import { quickDiff } from './quickDiff'
 import { linksHere } from './linksHere'
@@ -17,6 +17,8 @@ import { linksHere } from './linksHere'
  * @param {{ page: string; revision?: number; section?: number; reload?: boolean }} options
  */
 export function quickEdit(options) {
+  const mwApi = useMwApi()
+
   /** 获取设定信息，设置缺省值 **/
   options = options || {}
   if (typeof options === 'string') {
@@ -359,7 +361,7 @@ export function quickEdit(options) {
           class: 'showEditNotice',
           href: 'javascript:void(0);',
           html:
-            '<i class="fa fa-info-circle"></i> ' +
+            '<i class="fa"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-info-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c5.523 0 10 4.477 10 10a10 10 0 0 1 -19.995 .324l-.005 -.324l.004 -.28c.148 -5.393 4.566 -9.72 9.996 -9.72zm0 9h-1l-.117 .007a1 1 0 0 0 0 1.986l.117 .007v3l.007 .117a1 1 0 0 0 .876 .876l.117 .007h1l.117 -.007a1 1 0 0 0 .876 -.876l.007 -.117l-.007 -.117a1 1 0 0 0 -.764 -.857l-.112 -.02l-.117 -.006v-3l-.007 -.117a1 1 0 0 0 -.876 -.876l-.117 -.007zm.01 -3l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007z" /></svg></i> ' +
             _msg('editor-has-editNotice'),
           style: 'display: none;',
         }).on('click', function () {
@@ -380,6 +382,7 @@ export function quickEdit(options) {
      * @description 模态框显示后
      */
     onShow($modal) {
+      $modal.options.onShow = ''
       var $modalWindow = $('#' + $modal.modalId)
       mw.hook('InPageEdit.quickEdit').fire({
         $modal,
@@ -558,7 +561,7 @@ export function quickEdit(options) {
             $optionsLabel
               .find('.watchList')
               .prop('disabled', false)
-              .prop('checked', 'watched' in pageData)
+              .prop('checked', pageData.watched)
               .off('click')
               .removeAttr('title')
           }
@@ -878,7 +881,8 @@ export function quickEdit(options) {
     modal
   ) {
     _analysis('quick_edit_save')
-    progress(_msg('editor-title-saving'))
+    const { done: finishProgress, close: closeProgress } =
+      progressOverlay(_msg('editor-title-saving'))
     options.jsonPost = {
       action: 'edit',
       starttimestamp: $modalContent.data('starttimestamp'),
@@ -906,7 +910,7 @@ export function quickEdit(options) {
     // 保存正常
     function saveSuccess(data, feedback, errorThrown) {
       if (data.edit.result === 'Success') {
-        progress(true)
+        finishProgress()
         // 是否重载页面
         if ($optionsLabel.find('.reloadPage').prop('checked')) {
           var content
@@ -924,7 +928,7 @@ export function quickEdit(options) {
           console.info('[InPageEdit] 将不会重载页面！')
           content = _msg('notify-save-success-noreload')
           setTimeout(function () {
-            progress(false)
+            closeProgress()
             $editArea.attr('data-confirmclose', 'true')
             modal.close()
           }, 1500)
@@ -943,7 +947,7 @@ export function quickEdit(options) {
 
     // 保存失败
     function saveError(errorCode, feedback, errorThrown) {
-      progress(false)
+      closeProgress()
       var data = errorThrown || errorCode // 规范错误代码
       var errorInfo,
         errorMore = ''

@@ -32,7 +32,7 @@ export async function syncI18nData(noCache) {
     var json = {}
     try {
       json = JSON.parse(localStorage.getItem(localCacheName))
-    } catch (e) {
+    } catch (_) {
       console.warn('[InPageEdit] i18n 数据不合法')
       await getOriginalData()
       return true
