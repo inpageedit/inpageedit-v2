@@ -44,7 +44,7 @@ export const preference = {
     var local = localStorage.getItem('InPageEditPreference') || '{}'
     try {
       local = JSON.parse(local)
-    } catch (e) {
+    } catch (_) {
       local = {}
     }
     if (typeof InPageEdit.myPreference === 'object') {

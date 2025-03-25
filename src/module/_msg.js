@@ -177,7 +177,7 @@ const fallbacks = {
 function toObject(data) {
   try {
     return JSON.parse(data)
-  } catch (e) {
+  } catch (_) {
     return {}
   }
 }

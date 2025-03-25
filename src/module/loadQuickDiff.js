@@ -62,7 +62,6 @@ function injectLinks(container) {
        * fromrelative 是不被接受的，所以进行翻转
        */
       if (RELATIVE_TYPES.includes(oldid)) {
-        // eslint-disable-next-line no-extra-semi
         ;[diff, oldid] = [oldid, diff]
       }
 

@@ -18,7 +18,7 @@ import { linksHere } from '../module/linksHere'
 import { loadQuickDiff } from '../module/loadQuickDiff'
 import { preference } from '../module/preference'
 import { pluginStore } from '../module/pluginStore'
-import { progress } from '../module/progress'
+import { progressOverlay } from '../module/progress'
 import { quickDelete } from '../module/quickDelete'
 import { quickDiff } from '../module/quickDiff'
 import { quickEdit } from '../module/quickEdit'
@@ -73,7 +73,7 @@ export default async function init() {
     linksHere,
     loadQuickDiff,
     preference,
-    progress,
+    progressOverlay,
     quickDelete,
     quickDiff,
     quickEdit,
