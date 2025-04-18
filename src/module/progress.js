@@ -3,7 +3,7 @@ import { $progress } from './_elements.js'
 
 export function progressOverlay(title = '') {
   const $progressBar = $($progress)
-  const modal = ssi_modal.create({
+  const modal = ssi_modal.show({
     title: title,
     content: $progressBar,
     className: 'in-page-edit ipe-progress-overlay',
@@ -17,8 +17,9 @@ export function progressOverlay(title = '') {
     modal.find('.ssi-modalTitle').html(_msg('done'))
   }
   const close = () => {
-    modal.appendTo('body')
-    ssi_modal.close()
+    modal.close()
   }
-  return { modal, done, close }
+  const payload = { modal, done, close }
+  mw.hook('InPageEdit.progressOverlay').fire(payload)
+  return payload
 }
