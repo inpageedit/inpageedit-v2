@@ -1,7 +1,7 @@
 // 导入方法
 import _dir from './_dir'
 import { loadScript } from './loadScript'
-import { initQueryData } from './initQueryData'
+import { fetchMetadata } from './metadata'
 import { loadStyles } from './loadStyles'
 import { syncI18nData } from './syncI18nData'
 
@@ -47,7 +47,7 @@ export default async function init() {
   await Promise.all([
     syncI18nData(noCache),
     loadScript(`${pluginCDN}/lib/ssi-modal/ssi-modal.js`),
-    initQueryData(),
+    fetchMetadata(),
   ])
 
   mw.hook('InPageEdit.init.i18n').fire({ _msg })

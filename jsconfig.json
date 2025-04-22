@@ -7,7 +7,10 @@
     "jsx": "preserve",
     "sourceMap": true,
     "types": ["node"],
-    "lib": ["ESNext", "DOM"]
+    "lib": ["ESNext", "DOM"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": [
     "./node_modules/types-mediawiki",

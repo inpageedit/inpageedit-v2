@@ -12,13 +12,13 @@ import { quickPreview } from './quickPreview'
 import { quickDiff } from './quickDiff'
 import { linksHere } from './linksHere'
 
+const mwApi = useMwApi()
+
 /**
  * @module quickEdit 快速编辑模块
  * @param {{ page: string; revision?: number; section?: number; reload?: boolean }} options
  */
-export function quickEdit(options) {
-  const mwApi = useMwApi()
-
+export function quickEditLegacy(options) {
   /** 获取设定信息，设置缺省值 **/
   options = options || {}
   if (typeof options === 'string') {
@@ -881,8 +881,9 @@ export function quickEdit(options) {
     modal
   ) {
     _analysis('quick_edit_save')
-    const { done: finishProgress, close: closeProgress } =
-      progressOverlay(_msg('editor-title-saving'))
+    const { done: finishProgress, close: closeProgress } = progressOverlay(
+      _msg('editor-title-saving')
+    )
     options.jsonPost = {
       action: 'edit',
       starttimestamp: $modalContent.data('starttimestamp'),

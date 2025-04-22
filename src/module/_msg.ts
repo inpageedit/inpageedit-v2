@@ -1,8 +1,8 @@
-import { mwConfig } from '../utils/mw'
+import { mwConfig } from '@/utils/mw.js'
 
 const funcName = 'InPageEdit'
 const userLang = mwConfig.wgUserLanguage
-const fallbacks = {
+const fallbacks: Record<string, string> = {
   ab: 'ru',
   ace: 'id',
   aln: 'sq',
@@ -174,7 +174,7 @@ const fallbacks = {
  * @function toObject
  * @param {String} data
  */
-function toObject(data) {
+function toObject(data: any) {
   try {
     return JSON.parse(data)
   } catch (_) {
@@ -191,7 +191,7 @@ function toObject(data) {
  *
  * @return The resulting message.
  */
-function handleArgs(message, ...args) {
+function handleArgs(message: string, ...args: string[]) {
   args.forEach(function (elem, index) {
     var rgx = new RegExp('\\$' + (index + 1), 'g')
     message = message.replace(rgx, elem)
@@ -212,18 +212,21 @@ function handleArgs(message, ...args) {
  *
  * @return The generated link.
  */
-function makeLink(href, text, hasProtocol, blank) {
+function makeLink(
+  href: string,
+  text?: string,
+  hasProtocol?: boolean,
+  blank?: boolean
+) {
   text = text || href
   href = hasProtocol ? href : mw.util.getUrl(href)
 
   text = mw.html.escape(text)
   href = mw.html.escape(href)
 
-  blank = blank ? 'rel="noopener" target="_blank"' : ''
+  const blankAttrs = blank ? 'rel="noopener" target="_blank"' : ''
 
-  return (
-    '<a href="' + href + '" title="' + text + '"' + blank + '>' + text + '</a>'
-  )
+  return `<a href="${href}" title="${text}" ${blankAttrs}>${text}</a>`
 }
 
 /*
@@ -248,7 +251,7 @@ function makeLink(href, text, hasProtocol, blank) {
  *
  * @return
  */
-function sanitiseHtml(html) {
+function sanitiseHtml(html: string) {
   var context = document.implementation.createHTMLDocument(''),
     $html = $.parseHTML(html, /* document */ context, /* keepscripts */ false),
     $div = $('<div>', context).append($html),
@@ -267,7 +270,7 @@ function sanitiseHtml(html) {
     ]
 
   $div.find('*').each(function () {
-    var $this = $(this),
+    let $this = $(this),
       tagname = $this.prop('tagName').toLowerCase(),
       attrs,
       array,
@@ -298,12 +301,12 @@ function sanitiseHtml(html) {
       if (attr.name === 'style') {
         style = $this.attr('style')
 
-        if (style.indexOf('url(') > -1) {
+        if (style!.indexOf('url(') > -1) {
           mw.log('[I18n-js] Disallowed url() in style attribute')
           $this.removeAttr('style')
 
           // https://phabricator.wikimedia.org/T208881
-        } else if (style.indexOf('var(') > -1) {
+        } else if (style!.indexOf('var(') > -1) {
           mw.log('[I18n-js] Disallowed var() in style attribute')
           $this.removeAttr('style')
         }
@@ -329,7 +332,7 @@ function sanitiseHtml(html) {
  *
  * @return The resulting string.
  */
-function parseWikitext(message) {
+function parseWikitext(message: string) {
   // [url text] -> [$1 $2]
   var urlRgx = /\[((?:https?:)?\/\/.+?) (.+?)\]/g,
     // [[pagename]] -> [[$1]]
@@ -373,7 +376,7 @@ function parseWikitext(message) {
  * @param {string} msg
  * @param  {...string} args
  */
-function parseMessage(msg, ...args) {
+function parseMessage(msg: string, ...args: string[]) {
   msg = handleArgs(msg, ...args)
   msg = parseWikitext(msg)
   return msg
@@ -382,7 +385,7 @@ function parseMessage(msg, ...args) {
 /**
  * @function rawMessage
  */
-function getMessage(lang, msgKey, ...args) {
+function getRawMessage(lang: string, msgKey: string, ...args: string[]) {
   const i18nCache =
     localStorage.getItem('i18n-cache-' + funcName + '-content') || '{}'
 
@@ -399,7 +402,7 @@ function getMessage(lang, msgKey, ...args) {
   var cacheMessages = toObject(i18nCache)
 
   // 查询本地覆写
-  var ipe = window.InPageEdit || {}
+  var ipe = (window as any).InPageEdit || {}
   var overrides = ipe.i18n || {}
   // InPageEdit.i18n.lang.msgKey
   if (overrides[lang] && overrides[lang][msgKey]) {
@@ -422,14 +425,15 @@ function getMessage(lang, msgKey, ...args) {
 
   // 转换用户语言后再试，例如 zh => zh-hans, zh-tw => zh-hant
   lang = fallbacks[lang] || 'en'
-  return getMessage(lang, msgKey, ...args)
+  return getRawMessage(lang, msgKey, ...args)
 }
 
 /**
- * @module _msg
  * @param {String} msgKey 消息的键
  * @param  {String} args 替代占位符($1, $2...)的内容，可以解析简单的wikitext
  */
-export const _msg = function (msgKey, ...args) {
-  return getMessage(userLang, msgKey, ...args)
+export const i18n = function (msgKey: string, ...args: string[]) {
+  return getRawMessage(userLang, msgKey, ...args)
 }
+// 兼容旧版
+export { i18n as _msg }

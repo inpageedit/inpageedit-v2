@@ -16,17 +16,22 @@ import init from './method/init'
 
   // 防止多次运行
   if (InPageEdit.__loaded) {
-    throw '[InPageEdit] InPageEdit 被多次加载。'
+    throw new Error('[InPageEdit] InPageEdit 被多次加载。')
   } else {
     InPageEdit.__loaded = true
   }
+  try {
+    // 初始化插件
+    const core = await init()
 
-  // 初始化插件
-  const core = await init()
-
-  // 合并入全局变量
-  window.InPageEdit = {
-    ...InPageEdit,
-    ...core,
+    // 合并入全局变量
+    window.InPageEdit = {
+      ...InPageEdit,
+      ...core,
+    }
+  } catch (e) {
+    // 处理错误
+    console.error('[InPageEdit] 初始化失败', e)
+    InPageEdit.__loaded = false
   }
 })()

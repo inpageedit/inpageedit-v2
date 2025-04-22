@@ -4,9 +4,10 @@
  * - 插件CDN的URL路径，不含尾随 `/`
  * - 注意，如果您想自己自己托管 InPageEdit，`_dir`可以直接返回您的URL
  */
-export const baseURL = import.meta.env.DEV
-  ? import.meta.env.BASE_URL.replace(/\/+$/, '')
-  : resolveLegacyBaseURL(document?.currentScript?.src)
+export const baseURL =
+  import.meta.env.MODE === 'development'
+    ? 'http://127.0.0.1:1225'
+    : resolveLegacyBaseURL(document?.currentScript?.src)
 
 export { baseURL as default }
 

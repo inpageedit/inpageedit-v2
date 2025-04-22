@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import { version } from './package.json'
+import { resolve } from 'node:path'
 
 const { MINIFY } = process.env
 const isDev = process.env.NODE_ENV === 'development'
@@ -18,6 +19,11 @@ export default defineConfig({
     minify: !!MINIFY,
     emptyOutDir: false,
     sourcemap: true,
+  },
+  resolve: {
+    alias: {
+      '@': resolve(import.meta.dirname, 'src'),
+    },
   },
   define: {
     'import.meta.env.__VERSION__': JSON.stringify(

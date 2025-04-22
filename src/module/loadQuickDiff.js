@@ -4,6 +4,7 @@ import { quickDiff } from './quickDiff'
 import { quickEdit } from './quickEdit'
 import { mwConfig } from '../utils/mw'
 import { isPureLMBClick } from '../utils/mouseEvent'
+import { useSpecialPageAliases } from '@/method/metadata'
 const { getParamValue } = mw.util
 
 function injectLinks(container) {
@@ -24,8 +25,7 @@ function injectLinks(container) {
 
       // 形如 Special:Diff/[oldid]/[diff]
       const specialDiffNames = (
-        mw.config
-          .get('wgSpecialPageAliases', [])
+        useSpecialPageAliases()
           .find(({ realname }) => realname === 'Diff')
           ?.aliases.map((i) => [i, encodeURI(i)])
           .flat() || ['Diff']
