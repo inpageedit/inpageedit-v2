@@ -1,8 +1,0 @@
-export const aboutUrl = 'https://www.ipe.wiki/'
-export const analyticsApi = 'https://analytics.ipe.wiki/api'
-export const analyticsDash = 'https://analytics.ipe.wiki'
-export const githubLink = 'https://github.com/inpageedit/inpageedit-v2'
-export const pluginCDN = 'https://ipe-plugins.js.org'
-export const pluginGithub = 'https://github.com/inpageedit/Plugins'
-export const specialNotice = 'https://ipe-plugins.js.org/specialNotice.json'
-export const updatelogsUrl = 'https://www.ipe.wiki/update/'

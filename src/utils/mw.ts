@@ -1,4 +1,4 @@
-import version from '../module/version'
+import version from '../constants/version'
 
 /**
  * 警告：从此 Map 获取页面初始化以后动态绑定的配置项可能(?)是不安全的

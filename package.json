@@ -26,6 +26,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.23.0",
+    "@types/jquery": "^3.5.32",
     "@types/node": "^22.13.13",
     "cross-env": "^7.0.3",
     "eslint": "^9.23.0",
@@ -33,7 +34,9 @@
     "npm-run-all2": "^7.0.2",
     "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
+    "tsx": "^4.19.3",
     "types-mediawiki": "^1.10.1",
+    "typescript": "^5.8.3",
     "vite": "^6.2.3"
   },
   "author": "Dragon-Fish",
@@ -50,5 +53,8 @@
   },
   "bugs": {
     "url": "https://github.com/inpageedit/inpageedit-v2/issues"
+  },
+  "dependencies": {
+    "jsx-dom": "^8.1.6"
   }
 }

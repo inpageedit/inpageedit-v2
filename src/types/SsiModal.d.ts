@@ -87,7 +87,7 @@ declare class SsiModal {
    */
   setContent: (
     content: string | HTMLElement | JQuery<any>,
-    method?: 'html' | 'append' | 'prepend' = 'html'
+    method?: 'html' | 'append' | 'prepend'
   ) => JQuery<any>
   setIcons: (icons: any) => void
   setModalHeight: (
@@ -127,10 +127,6 @@ declare class SsiModal {
    * Remove all the modals from the dom immediately. No callbacks will execute.
    */
   static removeAll: () => void
-  static confirm: (
-    options: Partial<SsiModalOptions>,
-    method: (event: MouseEvent, modal: SsiModal) => void
-  ) => SsiModal
 
   // == Plugins ==
   // dialog

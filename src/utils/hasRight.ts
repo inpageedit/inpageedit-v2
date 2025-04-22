@@ -1,4 +1,4 @@
-import { useUserIsBlocked, useUserRights } from '@/method/metadata'
+import { useUserIsBlocked, useUserRights } from '@/controllers/metadata'
 
 /**
  * 是否拥有权限
