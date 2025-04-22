@@ -20,27 +20,90 @@ declare class SsiModal {
   public options: SsiModalOptions
   readonly pluginName: string
   close: () => void
+  /**
+   * Initialize the modal and backdrop and expose them to the DOM
+   */
   init: () => this
+  /**
+   * Changes the previe state (fullScreen) of the modal.
+   */
+  changePreviewState: () => this
+  /**
+   * Generates a button according to the options.
+   * @returns The button element.
+   */
+  generateButton: (
+    buttonOptions: Partial<SsiModalButton>
+  ) => JQuery<HTMLElement>
+  /**
+   * Returns the backdrop element of the modal.
+   * Or outer element if the modal is stack.
+   */
   get$backdrop: () => JQuery<HTMLElement>
-  get$buttons: (type: 'left' | 'right') => JQuery<HTMLElement>
+  /**
+   * Returns the buttons element of the modal.
+   * @param type - 'left' or 'right'. If not specified, returns all buttons' container.
+   */
+  get$buttons: (type?: 'left' | 'right') => JQuery<HTMLElement>
+  /**
+   * Returns the content element of the modal.
+   */
   get$content: () => JQuery<HTMLElement>
+  /**
+   * Returns the title icons of the modal.
+   */
   get$icons: () => JQuery<HTMLElement>
+  /**
+   * Returns the modal element of the modal.
+   * @description returns the outer element of the modal (ie if we use stack modals will return the window object else will return the modalOuter)
+   */
   get$modal: () => JQuery<HTMLElement>
+  /**
+   * Returns the title element of the modal.
+   */
   get$title: () => JQuery<HTMLElement>
+  /**
+   * Returns the window element of the modal.
+   */
   get$window: () => JQuery<HTMLElement>
+  /**
+   * Returns the wrapper element of the modal.
+   */
   get$wrapper: () => JQuery<HTMLElement>
-  setButtons: (buttons: SsiModalButton[]) => void
+  /**
+   * Initialize the buttons element if it is necessary, and add the buttons to the element.
+   * @returns Buttons container element.
+   */
+  setButtons: (
+    buttons: Partial<SsiModalButton>[],
+    area?: AnyJQueryElement,
+    $modalWindow?: JQuery<any>
+  ) => JQuery<HTMLElement>
+  /**
+   * Initialize the content element if it is necessary and registers the content.
+   * @param content The content of the element.
+   * @param method The jquery method that will use to register the content to the modal.
+   * @returns The content element of the modal.
+   */
   setContent: (
     content: string | HTMLElement | JQuery<any>,
-    method?: 'html' | 'text' = 'html'
-  ) => void
+    method?: 'html' | 'append' | 'prepend' = 'html'
+  ) => JQuery<any>
   setIcons: (icons: any) => void
-  setModalHeight: (height: number) => void
-  setOptions: (options: Partial<SsiModalOptions>) => void
+  setModalHeight: (
+    offset: number,
+    option?: 'height' | 'min-height' | 'max-height'
+  ) => number
+  setOptions: (options: Partial<SsiModalOptions>) => this
+  setPluginName: (name: string) => this
   setTitle: (title: string | HTMLElement | JQuery<any>) => void
   show: () => this
 
   // Static methods
+  /**
+   * Checks if the element is a ssi modal object.
+   */
+  static checkElement: (element: AnyJQueryElement) => SsiModal | false
   /**
    * Creates a ssi modal object and shows it immediately.
    * @example ```js
@@ -61,28 +124,36 @@ declare class SsiModal {
   static close: (modalId?: string) => SsiModal
   static closeAll: () => SsiModal
   /**
-   * Removes all modals from the DOM. With no beforeClose or onClose events.
+   * Remove all the modals from the dom immediately. No callbacks will execute.
    */
   static removeAll: () => void
-  static dialog: (
-    options: Partial<SsiModalOptions>,
-    method: (event: MouseEvent, modal: SsiModal) => void
-  ) => SsiModal
   static confirm: (
     options: Partial<SsiModalOptions>,
     method: (event: MouseEvent, modal: SsiModal) => void
   ) => SsiModal
 
-  // Plugins
+  // == Plugins ==
+  // dialog
+  static dialog: (
+    options: Partial<SsiModalOptions>,
+    method: (event: MouseEvent, modal: SsiModal) => void
+  ) => SsiModal
+  // confirm
+  static confirm: (
+    options: Partial<SsiModalOptions>,
+    method: (event: MouseEvent, modal: SsiModal) => void
+  ) => SsiModal
+  // notify
   static notify: (
     type: 'success' | 'error' | 'warning' | 'info' | 'dialog' | 'confirm',
     options: Partial<SsiModalOptions> &
       Partial<{
         icon: string
-        okBtn: SsiModalButton
-        cancelBtn: SsiModalButton
+        okBtn: Pick<SsiModalButton, 'label' | 'className'>
+        cancelBtn: Pick<SsiModalButton, 'label' | 'className'>
         overrideOther: boolean
-      }>
+      }>,
+    callback: (result: boolean) => void
   ) => SsiModal
 }
 
@@ -96,7 +167,7 @@ export interface SsiModalOptions {
   beforeShow: (modal: SsiModal) => void | false
   bodyElement: boolean
   bodyScroll: boolean
-  buttons: SsiModalButton[]
+  buttons: Partial<SsiModalButton>[]
   center: boolean
   className: string
   closeAfter: {
@@ -127,11 +198,11 @@ export interface SsiModalOptions {
   preview: unknown
   sizeClass: SsiModalSizeClass
   stack: boolean
-  title: string | HTMLElement | JQuery<any>
+  title: AnyJQueryElement
 }
 
 export interface SsiModalButton {
-  label: string | HTMLElement | JQuery<any>
+  label: AnyJQueryElement
   type: 'button' | 'link'
   className: string
   enableAfter: number | false
@@ -159,6 +230,8 @@ export type SsiModalAnimation =
       hide: string | false
     }
   | false
+
+type AnyJQueryElement = string | HTMLElement | JQuery<any>
 
 // Declare the global variable
 declare global {
