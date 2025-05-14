@@ -7,44 +7,44 @@
  * @url https://github.com/Dragon-Fish/InPageEdit-v2
  */
 
-import init from '@/controllers/init.js'
+import { InPageEdit as App } from '@/InPageEdit'
+export { App as InPageEdit }
 
-// Types declaration
-declare type InPageEdit = Awaited<ReturnType<typeof init>>
-// Global variable declaration
+/**
+ * Global variable declaration
+ *
+ * Due to historical problem,
+ * we call the IPE instance `InPageEdit`,
+ * and the IPE class called `InPageEditCore`
+ */
 declare global {
-  export const InPageEdit: InPageEdit
+  export const InPageEditCore: typeof App
+  export const InPageEdit: App
   export interface Window {
     [LOADED_SYMBOL]: boolean
-    InPageEdit: InPageEdit
+    InPageEditCore: typeof App
+    InPageEdit: App
   }
 }
 
 const LOADED_SYMBOL: unique symbol = Symbol.for('InPageEditLoaded')
 
 // Main IIFE
-;(async function main()  {
-  // 创建 InPageEdit 变量
-  const InPageEdit = window.InPageEdit || {}
-
+;(async function initIPEInstance() {
   // 防止多次运行
   if (window[LOADED_SYMBOL]) {
     throw new Error('[InPageEdit] InPageEdit 被多次加载。')
   } else {
     window[LOADED_SYMBOL] = true
   }
-  try {
-    // 初始化插件
-    const core = await init()
 
-    // 合并入全局变量
-    window.InPageEdit = {
-      ...InPageEdit,
-      ...core,
-    }
-  } catch (e) {
-    // 处理错误
-    console.error('[InPageEdit] 初始化失败', e)
-    window[LOADED_SYMBOL] = false
-  }
+  window.InPageEditCore = App
+
+  const oldGlobalVar: any = window.InPageEdit || {}
+  const ipe = new App({
+    legacyPreferences: oldGlobalVar?.myPreferences || {},
+  })
+  ipe.start()
+
+  window.InPageEdit = ipe
 })()

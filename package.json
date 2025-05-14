@@ -9,7 +9,7 @@
     "i18n"
   ],
   "scripts": {
-    "build": "npm run lint && npm run clear && run-p \"build:*\"",
+    "build": "npm run lint && npm run clear && run-p build:*",
     "build:full": "vite build",
     "build:compressed": "cross-env MINIFY=1 vite build",
     "prepublish": "npm run build",
@@ -25,19 +25,20 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.23.0",
+    "@eslint/js": "^9.25.1",
     "@types/jquery": "^3.5.32",
-    "@types/node": "^22.13.13",
+    "@types/node": "^22.15.3",
     "cross-env": "^7.0.3",
-    "eslint": "^9.23.0",
+    "eslint": "^9.25.1",
+    "fexios": "^2.1.0",
     "globals": "^16.0.0",
     "npm-run-all2": "^7.0.2",
     "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
-    "tsx": "^4.19.3",
+    "tsx": "^4.19.4",
     "types-mediawiki": "^1.10.1",
     "typescript": "^5.8.3",
-    "vite": "^6.2.3"
+    "vite": "^6.3.4"
   },
   "author": "Dragon-Fish",
   "license": "GPL-3.0-or-later",
@@ -55,6 +56,11 @@
     "url": "https://github.com/inpageedit/inpageedit-v2/issues"
   },
   "dependencies": {
-    "jsx-dom": "^8.1.6"
+    "cordis": "^3.18.1",
+    "jsx-dom": "^8.1.6",
+    "wiki-saikou": "^4.2.0"
+  },
+  "peerDependencies": {
+    "fexios": "^2.1.0"
   }
 }

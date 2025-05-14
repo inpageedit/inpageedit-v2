@@ -17,7 +17,7 @@ export default defineConfig({
       formats: ['umd'],
     },
     minify: !!MINIFY,
-    emptyOutDir: false,
+    emptyOutDir: isDev ? true : false,
     sourcemap: true,
   },
   resolve: {
@@ -31,6 +31,9 @@ export default defineConfig({
         ? version
         : `${version}-dev.${new Date().toISOString().split('T')[0].replaceAll('-', '')}`
     ),
+  },
+  optimizeDeps: {
+    include: ['cordis'],
   },
   mode: process.env.NODE_ENV,
   server: {
