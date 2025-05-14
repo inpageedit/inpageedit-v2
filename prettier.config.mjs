@@ -1,5 +1,10 @@
+// @ts-check
+
 // https://prettier.io/docs/en/options.html
-module.exports = {
+/**
+ * @type {import('prettier').Options}
+ */
+export default {
   tabWidth: 2,
   useTabs: false,
   semi: false,

@@ -2,11 +2,11 @@
   "compilerOptions": {
     "target": "ES2019",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "strict": true,
     "jsx": "preserve",
     "sourceMap": true,
-    "types": ["node"],
+    "types": ["vite/client", "node"],
     "lib": ["ESNext", "DOM"]
   },
   "include": [
