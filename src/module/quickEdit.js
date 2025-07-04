@@ -14,7 +14,7 @@ import { linksHere } from './linksHere'
 
 /**
  * @module quickEdit 快速编辑模块
- * @param {{ page: string; revision?: number; section?: number; reload?: boolean }} options
+ * @param {{ page: string; revision?: number; section?: number; reload?: boolean; editText?: string }} options
  */
 export function quickEdit(options) {
   const mwApi = useMwApi()
@@ -59,7 +59,7 @@ export function quickEdit(options) {
     now = date.toISOString()
 
   /** 将选项合并并标准化 **/
-  options = $.extend({}, defaultOptions, options, userPreference)
+  options = $.extend({}, defaultOptions, userPreference, options)
 
   _analysis('quick_edit')
 
@@ -434,8 +434,10 @@ export function quickEdit(options) {
       // 页面内容获取完毕，后续工作
       function contentDone(data) {
         options.pageDetail = data
-
-        if (data.error) {
+        if (options.editText) {
+          console.log("[InPageEdit] 使用传入的editText值编辑")
+        }
+        else if (data.error) {
           console.warn('[InPageEdit]警告：无法获取页面内容')
           options.editText = '<!-- ' + data.error.info + ' -->'
           options.pageId = -1
