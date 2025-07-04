@@ -85,9 +85,9 @@ export function quickEdit(options) {
   // 模态框内部
   var $modalTitle = $('<span>').append(
     _msg('editor-title-editing') +
-      ': <u class="editPage">' +
-      options.page.replace(/_/g, ' ') +
-      '</u>'
+    ': <u class="editPage">' +
+    options.page.replace(/_/g, ' ') +
+    '</u>'
   )
   var $editArea = $('<textarea>', {
     class: 'editArea',
@@ -417,38 +417,35 @@ export function quickEdit(options) {
         $modalWindow.find('.save-btn').addClass('btn-danger')
       }
 
-      // 解析页面内容
-      mwApi
-        .get(options.jsonGet)
-        .done(function (data) {
-          console.timeEnd('[InPageEdit] 获取页面源代码')
-          contentDone(data)
-        })
-        .fail(function (a, b, errorThrown) {
-          console.timeEnd('[InPageEdit] 获取页面源代码')
-          console.warn('[InPageEdit]警告：无法获取页面内容')
-          var data = errorThrown
-          contentDone(data)
-        })
-
-      // 页面内容获取完毕，后续工作
-      function contentDone(data) {
-        options.pageDetail = data
-        if (data.error) {
-          console.warn('[InPageEdit]警告：无法获取页面内容')
-          options.editText = '<!-- ' + data.error.info + ' -->'
-          options.pageId = -1
-          $optionsLabel.find('.detailArea').hide()
-        } else {
-          options.pageId = data.parse.pageid
-          if (options.editText) {
-            console.log("[InPageEdit] 使用传入的 editText 值编辑")
-          }
-          else {
+      if (options.editText) {
+        console.log("[InPageEdit] 使用 editText 传入值编辑")
+        parseModal()
+      }
+      else {
+        // 解析页面内容
+        mwApi
+          .get(options.jsonGet)
+          .done(function (data) {
+            console.timeEnd('[InPageEdit] 获取页面源代码')
+            options.pageDetail = data
             options.editText =
               options.section === 'new' ? '' : data.parse.wikitext
-          }
-        }
+            options.pageId = data.parse.pageid
+            parseModal(data)
+          })
+          .fail(function (a, b, errorThrown) {
+            console.timeEnd('[InPageEdit] 获取页面源代码')
+            console.warn('[InPageEdit]警告：无法获取页面内容')
+            var data = errorThrown
+            options.pageDetail = data
+            options.editText = '<!-- ' + data.error.info + ' -->'
+            options.pageId = -1
+            $optionsLabel.find('.detailArea').hide()
+            parseModal(data)
+          })
+      }
+
+      function parseModal() {
         // 设定一堆子样式
         $modalContent.find('.ipe-progress').hide()
         $modalWindow.find('.hideBeforeLoaded').fadeIn(500)
@@ -459,17 +456,17 @@ export function quickEdit(options) {
           summaryVal = $optionsLabel.find('.editSummary').val()
           summaryVal = summaryVal.replace(
             /\$section/gi,
-            `/* ${data.parse.sections[0].anchor} */`
+            `/* ${options.pageDetail?.parse.sections[0].anchor} */`
           )
           $optionsLabel.find('.editSummary').val(summaryVal)
           $modalTitle
             .find('.editPage')
             .after(
               '<span class="editSection"> → ' +
-                data.parse.sections[0].line +
-                '</span>'
+              options.pageDetail?.parse.sections[0].line +
+              '</span>'
             )
-          options.jumpTo = '#' + data.parse.sections[0].anchor
+          options.jumpTo = '#' + options.pageDetail?.parse.sections[0].anchor
         } else if (options.section !== 'new') {
           summaryVal = $optionsLabel.find('.editSummary').val()
           summaryVal = summaryVal.replace(/\$section/gi, '')
@@ -486,10 +483,10 @@ export function quickEdit(options) {
             .find('.editPage')
             .after(
               '<span class="editRevision">(' +
-                _msg('editor-title-editRevision') +
-                '：' +
-                options.revision +
-                ')</span>'
+              _msg('editor-title-editRevision') +
+              '：' +
+              options.revision +
+              ')</span>'
             )
           $modalWindow.find('.diff-btn').on('click', function () {
             _analysis('quick_diff_edit')
@@ -532,7 +529,7 @@ export function quickEdit(options) {
             $modalContent.data(
               'basetimestamp',
               data['query']['pages']?.[0]?.['revisions']?.[0]?.['timestamp'] ??
-                now
+              now
             )
             $modalContent.data(
               'starttimestamp',
