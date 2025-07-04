@@ -434,18 +434,20 @@ export function quickEdit(options) {
       // 页面内容获取完毕，后续工作
       function contentDone(data) {
         options.pageDetail = data
-        if (options.editText) {
-          console.log("[InPageEdit] 使用传入的editText值编辑")
-        }
-        else if (data.error) {
+        if (data.error) {
           console.warn('[InPageEdit]警告：无法获取页面内容')
           options.editText = '<!-- ' + data.error.info + ' -->'
           options.pageId = -1
           $optionsLabel.find('.detailArea').hide()
         } else {
-          options.editText =
-            options.section === 'new' ? '' : data.parse.wikitext
           options.pageId = data.parse.pageid
+          if (options.editText) {
+            console.log("[InPageEdit] 使用传入的 editText 值编辑")
+          }
+          else {
+            options.editText =
+              options.section === 'new' ? '' : data.parse.wikitext
+          }
         }
         // 设定一堆子样式
         $modalContent.find('.ipe-progress').hide()
