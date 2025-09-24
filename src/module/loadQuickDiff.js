@@ -108,6 +108,7 @@ export function loadQuickDiff(container) {
     $('.historysubmit.mw-history-compareselectedversions-button').after(
       $('<button>')
         .text(_msg('quick-diff'))
+        .addClass('cdx-button')
         .on('click', function (e) {
           if (!isPureLMBClick(e)) return
 
