@@ -316,7 +316,21 @@ export const preference = {
       )
     )
 
+    var $tryNext = $('<div>', {
+      class: 'try-inpageedit-next',
+      style:
+        'padding-left: 8px; border-left: 6px solid #3f7cff; font-size: small; background: #efefef; border-radius: 4px; margin-bottom: 0.5em;',
+    }).append(
+      $('<h4>', {
+        text: _msg('updatelog-button-try-next'),
+        style:
+          'font-size: 18px; font-weight: 700; background: -webkit-linear-gradient(120deg, rgb(189, 52, 254) 30%, rgb(65, 209, 255)) text; -webkit-text-fill-color: transparent;',
+      }),
+      $('<p>', { html: _msg('updatelog-try-next') })
+    )
+
     var $modalContent = $('<div>', { class: 'preference-tabber' }).append(
+      $tryNext,
       $tabList,
       $tabContent
     )
