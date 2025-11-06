@@ -1,3 +1,11 @@
+> [!IMPORTANT]
+>
+> **Try InPageEdit NEXT!**
+>
+> InPageEdit-v2 已经停止维护！试试更强、更好、更酷炫的 [InPageEdit NEXT](https://github.com/inpageedit/inpageedit-next) 吧~
+>
+> InPageEdit-v2 is sunset! Try our harder, better, stronger [InPageEdit NEXT](https://github.com/inpageedit/inpageedit-next)~
+
 [![InPageEdit Logo](https://ipe.js.org/images/logo/InPageEdit.png)](https://ipe.js.org/images/logo/InPageEdit.png)
 
 **InPageEdit**是由机智的小鱼君编写的一款 MediaWiki 多功能插件，它主要基于 jQuery 编写。具有较好的移动设备支持以及~~毫无卵用~~的五彩斑斓设计。主要功能旨在使许多 MediaWiki 的功能在不打开新标签页的情况下完成(包括但不限于编辑)，极大加快维护 wiki 的速度。插件采用模块化设计，提供许多 API 可以自由调用，详见 [API - InPageEdit Documentations](https://ipe.js.org/develop/api.html)
