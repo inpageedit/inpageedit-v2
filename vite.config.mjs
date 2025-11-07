@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import { version } from './package.json'
 
 const { MINIFY } = process.env
-const isDev = process.env.NODE_ENV === 'development'
+const PROD = process.env.NODE_ENV === 'production'
 
 export default defineConfig({
   build: {
@@ -21,7 +21,7 @@ export default defineConfig({
   },
   define: {
     'import.meta.env.__VERSION__': JSON.stringify(
-      isDev
+      PROD
         ? version
         : `${version}-dev.${new Date().toISOString().split('T')[0].replaceAll('-', '')}`
     ),
