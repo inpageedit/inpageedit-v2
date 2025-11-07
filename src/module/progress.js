@@ -14,7 +14,7 @@ export function progressOverlay(title = '') {
   })
   const done = () => {
     $progressBar.addClass('done')
-    modal.find('.ssi-modalTitle').html(_msg('done'))
+    modal.get$window().find('.ssi-modalTitle').html(_msg('done'))
   }
   const close = () => {
     modal.close()
