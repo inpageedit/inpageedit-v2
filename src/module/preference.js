@@ -10,10 +10,14 @@ import {
 } from './endpoints'
 import version from './version'
 import { pluginStore } from './pluginStore'
-import { _analytics, getSiteID } from './_analytics'
+import { _analytics } from './_analytics'
 import { mwConfig } from '../utils/mw'
 
 const InPageEdit = window.InPageEdit || {}
+
+function getSiteID() {
+  return `${mwConfig.wgServer}${mwConfig.wgArticlePath.replace('$1', '')}`
+}
 
 /**
  * @module preference 个人设置模块
