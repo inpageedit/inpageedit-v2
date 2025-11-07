@@ -36,7 +36,7 @@ export default defineConfig([
       'no-unused-vars': [
         'error',
         {
-          varsIgnorePattern: '^_',
+          argsIgnorePattern: '^_',
           caughtErrorsIgnorePattern: '^_',
         },
       ],
