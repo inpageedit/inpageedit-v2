@@ -12,9 +12,52 @@ import { quickPreview } from './quickPreview'
 import { quickDiff } from './quickDiff'
 import { linksHere } from './linksHere'
 
+// @ts-check
 /**
  * @module quickEdit 快速编辑模块
- * @param {{ page: string; revision?: number; section?: number; reload?: boolean }} options
+ * @param {{
+ *   page: string,
+ *   pageId?: number,
+ *   revision?: string | null,
+ *   summaryRevision?: string,
+ *   section?: string | null,
+ *   editText?: string,
+ *   editMinor?: boolean,
+ *   editSummary?: string,
+ *   editNotice?: string,
+ *   outSideClose?: boolean,
+ *   jsonGet?: Object, // mw.api_params.ApiParseParams
+ *   jsonPost?: Object, //mw.api_params.ApiEditPageParams
+ *   pageDetail?: {
+ *     error?: {
+ *       code: string,
+ *       info: string,
+ *       "*": string
+ *     },
+ *     parse?: {
+ *       title: string,
+ *       pageid: number,
+ *       revid: number,
+ *       text: { "*": string },
+ *       langlinks: Array<{lang: string, url: string, langname: string, autonym: string, "*": string }>,
+ *       categories: Array<{ sortkey: string, "*": string }>,
+ *       links: Array<{ ns: number, exists?: string, "*": string }>,
+ *       templates: Array<{ ns: number, exists?: string, "*": string }>,
+ *       images: Array<string>,
+ *       externallinks: Array<string>,
+ *       sections: Array<{ toclevel: number, level: string, line: string, number: string, index: string, byteoffset: null, anchor: string, linkAnchor: string }>,
+ *       parsewarnings: Array<string>,
+ *       displaytitle: string,
+ *       iwlinks: Array<{ prefix: string, url: string, "*": string}>,
+ *       properties: Array<{ name: string, "*": string }>
+ *     }
+ *   },
+ *   jumpTo?: string,
+ *   reload?: boolean,
+ *   watchList?: "nochange" | "preferences" | "unwatch" | "watch",
+ *   namespace?: number,
+ *   protection?: Array<{ type: string, level: string, expiry: string, source: string }>,
+ * }} options
  */
 export function quickEdit(options) {
   const mwApi = useMwApi()
@@ -48,6 +91,8 @@ export function quickEdit(options) {
     jumpTo: '',
     reload: true,
     watchList: 'preferences',
+    namespace: 0,
+    protection: [],
   }
 
   /** 获取用户设置 **/
@@ -59,7 +104,7 @@ export function quickEdit(options) {
     now = date.toISOString()
 
   /** 将选项合并并标准化 **/
-  options = $.extend({}, defaultOptions, options, userPreference)
+  options = $.extend({}, defaultOptions, userPreference, options)
 
   _analysis('quick_edit')
 
@@ -425,9 +470,9 @@ export function quickEdit(options) {
           contentDone(data)
         })
         .fail(function (a, b, errorThrown) {
+          var data = errorThrown
           console.timeEnd('[InPageEdit] 获取页面源代码')
           console.warn('[InPageEdit]警告：无法获取页面内容')
-          var data = errorThrown
           contentDone(data)
         })
 
@@ -436,13 +481,11 @@ export function quickEdit(options) {
         options.pageDetail = data
 
         if (data.error) {
-          console.warn('[InPageEdit]警告：无法获取页面内容')
-          options.editText = '<!-- ' + data.error.info + ' -->'
+          options.editText ||= '<!-- ' + data.error.info + ' -->'
           options.pageId = -1
           $optionsLabel.find('.detailArea').hide()
         } else {
-          options.editText =
-            options.section === 'new' ? '' : data.parse.wikitext
+          options.editText ||= (options.section === 'new' ? '' : data.parse.wikitext)
           options.pageId = data.parse.pageid
         }
         // 设定一堆子样式
